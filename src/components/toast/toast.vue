@@ -7,44 +7,49 @@
 </template>
 
 <script type="text/ecmascript-6">
-  export default {
-    data() {
-      return {
-        showToast: false,
-        content: 'carNumber error!'
-      }
-    },
-    methods: {
-      show(content, time) {
-        this.content = content
-        this.showToast = true
-        const showTime = time || 1500
-        setTimeout(() => {
-          this.showToast = false
-        }, showTime)
-      }
+export default {
+  data() {
+    return {
+      showToast: false,
+      content: 'carNumber error!'
+    }
+  },
+  methods: {
+    show(content, time) {
+      this.content = content
+      this.showToast = true
+      const showTime = time || 1500
+      setTimeout(() => {
+        this.showToast = false
+      }, showTime)
     }
   }
+}
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~common/stylus/variable"
+  @import '~common/stylus/mixin'
+
   .toast
     position: fixed
     left: 50%
     transform: translateX(-50%)
     z-index: 9999
-    top: 42%
+    top: 30%
     padding: 11.5px 23px
-    border-radius: 100px
-    background-color: rgba(71, 71, 71, 0.66)
+    border-radius: 6px
+    transition: all .5s ease-out
+    text-align: center
+    background-color: $color-mask-bgc
     .content
-      display: inline-block
       min-width :150px
       max-width :260px
       text-align: center
-      font-family: PingFangSC-Regular
+      font-family: $font-family-medium
       line-height: 16px
       font-size: 14px
       color: #FFFFFF
-      white-space: nowrap
+      word-break :break-all
+
 </style>
