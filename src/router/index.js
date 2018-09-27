@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const HelloWorld = () => import('pages/hello-world/hello-world')
 const ServiceManage = () => import('pages/service-manage/service-manage')
 const Login = () => import('pages/login/login')
 const Home = () => import('pages/home/home')
@@ -17,7 +16,10 @@ const route = new Router({
     },
     {
       path: '/service-manage',
-      component: ServiceManage
+      component: ServiceManage,
+      meta: {
+        title: '服务管理'
+      }
     },
     {
       path: '/login',
