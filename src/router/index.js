@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+const ServiceManage = () => import('pages/service-manage/service-manage')
 const Login = () => import('pages/login/login')
 // const Home = () => import('pages/home/home')
 const Mine = () => import('pages/mine/mine')
@@ -16,6 +17,13 @@ const route = new Router({
     {
       path: '/',
       redirect: '/shop'
+    },
+    {
+      path: '/service-manage',
+      component: ServiceManage,
+      meta: {
+        title: '服务管理'
+      }
     },
     {
       path: '/login',
