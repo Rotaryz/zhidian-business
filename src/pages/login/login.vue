@@ -1,7 +1,8 @@
 <template>
   <transition :name="transitionType">
-    <div class="login" @click="test">
+    <div class="login" @click.stop="test">
       login
+      <router-view></router-view>
     </div>
   </transition>
 </template>
@@ -12,8 +13,8 @@
     },
     methods: {
       test() {
-        console.log(this.$route.path + '/radar')
-        this.$router.push(this.$route.path + '/radar')
+        // console.log(this.$route.path + '/demo')
+        this.$router.push(this.$route.path + '/demo')
       }
     }
   }

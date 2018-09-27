@@ -6,7 +6,7 @@ const Login = () => import('pages/login/login')
 const Mine = () => import('pages/mine/mine')
 const Radar = () => import('pages/radar/radar')
 const Shop = () => import('pages/shop/shop')
-const Demo = () => import('pages/shop/shop')
+const Demo = () => import('pages/Z-DEMO/z-demo')
 
 Vue.use(Router)
 
@@ -46,10 +46,10 @@ const route = new Router({
           },
           children: [
             {
-              path: 'radar',
-              component: Radar,
+              path: 'demo',
+              component: Demo,
               meta: {
-                title: 'BOSS-AI'
+                title: 'demo'
               }
             }
           ]
@@ -66,21 +66,21 @@ const route = new Router({
   ]
 })
 
-const DEFAULT_TITLE = '商户助手'
-const DEFAULT_ROUTE = '/shop'
-const OAUTH_ROUTE = '/' // todo
-
-route.beforeEach((to, from, next) => {
-  document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
-  if (to.path === '/') {
-    const token = this.$storage.get('token', '')
-    if (token) {
-      next({path: DEFAULT_ROUTE, replace: true})
-    } else {
-      next({path: OAUTH_ROUTE, replace: true})
-    }
-  }
-  next()
-})
+// const DEFAULT_TITLE = '商户助手'
+// const DEFAULT_ROUTE = '/shop'
+// const OAUTH_ROUTE = '/' // todo
+//
+// route.beforeEach((to, from, next) => {
+//   document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
+//   if (to.path === '/') {
+//     const token = this.$storage.get('token', '')
+//     if (token) {
+//       next({path: DEFAULT_ROUTE, replace: true})
+//     } else {
+//       next({path: OAUTH_ROUTE, replace: true})
+//     }
+//   }
+//   next()
+// })
 
 export default route

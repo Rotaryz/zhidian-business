@@ -1,17 +1,20 @@
 <template>
-  <div class="home">
-    <button @click="test">toAASDA</button>
-    <h1 @click="test2">showloading</h1>
-    <h1 @click="test3">hideloading</h1>
-    <hr>
-    <h1 @click="choose">选择图片</h1>
-    <cropper ref="cropper" @confirm="cropperConfirm"></cropper>
-    <img v-if="testSrc" style="width: 100%" :src="testSrc" alt="">
-  </div>
+  <transition :name="transitionType">
+    <div class="demo">
+      <button @click="test">toAASDA</button>
+      <h1 @click="test2">showloading</h1>
+      <h1 @click="test3">hideloading</h1>
+      <hr>
+      <h1 @click="choose">选择图片</h1>
+      <cropper ref="cropper" @confirm="cropperConfirm"></cropper>
+      <img v-if="testSrc" style="width: 100%" :src="testSrc" alt="">
+    </div>
+  </transition>
 </template>
 
 <script>
   import Cropper from 'components/cropper/cropper'
+
   export default {
     components: {
       Cropper
@@ -50,5 +53,12 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
-
+  .demo
+    position: fixed
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+    z-index: 999
+    background fuchsia
 </style>

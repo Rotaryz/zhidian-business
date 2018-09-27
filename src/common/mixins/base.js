@@ -6,7 +6,6 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     this.$emit('refresh')
-    // this.transitionType = 'out'
     next(true)
   },
   methods: {

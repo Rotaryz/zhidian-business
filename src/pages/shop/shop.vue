@@ -19,6 +19,7 @@
     methods: {
       refresh() {
         // todo
+        console.log(2123)
       },
       test() {
         this.$router.push(this.$route.path + '/login')
