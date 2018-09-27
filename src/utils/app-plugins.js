@@ -4,6 +4,7 @@ import storage from 'storage-controller'
 import echarts from 'echarts'
 import AwesomePicker from 'vue-awesome-picker'
 import components from './components-plugins'
+import {ERR_OK} from 'common/js/config'
 
 // 定义插件
 const AppPlugin = {
@@ -11,6 +12,7 @@ const AppPlugin = {
     Vue.mixin(base)
     Vue.prototype.$echarts = echarts
     Vue.prototype.$storage = storage
+    Vue.prototype.$ERR_OK = ERR_OK
   }
 }
 // 使用插件
