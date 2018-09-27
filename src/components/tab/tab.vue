@@ -12,8 +12,8 @@
 <script>
   const COMPONENT_NAME = 'Tab'
   const TABS = [
-    {text: '消息', path: '/shop', id: 1, iconClass: 'icon-news'},
-    {text: '雷达', path: '/radar', id: 2, iconClass: 'icon-radar'},
+    {text: '店铺', path: '/shop', id: 1, iconClass: 'icon-shop'},
+    {text: 'BOSS雷达', path: '/radar', id: 2, iconClass: 'icon-radar'},
     {text: '我的', path: '/mine', id: 3, iconClass: 'icon-mine'}
   ]
   export default {
@@ -56,23 +56,22 @@
           margin-bottom: 3px
           background-size: 20px 20px
           &.icon-radar
-            bg-image('./icon-radar_tabbar')
-          &.icon-news
-            bg-image('./icon-news_tabbar')
-          &.icon-client
-            bg-image('./icon-customer_tabbar')
+            bg-image('./icon-radar')
+          &.icon-shop
+            bg-image('./icon-shop')
           &.icon-mine
-            bg-image('./icon-my_tabbar')
+            bg-image('./icon-my')
         .icon-text
           font-family: $font-family-light
           font-size: 10px
+          color: #C8C8C8
       &.router-link-active .item-container
         .icon-radar
-          bg-image('./icon-radar_selected')
-        .icon-news
-          bg-image('./icon-news_selected')
-        .icon-client
-          bg-image('./icon-customer_selected')
+          bg-image('./icon-radar_press')
+        .icon-shop
+          bg-image('./icon-shop_press')
         .icon-mine
-          bg-image('./icon-my_selected')
+          bg-image('./icon-my_press')
+        .icon-text
+          color: #363547
 </style>
