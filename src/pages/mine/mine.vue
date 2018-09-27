@@ -1,33 +1,23 @@
 <template>
   <transition :name="transitionType">
-    <div class="login" @click="test">
-      login
-    </div>
+    <div class="mine">mine</div>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
-  export default {
-    created() {
-    },
-    methods: {
-      test() {
-        console.log(this.$route.path + '/radar')
-        this.$router.push(this.$route.path + '/radar')
-      }
-    }
-  }
+  export default {}
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~common/stylus/variable"
+  @import '~common/stylus/mixin'
 
-  .login
+  .mine
     position: fixed
     left: 0
     top: 0
     right: 0
-    bottom: 0
+    bottom: $tab-height
     font-family: $font-family-regular
     background: #fff
-    z-index: 20
 </style>
