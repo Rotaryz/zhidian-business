@@ -1,10 +1,10 @@
 <template>
-  <transition :name="transitionType">
-    <div class="login" @click.stop="test">
-      login
+  <div class="login" @click.stop="test">
+    login
+    <transition :name="transitionType">
       <router-view></router-view>
-    </div>
-  </transition>
+    </transition>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">

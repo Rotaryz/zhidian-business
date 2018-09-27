@@ -1,11 +1,21 @@
 <template>
-  <transition :name="transitionType">
-    <div class="mine">mine</div>
-  </transition>
+    <div class="mine">
+      mine
+      <transition :name="transitionType">
+        <router-view @refresh="refresh"></router-view>
+      </transition>
+    </div>
 </template>
 
 <script type="text/ecmascript-6">
-  export default {}
+  export default {
+    methods: {
+      refresh() {
+        // todo
+        console.log(2123)
+      }
+    }
+  }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">

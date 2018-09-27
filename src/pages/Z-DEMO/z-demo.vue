@@ -1,5 +1,4 @@
 <template>
-  <transition :name="transitionType">
     <div class="demo">
       <button @click="test">toAASDA</button>
       <h1 @click="test2">showloading</h1>
@@ -9,7 +8,6 @@
       <cropper ref="cropper" @confirm="cropperConfirm"></cropper>
       <img v-if="testSrc" style="width: 100%" :src="testSrc" alt="">
     </div>
-  </transition>
 </template>
 
 <script>

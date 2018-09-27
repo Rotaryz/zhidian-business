@@ -1,19 +1,14 @@
 <template>
-  <transition :name="transitionType">
-    <div class="shop" @click="test">
-      <div>shop</div>
+  <div class="shop" @click="test">
+    <div>shop</div>
+    <transition :name="transitionType">
       <router-view @refresh="refresh"></router-view>
-    </div>
-  </transition>
+    </transition>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import MyRouter from 'components/my-router/my-router'
-
   export default {
-    components: {
-      MyRouter
-    },
     created() {
     },
     methods: {

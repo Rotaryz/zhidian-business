@@ -66,21 +66,21 @@ const route = new Router({
   ]
 })
 
-// const DEFAULT_TITLE = '商户助手'
-// const DEFAULT_ROUTE = '/shop'
-// const OAUTH_ROUTE = '/' // todo
-//
-// route.beforeEach((to, from, next) => {
-//   document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
-//   if (to.path === '/') {
-//     const token = this.$storage.get('token', '')
-//     if (token) {
-//       next({path: DEFAULT_ROUTE, replace: true})
-//     } else {
-//       next({path: OAUTH_ROUTE, replace: true})
-//     }
-//   }
-//   next()
-// })
+const DEFAULT_TITLE = '商户助手'
+const DEFAULT_ROUTE = '/shop'
+const OAUTH_ROUTE = '/' // todo
+
+route.beforeEach((to, from, next) => {
+  document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
+  if (to.path === '/') {
+    const token = this.$storage.get('token', '')
+    if (token) {
+      next({path: DEFAULT_ROUTE, replace: true})
+    } else {
+      next({path: OAUTH_ROUTE, replace: true})
+    }
+  }
+  next()
+})
 
 export default route

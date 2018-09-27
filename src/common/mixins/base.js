@@ -6,6 +6,7 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     this.$emit('refresh')
+    console.log(from)
     next(true)
   },
   methods: {
