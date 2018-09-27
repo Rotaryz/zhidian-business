@@ -1,15 +1,14 @@
 <template>
   <div class="img-cut" v-show="visible">
     <vueCropper
-      :viewMode="1"
       class="img-big"
+      ref="myCropper"
+      :viewMode="1"
       :guides="false"
-      ref="cropper"
-      :img="imageBig"
       :rotatable="true"
       :background="status"
       :cropBoxResizable="status"
-      :aspectRatio="1"
+      :aspectRatio="option.aspect || 4/3"
       :autoCropArea="0.8"
       :dragMode="'move'"
       :checkCrossOrigin="false"
@@ -17,10 +16,9 @@
     >
     </vueCropper>
     <div class="img-btn">
-      <div class="btn-item" @click="cropImage">确定</div>
-      <div class="btn-item" @click="cropImageCosle">取消</div>
+      <div class="btn-item" @click="confirm">确定</div>
+      <div class="btn-item" @click="cancel">取消</div>
     </div>
-    <!--<img class="loading" src="./loading.gif" alt="" width="30" height="30" v-show="loading">-->
   </div>
 </template>
 
@@ -33,27 +31,58 @@
     },
     data() {
       return {
-        imageBig: '',
+        option: {},
         visible: false,
-        status: false,
-        cropImg: '',
-        loading: false,
-        presonImg: '',
-        chooseType: '',
-        robotImg: '',
-        robotId: 0,
-        note: '',
-        inputValue: '',
-        upRobotId: true,
-        imgSc: true,
-        imgAllSc: true,
-        showPla: true,
-        wechatStatus: 0
+        status: false
+      }
+    },
+    methods: {
+      show(imgUrl) {
+        this.visible = true
+        let img = this.$handle.getObjectURL(imgUrl)
+        this.$refs.myCropper.replace(img)
+      },
+      confirm() {
+        let src = this.$refs.myCropper.getCroppedCanvas().toDataURL()
+        this.$emit('confirm', src)
+        this.cancel()
+      },
+      cancel() {
+        this.visible = false
       }
     }
   }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~common/stylus/variable"
+  @import '~common/stylus/mixin'
 
+  .img-cut
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    z-index: 100
+    background: #000
+    .img-big
+      background: #000
+      height: 100%
+    .img-btn
+      width: 100vw
+      position: absolute
+      bottom: 0
+      height: 60px
+      display: flex
+      align-items: center
+      background: #fff
+      border-top: 0.5px solid $color-col-line
+      .btn-item
+        flex: 1
+        text-align: center
+        font-size: 16px
+        color: #20202E
+        &:last-child
+          border-left: 0.5px solid $color-col-line
 </style>
