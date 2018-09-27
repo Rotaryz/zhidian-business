@@ -6,8 +6,11 @@ import router from './router'
 import 'common/stylus/index.styl'
 import fastclick from 'fastclick'
 import store from './store'
+import AwesomePicker from 'vue-awesome-picker'
 
 fastclick.attach(document.body)
+
+Vue.use(AwesomePicker)
 
 /* eslint-disable no-new */
 new Vue({
