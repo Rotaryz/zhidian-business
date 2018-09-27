@@ -34,6 +34,5 @@
     right: 0
     bottom: $tab-height
     font-family: $font-family-regular
-    background: #fff
     z-index: 10
 </style>

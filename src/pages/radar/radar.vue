@@ -29,5 +29,4 @@
     right: 0
     bottom: $tab-height
     font-family: $font-family-regular
-    background: #fff
 </style>

@@ -20,4 +20,7 @@
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/index"
+
+  #app
+    background :$color-background
 </style>

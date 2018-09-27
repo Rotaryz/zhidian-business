@@ -34,7 +34,7 @@
     bottom: 0
     width: 100vw
     height: $tab-height
-    background: #fff
+    background: #ffffff
     display: flex
     .tab-item
       flex: 1
