@@ -1,8 +1,9 @@
 'use strict'
 
 import axios from 'axios'
-import {baseUrl} from './config'
+import {BASE_URL} from './config'
 
+const baseUrl = BASE_URL
 const TIME_OUT = 10000
 const COMMON_HEADER = {}
 const ERR_OK = 0
