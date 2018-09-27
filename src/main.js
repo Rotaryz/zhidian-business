@@ -5,16 +5,13 @@ import App from './App'
 import router from './router'
 import 'common/stylus/index.styl'
 import store from './store'
-import echarts from 'echarts'
-import AwesomePicker from 'vue-awesome-picker'
-Vue.use(AwesomePicker)
-Vue.prototype.$echarts = echarts
+import './utils/app-plugins'
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {App},
   template: '<App/>'
 })
