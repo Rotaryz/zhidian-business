@@ -4,10 +4,11 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import 'common/stylus/index.styl'
-import fastclick from 'fastclick'
 import store from './store'
-
-fastclick.attach(document.body)
+import echarts from 'echarts'
+import AwesomePicker from 'vue-awesome-picker'
+Vue.use(AwesomePicker)
+Vue.prototype.$echarts = echarts
 
 /* eslint-disable no-new */
 new Vue({
