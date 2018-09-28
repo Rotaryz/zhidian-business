@@ -16,6 +16,7 @@ export default {
   },
   methods: {
     show(content, time) {
+      if (!content) return
       this.content = content
       this.showToast = true
       const showTime = time || 1500

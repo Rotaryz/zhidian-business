@@ -1,13 +1,15 @@
 'use strict'
 
 import axios from 'axios'
-import {BASE_URL} from './config'
+import { BASE_URL } from './config'
+import storage from 'storage-controller'
+import _this from '@/main'
 
 const baseUrl = BASE_URL
-const TIME_OUT = 10000
-const COMMON_HEADER = {}
 const ERR_OK = 0
 const ERR_NO = -404
+const TIME_OUT = 10000
+const COMMON_HEADER = {}
 
 const http = axios.create({
   baseURL: baseUrl.api,
@@ -17,6 +19,7 @@ const http = axios.create({
 
 http.interceptors.request.use(config => {
   // 请求数据前的拦截
+  config.headers['Authorization'] = storage.get('token', '')
   return config
 }, error => {
   return Promise.reject(error)
@@ -49,6 +52,7 @@ function checkCode(res) {
   }
   // 如果网络请求成功，而提交的数据，或者是后端的一些未知错误所导致的，可以根据实际情况进行捕获异常
   if (res.data && (res.data.code !== ERR_OK)) {
+    _handleErrorType(res.data.code)
     throw requestException(res)
   }
   return res.data
@@ -68,7 +72,10 @@ function requestException(res) {
 }
 
 export default {
-  post(url, data) {
+  post(url, data, loading = true) {
+    if (loading) {
+      _this.$loading.show()
+    }
     return http({
       method: 'post',
       url,
@@ -79,7 +86,10 @@ export default {
       return checkCode(res)
     })
   },
-  get(url, params) {
+  get(url, params, loading = true) {
+    if (loading) {
+      _this.$loading.show()
+    }
     return http({
       method: 'get',
       url,
@@ -90,7 +100,10 @@ export default {
       return checkCode(res)
     })
   },
-  put(url, data) {
+  put(url, data, loading = true) {
+    if (loading) {
+      _this.$loading.show()
+    }
     return http({
       method: 'put',
       url,
@@ -101,7 +114,10 @@ export default {
       return checkCode(res)
     })
   },
-  delete(url, data) {
+  delete(url, data, loading = true) {
+    if (loading) {
+      _this.$loading.show()
+    }
     return http({
       method: 'delete',
       url,
@@ -112,4 +128,34 @@ export default {
       return checkCode(res)
     })
   }
+}
+
+// 错误码检查
+function _handleErrorType(code) {
+  switch (code) {
+    case 404: {
+      _toErrorPage(`404`)
+      break
+    }
+    case 10000: {
+      _handleLoseEfficacy()
+      break
+    }
+    default:
+      break
+  }
+}
+
+function _toErrorPage(useType) {
+  // const path = `/page-error` // todo
+  // _this.$router.replace({path, query: {useType}})
+}
+
+function _handleLoseEfficacy() {
+  const currentRoute = _this.$route.path
+  if (currentRoute !== '/') {
+    storage.set('beforeLoginRoute', currentRoute)
+  }
+  storage.remove('token')
+  _this.$router.replace('/oauth')
 }

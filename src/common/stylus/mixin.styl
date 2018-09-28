@@ -93,12 +93,6 @@ transition()
 transform()
   vendor('transform', arguments)
 
-// 不换行
-no-wrap()
-  text-overflow: ellipsis
-  overflow: hidden
-  white-space: nowrap
-
 // 填充
 fill-box($pos = fixed)
   position: $pos
@@ -106,3 +100,53 @@ fill-box($pos = fixed)
   left: 0
   bottom: 0
   right: 0
+
+//布局
+layout($direction = column, $inline = block, $wrap = wrap)
+  display: $inline == block ? flex:inline-flex
+  flex-direction: $direction
+  flex-wrap: $wrap
+
+// 扩展点击区域
+extend-click($number = -20px)
+  position: relative
+  &:before
+    content: ''
+    position: absolute
+    top: $number
+    left: $number
+    right: $number
+    bottom: $number
+
+// 不换行
+no-wrap()
+  text-overflow: ellipsis
+  overflow: hidden
+  white-space: nowrap
+
+// n行省略号
+no-wrap-plus($line-clamp = 2)
+  overflow: hidden
+  display: -webkit-box
+  -webkit-line-clamp: $line-clamp
+  -webkit-box-orient: vertical
+  word-break: break-all
+
+//  水平居中
+row-center()
+  position: absolute
+  left: 50%
+  transform: translateX(-50%)
+
+//垂直居中
+col-center()
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+
+//  全居中
+all-center()
+  position: absolute
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
