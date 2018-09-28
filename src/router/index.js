@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 const ServiceManage = () => import('pages/service-manage/service-manage')
+const EditorService = () => import('pages/editor-service/editor-service')
 const Login = () => import('pages/login/login')
 const Mine = () => import('pages/mine/mine')
 const Radar = () => import('pages/radar/radar')
@@ -22,7 +23,16 @@ const route = new Router({
       component: ServiceManage,
       meta: {
         title: '服务管理'
-      }
+      },
+      children: [
+        {
+          path: 'editor-service',
+          component: EditorService,
+          meta: {
+            title: '新建服务'
+          }
+        }
+      ]
     },
     {
       path: '/login',

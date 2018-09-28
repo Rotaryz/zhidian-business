@@ -1,14 +1,20 @@
 <template>
-  <transition :name="transitionType">
-    <div class="login" @click.stop="test">
-      login
-    </div>
-  </transition>
+  <div class="editor-service">
+    123
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
   export default {
+    data() {
+      return {
+        type: 'new',
+        id: ''
+      }
+    },
     created() {
+      this.type = this.$route.query.type
+      this.id = this.$route.query.id
     },
     methods: {
     }
@@ -16,14 +22,12 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~common/stylus/variable"
+  @import "~common/stylus/mixin"
 
-  .login
-    position: fixed
-    left: 0
-    top: 0
-    right: 0
-    bottom: 0
-    font-family: $font-family-regular
-    background: #fff
-    z-index: 20
+  .editor-service
+    fill-box()
+    z-index: 70
+    background: $color-white
+
 </style>
