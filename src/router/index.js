@@ -3,10 +3,10 @@ import Router from 'vue-router'
 
 const ServiceManage = () => import('pages/service-manage/service-manage')
 const Login = () => import('pages/login/login')
-// const Home = () => import('pages/home/home')
 const Mine = () => import('pages/mine/mine')
 const Radar = () => import('pages/radar/radar')
 const Shop = () => import('pages/shop/shop')
+const Demo = () => import('pages/Z-DEMO/z-demo')
 
 Vue.use(Router)
 
@@ -53,10 +53,10 @@ const route = new Router({
           },
           children: [
             {
-              path: 'radar',
-              component: Radar,
+              path: 'demo',
+              component: Demo,
               meta: {
-                title: 'BOSS-AI'
+                title: 'demo'
               }
             }
           ]

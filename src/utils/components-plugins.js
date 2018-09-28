@@ -28,6 +28,7 @@ const Loading = {}
 Loading.install = function (Vue) {
   const LoadingConstructor = Vue.extend(LoadingComponent)
   const instance = new LoadingConstructor()
+  console.log(document)
   instance.$mount(document.createElement('div'))
   document.body.appendChild(instance.$el)
   Vue.prototype.$showLoading = (content) => {
