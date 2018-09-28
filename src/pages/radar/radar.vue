@@ -10,6 +10,7 @@
     <hr>
     <img v-if="pic" style="width:100%" :src="pic" alt="">
     <h1 @click="testcos">cos</h1>
+    <h3 @click="ttt">token</h3>
     <cropper ref="mycropper" @confirm="cropperConfirm"></cropper>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
@@ -33,6 +34,9 @@
       refresh() {
         // todo
         console.log(2123)
+      },
+      ttt() {
+        this.$storage.clear()
       },
       test() {
         this.$router.push(this.$route.path + '/login')
