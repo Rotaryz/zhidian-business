@@ -11,10 +11,6 @@
     created() {
     },
     methods: {
-      test() {
-        console.log(this.$route.path + '/radar')
-        this.$router.push(this.$route.path + '/radar')
-      }
     }
   }
 </script>

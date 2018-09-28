@@ -7,7 +7,6 @@ const Login = () => import('pages/login/login')
 const Mine = () => import('pages/mine/mine')
 const Radar = () => import('pages/radar/radar')
 const Shop = () => import('pages/shop/shop')
-const Demo = () => import('pages/shop/shop')
 
 Vue.use(Router)
 
