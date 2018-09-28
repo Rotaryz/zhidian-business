@@ -6,6 +6,7 @@ import router from './router'
 import 'common/stylus/index.styl'
 import store from './store'
 import './utils/app-plugins'
+// import request from 'common/js/request'
 
 /* eslint-disable no-new */
 export default new Vue({
@@ -15,3 +16,6 @@ export default new Vue({
   components: {App},
   template: '<App/>'
 })
+
+console.log('main')
+// console.log(request)

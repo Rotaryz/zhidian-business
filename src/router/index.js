@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+// import storage from 'storage-controller'
+
+const _this = () => import('@/main')
 
 const ServiceManage = () => import('pages/service-manage/service-manage')
 const Login = () => import('pages/login/login')
@@ -74,18 +77,21 @@ const route = new Router({
 })
 
 const DEFAULT_TITLE = '商户助手'
-const DEFAULT_ROUTE = '/shop'
-const OAUTH_ROUTE = '/' // todo
+// const DEFAULT_ROUTE = '/shop'
+// const OAUTH_ROUTE = '/' // todo
 
-route.beforeEach((to, from, next) => {
+route.beforeEach(async (to, from, next) => {
+  const vue = await _this()
+  const self = vue.default
   document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
-  if (to.path === '/') {
-    const token = this.$storage.get('token', '')
-    if (token) {
-      next({path: DEFAULT_ROUTE, replace: true})
-    } else {
-      next({path: OAUTH_ROUTE, replace: true})
-    }
+  const token = self.$storage.get('token', '')
+  console.log(555)
+  if (token) {
+    // next({path: DEFAULT_ROUTE, replace: true})
+  } else {
+    // next({path: OAUTH_ROUTE, replace: true})
+    console.log(111)
+    self.$login.show()
   }
   next()
 })

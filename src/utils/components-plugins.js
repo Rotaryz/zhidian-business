@@ -30,6 +30,7 @@ Loading.install = function (Vue) {
   document.body.appendChild(instance.$el)
   Vue.prototype.$loading = instance
 }
+
 const Login = {}
 
 Login.install = function (Vue) {
@@ -37,7 +38,7 @@ Login.install = function (Vue) {
   const instance = new LoadingConstructor()
   instance.$mount(document.createElement('div'))
   document.body.appendChild(instance.$el)
-  Vue.prototype.$loading = instance
+  Vue.prototype.$login = instance
 }
 
 export default {

@@ -14,7 +14,6 @@
 <script type="text/ecmascript-6">
   export default {
     created() {
-      console.log(this.$loading)
     },
     methods: {
       refresh() {

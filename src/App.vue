@@ -1,12 +1,14 @@
 <template>
   <div id="app">
     <router-view class="root-view" :class="tabStyle" @$hideTab="hideTab" @$showTab="showTab"></router-view>
-    <tab ref="tab" class="footer-tab" :class="tabStyle"></tab>
+    <tab class="footer-tab" :class="tabStyle"></tab>
+    <!--<login v-if="isLoginHide"></login>-->
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Tab from 'components/tab/tab'
+  // import Login from 'components/login/login'
 
   const COMPONENT_NAME = 'App'
 
@@ -14,11 +16,15 @@
     name: COMPONENT_NAME,
     components: {
       Tab
+      // Login
     },
     data() {
       return {
-        isTabHide: false
+        isTabHide: false,
+        isLoginHide: true
       }
+    },
+    mounted() {
     },
     methods: {
       hideTab() {
@@ -26,6 +32,9 @@
       },
       showTab() {
         this.isTabHide = false
+      },
+      showLogin() {
+        this.isLoginHide = true
       }
     },
     computed: {
@@ -52,18 +61,18 @@
       left: 0
       right: 0
       bottom: $tab-height
-      transform :translate3d(0,0,0)
-      transition : all 0.3s
+      transform: translate3d(0, 0, 0)
+      transition: all 0.3s
       &.tab-hide
         bottom: 0
     .footer-tab
       height: $tab-height
       position: fixed
-      bottom : 0
-      left :0
-      right :0
-      transform :translate3d(0,0,0)
-      transition : all 0.3s
+      bottom: 0
+      left: 0
+      right: 0
+      transform: translate3d(0, 0, 0)
+      transition: all 0.3s
       &.tab-hide
         height: 0
 </style>

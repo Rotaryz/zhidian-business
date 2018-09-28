@@ -1,52 +1,59 @@
 <template>
-  <div class="login">
-    <div class="logo"></div>
-    <section class="warn" v-if="phoneNumber && codeStyle">
-      <div class="icon-warn"></div>
-      <div>手机号码格式错误</div>
-    </section>
-    <form class="content">
-      <section class="input-wrapper mobile border-bottom-1px">
-        <div class="left">
-          <input class="input" ref="phone" type="number" placeholder="请输入手机号码" maxlength="11" v-model="phoneNumber">
-        </div>
-        <div class="del" v-if="phoneNumber.length > 0" @click="delHandle"></div>
+  <transition>
+    <div class="login" v-show="isShow">
+      <div class="logo"></div>
+      <section class="warn" v-if="phoneNumber && codeStyle">
+        <div class="icon-warn"></div>
+        <div>手机号码格式错误</div>
       </section>
-      <section class="input-wrapper mobile border-bottom-1px">
-        <div class="left">
-          <input class="input" type="number" placeholder="请输入验证码" maxlength="11" v-model="authCode">
-        </div>
-        <div class="get-code" :class="codeStyle? 'coding' : ''" v-if="allowGetCode" @click="getCode">获取验证码</div>
-        <div class="get-code coding" v-else>{{codeSeconds}}s</div>
-      </section>
-      <section class="btn" :class="btnStyle || codeStyle?'unable':''" @click="submit">
-        <div class="txt">登录</div>
-      </section>
-    </form>
-  </div>
+      <form class="content">
+        <section class="input-wrapper mobile border-bottom-1px">
+          <div class="left">
+            <input class="input" ref="phone" type="number" placeholder="请输入手机号码" maxlength="11" v-model="phoneNumber">
+          </div>
+          <div class="del" v-if="phoneNumber.length > 0" @click="delHandle"></div>
+        </section>
+        <section class="input-wrapper mobile border-bottom-1px">
+          <div class="left">
+            <input class="input" type="number" placeholder="请输入验证码" maxlength="11" v-model="authCode">
+          </div>
+          <div class="get-code" :class="codeStyle? 'coding' : ''" v-if="allowGetCode" @click="getCode">获取验证码</div>
+          <div class="get-code coding" v-else>重新发送{{codeSeconds}}s</div>
+        </section>
+        <section class="btn" :class="btnStyle || codeStyle?'unable':''" @click="submit">
+          <div class="txt">登录</div>
+        </section>
+      </form>
+    </div>
+  </transition>
 </template>
 
 <script type="text/ecmascript-6">
   import { checkIsPhoneNumber } from 'common/js/utils'
-  import {Jwt} from 'api'
+  import { Jwt } from 'api'
 
   export default {
     name: 'LOGIN',
     data() {
       return {
-        phoneNumber: '',
-        authCode: '',
+        phoneNumber: '15197865308',
+        authCode: '1234',
         allowGetCode: true,
         codeSeconds: 59,
         timer: null,
         showQrCode: false,
         codeStyle: true,
-        btnStyle: true
+        btnStyle: true,
+        isShow: false
       }
     },
     created() {
+
     },
     methods: {
+      show() {
+        this.isShow = true
+      },
       delHandle() {
         this.phoneNumber = ''
         this.$refs.phone.focus()
@@ -63,7 +70,11 @@
             this.$toast.show(res.message)
             return
           }
-          console.log(res)
+          const token = res.data.access_token
+          const merchantInfo = res.data.merchant_info
+          this.$storage.set('token', token)
+          this.$storage.set('merchantInfo', merchantInfo)
+          this.isShow = false
         }).catch(e => {
           console.error(e)
         })
@@ -78,7 +89,6 @@
         this.timer = setInterval(() => {
           --this.codeSeconds
         }, 1000)
-        // this._showLoading()
         // getSms({mobile: this.phoneNumber}).then(res => {
         //   this._hideLoading()
         //   if (res.error !== ERR_OK) {
@@ -89,11 +99,11 @@
       },
       _check() {
         if (!checkIsPhoneNumber(this.phoneNumber)) {
-          this._showToast('请输入正确的手机号码')
+          this.$toast.show('请输入正确的手机号码')
           return false
         }
         if (!this.authCode) {
-          this._showToast('请输入验证码')
+          this.$toast.show('请输入验证码')
           return false
         }
         return true
