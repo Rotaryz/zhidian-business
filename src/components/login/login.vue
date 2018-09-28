@@ -36,8 +36,8 @@
     name: 'LOGIN',
     data() {
       return {
-        phoneNumber: '15197865308',
-        authCode: '1234',
+        phoneNumber: '',
+        authCode: '',
         allowGetCode: true,
         codeSeconds: 59,
         timer: null,
