@@ -54,6 +54,9 @@
       show() {
         this.isShow = true
       },
+      hide() {
+        this.isShow = false
+      },
       delHandle() {
         this.phoneNumber = ''
         this.$refs.phone.focus()
@@ -74,7 +77,7 @@
           const merchantInfo = res.data.merchant_info
           this.$storage.set('token', token)
           this.$storage.set('merchantInfo', merchantInfo)
-          this.isShow = false
+          this.hide()
         }).catch(e => {
           console.error(e)
         })

@@ -1,15 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import storage from 'storage-controller'
 
 const _this = () => import('@/main')
 
 const ServiceManage = () => import('pages/service-manage/service-manage')
-const Login = () => import('pages/login/login')
 const Mine = () => import('pages/mine/mine')
 const Radar = () => import('pages/radar/radar')
 const Shop = () => import('pages/shop/shop')
-const Demo = () => import('pages/Z-DEMO/z-demo')
 
 Vue.use(Router)
 
@@ -28,13 +25,6 @@ const route = new Router({
       }
     },
     {
-      path: '/login',
-      component: Login,
-      meta: {
-        title: '登录'
-      }
-    },
-    {
       path: '/mine',
       component: Mine,
       meta: {
@@ -46,25 +36,7 @@ const route = new Router({
       component: Shop,
       meta: {
         title: '商户助手'
-      },
-      children: [
-        {
-          path: 'login',
-          component: Login,
-          meta: {
-            title: '登录'
-          },
-          children: [
-            {
-              path: 'demo',
-              component: Demo,
-              meta: {
-                title: 'demo'
-              }
-            }
-          ]
-        }
-      ]
+      }
     },
     {
       path: '/radar',
@@ -85,12 +57,10 @@ route.beforeEach(async (to, from, next) => {
   const self = vue.default
   document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
   const token = self.$storage.get('token', '')
-  console.log(555)
   if (token) {
     // next({path: DEFAULT_ROUTE, replace: true})
   } else {
     // next({path: OAUTH_ROUTE, replace: true})
-    console.log(111)
     self.$login.show()
   }
   next()

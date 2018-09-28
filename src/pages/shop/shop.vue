@@ -1,38 +1,31 @@
 <template>
-  <div class="shop" >
-    <div @click="test">shop</div>
-    <hr>
-    <h1 @click="test2">222</h1>
-    <h1 @click="test3">2224444</h1>
-    <hr>
-    <h1 @click="$hideTab">hide</h1>
-    <h1 @click="$showTab">show</h1>
+  <div class="shop">
+    <scroll>
+      <s-header></s-header>
+      <s-data></s-data>
+      <s-router></s-router>
+    </scroll>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import Scroll from 'components/scroll/scroll'
+  import SHeader from './s-header/s-header'
+  import SData from './s-data/s-data'
+  import SRouter from './s-router/s-router'
+
   export default {
-    created() {
+    components: {
+      Scroll,
+      SHeader,
+      SData,
+      SRouter
     },
     methods: {
       refresh() {
         // todo
         console.log(2123)
-      },
-      test() {
-        this.$router.push(this.$route.path + '/login')
-      },
-      test2() {
-        console.log(2123121111)
-        this.$toast.show('123')
-      },
-      test3() {
-        console.log(555)
-        this.$loading.show()
-        setTimeout(() => {
-          this.$loading.hide()
-        }, 2000)
       }
     }
   }
@@ -43,6 +36,6 @@
   @import '~common/stylus/mixin'
 
   .shop
-    background greenyellow
+    fill-box(absolute)
     z-index: 10
 </style>
