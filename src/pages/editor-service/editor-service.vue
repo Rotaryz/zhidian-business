@@ -63,7 +63,7 @@
       <div class="group-container">
         <div class="editor-item border-bottom-1px">
           <div class="item-left">服务详情</div>
-          <div class="item-right check-right">
+          <div class="item-right check-right" @click="checkService">
             <img src="./icon-press_right@2x.png" class="arrow-icon">
           </div>
         </div>
@@ -144,9 +144,7 @@
         <div class="royalty-item">
           <div class="item-left">全员上架</div>
           <div class="item-right end-right">
-            <div class="checkbox">
-              <div class="circle-btn"></div>
-            </div>
+            <switch-box @switchChange="switchChange"></switch-box>
           </div>
         </div>
       </div>
@@ -172,11 +170,7 @@
     <div class="bottom-box border-top-1px">
       <div class="bottom-btn">保存</div>
     </div>
-    <transition name="fade">
-      <div class="service-detail-cover">
-
-      </div>
-    </transition>
+    <detail-modal ref="detailModal" @serviceSuccess="serviceSuccess"></detail-modal>
     <awesome-picker
       ref="picker"
       type="date"
@@ -189,6 +183,8 @@
 <script type="text/ecmascript-6">
   import TitleBox from 'components/title-box/title-box'
   import Scroll from 'components/scroll/scroll'
+  import DetailModal from 'components/service-detail-modal/service-detail-modal'
+  import SwitchBox from 'components/switch-box/switch-box'
   export default {
     data() {
       return {
@@ -238,11 +234,22 @@
       chioseTime(type) {
         this.timeType = type
         this.$refs.picker.show()
+      },
+      checkService() {
+        this.$refs.detailModal.showCover()
+      },
+      serviceSuccess(res) {
+        console.log(res)
+      },
+      switchChange(res) {
+        console.log(res)
       }
     },
     components: {
       TitleBox,
-      Scroll
+      Scroll,
+      DetailModal,
+      SwitchBox
     }
   }
 </script>
@@ -255,11 +262,6 @@
     fill-box()
     z-index: 70
     background: $color-white
-    .service-detail-cover
-      width: 100vw
-      height: 100vh
-      background: rgba(54,53,71,0.80)
-      fill-box()
     .bottom-box
       position: fixed
       left: 0
@@ -553,24 +555,7 @@
         .right-txt-12
           font-size: $font-size-12
           color: $color-9B9B9B
-        .checkbox
-          width: 51px
-          height: 28px
-          border-radius: 14px
-          background: $color-CCCCCC
-          display: flex
-          align-items: center
-          .circle-btn
-            width: 24px
-            height: 24px
-            border-radius: 12px
-            background: $color-white
-            margin-left: 2px
-            transition: all .3s
-        .checkbox.checked
-          background: #56BA15
-          .circle-btn
-            margin-left: 25px
+
       .end-right.item-right
         justify-content: flex-end
         padding-right: 15px
