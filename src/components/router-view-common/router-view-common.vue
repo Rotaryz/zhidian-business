@@ -1,9 +1,9 @@
 <template>
   <transition :name="transitionType">
     <keep-alive v-if="keepAlive">
-      <router-view @refresh="refresh"></router-view>
+      <router-view @refresh="refresh"/>
     </keep-alive>
-    <router-view v-else @refresh="refresh"></router-view>
+    <router-view v-else @refresh="refresh"/>
   </transition>
 </template>
 
@@ -24,7 +24,8 @@
     watch: {
       '$route'(to, from) {
         this.keepAlive = to.meta.keepAlive
-        this.transitionType = 'out'
+        // this.transitionType = 'out'
+        console.log(this.transitionType)
       }
     }
   }

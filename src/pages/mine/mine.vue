@@ -21,5 +21,6 @@
   @import '~common/stylus/mixin'
 
   .mine
-    z-index: 10
+    fill-box()
+    bottom :$tab-height
 </style>

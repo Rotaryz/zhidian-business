@@ -42,5 +42,5 @@
 
   .shop
     fill-box()
-    z-index: 10
+    bottom: $tab-height
 </style>
