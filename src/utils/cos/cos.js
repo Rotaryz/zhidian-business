@@ -39,7 +39,7 @@ export function chooseFiles(fileType, showProcess, processCallBack, count = 9) {
   return new Promise((resolve, reject) => {
     _fileController(fileType, count).then((files) => {
       showProcess && showProcess()
-      let type = fileType === IMAGE_TYPE ? 'image' : 'video'
+      let type = fileType !== IMAGE_TYPE ? 'video' : 'image'
       let requests = files.map((file) => {
         return Upload.getUploadParam().then((res) => {
           const data = res.data
@@ -83,8 +83,10 @@ export function uploadFiles(fileType, filePaths, showProcess, processCallBack) {
     let requests = filePaths.map((filePath) => {
       return Upload.getUploadParam().then((res) => {
         const data = res.data
+        console.log(data, '-----')
         if (data) {
           let params = _reorganizeParams(data, filePath, processCallBack)
+          console.log(params)
           return postObject(params, type)
         }
       }).catch((err) => {
@@ -112,8 +114,10 @@ function _fileController(type, count) {
   return new Promise((resolve, reject) => {
     let input = document.createElement('input')
     input.type = 'file'
-    input.multiple = 'multiple'
-    input.onchange = function (e) {
+    if (count > 1) {
+      input.multiple = 'multiple'
+    }
+    input.onchange = function () {
       let files = this.files
       let arr = Util.changeToArray(files)
       arr = arr.splice(0, count)
@@ -147,8 +151,9 @@ function _fileController(type, count) {
  */
 function _reorganizeParams(data, file, callback) {
   const {bucket, region} = data
-  let blob = Util.createFile(file)
-  let key = file.name
+  let type = Util.checkCreateFileType(file)
+  let blob = type === 'base64' ? Util.getBlobBydataURI(file) : type === 'file' ? Util.createFile(file) : file
+  let key = file.name || '' + Date.now()
   const params = {
     Bucket: bucket,
     Region: region,

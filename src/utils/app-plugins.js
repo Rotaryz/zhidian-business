@@ -10,7 +10,7 @@ import { fileType } from './cos/file-config'
 import * as cos from './cos/cos'
 import RouterViewCommon from 'components/router-view-common'
 
-const {Toast, Loading} = components
+const {Toast, Loading, Login} = components
 // 定义插件
 const AppPlugin = {
   install: function () {
@@ -28,4 +28,5 @@ Vue.use(AppPlugin)
 Vue.use(AwesomePicker)
 Vue.use(Toast)
 Vue.use(Loading)
+Vue.use(Login)
 Vue.use(RouterViewCommon)

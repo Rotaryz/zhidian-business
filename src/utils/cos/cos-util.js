@@ -29,5 +29,24 @@ export default {
       url = window.webkitURL.createObjectURL(file)
     }
     return url
+  },
+  // base64转流
+  getBlobBydataURI(dataURI, type = 'image/png') {
+    let binary = atob(dataURI.split(',')[1])
+    let array = []
+    for (let i = 0; i < binary.length; i++) {
+      array.push(binary.charCodeAt(i))
+    }
+    return new Blob([new Uint8Array(array)], {type: type})
+  },
+  checkCreateFileType(obj) {
+    switch (typeof obj) {
+      case 'object':
+        return obj.type ? 'file' : 'blob'
+      case 'string':
+        return 'base64'
+      default:
+        break
+    }
   }
 }

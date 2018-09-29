@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+const _this = () => import('@/main')
+
 const ServiceManage = () => import('pages/service-manage/service-manage')
 const EditorService = () => import('pages/editor-service/editor-service')
 const Login = () => import('pages/login/login')
@@ -35,13 +37,6 @@ const route = new Router({
       ]
     },
     {
-      path: '/login',
-      component: Login,
-      meta: {
-        title: '登录'
-      }
-    },
-    {
       path: '/mine',
       component: Mine,
       meta: {
@@ -53,25 +48,7 @@ const route = new Router({
       component: Shop,
       meta: {
         title: '商户助手'
-      },
-      children: [
-        {
-          path: 'login',
-          component: Login,
-          meta: {
-            title: '登录'
-          },
-          children: [
-            {
-              path: 'demo',
-              component: Demo,
-              meta: {
-                title: 'demo'
-              }
-            }
-          ]
-        }
-      ]
+      }
     },
     {
       path: '/radar',
@@ -84,18 +61,19 @@ const route = new Router({
 })
 
 const DEFAULT_TITLE = '商户助手'
-const DEFAULT_ROUTE = '/shop'
-const OAUTH_ROUTE = '/' // todo
+// const DEFAULT_ROUTE = '/shop'
+// const OAUTH_ROUTE = '/' // todo
 
-route.beforeEach((to, from, next) => {
+route.beforeEach(async (to, from, next) => {
+  const vue = await _this()
+  const self = vue.default
   document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
-  if (to.path === '/') {
-    const token = this.$storage.get('token', '')
-    if (token) {
-      next({path: DEFAULT_ROUTE, replace: true})
-    } else {
-      next({path: OAUTH_ROUTE, replace: true})
-    }
+  const token = self.$storage.get('token', '')
+  if (token) {
+    // next({path: DEFAULT_ROUTE, replace: true})
+  } else {
+    // next({path: OAUTH_ROUTE, replace: true})
+    self.$login.show()
   }
   next()
 })

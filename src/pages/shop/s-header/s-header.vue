@@ -1,0 +1,65 @@
+<template>
+  <ul class="s-header">
+    <router-link tag="li" class="item-wrapper" v-for="(item, index) in dataArray" :key="index" :to="item.path">
+      <div class="logo" :class="item.icon"></div>
+      <div class="txt">{{item.title}}</div>
+    </router-link>
+  </ul>
+</template>
+
+<script type="text/ecmascript-6">
+  const dataArray = [
+    {
+      icon: 'key',
+      title: '输码核销',
+      path: ''
+    },
+    {
+      icon: 'scanner',
+      title: '扫码核销',
+      path: ''
+    },
+    {
+      icon: 'record',
+      title: '核销记录',
+      path: ''
+    }
+  ]
+  export default {
+    data() {
+      return {
+        dataArray
+      }
+    }
+  }
+</script>
+
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import '~common/stylus/variable'
+  @import '~common/stylus/mixin'
+
+  .s-header
+    height: 121px
+    background-color: $color-363537
+    layout(row, block, nowrap)
+    .item-wrapper
+      flex: 1
+      height: 100%
+      layout()
+      justify-content: center
+      align-items: center
+      font-family: PingFangSC-Regular
+      font-size: 14px
+      color: #FFFFFF
+      .logo
+        width: 32px
+        height: 32px
+        margin-bottom: 15px
+        &.key
+          icon-image(icon-inputcode)
+        &.scanner
+          icon-image(icon-scancode)
+        &.record
+          icon-image(icon-record)
+
+</style>

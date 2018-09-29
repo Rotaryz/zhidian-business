@@ -1,5 +1,6 @@
 import ToastComponent from 'components/toast/toast'
 import LoadingComponent from 'components/loading/loading'
+import LoginComponent from 'components/login/login'
 
 const Toast = {}
 
@@ -17,10 +18,7 @@ Toast.install = function (Vue) {
   // instance.$el.setAttribute('ref', 'toast')
   document.body.appendChild(instance.$el)
   // 通过Vue的原型注册一个方法
-  Vue.prototype.$showToast = (content, time) => {
-    if (!content) return
-    instance.show(content, time)
-  }
+  Vue.prototype.$toast = instance
 }
 
 const Loading = {}
@@ -28,18 +26,23 @@ const Loading = {}
 Loading.install = function (Vue) {
   const LoadingConstructor = Vue.extend(LoadingComponent)
   const instance = new LoadingConstructor()
-  console.log(document)
   instance.$mount(document.createElement('div'))
   document.body.appendChild(instance.$el)
-  Vue.prototype.$showLoading = (content) => {
-    instance.show(content)
-  }
-  Vue.prototype.$hideLoading = () => {
-    instance.hide()
-  }
+  Vue.prototype.$loading = instance
+}
+
+const Login = {}
+
+Login.install = function (Vue) {
+  const LoadingConstructor = Vue.extend(LoginComponent)
+  const instance = new LoadingConstructor()
+  instance.$mount(document.createElement('div'))
+  document.body.appendChild(instance.$el)
+  Vue.prototype.$login = instance
 }
 
 export default {
   Toast,
-  Loading
+  Loading,
+  Login
 }

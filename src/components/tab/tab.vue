@@ -1,5 +1,5 @@
 <template>
-  <div class="tab border-top-1px" :class="isTabShow? '' : 'tab-hide'">
+  <div class="tab border-top-1px">
     <router-link tag="div" v-for="(item, index) in tabList" :key="index" :to="item.path" class="tab-item">
       <div class="item-container">
         <div class="icon" :class="item.iconClass"></div>
@@ -20,16 +20,7 @@
     name: COMPONENT_NAME,
     data() {
       return {
-        tabList: TABS,
-        isTabShow: true
-      }
-    },
-    methods: {
-      hide() {
-        this.isTabShow = false
-      },
-      show() {
-        this.isTabShow = true
+        tabList: TABS
       }
     }
   }
@@ -39,14 +30,10 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
   .tab
-    height: $tab-height
+    height: 100%
     background: #ffffff
     display: flex
     overflow: hidden
-    transition: all 0.3s
-    transform: translate3d(0, 0, 0)
-    &.tab-hide
-      height : 0
     .tab-item
       flex: 1
       overflow: hidden

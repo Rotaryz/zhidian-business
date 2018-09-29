@@ -45,7 +45,6 @@
       confirm() {
         let src = this.$refs.myCropper.getCroppedCanvas().toDataURL()
         this.$emit('confirm', src)
-        this.cancel()
       },
       cancel() {
         this.visible = false

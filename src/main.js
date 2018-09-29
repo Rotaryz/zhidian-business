@@ -5,13 +5,10 @@ import App from './App'
 import router from './router'
 import 'common/stylus/index.styl'
 import store from './store'
-import AwesomePicker from 'vue-awesome-picker'
 import './utils/app-plugins'
 
-Vue.use(AwesomePicker)
-
 /* eslint-disable no-new */
-new Vue({
+export default new Vue({
   el: '#app',
   router,
   store,
