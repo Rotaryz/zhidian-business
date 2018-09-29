@@ -6,7 +6,7 @@
 
 <script type="text/ecmascript-6">
   export default {
-    props: ['disabled', 'relyFn'],
+    props: ['disabled', 'relyFn'], // disabled 禁用 relyFn 是否依赖方法，有依赖则抛出父级处理后手动改变值
     data() {
       return {
         checked: false

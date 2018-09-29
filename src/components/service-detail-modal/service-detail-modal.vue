@@ -52,7 +52,7 @@
       return {
         showModal: false,
         list: [{
-          service: '',
+          servie: '',
           number: '',
           price: ''
         }]
@@ -65,6 +65,7 @@
             let res = Object.assign({}, item)
             return res
           })
+          console.log(this.list)
         }
         this.showModal = true
       },
@@ -85,8 +86,10 @@
         this.showModal = false
       },
       confirm() {
-        console.log(this.list)
-        this.$emit('serviceSuccess', this.list)
+        let res = this.list.filter((item) => {
+          return item.servie || item.number || item.price
+        })
+        this.$emit('serviceSuccess', res)
         this.showModal = false
       }
     },

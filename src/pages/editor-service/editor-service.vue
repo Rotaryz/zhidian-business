@@ -5,13 +5,13 @@
         <div class="editor-item border-bottom-1px">
           <div class="item-left">品类</div>
           <div class="item-right">
-            <span class="right-txt">丽人</span>
+            <span class="right-txt">{{serviceDetail.industry_name}}</span>
           </div>
         </div>
         <div class="editor-item">
           <div class="item-left">类型</div>
           <div class="item-right">
-            <span class="right-txt">套餐券</span>
+            <span class="right-txt">{{couponType[serviceDetail.promotion_type]}}</span>
           </div>
         </div>
       </div>
@@ -20,42 +20,47 @@
         <div class="service-img-item border-bottom-1px">
           <div class="item-title">优惠券服务项目图片</div>
           <div class="img-container">
-            <div class="img-box" v-for="(item, index) in bannerImg" :key="index">
-              <div class="img-bc un-up"></div>
-              <div class="img-bc up"></div>
-              <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*">
-              <div class="img-show" :style="{backgroundImage: 'url(' +  + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-              <div class="del-icon"></div>
+            <div class="container-item">
+              <div class="img-box" v-for="(item, index) in [1, 2, 3]" :key="index">
+                <div class="img-bc un-up"></div>
+                <div class="img-bc up" v-if="serviceDetail.goods_banner_images.length == index" @click="chooseBanner"></div>
+              </div>
+            </div>
+            <div class="container-item">
+              <div class="img-box" v-for="(item, index) in serviceDetail.goods_banner_images" :key="index">
+                <div class="img-show" v-if="item.image.url" :style="{backgroundImage: 'url(' + item.image.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                <div class="del-icon" v-if="item.image.url" @click.stop="delBanner(index)"></div>
+              </div>
             </div>
           </div>
-          <div class="item-subtitle">添加1-3张服务项目图片(尺寸:750x400,大小2M以下)</div>
+          <div class="item-subtitle">添加1-3张服务项目图片(尺寸:600*480,大小10M以下)</div>
         </div>
         <div class="editor-item border-bottom-1px">
           <div class="item-left">标题</div>
           <div class="item-right input-right" @click="showTitleModal('title')">
-            <span class="right-txt" v-if="false">套餐券</span>
-            <span class="right-txt-placeholder">请输入</span>
+            <div class="right-txt" v-if="serviceDetail.title">{{serviceDetail.title}}</div>
+            <span class="right-txt-placeholder" v-if="!serviceDetail.title">请输入</span>
             <img src="./icon-press_right@2x.png" class="arrow-icon">
           </div>
         </div>
         <div class="editor-item border-bottom-1px">
           <div class="item-left">副标题</div>
           <div class="item-right input-right" @click="showTitleModal('subtitle')">
-            <span class="right-txt" v-if="false">套餐券</span>
-            <span class="right-txt-placeholder">(选填)</span>
+            <div class="right-txt" v-if="serviceDetail.subtitle">{{serviceDetail.subtitle}}</div>
+            <span class="right-txt-placeholder" v-if="!serviceDetail.subtitle">(选填)</span>
             <img src="./icon-press_right@2x.png" class="arrow-icon">
           </div>
         </div>
         <div class="editor-item border-bottom-1px">
           <div class="item-left">平台价</div>
           <div class="item-right">
-            <input type="number" class="input-box" placeholder="请输入">
+            <input type="number" class="input-box" v-model="serviceDetail.platform_price" placeholder="请输入">
           </div>
         </div>
         <div class="editor-item border-bottom-1px">
           <div class="item-left">门市价</div>
           <div class="item-right">
-            <input type="number" class="input-box" placeholder="请输入">
+            <input type="number" class="input-box" v-model="serviceDetail.original_price" placeholder="请输入">
           </div>
         </div>
       </div>
@@ -70,15 +75,21 @@
         <div class="service-img-item border-bottom-1px">
           <div class="item-title">优惠券服务项目图片</div>
           <div class="img-container">
-            <div class="img-box" v-for="(item, index) in details" :key="index">
-              <div class="img-bc un-up"></div>
-              <div class="img-bc up"></div>
-              <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*">
-              <div class="img-show" :style="{backgroundImage: 'url(' +  + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-              <div class="del-icon"></div>
+            <div class="container-item">
+              <div class="img-box" v-for="(item, index) in [1, 2, 3]" :key="index">
+                <div class="img-bc un-up"></div>
+                <div class="img-bc up" v-if="serviceDetail.goods_banner_images.length == index"></div>
+                <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="serviceDetail.goods_banner_images.length == index">
+              </div>
+            </div>
+            <div class="container-item">
+              <div class="img-box" v-for="(item, index) in serviceDetail.goods_banner_images" :key="index">
+                <div class="img-show" v-if="item.image.url" :style="{backgroundImage: 'url(' + item.image.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                <div class="del-icon" v-if="item.image.url" @click.stop="delBanner(index)"></div>
+              </div>
             </div>
           </div>
-          <div class="item-subtitle">添加1-3张服务项目图片(尺寸:750x400,大小2M以下)</div>
+          <div class="item-subtitle">添加1-5张服务项目图片(大小10M以下)</div>
         </div>
       </div>
       <div class="margin-box-10px"></div>
@@ -165,8 +176,8 @@
           </div>
         </div>
       </div>
-      <title-box ref="titleBox"></title-box>
     </scroll>
+    <title-box ref="titleBox" @submitMsg="submitTile"></title-box>
     <div class="bottom-box border-top-1px">
       <div class="bottom-btn">保存</div>
     </div>
@@ -177,6 +188,7 @@
       @cancel="pickerCancel"
       @confirm="pickerConfirm">
     </awesome-picker>
+    <cropper ref="cropper" @confirm="cropperConfirm"></cropper>
   </div>
 </template>
 
@@ -185,14 +197,49 @@
   import Scroll from 'components/scroll/scroll'
   import DetailModal from 'components/service-detail-modal/service-detail-modal'
   import SwitchBox from 'components/switch-box/switch-box'
+  import Cropper from 'components/cropper/cropper'
+  const COUPON_TYPE = {
+    1: '套餐券'
+  }
   export default {
     data() {
       return {
         type: 'new',
         id: '',
+        couponType: COUPON_TYPE,
         bannerImg: [1, 2, 3],
         details: [1, 2, 3, 4, 5],
-        timeType: ''
+        timeType: '',
+        serviceDetail: {
+          promotion_type: 1, // 1=套餐券;2=代金券;3=满减券;4=折扣券
+          goods_banner_images: [], // banner图片
+          image_id: '', // banner图片第一张
+          title: '', // 商品标题
+          subtitle: '', // 商品副标题
+          platform_price: '', // 平台价
+          original_price: '', // 门市价
+          goods_images: [], // 商品详情图片
+          sale_start_at: '', // 售卖开始
+          sale_end_at: '', // 售卖结束
+          start_at: '', // 券使用开始
+          end_at: '', // 券结束时间
+          commission_rate: '', // 佣金
+          total_stock: '', // 总库存
+          note: {
+            need_subscribe: '', // 预约信息
+            remarks: '' // 其他备注
+          },
+          detail_config: [
+            {
+              servie: '',
+              number: '',
+              price: ''
+            }
+          ], // 服务详情
+          industry_name: '美业', // 品类
+          is_online: '1', // 是否上线
+          is_sync: 0 // 是否全员上架
+        }
       }
     },
     created() {
@@ -200,13 +247,24 @@
       this.id = this.$route.query.id
     },
     methods: {
+      delBanner(index) {
+        this.serviceDetail.goods_banner_images.splice(index, 1)
+      },
+      chooseBanner() {
+        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
+          this.$refs.cropper.show(res[0])
+        })
+      },
+      cropperConfirm(e) {
+        console.log(e)
+      },
       showTitleModal(type) {
         let obj
         switch (type) {
           case 'title':
             obj = {
               type,
-              text: '123',
+              text: this.serviceDetail.title,
               title: '标题',
               placeholder: '请输入标题'
             }
@@ -214,13 +272,16 @@
           case 'subtitle':
             obj = {
               type,
-              text: '123',
+              text: this.serviceDetail.subtitle,
               title: '副标题',
               placeholder: '请输入副标题'
             }
             break
         }
         this.$refs.titleBox.showTitleBox(obj)
+      },
+      submitTile(txt, type) {
+        this.serviceDetail[type] = txt
       },
       pickerCancel() {
       },
@@ -236,20 +297,24 @@
         this.$refs.picker.show()
       },
       checkService() {
-        this.$refs.detailModal.showCover()
+        console.log(this.serviceDetail.detail_config)
+        this.$refs.detailModal.showCover(this.serviceDetail.detail_config)
       },
       serviceSuccess(res) {
-        console.log(res)
+        this.serviceDetail.detail_config = res.map((item) => {
+          return Object.assign({}, item)
+        })
       },
       switchChange(res) {
-        console.log(res)
+        this.serviceDetail.is_sync = res ? '1' : '0'
       }
     },
     components: {
       TitleBox,
       Scroll,
       DetailModal,
-      SwitchBox
+      SwitchBox,
+      Cropper
     }
   }
 </script>
@@ -308,6 +373,9 @@
           font-size: $font-size-14
           letter-spacing: 0.6px
           color: $color-363537
+          width: 100%
+          height: 55px
+          no-wrap()
         .right-txt-placeholder
           font-family: $font-family-regular
           font-size: $font-size-14
@@ -428,11 +496,17 @@
         padding-top: 20px
         padding-bottom: 17px
       .img-container
-        display: flex
+        position: relative
+        height: 16vw
+        .container-item
+          position: absolute
+          left: 0
+          top: 0
+          display: flex
         .img-box
           width: 16vw
           height: 16vw
-          margin-right: 4vw
+          margin-right: 2.6vw
           position: relative
           .img-bc
             width: 100%

@@ -37,7 +37,7 @@
       },
       submitTitle() {
         this.showTitle = false
-        this.$emit('submit', this.note, this.type)
+        this.$emit('submitMsg', this.note, this.type)
       }
     }
   }
