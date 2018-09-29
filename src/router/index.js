@@ -4,7 +4,7 @@ import Router from 'vue-router'
 const _this = () => import('@/main')
 
 const ServiceManage = () => import('pages/service-manage/service-manage')
-const EditorService = () => import('pages/editor-service/editor-service')
+// const EditorService = () => import('pages/editor-service/editor-service')
 const Mine = () => import('pages/mine/mine')
 const Radar = () => import('pages/radar/radar')
 const Shop = () => import('pages/shop/shop')
