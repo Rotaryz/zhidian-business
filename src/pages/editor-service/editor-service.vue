@@ -76,16 +76,15 @@
           <div class="item-title">优惠券服务详情图片</div>
           <div class="img-container">
             <div class="container-item">
-              <div class="img-box" v-for="(item, index) in [1, 2, 3]" :key="index">
+              <div class="img-box" v-for="(item, index) in [1, 2, 3, 4, 5]" :key="index">
                 <div class="img-bc un-up"></div>
-                <div class="img-bc up" v-if="serviceDetail.goods_banner_images.length == index"></div>
-                <input type="file" class="image-file" @change="_fileImage($event)" accept="image/*" v-if="serviceDetail.goods_banner_images.length == index">
+                <div class="img-bc up" v-if="serviceDetail.goods_images.length == index" @click="chooseDetail"></div>
               </div>
             </div>
             <div class="container-item">
-              <div class="img-box" v-for="(item, index) in serviceDetail.goods_banner_images" :key="index">
+              <div class="img-box" v-for="(item, index) in serviceDetail.goods_images" :key="index">
                 <div class="img-show" v-if="item.image.url" :style="{backgroundImage: 'url(' + item.image.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-                <div class="del-icon" v-if="item.image.url" @click.stop="delBanner(index)"></div>
+                <div class="del-icon" v-if="item.image.url" @click.stop="delDetail(index)"></div>
               </div>
             </div>
           </div>
@@ -146,7 +145,7 @@
         <div class="royalty-item">
           <div class="item-left">商品提成</div>
           <div class="item-right">
-            <input type="number" class="num-input" v-model="serviceDetail.commission_rate">
+            <input type="number" class="num-input" v-model="serviceDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" disabled="type === 'editor'">
             <div class="right-txt-14">%</div>
             <div class="right-txt-12">按成交价计算</div>
           </div>
@@ -302,8 +301,19 @@
           this.$refs.cropper.show(res[0])
         })
       },
+      chooseDetail() {
+        // 选择详情图片
+        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE, 5).then(res => {
+          console.log(res)
+          // todo
+        })
+      },
+      delDetail(index) {
+        this.serviceDetail.goods_images.splice(index, 1)
+      },
       cropperConfirm(e) {
         this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e])
+        // toDo
         this.$refs.cropper.cancel()
       },
       showTitleModal(type) {
@@ -770,6 +780,8 @@
           border: 1px solid $color-CCCCCC
           font-size: $font-size-14
           color: $color-20202E
+          &.disabled
+            color: $color-9B9B9B
         .right-txt-14
           font-size: $font-size-14
           color: $color-9B9B9B
