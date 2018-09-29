@@ -1,25 +1,30 @@
 <template>
-  <div class="shop">
-    <div @click="test">shop</div>
-    <hr>
-    <h1 @click="test2">222</h1>
-    <h1 @click="test3">2224444</h1>
-    <hr>
-    <h1 @click="$hideTab">hide</h1>
-    <h1 @click="$showTab">show</h1>
-    <hr>
-    <img v-if="pic" style="width:100%" :src="pic" alt="">
-    <h1 @click="testcos">cos</h1>
+  <div class="radar">
+    <scroll>
+      <div @click="test">shop</div>
+      <hr>
+      <h1 @click="test2">222</h1>
+      <h1 @click="test3">2224444</h1>
+      <hr>
+      <h1 @click="$hideTab">hide</h1>
+      <h1 @click="$showTab">show</h1>
+      <hr>
+      <img v-if="pic" style="width:100%" :src="pic" alt="">
+      <h1 @click="testcos">cos</h1>
+      <div style="height: 600px;background-color: #f00"></div>
+    </scroll>
     <cropper ref="mycropper" @confirm="cropperConfirm"></cropper>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import Scroll from 'components/scroll/scroll'
   import Cropper from 'components/cropper/cropper'
 
   export default {
     components: {
+      Scroll,
       Cropper
     },
     data() {
@@ -72,7 +77,8 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
 
-  .shop
+  .radar
+    fill-box(absolute)
     background greenyellow
     z-index: 10
 </style>

@@ -2,10 +2,10 @@
   <div class="s-router">
     <div class="s-router-container">
       <ul class="s-ul border-bottom-1px border-right-1px">
-        <router-link tag="li" class="item-wrapper border-top-1px border-left-1px" v-for="(item, index) in dataArray" :key="index" :to="item.path">
+        <li tag="li" class="item-wrapper border-top-1px border-left-1px" v-for="(item, index) in dataArray" :key="index" @click="navHandle(item)">
           <div class="logo" :class="item.icon"></div>
           <div class="txt">{{item.title}}</div>
-        </router-link>
+        </li>
       </ul>
     </div>
   </div>
@@ -16,7 +16,7 @@
     {
       icon: 'one-1',
       title: '服务',
-      path: ''
+      path: '/service-manage'
     },
     {
       icon: 'one-2',
@@ -63,6 +63,11 @@
     data() {
       return {
         dataArray
+      }
+    },
+    methods: {
+      navHandle(item) {
+        this.$router.push(this.$route.path + item.path)
       }
     }
   }

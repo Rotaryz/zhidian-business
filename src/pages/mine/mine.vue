@@ -21,5 +21,5 @@
   @import '~common/stylus/mixin'
 
   .mine
-    font-family: $font-family-regular
+    z-index: 10
 </style>

@@ -2,7 +2,7 @@
   <transition>
     <div class="login" v-show="isShow">
       <div class="logo"></div>
-      <section class="warn" v-if="phoneNumber && codeStyle">
+      <section class="warn" v-if="phoneNumber.length >= 11 && codeStyle">
         <div class="icon-warn"></div>
         <div>手机号码格式错误</div>
       </section>

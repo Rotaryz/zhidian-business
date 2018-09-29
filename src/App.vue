@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view class="root-view" :class="tabStyle" @$hideTab="hideTab" @$showTab="showTab"></router-view>
+    <router-view class="root-view" :class="[tabStyle,isTabPage?'tab-page': '']" @$hideTab="hideTab" @$showTab="showTab"></router-view>
     <tab class="footer-tab" :class="tabStyle"></tab>
   </div>
 </template>
@@ -17,7 +17,8 @@
     },
     data() {
       return {
-        isTabHide: false
+        isTabHide: false,
+        isTabPage: false
       }
     },
     mounted() {
@@ -34,6 +35,12 @@
       tabStyle() {
         return this.isTabHide ? 'tab-hide' : ''
       }
+    },
+    watch: {
+      '$route'(to, from) {
+        this.isTabPage = /(^\/radar$)|(^\/shop$)|(^\/mine$)/.test(to.path)
+        console.log(this.isTabPage)
+      }
     }
   }
 </script>
@@ -43,22 +50,14 @@
   @import "~common/stylus/variable"
 
   #app
-    height: 100vh
-    display: flex
-    flex-direction: column
-    flex-wrap: nowrap
     background: $color-background
+    height: 100vh
     .root-view
-      position: fixed
-      top: 0
-      left: 0
-      right: 0
-      bottom: $tab-height
-      transform: translate3d(0, 0, 0)
-      transition: all 0.3s
-      &.tab-hide
-        bottom: 0
+      fill-box(fixed)
+      &.tab-page
+        padding-bottom :$tab-height
     .footer-tab
+      z-index: 11
       height: $tab-height
       position: fixed
       bottom: 0

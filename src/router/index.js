@@ -36,7 +36,16 @@ const route = new Router({
       component: Shop,
       meta: {
         title: '商户助手'
-      }
+      },
+      children: [
+        {
+          path: 'service-manage',
+          component: ServiceManage,
+          meta: {
+            title: '服务管理'
+          }
+        }
+      ]
     },
     {
       path: '/radar',
