@@ -17,43 +17,6 @@ const route = new Router({
   routes: [
     {
       path: '/',
-      redirect: '/shop'
-    },
-    {
-      path: '/service-manage',
-      component: ServiceManage,
-      meta: {
-        title: '服务管理'
-      },
-      children: [
-        {
-          path: 'editor-service',
-          component: EditorService,
-          meta: {
-            title: '新建服务'
-          }
-        }
-      ]
-    },
-    {
-      path: '/mine',
-      component: Mine,
-      meta: {
-        title: '我的'
-      }
-    },
-    {
-      path: '/shop',
-      component: Shop,
-      meta: {
-        title: '商户助手'
-      }
-    },
-    {
-      path: '/radar',
-      component: Radar,
-      meta: {
-        title: 'BOSS-AI'
       component: Home,
       children: [
         {
@@ -75,7 +38,16 @@ const route = new Router({
               component: ServiceManage,
               meta: {
                 title: '服务管理'
-              }
+              },
+              children: [
+                {
+                  path: 'editor-service',
+                  component: EditorService,
+                  meta: {
+                    title: '新建服务'
+                  }
+                }
+              ]
             }
           ]
         },

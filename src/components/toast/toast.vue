@@ -19,7 +19,7 @@ export default {
       if (!content) return
       this.content = content
       this.showToast = true
-      const showTime = time || 1500
+      const showTime = time || 2000
       setTimeout(() => {
         this.showToast = false
       }, showTime)

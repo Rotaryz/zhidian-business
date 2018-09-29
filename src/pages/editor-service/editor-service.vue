@@ -73,7 +73,7 @@
           </div>
         </div>
         <div class="service-img-item border-bottom-1px">
-          <div class="item-title">优惠券服务项目图片</div>
+          <div class="item-title">优惠券服务详情图片</div>
           <div class="img-container">
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in [1, 2, 3]" :key="index">
@@ -89,7 +89,7 @@
               </div>
             </div>
           </div>
-          <div class="item-subtitle">添加1-5张服务项目图片(大小10M以下)</div>
+          <div class="item-subtitle">添加1-5张服务详情图片(大小10M以下)</div>
         </div>
       </div>
       <div class="margin-box-10px"></div>
@@ -97,45 +97,47 @@
         <div class="editor-item border-bottom-1px">
           <div class="item-left">售卖时间</div>
           <div class="item-right time-right">
-            <div class="time-right-first">
-              <div class="time-none" @click="chioseTime('sale1')">
+            <div class="time-right-first" @click="chioseTime('sale1')">
+              <div class="time-none" v-if="!serviceDetail.sale_start_at">
                 <div class="time-item">开始时间</div>
                 <img src="./icon-press_right@2x.png" class="time-icon">
               </div>
-              <div class="time-txt" v-if="false">2018-9-28</div>
+              <div class="time-txt" :class="type === 'editor' ? 'disabled' : ''" v-if="serviceDetail.sale_start_at">{{serviceDetail.sale_start_at}}</div>
             </div>
             <div class="meddle-time">至</div>
-            <div class="time-right-first">
-              <div class="time-none" @click="chioseTime('sale2')">
+            <div class="time-right-first" @click="chioseTime('sale2')">
+              <div class="time-none" v-if="!serviceDetail.sale_end_at">
                 <div class="time-item">结束时间</div>
                 <img src="./icon-press_right@2x.png" class="time-icon">
               </div>
+              <div class="time-txt" v-if="serviceDetail.sale_end_at">{{serviceDetail.sale_end_at}}</div>
             </div>
           </div>
         </div>
         <div class="editor-item border-bottom-1px">
           <div class="item-left">券有效期</div>
           <div class="item-right time-right">
-            <div class="time-right-first">
-              <div class="time-none" @click="chioseTime('sale1')">
+            <div class="time-right-first" @click="chioseTime('use1')">
+              <div class="time-none" v-if="!serviceDetail.start_at">
                 <div class="time-item">开始时间</div>
                 <img src="./icon-press_right@2x.png" class="time-icon">
               </div>
-              <div class="time-txt" v-if="false">2018-9-28</div>
+              <div class="time-txt" :class="type === 'editor' ? 'disabled' : ''" v-if="serviceDetail.start_at">{{serviceDetail.start_at}}</div>
             </div>
             <div class="meddle-time">至</div>
-            <div class="time-right-first">
-              <div class="time-none" @click="chioseTime('sale2')">
+            <div class="time-right-first" @click="chioseTime('use2')">
+              <div class="time-none" v-if="!serviceDetail.end_at">
                 <div class="time-item">结束时间</div>
                 <img src="./icon-press_right@2x.png" class="time-icon">
               </div>
+              <div class="time-txt" v-if="serviceDetail.end_at">{{serviceDetail.end_at}}</div>
             </div>
           </div>
         </div>
         <div class="large-item">
           <div class="item-left">最大可售数量</div>
           <div class="item-right num-right">
-            <input type="number" class="num-input">
+            <input type="number" class="num-input" v-model="serviceDetail.total_stock">
           </div>
         </div>
       </div>
@@ -144,7 +146,7 @@
         <div class="royalty-item">
           <div class="item-left">商品提成</div>
           <div class="item-right">
-            <input type="number" class="num-input">
+            <input type="number" class="num-input" v-model="serviceDetail.commission_rate">
             <div class="right-txt-14">%</div>
             <div class="right-txt-12">按成交价计算</div>
           </div>
@@ -155,7 +157,7 @@
         <div class="royalty-item">
           <div class="item-left">全员上架</div>
           <div class="item-right end-right">
-            <switch-box @switchChange="switchChange"></switch-box>
+            <switch-box @switchChange="switchChange" :values="serviceDetail.is_sync * 1"></switch-box>
           </div>
         </div>
       </div>
@@ -165,13 +167,13 @@
         <div class="large-item border-bottom-1px">
           <div class="item-left">需要预约时间</div>
           <div class="item-right">
-            <input type="text" class="input-box" placeholder="请输入">
+            <input type="text" class="input-box" placeholder="请输入" v-model="serviceDetail.note.need_subscribe">
           </div>
         </div>
         <div class="textarea-item">
           <div class="textarea-title">其他</div>
           <div class="textarea-box">
-            <textarea class="textarea-content" @touchmove.stop maxlength="20" placeholder="请输入"></textarea>
+            <textarea class="textarea-content" @touchmove.stop maxlength="20" placeholder="请输入" v-model="serviceDetail.note.remarks"></textarea>
             <div class="count-box">10/20</div>
           </div>
         </div>
@@ -179,7 +181,7 @@
     </scroll>
     <title-box ref="titleBox" @submitMsg="submitTile"></title-box>
     <div class="bottom-box border-top-1px">
-      <div class="bottom-btn">保存</div>
+      <div class="bottom-btn" @click="submitAll">保存</div>
     </div>
     <detail-modal ref="detailModal" @serviceSuccess="serviceSuccess"></detail-modal>
     <awesome-picker
@@ -188,6 +190,7 @@
       @cancel="pickerCancel"
       @confirm="pickerConfirm">
     </awesome-picker>
+    <div class="disabled-cover" @click.stop="" v-if="disabledCover"></div>
     <cropper ref="cropper" @confirm="cropperConfirm"></cropper>
   </div>
 </template>
@@ -198,17 +201,19 @@
   import DetailModal from 'components/service-detail-modal/service-detail-modal'
   import SwitchBox from 'components/switch-box/switch-box'
   import Cropper from 'components/cropper/cropper'
+  import {ServiceApi} from 'api'
   const COUPON_TYPE = {
     1: '套餐券'
   }
+  const MONEYREG = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
+  const COUNTREG = /^[1-9]\d*$/
   export default {
     data() {
       return {
         type: 'new',
         id: '',
         couponType: COUPON_TYPE,
-        bannerImg: [1, 2, 3],
-        details: [1, 2, 3, 4, 5],
+        disabledCover: false, // 请求时禁止任何操作
         timeType: '',
         serviceDetail: {
           promotion_type: 1, // 1=套餐券;2=代金券;3=满减券;4=折扣券
@@ -245,8 +250,50 @@
     created() {
       this.type = this.$route.query.type
       this.id = this.$route.query.id
+      if (this.id) {
+        this._getServiceDetail(this.id)
+      }
     },
     methods: {
+      _getServiceDetail(id) {
+        ServiceApi.getServiceDetail(id).then((res) => {
+          this.$loading.hide()
+          if (res.error === this.$ERR_OK) {
+            this.serviceDetail = Object.assign({}, this.serviceDetail, res.data)
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
+      },
+      _newService() {
+        ServiceApi.newServiceMsg(this.serviceDetail).then((res) => {
+          this.$loading.hide()
+          if (res.error === this.$ERR_OK) {
+            this.$emit('refresh')
+            this.$toast.show('创建成功')
+            setTimeout(() => {
+              this.$router.back()
+            }, 1500)
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
+      },
+      _setService() {
+        this.serviceDetail.is_online = 1
+        ServiceApi.setServiceMsg(this.id, this.serviceDetail).then((res) => {
+          this.$loading.hide()
+          if (res.error === this.$ERR_OK) {
+            this.$emit('refresh')
+            this.$toast.show('保存成功')
+            setTimeout(() => {
+              this.$router.back()
+            }, 1500)
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
+      },
       delBanner(index) {
         this.serviceDetail.goods_banner_images.splice(index, 1)
       },
@@ -256,7 +303,8 @@
         })
       },
       cropperConfirm(e) {
-        console.log(e)
+        this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e])
+        this.$refs.cropper.cancel()
       },
       showTitleModal(type) {
         let obj
@@ -290,14 +338,28 @@
         let arr = e.map(item => {
           return item.value.replace(reg, '')
         })
-        console.log(arr.join('-'))
+        let res = arr.join('-')
+        switch (this.timeType) {
+          case 'sale1':
+            this.serviceDetail.sale_start_at = res
+            break
+          case 'sale2':
+            this.serviceDetail.sale_end_at = res
+            break
+          case 'use1':
+            this.serviceDetail.start_at = res
+            break
+          case 'use2':
+            this.serviceDetail.end_at = res
+            break
+        }
       },
       chioseTime(type) {
+        if (this.type === 'editor' && (type === 'sale1' || type === 'use1')) return
         this.timeType = type
         this.$refs.picker.show()
       },
       checkService() {
-        console.log(this.serviceDetail.detail_config)
         this.$refs.detailModal.showCover(this.serviceDetail.detail_config)
       },
       serviceSuccess(res) {
@@ -306,7 +368,88 @@
         })
       },
       switchChange(res) {
-        this.serviceDetail.is_sync = res ? '1' : '0'
+        this.serviceDetail.is_sync = res ? 1 : 0
+      },
+      submitAll() {
+        this.disabledCover = true
+        this.checkForm()
+      },
+      checkForm() {
+        let arr = [
+          {value: this.bannerReg, txt: '请添加至少一张服务项目图片'},
+          {value: this.titleReg, txt: '请输入服务标题'},
+          {value: this.platformPriceNotReg, txt: '请输入合法的平台价格'},
+          {value: this.platformPriceRangeReg, txt: '平台价格不得高于门市价'},
+          {value: this.originalPriceNotReg, txt: '请输入合法的门市价格'},
+          {value: this.detailImgReg, txt: '请添加至少一张服务详情图片'},
+          {value: this.sale1TimeReg, txt: '请选择售卖开始时间'},
+          {value: this.sale2TimeReg, txt: '请选择售卖结束时间'},
+          {value: this.use1TimeReg, txt: '请选择券有效期开始时间'},
+          {value: this.use2TimeReg, txt: '请选择券有效期结束时间'},
+          {value: this.stockReg, txt: '请输入合法的最大可售数量'},
+          {value: this.rateReg, txt: '请输入正整数提成比例'}
+        ]
+        let res = this._testPropety(arr)
+        if (res) {
+          switch (this.type) {
+            case 'new':
+              this._newService()
+              break
+            case 'editor':
+              this._setService()
+              break
+          }
+        }
+      },
+      _testPropety(arr) {
+        for (let i = 0, j = arr.length; i < j; i++) {
+          if (!arr[i].value) {
+            this.$toast.show(arr[i].txt)
+            this.disabledCover = false
+            return false
+          }
+          if (i === j - 1 && arr[i].value) {
+            return true
+          }
+        }
+      }
+    },
+    computed: {
+      bannerReg() {
+        return this.serviceDetail.goods_banner_images.length
+      },
+      titleReg() {
+        return this.serviceDetail.title
+      },
+      platformPriceNotReg() {
+        return this.serviceDetail.platform_price && MONEYREG.test(this.serviceDetail.platform_price)
+      },
+      platformPriceRangeReg() {
+        return +this.serviceDetail.platform_price <= +this.serviceDetail.original_price
+      },
+      originalPriceNotReg() {
+        return this.serviceDetail.original_price && MONEYREG.test(this.serviceDetail.original_price)
+      },
+      detailImgReg() {
+        return this.serviceDetail.goods_images.length
+      },
+      sale1TimeReg() {
+        return this.serviceDetail.sale_start_at
+      },
+      sale2TimeReg() {
+        return this.serviceDetail.sale_end_at
+      },
+      use1TimeReg() {
+        return this.serviceDetail.start_at
+      },
+      use2TimeReg() {
+        return this.serviceDetail.end_at
+      },
+      stockReg() {
+        return this.serviceDetail.total_stock && COUNTREG.test(this.serviceDetail.total_stock)
+      },
+      rateReg() {
+        return this.serviceDetail.commission_rate && COUNTREG.test(this.serviceDetail.commission_rate)
       }
     },
     components: {
@@ -327,6 +470,9 @@
     fill-box()
     z-index: 70
     background: $color-white
+    .disabled-cover
+      fill-box()
+      z-index: 100
     .bottom-box
       position: fixed
       left: 0
@@ -416,6 +562,8 @@
             font-family: $font-family-regular
             color: $color-363537
             font-size: $font-size-14
+            &.disabled
+              color: $color-9B9B9B
         .meddle-time
           font-family: $font-family-regular
           color: $color-9B9B9B

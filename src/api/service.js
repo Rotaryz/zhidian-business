@@ -45,8 +45,16 @@ export default {
    * 编辑服务
    * @returns {*}
    */
-  setServiceMsg(id, loading = true) {
+  setServiceMsg(id, data, loading = true) {
     let url = `api/merchant/goods/${id}`
-    return request.put(url, {}, loading)
+    return request.put(url, data, loading)
+  },
+  /**
+   * 新建服务
+   * @returns {*}
+   */
+  newServiceMsg(loading = true) {
+    let url = `api/merchant/goods`
+    return request.post(url, {}, loading)
   }
 }
