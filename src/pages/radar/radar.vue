@@ -53,9 +53,6 @@
       },
       testcos() {
         this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
-          const bb = new Blob([new Uint8Array([1, 2, 2, 3])])
-          console.log(res[0].type)
-          console.log(bb.type)
           this.$refs.mycropper.show(res[0])
         })
       },
