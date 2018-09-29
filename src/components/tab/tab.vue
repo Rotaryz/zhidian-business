@@ -30,10 +30,12 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
   .tab
-    height: 100%
-    background: #ffffff
+    position: fixed
+    bottom: 0
+    width: 100vw
+    height: $tab-height
+    background: #fff
     display: flex
-    overflow: hidden
     .tab-item
       flex: 1
       overflow: hidden

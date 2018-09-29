@@ -8,6 +8,7 @@ const EditorService = () => import('pages/editor-service/editor-service')
 const Mine = () => import('pages/mine/mine')
 const Radar = () => import('pages/radar/radar')
 const Shop = () => import('pages/shop/shop')
+const Home = () => import('pages/home/home')
 
 Vue.use(Router)
 
@@ -53,6 +54,45 @@ const route = new Router({
       component: Radar,
       meta: {
         title: 'BOSS-AI'
+      component: Home,
+      children: [
+        {
+          path: 'mine',
+          component: Mine,
+          meta: {
+            title: '我的'
+          }
+        },
+        {
+          path: 'shop',
+          component: Shop,
+          meta: {
+            title: '商户助手'
+          },
+          children: [
+            {
+              path: 'service-manage',
+              component: ServiceManage,
+              meta: {
+                title: '服务管理'
+              }
+            }
+          ]
+        },
+        {
+          path: 'radar',
+          component: Radar,
+          meta: {
+            title: 'BOSS-AI'
+          }
+        }
+      ]
+    },
+    {
+      path: '/service-manage',
+      component: ServiceManage,
+      meta: {
+        title: '服务管理'
       }
     }
   ]

@@ -22,6 +22,11 @@
       SData,
       SRouter
     },
+    data() {
+      return {
+        isTabHide: false
+      }
+    },
     methods: {
       refresh() {
         // todo
@@ -36,6 +41,6 @@
   @import '~common/stylus/mixin'
 
   .shop
-    fill-box(absolute)
-    z-index: 10
+    fill-box()
+    bottom: $tab-height
 </style>

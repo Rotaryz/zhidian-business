@@ -21,5 +21,6 @@
   @import '~common/stylus/mixin'
 
   .mine
-    font-family: $font-family-regular
+    fill-box()
+    bottom :$tab-height
 </style>
