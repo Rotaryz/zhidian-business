@@ -169,6 +169,7 @@
         })
       },
       refresh() {
+        this._initAny()
         this._getList(false)
       },
       _setTabNum(obj) {
