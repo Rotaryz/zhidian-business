@@ -37,9 +37,6 @@
         // todo
         console.log(2123)
       },
-      ttt() {
-        this.$storage.clear()
-      },
       test() {
         this.$router.push(this.$route.path + '/login')
       },

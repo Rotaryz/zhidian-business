@@ -38,7 +38,16 @@ const route = new Router({
               component: ServiceManage,
               meta: {
                 title: '服务管理'
-              }
+              },
+              children: [
+                {
+                  path: 'editor-service',
+                  component: EditorService,
+                  meta: {
+                    title: '新建服务'
+                  }
+                }
+              ]
             }
           ]
         },

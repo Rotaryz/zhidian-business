@@ -11,7 +11,7 @@
                   <div class="item-p border-bottom-1px">
                     <div class="item-left">服务名称</div>
                     <div class="item-right">
-                      <input type="text" v-model="list[index].service" placeholder="请输入" class="input-box">
+                      <input type="text" v-model="list[index].servie" placeholder="请输入" class="input-box">
                     </div>
                   </div>
                   <div class="item-p border-bottom-1px">
