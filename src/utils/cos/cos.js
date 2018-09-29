@@ -15,10 +15,24 @@ const ERR_OK = 0
 /**
  * 实例COS
  */
+// let cos = new COS({
+//   getAuthorization: function (params, callback) {
+//     Upload.getUploadSign().then((res) => {
+//       callback(res.data.sign)
+//     }).catch((err) => {
+//       if (err) {
+//         throw _handleException(SIGN_ERROR)
+//       }
+//     })
+//   }
+// })
+
+let sign = `'q-sign-algorithm=sha1&q-ak=AKIDhKsMsWwDvUacZMvQrGRYWiv0ufGc2561&q-sign-time=1538206913;1538207513&q-key-time=1538206913;1538207513&q-header-list=&q-url-param-list=&q-signature=5df7c55da8d8a8969b01b86ff3c949658b619d01'`
 let cos = new COS({
   getAuthorization: function (params, callback) {
     Upload.getUploadSign().then((res) => {
-      callback(res.data.sign)
+      // callback(res.data.sign)
+      callback(sign)
     }).catch((err) => {
       if (err) {
         throw _handleException(SIGN_ERROR)
@@ -26,6 +40,10 @@ let cos = new COS({
     })
   }
 })
+// let cos = new COS({
+//   getAuthorization: 'q-sign-algorithm=sha1&q-ak=AKIDhKsMsWwDvUacZMvQrGRYWiv0ufGc2561&q-sign-time=1538206913;1538207513&q-key-time=1538206913;1538207513&q-header-list=&q-url-param-list=&q-signature=5df7c55da8d8a8969b01b86ff3c949658b619d01'
+// })
+console.log(cos, '--a0sdada')
 
 /**
  * 选择文件
@@ -176,7 +194,10 @@ function _reorganizeParams(data, file, callback) {
  */
 function postObject(params, fileType) {
   return new Promise((resolve, reject) => {
+    console.log(params, '----+++-')
     cos.putObject(params, function (err, data) {
+      console.info(err)
+      console.info(data)
       if (!err && data.statusCode === 200) {
         Upload.saveFile({path: `/${params.Key}`, file_type: fileType || ''}).then(files => {
           // Todo 隐藏加载器

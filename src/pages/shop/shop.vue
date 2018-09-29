@@ -14,6 +14,7 @@
   import SHeader from './s-header/s-header'
   import SData from './s-data/s-data'
   import SRouter from './s-router/s-router'
+  // import { Jwt } from 'api'
 
   export default {
     components: {
@@ -21,6 +22,9 @@
       SHeader,
       SData,
       SRouter
+    },
+    created() {
+      // Jwt.getToken()
     },
     data() {
       return {
