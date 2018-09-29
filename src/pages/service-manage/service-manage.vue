@@ -14,76 +14,107 @@
       <div class="big-container" :style="'transform: translate(-' + tabIdx*33.333 + '%,0)'">
         <div class="container-item">
           <scroll ref="scroll0"
-                  :data="stayList"
+                  :data="list0"
                   bcColor="#f6f6f6"
                   :pullUpLoad="pullUpLoadObj0"
                   @pullingUp="onPullingUp0"
                   :showNoMore="showNoMore0">
             <div class="list-container">
-              <div class="list-item" v-for="(item, index) in stayList" :key="index">
-                <service-item :tabIdx="tabIdx"></service-item>
+              <div class="list-item" v-for="(item, index) in list0" :key="index">
+                <service-item :tabIdx="tabIdx"
+                              :item="item"
+                              :showEdit="item.showEdit"
+                              @showEdit="showEditor"
+                              @itemEditor="itemEditor"
+                              @itemDown="itemDown"
+                              @itemDelete="itemDelete">
+                </service-item>
               </div>
             </div>
           </scroll>
         </div>
         <div class="container-item">
           <scroll ref="scroll1"
-                  :data="onlineList"
+                  :data="list1"
                   bcColor="#f6f6f6"
                   :pullUpLoad="pullUpLoadObj1"
                   @pullingUp="onPullingUp1"
                   :showNoMore="showNoMore1">
             <div class="list-container">
-              <div class="list-item" v-for="(item, index) in onlineList" :key="index">
-                <service-item :tabIdx="tabIdx"></service-item>
+              <div class="list-item" v-for="(item, index) in list1" :key="index">
+                <service-item :tabIdx="tabIdx"
+                              :item="item"
+                              :showEdit="item.showEdit"
+                              @showEdit="showEditor"
+                              @itemEditor="itemEditor"
+                              @itemDown="itemDown"
+                              @itemDelete="itemDelete">
+                </service-item>
               </div>
             </div>
           </scroll>
         </div>
         <div class="container-item">
           <scroll ref="scroll2"
-                  :data="offlineList"
+                  :data="list2"
                   bcColor="#f6f6f6"
                   :pullUpLoad="pullUpLoadObj2"
                   @pullingUp="onPullingUp2"
                   :showNoMore="showNoMore2">
             <div class="list-container">
-              <div class="list-item" v-for="(item, index) in offlineList" :key="index">
-                <service-item :tabIdx="tabIdx"></service-item>
+              <div class="list-item" v-for="(item, index) in list2" :key="index">
+                <service-item :tabIdx="tabIdx"
+                              :item="item"
+                              :showEdit="item.showEdit"
+                              @showEdit="showEditor"
+                              @itemEditor="itemEditor"
+                              @itemDown="itemDown"
+                              @itemDelete="itemDelete">
+                </service-item>
               </div>
             </div>
           </scroll>
         </div>
       </div>
     </div>
+    <div class="footer-box">
+      <div class="footer-btn" @click="toDetail('new')">新建服务</div>
+    </div>
+    <router-view-common></router-view-common>
+    <modal ref="modal"></modal>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import ServiceItem from 'components/service-item/service-item'
+  import Modal from 'components/confirm-msg/confirm-msg'
   import Scroll from 'components/scroll/scroll'
+  import { ServiceApi } from 'api'
   const TABS = [
-    {txt: '待上线', id: 1},
-    {txt: '出售中', id: 2},
-    {txt: '已下架', id: 3}
+    {txt: '待上线', id: 0},
+    {txt: '出售中', id: 1},
+    {txt: '已下架', id: 2}
   ]
   export default {
     data() {
       return {
         tabList: TABS,
         tabIdx: 1,
-        stayList: [1, 2, 3, 4, 5, 6, 7, 8],
-        onlineList: [1, 2, 3],
-        offlineList: [1, 2, 3],
+        list0: [{id: 1}, {id: 2}],
+        list1: [{id: 1}, {id: 2}, {id: 3}],
+        list2: [{id: 1}],
         pullUpLoad0: true,
         pullUpLoadThreshold0: 0,
         showNoMore0: true,
+        page0: 1,
         pullUpLoad1: true,
         pullUpLoadThreshold1: 0,
         showNoMore1: true,
+        page1: 1,
         pullUpLoad2: true,
         pullUpLoadThreshold2: 0,
         showNoMore2: true,
+        page2: 1,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
         scrollToEasing: 'bounce',
@@ -93,9 +124,54 @@
     created() {
     },
     methods: {
+      _getList() {
+        let data = {
+          page: this[`page${this.tabIdx}`],
+          status: this.tabIdx
+        }
+        ServiceApi.getServiceList(data).then((res) => {
+          console.log(res)
+        })
+      },
       changeTab(idx, item) {
-        console.log(999)
         this.tabIdx = idx * 1
+        this._initAll()
+      },
+      showModal() {
+        this.$refs.modal.show({msg: '该服务已关联活动，下架会导致活动下架，确定吗？'})
+      },
+      showEditor(item) {
+        this['list' + this.tabIdx] = this['list' + this.tabIdx].map((item1) => {
+          if (+item.id === +item1.id) {
+            item1.showEdit = !item1.showEdit
+          } else {
+            item1.showEdit = false
+          }
+          return item1
+        })
+      },
+      itemEditor(item) {
+        console.log(item)
+        let id = item.id
+        this.toDetail('editor', id)
+      },
+      itemDown(item) {
+        console.log('down', item)
+      },
+      itemDelete(item) {
+        console.log('del', item)
+      },
+      toDetail(type, id = '') {
+        let url = `/service-manage/editor-service?type=${type}&id=${id}`
+        this.$router.push(url)
+      },
+      _initAll() {
+        for (let i = 0; i < 3; i++) {
+          this['list' + i] = this['list' + i].map((item1) => {
+            item1.showEdit = false
+            return item1
+          })
+        }
       },
       onPullingUp0() {
         console.log(7776767)
@@ -108,14 +184,15 @@
       },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
+          this.$refs['scroll' + this.tabIdx].destroy()
+          this.$refs['scroll' + this.tabIdx].initScroll()
         })
       }
     },
     components: {
       ServiceItem,
-      Scroll
+      Scroll,
+      Modal
     },
     computed: {
       pullUpLoadObj0: function () {
@@ -189,6 +266,8 @@
       position: fixed
       width: 100vw
       height: 45px
+      top: 0
+      left: 0
       z-index: 60
       background: $color-white
       .tab-box
@@ -238,4 +317,25 @@
             padding: 0 15px
             .list-item
               padding-top: 10px
+    .footer-box
+      position: fixed
+      width: 100vw
+      height: 64px
+      z-index: 60
+      bottom: 0
+      left: 0
+      background: $color-white
+      box-sizing: border-box
+      padding: 10px 15px
+      .footer-btn
+        width: 100%
+        height: 100%
+        background: $color-363537
+        border-radius: 2px
+        line-height: 44px
+        text-align: center
+        font-family: $font-family-regular
+        color: $color-white
+        font-size: $font-size-16
+        letter-spacing: 0.8px
 </style>

@@ -12,8 +12,27 @@
             <p class="down-txt second"><span class="first-txt">库存：550</span><span v-if="tabIdx != 0">销量：888</span></p>
           </div>
           <div class="down-right">
-            <div class="down-right-icon active"></div>
+            <div class="down-right-icon" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
           </div>
+        </div>
+      </div>
+      <div class="editor-box" :class="showEdit ? '' : 'hide'">
+        <div class="editor-container">
+          <div class="editor-content">
+            <div class="editor-item" @click.stop="itemEditor(item)">
+              <div class="item-icon edit"></div>
+              <div class="item-txt">编辑</div>
+            </div>
+            <div class="editor-item" v-if="tabIdx != 2" @click.stop="itemDown(item)">
+              <div class="item-icon down"></div>
+              <div class="item-txt">下架</div>
+            </div>
+            <div class="editor-item" v-if="tabIdx == 2" @click.stop="itemDelete(item)">
+              <div class="item-icon del"></div>
+              <div class="item-txt">删除</div>
+            </div>
+          </div>
+          <div class="editor-arrow"></div>
         </div>
       </div>
     </div>
@@ -22,12 +41,24 @@
 
 <script type="text/ecmascript-6">
   export default {
-    props: ['tabIdx'],
+    props: ['tabIdx', 'item', 'showEdit'],
     data() {
       return {
       }
     },
     methods: {
+      showEditCover(item) {
+        this.$emit('showEdit', item)
+      },
+      itemEditor(item) {
+        this.$emit('itemEditor', item)
+      },
+      itemDown(item) {
+        this.$emit('itemDown', item)
+      },
+      itemDelete(item) {
+        this.$emit('itemDelete', item)
+      }
     }
   }
 </script>
@@ -115,6 +146,60 @@
               icon-image('./icon-function')
             .down-right-icon.active
               icon-image('./icon-function_click')
+    .editor-box
+      position: absolute
+      height: 55px
+      right: 14.6vw
+      bottom: 9px
+      width: 110px
+      overflow: hidden
+      transition: all 0.3s
+      .editor-container
+        display: flex
+        align-items: flex-end
+        height: 100%
+        position: absolute
+        right: 0
+        top: 0
+        transition: all 0.3s
+        .editor-content
+          background: rgba(0, 0, 0, 0.8)
+          box-shadow: 0 1px 10px 0 rgba(54,53,71,0.50)
+          border-radius: 2px
+          height: 100%
+          padding: 0 10px
+          display: flex
+          .editor-item
+            width: 40px
+            height: 100%
+            display: flex
+            flex-direction: column
+            align-items: center
+            justify-content: center
+            .item-icon
+              width: 17px
+              height: 17px
+              margin-bottom: 9px
+              &.edit
+                icon-image('./icon-compile_kj')
+              &.del
+                icon-image('./icon-delete')
+              &.down
+                icon-image('./icon-offline')
+            .item-txt
+              font-size: $font-size-10
+              font-family: $font-family-regular
+              color: $color-white
+        .editor-arrow
+          width: 0
+          height: 0
+          border-width: 5px 0 5px 5px
+          border-style: solid
+          border-color: transparent transparent transparent rgba(0, 0, 0, 0.8)/*透明 灰 透明 透明 */
+          margin-bottom: 12px
 
-
+      .hide.editor-container
+        right: -100%
+    .editor-box.hide
+      width: 0
 </style>
