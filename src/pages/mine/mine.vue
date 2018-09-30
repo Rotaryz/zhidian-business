@@ -1,6 +1,7 @@
 <template>
   <div class="mine">
     mine
+    <div @click="test">退出登录</div>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
@@ -11,6 +12,10 @@
       refresh() {
         // todo
         console.log(2123)
+      },
+      test() {
+        this.$storage.clear()
+        this.$router.replace('/shop')
       }
     }
   }
