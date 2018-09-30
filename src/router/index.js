@@ -10,6 +10,8 @@ const Mine = () => import('pages/mine/mine')
 const Radar = () => import('pages/radar/radar')
 const Shop = () => import('pages/shop/shop')
 const Home = () => import('pages/home/home')
+const EmployeeManage = () => import('pages/employee-manage/employee-manage')
+const NewEmployee = () => import('pages/new-employee/new-employee')
 
 Vue.use(Router)
 
@@ -25,7 +27,24 @@ const route = new Router({
           component: Mine,
           meta: {
             title: '我的'
-          }
+          },
+          children: [
+            {
+              path: 'employee-manage',
+              component: EmployeeManage,
+              meta: {
+                title: '店员管理'
+              },
+              children: [
+                {
+                  path: 'new-employee',
+                  component: NewEmployee,
+                  meta: {
+                    title: '新建店员'
+                  }
+                }]
+            }
+          ]
         },
         {
           path: 'shop',
