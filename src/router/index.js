@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import storage from 'storage-controller'
 
 const _this = () => import('@/main')
 
@@ -71,19 +72,34 @@ const route = new Router({
 })
 
 const DEFAULT_TITLE = '商户助手'
-// const DEFAULT_ROUTE = '/shop'
-// const OAUTH_ROUTE = '/' // todo
+const DEFAULT_ROUTE = '/shop'
+const OAUTH_ROUTE = '/shop' // todo
 
+// route.beforeEach(async (to, from, next) => {
+//   const vue = await _this()
+//   const self = vue.default
+//   document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
+//   const token = self.$storage.get('token', '')
+//   if (token) {
+//     // next({path: DEFAULT_ROUTE, replace: true})
+//   } else {
+//     // next({path: OAUTH_ROUTE, replace: true})
+//     self.$login.show()
+//   }
+//   next()
+// })
 route.beforeEach(async (to, from, next) => {
   const vue = await _this()
   const self = vue.default
   document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
-  const token = self.$storage.get('token', '')
-  if (token) {
-    // next({path: DEFAULT_ROUTE, replace: true})
-  } else {
-    // next({path: OAUTH_ROUTE, replace: true})
-    self.$login.show()
+  if (to.path === '/') {
+    const token = storage.get('token', '')
+    if (token) {
+      next({path: DEFAULT_ROUTE, replace: true})
+    } else {
+      next({path: OAUTH_ROUTE, replace: true})
+      self.$login.show()
+    }
   }
   next()
 })

@@ -15,7 +15,7 @@
       },
       test() {
         this.$storage.clear()
-        this.$router.replace('/shop')
+        this.$login.show()
       }
     }
   }
