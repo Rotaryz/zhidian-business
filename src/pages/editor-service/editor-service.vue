@@ -322,7 +322,7 @@
               let obj = {
                 image_id: item.data.id,
                 url: item.data.url,
-                id: item.data.id
+                id: 0
               }
               arr.push(obj)
             })
@@ -349,7 +349,7 @@
           let obj = {
             image_id: res.data.id,
             url: res.data.url,
-            id: res.data.id
+            id: 0
           }
           this.serviceDetail.goods_banner_images.push(obj)
           this.$loading.hide()
