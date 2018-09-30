@@ -53,8 +53,9 @@ export default {
    * 新建服务
    * @returns {*}
    */
-  newServiceMsg(loading = true) {
+  newServiceMsg(data, loading = true) {
+    console.log(data)
     let url = `api/merchant/goods`
-    return request.post(url, {}, loading)
+    return request.post(url, data, loading)
   }
 }

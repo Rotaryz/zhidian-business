@@ -67,6 +67,17 @@ export function createFile(options) {
   return blob
 }
 
+// 文件类型base64
+export function fileReader2Base64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = (event) => {
+      resolve(event.target.result)
+    }
+  })
+}
+
 // base64转流
 export function getBlobBydataURI(dataURI, type = 'image/png') {
   let binary = atob(dataURI.split(',')[1])
@@ -87,4 +98,10 @@ export function getObjectURL(file) {
     url = window.webkitURL.createObjectURL(file)
   }
   return url
+}
+
+export function createFormData($Blob) {
+  let formData = new FormData()
+  formData.append('file', $Blob, 'file_' + Date.now() + '.png')
+  return formData
 }

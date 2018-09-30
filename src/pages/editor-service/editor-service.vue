@@ -28,8 +28,8 @@
             </div>
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in serviceDetail.goods_banner_images" :key="index">
-                <div class="img-show" v-if="item.image.url" :style="{backgroundImage: 'url(' + item.image.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-                <div class="del-icon" v-if="item.image.url" @click.stop="delBanner(index)"></div>
+                <div class="img-show" v-if="item.url" :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                <div class="del-icon" v-if="item.url" @click.stop="delBanner(index)"></div>
               </div>
             </div>
           </div>
@@ -83,8 +83,8 @@
             </div>
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in serviceDetail.goods_images" :key="index">
-                <div class="img-show" v-if="item.image.url" :style="{backgroundImage: 'url(' + item.image.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-                <div class="del-icon" v-if="item.image.url" @click.stop="delDetail(index)"></div>
+                <div class="img-show" v-if="item.url" :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                <div class="del-icon" v-if="item.url" @click.stop="delDetail(index)"></div>
               </div>
             </div>
           </div>
@@ -145,7 +145,7 @@
         <div class="royalty-item">
           <div class="item-left">商品提成</div>
           <div class="item-right">
-            <input type="number" class="num-input" v-model="serviceDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" disabled="type === 'editor'">
+            <input type="number" class="num-input" v-model="serviceDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" :disabled="type === 'editor'">
             <div class="right-txt-14">%</div>
             <div class="right-txt-12">按成交价计算</div>
           </div>
@@ -200,7 +200,8 @@
   import DetailModal from 'components/service-detail-modal/service-detail-modal'
   import SwitchBox from 'components/switch-box/switch-box'
   import Cropper from 'components/cropper/cropper'
-  import {ServiceApi} from 'api'
+  import { ServiceApi, Upload } from 'api'
+
   const COUPON_TYPE = {
     1: '套餐券'
   }
@@ -267,6 +268,7 @@
       _newService() {
         ServiceApi.newServiceMsg(this.serviceDetail).then((res) => {
           this.$loading.hide()
+          this.disabledCover = false
           if (res.error === this.$ERR_OK) {
             this.$emit('refresh')
             this.$toast.show('创建成功')
@@ -282,6 +284,7 @@
         this.serviceDetail.is_online = 1
         ServiceApi.setServiceMsg(this.id, this.serviceDetail).then((res) => {
           this.$loading.hide()
+          this.disabledCover = false
           if (res.error === this.$ERR_OK) {
             this.$emit('refresh')
             this.$toast.show('保存成功')
@@ -303,8 +306,31 @@
       },
       chooseDetail() {
         // 选择详情图片
-        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE, 5).then(res => {
-          console.log(res)
+        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE, 5).then(async res => {
+          Promise.all(res.map(async item => {
+            let base64 = await this.$handle.fileReader2Base64(item)
+            let blob = this.$handle.getBlobBydataURI(base64)
+            let file = this.$handle.createFormData(blob)
+            return Upload.upLoadImage(file)
+          })).then((resArr) => {
+            this.$loading.hide()
+            let arr = []
+            resArr.map(item => {
+              if (item.error !== this.$ERR_OK) {
+                return this.$toast.show(item.message)
+              }
+              let obj = {
+                image_id: item.data.id,
+                url: item.data.url,
+                id: item.data.id
+              }
+              arr.push(obj)
+            })
+            let newArr = this.serviceDetail.goods_images
+            newArr.push(...arr)
+            newArr = newArr.splice(0, 5)
+            this.serviceDetail.goods_images = newArr
+          })
           // todo
         })
       },
@@ -312,9 +338,24 @@
         this.serviceDetail.goods_images.splice(index, 1)
       },
       cropperConfirm(e) {
-        this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e])
+        // this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e])
+        this.$loading.show()
+        let blob = this.$handle.getBlobBydataURI(e)
+        let file = this.$handle.createFormData(blob)
+        Upload.upLoadImage(file).then(res => {
+          if (res.error !== this.$ERR_OK) {
+            return this.$toast.show(res.message)
+          }
+          let obj = {
+            image_id: res.data.id,
+            url: res.data.url,
+            id: res.data.id
+          }
+          this.serviceDetail.goods_banner_images.push(obj)
+          this.$loading.hide()
+          this.$refs.cropper.cancel()
+        })
         // toDo
-        this.$refs.cropper.cancel()
       },
       showTitleModal(type) {
         let obj
@@ -460,6 +501,11 @@
       },
       rateReg() {
         return this.serviceDetail.commission_rate && COUNTREG.test(this.serviceDetail.commission_rate)
+      }
+    },
+    watch: {
+      'serviceDetail.goods_banner_images'(curVal) {
+        this.serviceDetail.image_id = curVal[0].image_id
       }
     },
     components: {
