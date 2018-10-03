@@ -48,8 +48,8 @@
     left: 0
 
   .weui_loading_toast .weui_toast
-    width: 7.6rem
-    min-height: 7.6rem
+    width: 122px
+    min-height: 122px
 
   .weui_toast
     position: fixed

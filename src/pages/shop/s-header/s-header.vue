@@ -1,9 +1,9 @@
 <template>
   <ul class="s-header">
-    <router-link tag="li" class="item-wrapper" v-for="(item, index) in dataArray" :key="index" :to="item.path">
+    <li class="item-wrapper" v-for="(item, index) in dataArray" :key="index" @click="navHandle(item)">
       <div class="logo" :class="item.icon"></div>
       <div class="txt">{{item.title}}</div>
-    </router-link>
+    </li>
   </ul>
 </template>
 
@@ -12,7 +12,7 @@
     {
       icon: 'key',
       title: '输码核销',
-      path: ''
+      path: '/exchange-code'
     },
     {
       icon: 'scanner',
@@ -29,6 +29,12 @@
     data() {
       return {
         dataArray
+      }
+    },
+    methods: {
+      navHandle(item) {
+        console.log(this.$route.path + item.path)
+        this.$router.push(this.$route.path + item.path)
       }
     }
   }
@@ -51,6 +57,7 @@
       font-family: PingFangSC-Regular
       font-size: 14px
       color: #FFFFFF
+      z-index :22
       .logo
         width: 32px
         height: 32px

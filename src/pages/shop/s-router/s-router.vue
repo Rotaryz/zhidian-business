@@ -2,7 +2,7 @@
   <div class="s-router">
     <div class="s-router-container">
       <ul class="s-ul border-bottom-1px border-right-1px">
-        <li tag="li" class="item-wrapper border-top-1px border-left-1px" v-for="(item, index) in dataArray" :key="index" @click="navHandle(item)">
+        <li class="item-wrapper border-top-1px border-left-1px" v-for="(item, index) in dataArray" :key="index" @click="navHandle(item)">
           <div class="logo" :class="item.icon"></div>
           <div class="txt">{{item.title}}</div>
         </li>
@@ -102,6 +102,7 @@
           font-size: $font-size-14
           color: $color-696771
           line-height: 14px
+          z-index: 22
           .logo
             width: 8.533vw
             height: 8.533vw
