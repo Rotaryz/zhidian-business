@@ -22,7 +22,7 @@
     {
       icon: 'record',
       title: '核销记录',
-      path: ''
+      path: '/exchange-record'
     }
   ]
   export default {
