@@ -2,9 +2,12 @@
 import service from './service'
 import upload from './upload'
 import jwt from './jwt'
+import employee from './employee'
 
 export const ServiceApi = service
 
 export const Jwt = jwt
 
 export const Upload = upload
+
+export const Employee = employee
