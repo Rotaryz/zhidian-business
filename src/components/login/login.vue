@@ -79,6 +79,7 @@
           this.$storage.set('token', token)
           this.$storage.set('merchantInfo', merchantInfo)
           this.hide()
+          window.location.replace(window.location.href)
         }).catch(e => {
           console.error(e)
         })
@@ -147,7 +148,7 @@
     fill-box(fixed)
     z-index: 300
     background: #fff
-    layout()
+    layout(column,block,nowrap)
     align-items: center
     .logo
       margin: 9.6vw 0 10.2vw
