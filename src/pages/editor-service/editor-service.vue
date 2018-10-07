@@ -442,7 +442,8 @@
           {value: this.use1TimeReg, txt: '请选择券有效期开始时间'},
           {value: this.use2TimeReg, txt: '请选择券有效期结束时间'},
           {value: this.stockReg, txt: '请输入合法的最大可售数量'},
-          {value: this.rateReg, txt: '请输入正整数提成比例'}
+          {value: this.rateReg, txt: '请输入正整数提成比例'},
+          {value: this.serviceDetailReg, txt: '请至少添加一条服务详情信息'}
         ]
         let res = this._testPropety(arr)
         if (res) {
@@ -505,6 +506,12 @@
       },
       rateReg() {
         return this.serviceDetail.commission_rate && COUNTREG.test(this.serviceDetail.commission_rate)
+      },
+      serviceDetailReg() {
+        let arr = this.serviceDetail.detail_config.filter((item) => {
+          return item.servie || item.number || item.price
+        })
+        return arr.length
       }
     },
     watch: {
@@ -837,13 +844,13 @@
         font-size: 0
         .num-input
           width: 70px
-          height: 32px
+          height: 20px
           outline: none
           text-align: center
           padding: 0
           margin: 0
-          line-height: 32px
-          border: 1px solid $color-CCCCCC
+          line-height: 20px
+          border: 0 none
           font-size: $font-size-14
           color: $color-20202E
           &.disabled
