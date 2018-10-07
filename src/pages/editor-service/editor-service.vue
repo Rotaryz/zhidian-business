@@ -28,8 +28,8 @@
             </div>
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in serviceDetail.goods_banner_images" :key="index">
-                <div class="img-show" v-if="item.url" :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-                <div class="del-icon" v-if="item.url" @click.stop="delBanner(index)"></div>
+                <div class="img-show" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                <div class="del-icon" v-if="item.image_url" @click.stop="delBanner(index)"></div>
               </div>
             </div>
           </div>
@@ -83,8 +83,8 @@
             </div>
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in serviceDetail.goods_images" :key="index">
-                <div class="img-show" v-if="item.url" :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-                <div class="del-icon" v-if="item.url" @click.stop="delDetail(index)"></div>
+                <div class="img-show" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                <div class="del-icon" v-if="item.image_url" @click.stop="delDetail(index)"></div>
               </div>
             </div>
           </div>
@@ -321,7 +321,7 @@
               }
               let obj = {
                 image_id: item.data.id,
-                url: item.data.url,
+                image_url: item.data.url,
                 id: 0
               }
               arr.push(obj)
@@ -348,7 +348,7 @@
           }
           let obj = {
             image_id: res.data.id,
-            url: res.data.url,
+            image_url: res.data.url,
             id: 0
           }
           this.serviceDetail.goods_banner_images.push(obj)

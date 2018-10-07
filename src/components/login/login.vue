@@ -1,6 +1,6 @@
 <template>
   <transition>
-    <div class="login" v-show="isShow">
+    <div class="login" v-if="isShow">
       <div class="logo"></div>
       <section class="warn" v-if="phoneNumber.length >= 11 && codeStyle">
         <div class="icon-warn"></div>
@@ -52,6 +52,7 @@
     },
     methods: {
       show() {
+        this.$loading.hide()
         this.isShow = true
       },
       hide() {
