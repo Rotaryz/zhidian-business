@@ -14,6 +14,7 @@ const EmployeeManage = () => import('pages/employee-manage/employee-manage')
 const NewEmployee = () => import('pages/new-employee/new-employee')
 const ExchangeCode = () => import('pages/exchange-code/exchange-code')
 const ExchangeRecord = () => import('pages/exchange-record/exchange-record')
+const ShopInfo = () => import('pages/shop-info/shop-info')
 
 Vue.use(Router)
 
@@ -31,6 +32,13 @@ const route = new Router({
             title: '我的'
           },
           children: [
+            {
+              path: 'shop-info',
+              component: ShopInfo,
+              meta: {
+                title: '门店信息'
+              }
+            },
             {
               path: 'employee-manage',
               component: EmployeeManage,

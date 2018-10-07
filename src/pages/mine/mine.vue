@@ -25,7 +25,7 @@
     {
       logo: 'shop',
       title: '门店信息',
-      path: ''
+      path: '/shop-info'
     },
     {
       logo: 'staff',
