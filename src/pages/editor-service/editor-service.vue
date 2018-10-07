@@ -136,7 +136,9 @@
         <div class="large-item">
           <div class="item-left">最大可售数量</div>
           <div class="item-right num-right">
-            <input type="number" class="num-input" v-model="serviceDetail.total_stock">
+            <div class="right-num-box">
+              <input type="number" class="num-input" v-model="serviceDetail.total_stock">
+            </div>
           </div>
         </div>
       </div>
@@ -145,7 +147,9 @@
         <div class="royalty-item">
           <div class="item-left">商品提成</div>
           <div class="item-right">
-            <input type="number" class="num-input" v-model="serviceDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" :disabled="type === 'editor'">
+            <div class="right-num-box">
+              <input type="number" class="num-input" v-model="serviceDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" :disabled="type === 'editor'">
+            </div>
             <div class="right-txt-14">%</div>
             <div class="right-txt-12">按成交价计算</div>
           </div>
@@ -570,6 +574,8 @@
         line-height: 55px
         font-size: 0
         overflow: hidden
+        display: flex
+        align-items: center
         .right-txt
           font-family: $font-family-regular
           font-size: $font-size-14
@@ -587,11 +593,11 @@
           height: 12.5px
         .input-box
           width: 100%
-          height: 100%
+          height: 20px
           outline: none
           padding: 0
           margin: 0
-          line-height: 55px
+          line-height: 20px
           border: 0 none
           font-size: $font-size-14
           color: $color-363537
@@ -658,7 +664,7 @@
         height: 55px
         line-height: 55px
         font-size: 0
-        .num-input
+        .right-num-box
           width: 70px
           height: 32px
           outline: none
@@ -667,6 +673,20 @@
           margin: 0
           line-height: 32px
           border: 1px solid $color-CCCCCC
+          font-size: $font-size-14
+          color: $color-20202E
+          display: flex
+          align-items: center
+          justify-content: center
+        .num-input
+          width: 70px
+          height: 20px
+          outline: none
+          text-align: center
+          padding: 0
+          margin: 0
+          line-height: 20px
+          border: 0 none
           font-size: $font-size-14
           color: $color-20202E
         .input-box
