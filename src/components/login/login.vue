@@ -78,6 +78,7 @@
           this.$storage.set('token', token)
           this.$storage.set('merchantInfo', merchantInfo)
           this.hide()
+          window.location.replace(window.location.href)
         }).catch(e => {
           console.error(e)
         })
