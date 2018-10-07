@@ -52,6 +52,7 @@
     },
     methods: {
       show() {
+        this.$loading.hide()
         this.isShow = true
       },
       hide() {
@@ -147,7 +148,7 @@
     fill-box(fixed)
     z-index: 300
     background: #fff
-    layout()
+    layout(column,block,nowrap)
     align-items: center
     .logo
       margin: 9.6vw 0 10.2vw

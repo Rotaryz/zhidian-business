@@ -15,10 +15,12 @@
       </li>
     </ul>
     <router-view-common @refresh="refresh"></router-view-common>
+    <modal ref="confirm" @confirm="exitApp"></modal>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import Modal from 'components/confirm-msg/confirm-msg'
   const optionsArr = [
     {
       logo: 'shop',
@@ -37,13 +39,16 @@
     }
   ]
   export default {
+    name: 'MINE',
+    components: {
+      Modal
+    },
     data() {
       return {
         optionsArr
       }
     },
     created() {
-      console.log(window.location.replace)
     },
     methods: {
       refresh() {
@@ -56,11 +61,14 @@
       },
       navTo(item) {
         if (item.logo === 'exit') {
-          this.$storage.clear()
-          this.$login.show()
+          this.$refs.confirm.show({msg: '确定要退出吗？'})
           return
         }
         this.$router.push(this.$route.path + item.path)
+      },
+      exitApp() {
+        this.$storage.clear()
+        this.$login.show()
       }
     }
   }
