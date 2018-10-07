@@ -55,6 +55,7 @@
     }
   ]
   export default {
+    name: 'ExchangeRecord',
     components: {
       Scroll
     },
@@ -67,6 +68,7 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+  $time-width = 80px
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 
@@ -85,14 +87,14 @@
         flex: 1
         layout(row, block, nowrap)
         .name
-          width :28.26vw
+          width: 28.26vw
           no-wrap()
         .id
           flex: 1
         .user-id
           flex: 1
       .right
-        width: 75.38px
+        width: $time-width
     .scroll-container
       position: absolute
       top: 50px
@@ -116,14 +118,14 @@
             flex: 1
             layout(row, block, nowrap)
             .name
-              width :28.26vw
+              width: 28.26vw
               no-wrap()
             .id
               flex: 1
             .user-id
               flex: 1
           .right
-            width: 75.38px
+            width: $time-width
             layout()
             align-items: flex-end
             .time

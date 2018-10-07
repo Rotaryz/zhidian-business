@@ -26,6 +26,7 @@
     }
   ]
   export default {
+    name: 's-header',
     data() {
       return {
         dataArray

@@ -48,7 +48,7 @@
       }
     },
     created() {
-
+      this.$loading.hide()
     },
     methods: {
       show() {
