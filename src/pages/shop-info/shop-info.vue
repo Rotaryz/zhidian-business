@@ -121,7 +121,6 @@
     </awesome-picker>
     <cropper ref="cropper-shop_images" @confirm="cropperConfirm"></cropper>
     <cropper ref="cropper-shop_logo" @confirm="cropperConfirm($event ,'logo')" :aspect="1"></cropper>
-
   </form>
 </template>
 
