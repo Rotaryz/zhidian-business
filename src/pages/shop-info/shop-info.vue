@@ -195,13 +195,6 @@
         }
         this.shopInfo.shop_images.splice(index, 1)
       },
-      chooseShopImages(flag) {
-        // if (!flag) return
-        // this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
-        //   flag !== 'logo' && this.$refs['cropper-shop_images'].show(res[0])
-        //   flag === 'logo' && this.$refs['cropper-shop_logo'].show(res[0])
-        // })
-      },
       cropperConfirm(e, type) {
         this.$loading.show()
         let blob = this.$handle.getBlobBydataURI(e)
