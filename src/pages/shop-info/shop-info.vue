@@ -59,10 +59,12 @@
             <article class="media-item border-bottom-1px">
               <div class="title">门店logo</div>
               <figure class="content">
-                <div class="add" @click="chooseShopImages('logo')">
+                <label class="add">
                   <div class="img-show" v-if="shopInfo.shop_logo[0]" :style="{backgroundImage: 'url(' + shopInfo.shop_logo[0].image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                   <div class="del-icon" v-if="shopInfo.shop_logo[0]" @click.stop="delDetail('logo')"></div>
-                </div>
+                  <input v-if="shopInfo.shop_logo.length === 0" type="file" style="display: none" @change="_fileChange($event, 'logo')"
+                         accept="image/*">
+                </label>
                 <div class="explain one">点击图片预览实际展示效果</div>
                 <div class="explain">添加1张图片（尺寸200*200，大小2M以下）</div>
               </figure>
@@ -78,14 +80,15 @@
             <article class="media-item">
               <div class="title">门店图片</div>
               <figure class="content">
-                <div class="add"
-                     v-for="(item, index) in shopImagesLen"
-                     :key="index"
-                     @click="chooseShopImages(shopInfo.shop_images.length == index)"
+                <label class="add"
+                       v-for="(item, index) in shopImagesLen"
+                       :key="index"
                 >
                   <div class="img-show" v-if="shopInfo.shop_images[index]" :style="{backgroundImage: 'url(' + shopInfo.shop_images[index].image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                   <div class="del-icon" v-if="shopInfo.shop_images[index]" @click.stop="delDetail(index)"></div>
-                </div>
+                  <input v-if="shopInfo.shop_images.length == index" type="file" style="display: none" @change="_fileChange($event, 'images')"
+                         accept="image/*">
+                </label>
                 <div class="explain one">点击图片预览实际展示效果</div>
                 <div class="explain">添加1-10 张图片（尺寸400*300，大小10M以下）</div>
               </figure>
@@ -118,8 +121,7 @@
     </awesome-picker>
     <cropper ref="cropper-shop_images" @confirm="cropperConfirm"></cropper>
     <cropper ref="cropper-shop_logo" @confirm="cropperConfirm($event ,'logo')" :aspect="1"></cropper>
-    <input type="file" style="position: fixed;height: 50px;z-index: 980" id="header-logo" @change="_fileChange"
-           accept="image/*" value="选择">
+
   </form>
 </template>
 
@@ -182,10 +184,10 @@
       this.shopInfo.opening_hours = [this.openingStart, this.openingEnd]
     },
     methods: {
-      _fileChange(e) {
-        console.log(e)
+      _fileChange(e, flag) {
         let arr = Array.from(e.target.files)
-        this.$refs['cropper-shop_images'].show(arr[0])
+        flag === 'images' && this.$refs['cropper-shop_images'].show(arr[0])
+        flag === 'logo' && this.$refs['cropper-shop_logo'].show(arr[0])
       },
       delDetail(index) {
         if (index === 'logo') {
@@ -195,11 +197,11 @@
         this.shopInfo.shop_images.splice(index, 1)
       },
       chooseShopImages(flag) {
-        if (!flag) return
-        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
-          flag !== 'logo' && this.$refs['cropper-shop_images'].show(res[0])
-          flag === 'logo' && this.$refs['cropper-shop_logo'].show(res[0])
-        })
+        // if (!flag) return
+        // this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
+        //   flag !== 'logo' && this.$refs['cropper-shop_images'].show(res[0])
+        //   flag === 'logo' && this.$refs['cropper-shop_logo'].show(res[0])
+        // })
       },
       cropperConfirm(e, type) {
         this.$loading.show()
@@ -492,10 +494,10 @@
           white-space: nowrap
         .content
           .add
+            display: block
             width: 64px
             height: @width
             border-radius: 4px
-            overflow: hidden
             border-1px($color-9B9B9B, 4px)
             icon-image(icon-addpic02)
             margin-right: 15px
