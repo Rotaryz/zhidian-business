@@ -78,6 +78,7 @@
       @confirm="pickerConfirm">
     </awesome-picker>
     <cropper ref="cropper" @confirm="cropperConfirm" :aspect="1"></cropper>
+    <div class="disabled-cover" @click.stop="" v-if="disabledCover"></div>
   </div>
 </template>
 
@@ -85,6 +86,7 @@
   import Scroll from 'components/scroll/scroll'
   import Cropper from 'components/cropper/cropper'
   import { PrizeApi, Upload } from 'api'
+  const COUNTREG = /^[1-9]\d*$/
   export default {
     data() {
       return {
@@ -102,7 +104,8 @@
             note: ''
           },
           is_online: 1
-        }
+        },
+        disabledCover: false
       }
     },
     created() {
@@ -177,12 +180,93 @@
         })
       },
       submitAll() {
-        console.log(88788787)
+        this.disabledCover = true
+        this.checkForm()
+      },
+      checkForm() {
+        let arr = [
+          {value: this.titleReg, txt: '请输入兑换券标题'},
+          {value: this.use1TimeReg, txt: '请选择券有效期开始时间'},
+          {value: this.use2TimeReg, txt: '请选择券有效期结束时间'},
+          {value: this.bannerReg, txt: '请添加兑换券图片'},
+          {value: this.numReg, txt: '请输入合法的兑换券数量'}
+        ]
+        let res = this._testPropety(arr)
+        if (res) {
+          switch (this.type) {
+            case 'new':
+              this._newPrize()
+              break
+            case 'editor':
+              this._setPrize()
+              break
+          }
+        }
+      },
+      _newPrize() {
+        PrizeApi.newPrize(this.prizeDetail).then((res) => {
+          this.$loading.hide()
+          this.disabledCover = false
+          if (res.error === this.$ERR_OK) {
+            this.$emit('refresh')
+            this.$toast.show('创建成功')
+            setTimeout(() => {
+              this.$router.back()
+            }, 1500)
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
+      },
+      _setPrize() {
+        this.prizeDetail.is_online = 1
+        PrizeApi.editPrize(this.id, this.prizeDetail).then((res) => {
+          this.$loading.hide()
+          this.disabledCover = false
+          if (res.error === this.$ERR_OK) {
+            this.$emit('refresh')
+            this.$toast.show('保存成功')
+            setTimeout(() => {
+              this.$router.back()
+            }, 1500)
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
+      },
+      _testPropety(arr) {
+        for (let i = 0, j = arr.length; i < j; i++) {
+          if (!arr[i].value) {
+            this.$toast.show(arr[i].txt)
+            this.disabledCover = false
+            return false
+          }
+          if (i === j - 1 && arr[i].value) {
+            return true
+          }
+        }
       }
     },
     components: {
       Scroll,
       Cropper
+    },
+    computed: {
+      titleReg() {
+        return this.prizeDetail.title
+      },
+      use1TimeReg() {
+        return this.prizeDetail.start_at
+      },
+      use2TimeReg() {
+        return this.prizeDetail.end_at
+      },
+      bannerReg() {
+        return this.prizeDetail.image_url && this.prizeDetail.image_id
+      },
+      numReg() {
+        return this.prizeDetail.stock && COUNTREG.test(this.prizeDetail.stock)
+      }
     }
   }
 </script>
@@ -195,6 +279,9 @@
     fill-box()
     z-index: 70
     background: $color-white
+    .disabled-cover
+      fill-box()
+      z-index: 100
     .bottom-box
       position: fixed
       left: 0

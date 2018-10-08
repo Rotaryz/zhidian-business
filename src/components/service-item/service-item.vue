@@ -2,7 +2,7 @@
   <div class="service-item">
     <div class="item-content">
       <div class="item-left" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
-        <div class="left-cover" :class="tabIdx == 2 ? '' : 'hide'">已下架</div>
+        <div class="left-cover" :class="tabIdx == 2 ? '' : 'hide'">已过期</div>
       </div>
       <div class="item-right">
         <div class="right-title">{{item.title}}</div>
@@ -88,6 +88,8 @@
         width: 18.666vw
         height: @width
         margin-right: 10px
+        border-1px($color-E6E6E6)
+        overflow: hidden
         position: relative
         .left-cover
           position: absolute
