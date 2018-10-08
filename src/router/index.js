@@ -21,6 +21,7 @@ const ActivityManage = () => import('pages/activity-manage/activity-manage')
 const EditorActivity = () => import('pages/editor-activity/editor-activity')
 const ExchangeManage = () => import('pages/exchange-manage/exchange-manage')
 const EditorPrize = () => import('pages/editor-prize/editor-prize')
+const ShopQrCode = () => import('pages/shop-qr-code/shop-qr-code')
 
 Vue.use(Router)
 
@@ -59,6 +60,13 @@ const route = new Router({
                     title: '新建店员'
                   }
                 }]
+            },
+            {
+              path: 'shop-qr-code',
+              component: ShopQrCode,
+              meta: {
+                title: '店铺二维码'
+              }
             }
           ]
         },
