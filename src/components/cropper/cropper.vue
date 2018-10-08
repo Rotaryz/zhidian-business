@@ -8,7 +8,7 @@
       :rotatable="true"
       :background="status"
       :cropBoxResizable="status"
-      :aspectRatio="option.aspect || 4/3"
+      :aspectRatio="aspect"
       :autoCropArea="0.8"
       :dragMode="'move'"
       :checkCrossOrigin="false"
@@ -26,12 +26,17 @@
   import VueCropper from 'vue-cropperjs'
 
   export default {
+    props: {
+      aspect: {
+        type: Number,
+        default: 4 / 3
+      }
+    },
     components: {
       VueCropper
     },
     data() {
       return {
-        option: {},
         visible: false,
         status: false
       }
