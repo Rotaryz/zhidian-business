@@ -177,7 +177,7 @@
           <div class="textarea-title">其他</div>
           <div class="textarea-box">
             <textarea class="textarea-content" @touchmove.stop maxlength="20" placeholder="请输入" v-model="serviceDetail.note.remarks"></textarea>
-            <div class="count-box">10/20</div>
+            <div class="count-box">{{serviceDetail.note.remarks.length}}/20</div>
           </div>
         </div>
       </div>
@@ -546,9 +546,9 @@
       right: 0
       bottom: 0
       z-index: 80
-      height: 82px
+      height: 62px
       box-sizing: border-box
-      padding: 19px 10px
+      padding: 10px 15px
       background: $color-F6F6F6
       .bottom-btn
         width: 100%
