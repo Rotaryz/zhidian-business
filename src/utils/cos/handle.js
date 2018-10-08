@@ -14,7 +14,7 @@ export function fileController(type, count = 2) {
       input.multiple = 'multiple'
     }
     input.onchange = function (e) {
-      // console.log(e.path[0].files)
+      console.log(e.path[0].files)
       let files = e.path[0].files
       let arr = _changeToArray(files)
       arr = arr.splice(0, count)
@@ -23,7 +23,6 @@ export function fileController(type, count = 2) {
           if (!_isAllImage(arr)) {
             reject(_handleException(CHOICE_ERROR))
           }
-          alert(44)
           resolve(arr)
           break
         case VIDEO_TYPE:

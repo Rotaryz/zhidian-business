@@ -45,10 +45,8 @@
     },
     methods: {
       show(imgUrl) {
-        alert(imgUrl)
         this.visible = true
         let img = this.$handle.getObjectURL(imgUrl)
-        alert(img)
         this.img = img
         this.$refs.myCropper.replace(img)
       },
