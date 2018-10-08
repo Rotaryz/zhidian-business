@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import storage from 'storage-controller'
 
 const _this = () => import('@/main')
-
+const Demo = () => import('pages/Z-DEMO/z-demo')
 const ServiceManage = () => import('pages/service-manage/service-manage')
 const EditorService = () => import('pages/editor-service/editor-service')
 const Mine = () => import('pages/mine/mine')
@@ -19,6 +19,8 @@ const ActivityManage = () => import('pages/activity-manage/activity-manage')
 const EditorActivity = () => import('pages/editor-activity/editor-activity')
 const ExchangeManage = () => import('pages/exchange-manage/exchange-manage')
 const EditorPrize = () => import('pages/editor-prize/editor-prize')
+const OverView = () => import('pages/overview/overview')
+const Ranking = () => import('pages/ranking/ranking')
 
 Vue.use(Router)
 
@@ -136,7 +138,32 @@ const route = new Router({
           component: Radar,
           meta: {
             title: 'BOSS-AI'
-          }
+          },
+          children: [
+            {
+              path: 'overview',
+              component: OverView,
+              meta: {
+                title: '总览'
+              },
+              children: [
+                {
+                  path: 'demo',
+                  component: Demo,
+                  meta: {
+                    title: 'demo'
+                  }
+                }
+              ]
+            },
+            {
+              path: 'ranking',
+              component: Ranking,
+              meta: {
+                title: '排行榜'
+              }
+            }
+          ]
         }
       ]
     },
@@ -179,6 +206,9 @@ route.beforeEach(async (to, from, next) => {
       next({path: OAUTH_ROUTE, replace: true})
       self.$login.show()
     }
+  }
+  if (to.path === '/radar') {
+    next({path: '/radar/overview', replace: true})
   }
   next()
 })
