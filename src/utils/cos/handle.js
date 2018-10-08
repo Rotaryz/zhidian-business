@@ -14,9 +14,11 @@ export function fileController(type, count = 1) {
       input.multiple = 'multiple'
     }
     input['onchange'] = function () {
+      alert(2222)
       let files = this.files
       let arr = _changeToArray(files)
       arr = arr.splice(0, count)
+      console.log(input.value)
       switch (type) {
         case IMAGE_TYPE:
           if (!_isAllImage(arr)) {
@@ -34,6 +36,7 @@ export function fileController(type, count = 1) {
           break
       }
     }
+    console.log(input.value)
     // document.appendChild(input)
     setTimeout(() => {
       input.click()

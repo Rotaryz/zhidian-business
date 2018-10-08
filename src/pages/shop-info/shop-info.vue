@@ -495,6 +495,7 @@
             width: 64px
             height: @width
             border-radius: 4px
+            overflow: hidden
             border-1px($color-9B9B9B, 4px)
             icon-image(icon-addpic02)
             margin-right: 15px
