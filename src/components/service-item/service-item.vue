@@ -87,7 +87,6 @@
       .item-left
         width: 18.666vw
         height: @width
-        background: #ddd
         margin-right: 10px
         position: relative
         .left-cover

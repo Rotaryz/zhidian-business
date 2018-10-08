@@ -28,8 +28,8 @@
             </div>
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in serviceDetail.goods_banner_images" :key="index">
-                <div class="img-show" v-if="item.url" :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-                <div class="del-icon" v-if="item.url" @click.stop="delBanner(index)"></div>
+                <div class="img-show" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                <div class="del-icon" v-if="item.image_url" @click.stop="delBanner(index)"></div>
               </div>
             </div>
           </div>
@@ -83,8 +83,8 @@
             </div>
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in serviceDetail.goods_images" :key="index">
-                <div class="img-show" v-if="item.url" :style="{backgroundImage: 'url(' + item.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-                <div class="del-icon" v-if="item.url" @click.stop="delDetail(index)"></div>
+                <div class="img-show" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                <div class="del-icon" v-if="item.image_url" @click.stop="delDetail(index)"></div>
               </div>
             </div>
           </div>
@@ -136,7 +136,9 @@
         <div class="large-item">
           <div class="item-left">最大可售数量</div>
           <div class="item-right num-right">
-            <input type="number" class="num-input" v-model="serviceDetail.total_stock">
+            <div class="right-num-box">
+              <input type="number" class="num-input" v-model="serviceDetail.total_stock">
+            </div>
           </div>
         </div>
       </div>
@@ -145,7 +147,9 @@
         <div class="royalty-item">
           <div class="item-left">商品提成</div>
           <div class="item-right">
-            <input type="number" class="num-input" v-model="serviceDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" :disabled="type === 'editor'">
+            <div class="right-num-box">
+              <input type="number" class="num-input" v-model="serviceDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" :disabled="type === 'editor'">
+            </div>
             <div class="right-txt-14">%</div>
             <div class="right-txt-12">按成交价计算</div>
           </div>
@@ -321,7 +325,7 @@
               }
               let obj = {
                 image_id: item.data.id,
-                url: item.data.url,
+                image_url: item.data.url,
                 id: 0
               }
               arr.push(obj)
@@ -348,7 +352,7 @@
           }
           let obj = {
             image_id: res.data.id,
-            url: res.data.url,
+            image_url: res.data.url,
             id: 0
           }
           this.serviceDetail.goods_banner_images.push(obj)
@@ -438,7 +442,8 @@
           {value: this.use1TimeReg, txt: '请选择券有效期开始时间'},
           {value: this.use2TimeReg, txt: '请选择券有效期结束时间'},
           {value: this.stockReg, txt: '请输入合法的最大可售数量'},
-          {value: this.rateReg, txt: '请输入正整数提成比例'}
+          {value: this.rateReg, txt: '请输入正整数提成比例'},
+          {value: this.serviceDetailReg, txt: '请至少添加一条服务详情信息'}
         ]
         let res = this._testPropety(arr)
         if (res) {
@@ -501,6 +506,12 @@
       },
       rateReg() {
         return this.serviceDetail.commission_rate && COUNTREG.test(this.serviceDetail.commission_rate)
+      },
+      serviceDetailReg() {
+        let arr = this.serviceDetail.detail_config.filter((item) => {
+          return item.servie || item.number || item.price
+        })
+        return arr.length
       }
     },
     watch: {
@@ -570,6 +581,8 @@
         line-height: 55px
         font-size: 0
         overflow: hidden
+        display: flex
+        align-items: center
         .right-txt
           font-family: $font-family-regular
           font-size: $font-size-14
@@ -587,11 +600,11 @@
           height: 12.5px
         .input-box
           width: 100%
-          height: 100%
+          height: 20px
           outline: none
           padding: 0
           margin: 0
-          line-height: 55px
+          line-height: 20px
           border: 0 none
           font-size: $font-size-14
           color: $color-363537
@@ -658,7 +671,7 @@
         height: 55px
         line-height: 55px
         font-size: 0
-        .num-input
+        .right-num-box
           width: 70px
           height: 32px
           outline: none
@@ -667,6 +680,20 @@
           margin: 0
           line-height: 32px
           border: 1px solid $color-CCCCCC
+          font-size: $font-size-14
+          color: $color-20202E
+          display: flex
+          align-items: center
+          justify-content: center
+        .num-input
+          width: 70px
+          height: 20px
+          outline: none
+          text-align: center
+          padding: 0
+          margin: 0
+          line-height: 20px
+          border: 0 none
           font-size: $font-size-14
           color: $color-20202E
         .input-box
@@ -817,13 +844,13 @@
         font-size: 0
         .num-input
           width: 70px
-          height: 32px
+          height: 20px
           outline: none
           text-align: center
           padding: 0
           margin: 0
-          line-height: 32px
-          border: 1px solid $color-CCCCCC
+          line-height: 20px
+          border: 0 none
           font-size: $font-size-14
           color: $color-20202E
           &.disabled
