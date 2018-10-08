@@ -22,6 +22,7 @@ const EditorActivity = () => import('pages/editor-activity/editor-activity')
 const ExchangeManage = () => import('pages/exchange-manage/exchange-manage')
 const EditorPrize = () => import('pages/editor-prize/editor-prize')
 const ShopQrCode = () => import('pages/shop-qr-code/shop-qr-code')
+const Property = () => import('pages/property/property')
 
 Vue.use(Router)
 
@@ -137,6 +138,13 @@ const route = new Router({
               component: ExchangeRecord,
               meta: {
                 title: '核销记录'
+              }
+            },
+            {
+              path: 'property',
+              component: Property,
+              meta: {
+                title: '资产'
               }
             }
           ]
