@@ -34,8 +34,10 @@ export function fileController(type, count = 1) {
           break
       }
     }
-    console.log(input)
-    input.click()
+    // document.appendChild(input)
+    setTimeout(() => {
+      input.click()
+    }, 13)
   })
 }
 
