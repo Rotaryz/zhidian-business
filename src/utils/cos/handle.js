@@ -38,6 +38,7 @@ export function fileController(type, count = 1) {
       }
     }
     input.click()
+    alert(222233333)
   })
 }
 
