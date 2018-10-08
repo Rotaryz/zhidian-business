@@ -118,6 +118,8 @@
     </awesome-picker>
     <cropper ref="cropper-shop_images" @confirm="cropperConfirm"></cropper>
     <cropper ref="cropper-shop_logo" @confirm="cropperConfirm($event ,'logo')" :aspect="1"></cropper>
+    <input type="file" style="position: fixed;height: 50px" id="header-logo" @change="_fileChange"
+           accept="image/*" value="选择">
   </form>
 </template>
 
@@ -180,6 +182,11 @@
       this.shopInfo.opening_hours = [this.openingStart, this.openingEnd]
     },
     methods: {
+      _fileChange(e) {
+        console.log(e)
+        let arr = Array.from(e.target.files)
+        this.$refs['cropper-shop_images'].show(arr[0])
+      },
       delDetail(index) {
         if (index === 'logo') {
           this.shopInfo.shop_logo = []
