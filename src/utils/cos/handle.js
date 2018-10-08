@@ -13,7 +13,9 @@ export function fileController(type, count = 1) {
     if (count > 1) {
       input.multiple = 'multiple'
     }
+    alert(22)
     input.onchange = function () {
+      alert(33)
       let files = this.files
       let arr = _changeToArray(files)
       arr = arr.splice(0, count)
@@ -22,6 +24,7 @@ export function fileController(type, count = 1) {
           if (!_isAllImage(arr)) {
             reject(_handleException(CHOICE_ERROR))
           }
+          alert(44)
           resolve(arr)
           break
         case VIDEO_TYPE:
