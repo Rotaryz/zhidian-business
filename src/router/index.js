@@ -16,6 +16,7 @@ const ExchangeCode = () => import('pages/exchange-code/exchange-code')
 const ExchangeRecord = () => import('pages/exchange-record/exchange-record')
 const ShopInfo = () => import('pages/shop-info/shop-info')
 const ActivityManage = () => import('pages/activity-manage/activity-manage')
+const EditorActivity = () => import('pages/editor-activity/editor-activity')
 const ExchangeManage = () => import('pages/exchange-manage/exchange-manage')
 const EditorPrize = () => import('pages/editor-prize/editor-prize')
 
@@ -87,7 +88,16 @@ const route = new Router({
               component: ActivityManage,
               meta: {
                 title: '活动管理'
-              }
+              },
+              children: [
+                {
+                  path: 'editor-activity',
+                  component: EditorActivity,
+                  meta: {
+                    title: '新建活动'
+                  }
+                }
+              ]
             },
             {
               path: 'exchange-manage',

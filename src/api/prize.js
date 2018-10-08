@@ -24,5 +24,21 @@ export default {
   getPrizeDetail(id, loading = true) {
     let url = `api/merchant/exchange-coupon/${id}`
     return request.get(url, {}, loading)
+  },
+  /**
+   * 新建兑换券
+   * @returns {*}
+   */
+  newPrize(data, loading = true) {
+    let url = `api/merchant/exchange-coupon`
+    return request.post(url, data, loading)
+  },
+  /**
+   * 编辑兑换券
+   * @returns {*}
+   */
+  editPrize(id, data, loading = true) {
+    let url = `api/merchant/exchange-coupon/${id}`
+    return request.put(url, data, loading)
   }
 }

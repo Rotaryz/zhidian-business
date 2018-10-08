@@ -210,7 +210,7 @@
       },
       itemEditor(item) {
         let id = item.id
-        this.toDetail('editor', id)
+        this.toDetail('editor', id, item.rule_id)
       },
       async itemDown(item) {
         this.temporaryItem = item
@@ -253,8 +253,11 @@
           }
         })
       },
-      toDetail(type, id = '') {
-        let url = `${this.$route.path}/editor-service?type=${type}&id=${id}`
+      toDetail(type, id = '', ruleId = '') {
+        if (type === 'new') {
+          this._initAll()
+        }
+        let url = `${this.$route.path}/editor-activity?type=${type}&id=${id}&ruleId=${ruleId}`
         this.$router.push(url)
       },
       _initAll() {
