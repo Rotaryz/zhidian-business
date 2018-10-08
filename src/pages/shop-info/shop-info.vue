@@ -116,8 +116,29 @@
       @cancel="pickerCancel"
       @confirm="pickerConfirm">
     </awesome-picker>
-    <cropper ref="cropper-shop_images" @confirm="cropperConfirm"></cropper>
+    <!--<cropper ref="cropper-shop_images" @confirm="cropperConfirm"></cropper>-->
     <cropper ref="cropper-shop_logo" @confirm="cropperConfirm($event ,'logo')" :aspect="1"></cropper>
+    <div class="img-cut" v-show="visible">
+      <vueCropper
+        class="img-big"
+        ref="cropper-shop_images"
+        :viewMode="1"
+        :guides="false"
+        :rotatable="true"
+        :background="false"
+        :cropBoxResizable="false"
+        :aspectRatio="4/3"
+        :autoCropArea="0.8"
+        :dragMode="'move'"
+        :checkCrossOrigin="false"
+        :cropBoxMovable="false"
+      >
+      </vueCropper>
+      <div class="img-btn">
+        <div class="btn-item" @click="cropperConfirm">确定</div>
+        <!--<div class="btn-item" @click="cancel">取消</div>-->
+      </div>
+    </div>
   </form>
 </template>
 
@@ -128,6 +149,7 @@
   import axios from 'axios'
   import { Upload } from 'api'
   import Cropper from 'components/cropper/cropper'
+  import VueCropper from 'vue-cropperjs'
 
   const KEY = '206ec5511b39a51e02627ffbd8dfc16c'
 
@@ -138,7 +160,8 @@
     components: {
       Scroll,
       TitleBox,
-      Cropper
+      Cropper,
+      VueCropper
     },
     data() {
       return {
@@ -170,7 +193,8 @@
         cityData,
         industryArr,
         pickerType: '',
-        timeType: ''
+        timeType: '',
+        visible: false
       }
     },
     created() {
@@ -187,7 +211,13 @@
       chooseShopImages(flag) {
         if (!flag) return
         this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
-          flag !== 'logo' && this.$refs['cropper-shop_images'].show(res[0])
+          // flag !== 'logo' && this.$refs['cropper-shop_images'].show(res[0])
+          // flag !== 'logo' && this.$refs['cropper-shop_images'].show(res[0])
+          if (flag !== 'logo') {
+            this.visible = true
+            let img = this.$handle.getObjectURL(res[0])
+            this.$refs['cropper-shop_images'].replace(img)
+          }
           flag === 'logo' && this.$refs['cropper-shop_logo'].show(res[0])
         })
       },
@@ -488,12 +518,14 @@
           .add
             width: 64px
             height: @width
+            border-radius: 4px
+            overflow: hidden
             border-1px($color-9B9B9B, 4px)
             icon-image(icon-addpic02)
             margin-right: 15px
             margin-bottom: 10px
-            position :relative
-            z-index : 1
+            position: relative
+            z-index: 1
             &.un-up
               icon-image('./icon-addpic_un')
               border-1px($color-E6E6E6, 4px)
@@ -515,7 +547,7 @@
               right: -6px
               top: -6px
               icon-image('./icon-del24')
-              z-index :2
+              z-index: 2
           .explain
             font-size: 12px
             color: $color-CCCCCC

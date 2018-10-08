@@ -13,6 +13,7 @@
       :dragMode="'move'"
       :checkCrossOrigin="false"
       :cropBoxMovable="false"
+      :img="img"
     >
     </vueCropper>
     <div class="img-btn">
@@ -38,13 +39,15 @@
     data() {
       return {
         visible: false,
-        status: false
+        status: false,
+        img: ''
       }
     },
     methods: {
       show(imgUrl) {
         this.visible = true
         let img = this.$handle.getObjectURL(imgUrl)
+        this.img = img
         this.$refs.myCropper.replace(img)
       },
       confirm() {
