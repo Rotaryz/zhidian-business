@@ -76,8 +76,7 @@
               <div class="title">门店图片</div>
               <figure class="content">
                 <div class="add"
-                     :class="shopInfo.shop_images.length == index? '': 'un-up'"
-                     v-for="(item, index) in '0123456789'"
+                     v-for="(item, index) in shopImagesLen"
                      :key="index"
                      @click="chooseMedia(shopInfo.shop_images.length == index, 10)"
                 >
@@ -85,7 +84,7 @@
                   <div class="del-icon" v-if="shopInfo.shop_images[index]" @click.stop="delDetail(index)"></div>
                 </div>
                 <div class="explain one">点击图片预览实际展示效果</div>
-                <div class="explain">添加1-10 张图片（尺寸400*400，大小10M以下）</div>
+                <div class="explain">添加1-10 张图片（尺寸400*300，大小10M以下）</div>
               </figure>
             </article>
           </section>
@@ -114,6 +113,7 @@
       @cancel="pickerCancel"
       @confirm="pickerConfirm">
     </awesome-picker>
+    <cropper ref="cropper" @confirm="cropperConfirm"></cropper>
   </form>
 </template>
 
@@ -123,6 +123,7 @@
   import { checkIsPhoneNumber, cityData } from 'common/js/utils'
   import axios from 'axios'
   import { Upload } from 'api'
+  import Cropper from 'components/cropper/cropper'
 
   const KEY = '206ec5511b39a51e02627ffbd8dfc16c'
 
@@ -132,7 +133,8 @@
   export default {
     components: {
       Scroll,
-      TitleBox
+      TitleBox,
+      Cropper
     },
     data() {
       return {
@@ -169,7 +171,7 @@
     },
     methods: {
       delDetail(index) {
-        // todo
+        this.shopInfo.shop_images.splice(index, 1)
       },
       chooseMedia(flag, count = 1) {
         if (!flag) return
@@ -322,6 +324,9 @@
       }
     },
     computed: {
+      shopImagesLen() {
+        return Math.min(this.shopInfo.shop_images.length + 1, 3)
+      },
       introReg() {
         return this.shopInfo.intro
       },
@@ -451,6 +456,7 @@
               right: -6px
               top: -6px
               icon-image('./icon-del24')
+              z-index :2
           .explain
             font-size: 12px
             color: $color-CCCCCC
