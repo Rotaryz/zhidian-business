@@ -116,29 +116,8 @@
       @cancel="pickerCancel"
       @confirm="pickerConfirm">
     </awesome-picker>
-    <!--<cropper ref="cropper-shop_images" @confirm="cropperConfirm"></cropper>-->
+    <cropper ref="cropper-shop_images" @confirm="cropperConfirm"></cropper>
     <cropper ref="cropper-shop_logo" @confirm="cropperConfirm($event ,'logo')" :aspect="1"></cropper>
-    <div class="img-cut" v-show="visible">
-      <vueCropper
-        class="img-big"
-        ref="cropper-shop_images"
-        :viewMode="1"
-        :guides="false"
-        :rotatable="true"
-        :background="false"
-        :cropBoxResizable="false"
-        :aspectRatio="4/3"
-        :autoCropArea="0.8"
-        :dragMode="'move'"
-        :checkCrossOrigin="false"
-        :cropBoxMovable="false"
-      >
-      </vueCropper>
-      <div class="img-btn">
-        <div class="btn-item" @click="cropperConfirm">确定</div>
-        <!--<div class="btn-item" @click="cancel">取消</div>-->
-      </div>
-    </div>
   </form>
 </template>
 
@@ -209,15 +188,10 @@
         this.shopInfo.shop_images.splice(index, 1)
       },
       chooseShopImages(flag) {
+        alert(flag)
         if (!flag) return
         this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
-          // flag !== 'logo' && this.$refs['cropper-shop_images'].show(res[0])
-          // flag !== 'logo' && this.$refs['cropper-shop_images'].show(res[0])
-          if (flag !== 'logo') {
-            this.visible = true
-            let img = this.$handle.getObjectURL(res[0])
-            this.$refs['cropper-shop_images'].replace(img)
-          }
+          flag !== 'logo' && this.$refs['cropper-shop_images'].show(res[0])
           flag === 'logo' && this.$refs['cropper-shop_logo'].show(res[0])
         })
       },
@@ -353,9 +327,7 @@
         ]
         let res = this._testPropety(arr)
         if (res) {
-          console.log(222222)
           this._getGeocoder(data => {
-            console.log(data)
             this._updateShopInfo()
           })
         }
@@ -364,7 +336,6 @@
         for (let i = 0, j = arr.length; i < j; i++) {
           if (!arr[i].value) {
             this.$toast.show(arr[i].txt)
-            // this.disabledCover = false
             return false
           }
           if (i === j - 1 && arr[i].value) {
@@ -445,6 +416,7 @@
   @import "~common/stylus/mixin"
 
   input
+    height: 40px
     &::-webkit-input-placeholder
       color: $color-CCCCCC
     &::-ms-input-placeholder
@@ -495,8 +467,6 @@
           flex: 1
           color: $color-CCCCCC
           padding: 0 24px
-          min-height: 40px
-          line-height: 55.5px
           no-wrap()
           &.active
             color: $color-363547
@@ -519,7 +489,6 @@
             width: 64px
             height: @width
             border-radius: 4px
-            overflow: hidden
             border-1px($color-9B9B9B, 4px)
             icon-image(icon-addpic02)
             margin-right: 15px
