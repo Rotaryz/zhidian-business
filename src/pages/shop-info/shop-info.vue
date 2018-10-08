@@ -118,7 +118,7 @@
     </awesome-picker>
     <cropper ref="cropper-shop_images" @confirm="cropperConfirm"></cropper>
     <cropper ref="cropper-shop_logo" @confirm="cropperConfirm($event ,'logo')" :aspect="1"></cropper>
-    <input type="file" style="position: fixed;height: 50px" id="header-logo" @change="_fileChange"
+    <input type="file" style="position: fixed;height: 50px;z-index: 980" id="header-logo" @change="_fileChange"
            accept="image/*" value="选择">
   </form>
 </template>
