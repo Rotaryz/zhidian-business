@@ -59,7 +59,10 @@
             <article class="media-item border-bottom-1px">
               <div class="title">门店logo</div>
               <figure class="content">
-                <div class="add"></div>
+                <div class="add" @click="chooseShopImages('logo')">
+                  <div class="img-show" v-if="shopInfo.shop_logo[0]" :style="{backgroundImage: 'url(' + shopInfo.shop_logo[0].image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                  <div class="del-icon" v-if="shopInfo.shop_logo[0]" @click.stop="delDetail('logo')"></div>
+                </div>
                 <div class="explain one">点击图片预览实际展示效果</div>
                 <div class="explain">添加1张图片（尺寸200*200，大小2M以下）</div>
               </figure>
@@ -78,9 +81,9 @@
                 <div class="add"
                      v-for="(item, index) in shopImagesLen"
                      :key="index"
-                     @click="chooseMedia(shopInfo.shop_images.length == index, 10)"
+                     @click="chooseShopImages(shopInfo.shop_images.length == index)"
                 >
-                  <div class="img-show" v-if="shopInfo.shop_images[index]" :style="{backgroundImage: 'url(' + shopInfo.shop_images[index].url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                  <div class="img-show" v-if="shopInfo.shop_images[index]" :style="{backgroundImage: 'url(' + shopInfo.shop_images[index].image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                   <div class="del-icon" v-if="shopInfo.shop_images[index]" @click.stop="delDetail(index)"></div>
                 </div>
                 <div class="explain one">点击图片预览实际展示效果</div>
@@ -113,7 +116,8 @@
       @cancel="pickerCancel"
       @confirm="pickerConfirm">
     </awesome-picker>
-    <cropper ref="cropper" @confirm="cropperConfirm"></cropper>
+    <cropper ref="cropper-shop_images" @confirm="cropperConfirm"></cropper>
+    <cropper ref="cropper-shop_logo" @confirm="cropperConfirm($event ,'logo')" :aspect="1"></cropper>
   </form>
 </template>
 
@@ -169,39 +173,48 @@
         timeType: ''
       }
     },
+    created() {
+      this.shopInfo.opening_hours = [this.openingStart, this.openingEnd]
+    },
     methods: {
       delDetail(index) {
+        if (index === 'logo') {
+          this.shopInfo.shop_logo = []
+          return
+        }
         this.shopInfo.shop_images.splice(index, 1)
       },
-      chooseMedia(flag, count = 1) {
+      chooseShopImages(flag) {
         if (!flag) return
-        console.log(flag)
-        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE, count).then(async res => {
-          Promise.all(res.map(async item => {
-            let base64 = await this.$handle.fileReader2Base64(item)
-            let blob = this.$handle.getBlobBydataURI(base64)
-            let file = this.$handle.createFormData(blob)
-            return Upload.upLoadImage(file)
-          })).then((resArr) => {
-            this.$loading.hide()
-            let arr = []
-            resArr.map(item => {
-              if (item.error !== this.$ERR_OK) {
-                return this.$toast.show(item.message)
-              }
-              let obj = {
-                image_id: item.data.id,
-                url: item.data.url,
-                id: 0
-              }
-              arr.push(obj)
-            })
-            let newArr = this.shopInfo.shop_images
-            newArr.push(...arr)
-            newArr = newArr.splice(0, count)
-            this.shopInfo.shop_images = newArr
-          })
-          // todo
+        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
+          flag !== 'logo' && this.$refs['cropper-shop_images'].show(res[0])
+          flag === 'logo' && this.$refs['cropper-shop_logo'].show(res[0])
+        })
+      },
+      cropperConfirm(e, type) {
+        this.$loading.show()
+        let blob = this.$handle.getBlobBydataURI(e)
+        let file = this.$handle.createFormData(blob)
+        Upload.upLoadImage(file).then(res => {
+          if (res.error !== this.$ERR_OK) {
+            return this.$toast.show(res.message)
+          }
+          let obj = {
+            image_id: res.data.id,
+            image_url: res.data.url,
+            id: 0
+          }
+          switch (type) {
+            case 'logo' :
+              this.shopInfo.shop_logo.push(obj)
+              this.$refs['cropper-shop_logo'].cancel()
+              break
+            default:
+              this.shopInfo.shop_images.push(obj)
+              this.$refs['cropper-shop_images'].cancel()
+              break
+          }
+          this.$loading.hide()
         })
       },
       showTitleModal(type) {
@@ -295,12 +308,48 @@
         this.pickerType = ''
         this.timeType = ''
       },
-      saveBtn() {
-        this.getGeocoder(data => {
-          console.log(data)
-        })
+      _checkForm() {
+        let arr = [
+          {value: this.nameReg, txt: '请输入门店名称'},
+          {value: this.introReg, txt: '请描述您的门店'},
+          {value: this.telephoneReg, txt: '请输入正确的手机号码'},
+          {value: this.industryReg, txt: '请选择您的行业类型'},
+          {value: this.addressReg, txt: '请选择您的门店所在的地区'},
+          {value: this.addressDetailReg, txt: '请输入您的门店的详细地址'},
+          {value: this.openHoursReg, txt: '请选择您的营业时间'},
+          {value: this.shopLogoReg, txt: '请添加门店logo'},
+          {value: this.shopVideoReg, txt: '请添加门店视频'},
+          {value: this.shopImagesReg, txt: '请添加至少一张门店图片'}
+        ]
+        let res = this._testPropety(arr)
+        if (res) {
+          console.log(222222)
+          this._getGeocoder(data => {
+            console.log(data)
+            this._updateShopInfo()
+          })
+        }
       },
-      getGeocoder(callback) {
+      _testPropety(arr) {
+        for (let i = 0, j = arr.length; i < j; i++) {
+          if (!arr[i].value) {
+            this.$toast.show(arr[i].txt)
+            // this.disabledCover = false
+            return false
+          }
+          if (i === j - 1 && arr[i].value) {
+            return true
+          }
+        }
+      },
+      _updateShopInfo() {
+        // todo
+      },
+      saveBtn() {
+        // todo
+        this._checkForm()
+      },
+      _getGeocoder(callback) {
         let addressInfo = this.addressInfo
         let text = addressInfo.pca + addressInfo.address_detail
         axios.get(`https://restapi.amap.com/v3/geocode/geo?address=${text}&key=${KEY}`)
@@ -324,8 +373,17 @@
       }
     },
     computed: {
+      shopImagesReg() {
+        return this.shopInfo.shop_images.length > 0
+      },
+      shopVideoReg() {
+        return this.shopInfo.shop_video.length > 0
+      },
+      shopLogoReg() {
+        return this.shopInfo.shop_logo.length > 0
+      },
       shopImagesLen() {
-        return Math.min(this.shopInfo.shop_images.length + 1, 3)
+        return Math.min(this.shopInfo.shop_images.length + 1, 10)
       },
       introReg() {
         return this.shopInfo.intro
@@ -346,7 +404,7 @@
         return this.shopInfo.address_detail
       },
       openHoursReg() {
-        return this.opening_hours.length === 2
+        return this.shopInfo.opening_hours.length === 2
       }
     }
   }
@@ -435,6 +493,7 @@
             margin-right: 15px
             margin-bottom: 10px
             position :relative
+            z-index : 1
             &.un-up
               icon-image('./icon-addpic_un')
               border-1px($color-E6E6E6, 4px)

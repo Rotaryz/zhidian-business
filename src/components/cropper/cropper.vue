@@ -68,7 +68,7 @@
     left: 0
     right: 0
     bottom: 0
-    z-index: 100
+    z-index: 500
     background: #000
     .img-big
       background: #000
