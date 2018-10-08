@@ -47,9 +47,9 @@
     height: 120px
     font-family: $font-family-regular
     background-color: #fff
-    border-radius :4px
-    overflow :hidden
-    layout()
+    border-radius: 4px
+    overflow: hidden
+    layout(column, block, nowrap)
     .title
       font-size: $font-size-16
       color: $color-363537

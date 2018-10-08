@@ -1,69 +1,22 @@
 <template>
   <div class="radar">
-    <scroll>
-      <div @click="test">shop</div>
-      <hr>
-      <h1 @click="test2">222</h1>
-      <h1 @click="test3">2224444</h1>
-      <hr>
-      <hr>
-      <img v-if="pic" style="width:100%" :src="pic" alt="">
-      <h1 @click="testcos">cos</h1>
-      <div style="height: 600px;background-color: #f00"></div>
-    </scroll>
-    <cropper ref="mycropper" @confirm="cropperConfirm"></cropper>
-    <router-view-common @refresh="refresh"></router-view-common>
+    <tab-boss></tab-boss>
+    <router-view @refresh="refresh"></router-view>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Scroll from 'components/scroll/scroll'
-  import Cropper from 'components/cropper/cropper'
-
+  import TabBoss from 'components/tab-boss/tab-boss'
   export default {
     components: {
-      Scroll,
-      Cropper
+      TabBoss
     },
     data() {
-      return {
-        pic: ''
-      }
-    },
-    created() {
+      return {}
     },
     methods: {
       refresh() {
         // todo
-        console.log(2123)
-      },
-      ttt() {
-        this.$storage.clear()
-      },
-      test() {
-        this.$router.push(this.$route.path + '/login')
-      },
-      test2() {
-        console.log(2123121111)
-        this.$toast.show('123')
-      },
-      test3() {
-        console.log(555)
-        this.$loading.show()
-        setTimeout(() => {
-          this.$loading.hide()
-        }, 2000)
-      },
-      testcos() {
-        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
-          this.$refs.mycropper.show(res[0])
-        })
-      },
-      cropperConfirm(src) {
-        this.pic = src
-        console.log(typeof src)
-        this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [src])
-        this.$refs.mycropper.cancel()
       }
     }
   }
@@ -76,5 +29,5 @@
   .radar
     fill-box()
     bottom :$tab-height
-    background greenyellow
+    background:$color-F6F6F6
 </style>

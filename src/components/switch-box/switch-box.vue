@@ -1,12 +1,25 @@
 <template>
-  <div class="checkbox" :class="checked ? 'checked' : ''" @click.stop="checkSwitch">
+  <div class="checkbox" :class="checked || values ? 'checked' : ''" @click.stop="checkSwitch">
     <div class="circle-btn"></div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   export default {
-    props: ['disabled', 'relyFn'], // disabled 禁用 relyFn 是否依赖方法，有依赖则抛出父级处理后手动改变值
+    props: {
+      disabled: {
+        type: Boolean,
+        default: false
+      },
+      relyFn: {
+        type: Boolean,
+        default: false
+      },
+      values: {
+        type: Number,
+        default: 0
+      }
+    }, // disabled 禁用 relyFn 是否依赖方法，有依赖则抛出父级处理后手动改变值
     data() {
       return {
         checked: false
@@ -14,6 +27,7 @@
     },
     methods: {
       checkSwitch() {
+        this.checked = this.values
         if (this.disabled) return
         if (this.relyFn) {
           this.$emit('relyFn', this.checked)

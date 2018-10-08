@@ -1,15 +1,15 @@
 <template>
   <div class="service-item">
     <div class="item-content">
-      <div class="item-left" :style="{backgroundImage: 'url(' +  + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
-        <div class="left-cover" :class="tabIdx == 2 ? '' : 'hide'">已下架</div>
+      <div class="item-left" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
+        <div class="left-cover" :class="tabIdx == 2 ? '' : 'hide'">已过期</div>
       </div>
       <div class="item-right">
-        <div class="right-title">较好的附件汇丰晋亨弗交话费和继父回家发好多件返回的海沸江翻活动经费的</div>
+        <div class="right-title">{{item.title}}</div>
         <div class="right-down">
           <div class="down-left">
-            <p class="down-txt">现价：¥88.00</p>
-            <p class="down-txt second"><span class="first-txt">库存：550</span><span v-if="tabIdx != 0">销量：888</span></p>
+            <p class="down-txt">现价：¥{{item.platform_price}}</p>
+            <p class="down-txt second"><span class="first-txt">库存：{{item.stock}}</span><span v-if="tabIdx != 0">销量：{{item.sale_count}}</span></p>
           </div>
           <div class="down-right">
             <div class="down-right-icon" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
@@ -87,8 +87,9 @@
       .item-left
         width: 18.666vw
         height: @width
-        background: #ddd
         margin-right: 10px
+        border-1px($color-E6E6E6)
+        overflow: hidden
         position: relative
         .left-cover
           position: absolute

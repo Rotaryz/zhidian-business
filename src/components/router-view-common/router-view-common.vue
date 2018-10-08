@@ -25,7 +25,6 @@
       '$route'(to, from) {
         this.keepAlive = to.meta.keepAlive
         // this.transitionType = 'out'
-        console.log(this.transitionType)
       }
     }
   }

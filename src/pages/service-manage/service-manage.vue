@@ -3,7 +3,7 @@
     <div class="header-tab border-bottom-1px">
       <div class="tab-box">
         <div class="tab-item" :class="tabIdx == index ? 'active' : ''" v-for="(item, index) in tabList" :key="index" @click="changeTab(index, item)">
-          {{item.txt}}(10)
+          {{item.txt}}({{numObj[tabsNumArr[index]]}})
         </div>
       </div>
       <div class="underline-box" :style="'transform: translate(' + tabIdx*100 + '%,0)'">
@@ -17,7 +17,7 @@
                   :data="list0"
                   bcColor="#f6f6f6"
                   :pullUpLoad="pullUpLoadObj0"
-                  @pullingUp="onPullingUp0"
+                  @pullingUp="onPullingUp"
                   :showNoMore="showNoMore0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in list0" :key="index">
@@ -30,6 +30,10 @@
                               @itemDelete="itemDelete">
                 </service-item>
               </div>
+              <div class="nothing-box" v-if="nothing0">
+                <img src="./pic-empty_order@2x.png" class="nothing-img">
+                <div class="nothing-txt">暂无数据</div>
+              </div>
             </div>
           </scroll>
         </div>
@@ -38,7 +42,7 @@
                   :data="list1"
                   bcColor="#f6f6f6"
                   :pullUpLoad="pullUpLoadObj1"
-                  @pullingUp="onPullingUp1"
+                  @pullingUp="onPullingUp"
                   :showNoMore="showNoMore1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in list1" :key="index">
@@ -51,6 +55,10 @@
                               @itemDelete="itemDelete">
                 </service-item>
               </div>
+              <div class="nothing-box" v-if="nothing1">
+                <img src="./pic-empty_order@2x.png" class="nothing-img">
+                <div class="nothing-txt">暂无数据</div>
+              </div>
             </div>
           </scroll>
         </div>
@@ -59,7 +67,7 @@
                   :data="list2"
                   bcColor="#f6f6f6"
                   :pullUpLoad="pullUpLoadObj2"
-                  @pullingUp="onPullingUp2"
+                  @pullingUp="onPullingUp"
                   :showNoMore="showNoMore2">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in list2" :key="index">
@@ -72,6 +80,10 @@
                               @itemDelete="itemDelete">
                 </service-item>
               </div>
+              <div class="nothing-box" v-if="nothing2">
+                <img src="./pic-empty_order@2x.png" class="nothing-img">
+                <div class="nothing-txt">暂无数据</div>
+              </div>
             </div>
           </scroll>
         </div>
@@ -80,8 +92,8 @@
     <div class="footer-box">
       <div class="footer-btn" @click="toDetail('new')">新建服务</div>
     </div>
-    <router-view-common></router-view-common>
-    <modal ref="modal"></modal>
+    <router-view-common @refresh="refresh"></router-view-common>
+    <modal ref="modal" @confirm="modalConfirm"></modal>
   </div>
 </template>
 
@@ -90,55 +102,102 @@
   import Modal from 'components/confirm-msg/confirm-msg'
   import Scroll from 'components/scroll/scroll'
   import { ServiceApi } from 'api'
+  import {ease} from 'common/js/ease'
   const TABS = [
     {txt: '待上线', id: 0},
     {txt: '出售中', id: 1},
     {txt: '已下架', id: 2}
   ]
+  const TABSNUM = ['wait_online_count', 'online_count', 'offline_count']
   export default {
     data() {
       return {
         tabList: TABS,
         tabIdx: 1,
-        list0: [{id: 1}, {id: 2}],
-        list1: [{id: 1}, {id: 2}, {id: 3}],
-        list2: [{id: 1}],
+        list0: [],
+        list1: [],
+        list2: [],
+        numObj: {},
+        tabsNumArr: TABSNUM,
         pullUpLoad0: true,
         pullUpLoadThreshold0: 0,
-        showNoMore0: true,
+        showNoMore0: false,
         page0: 1,
+        nothing0: false,
         pullUpLoad1: true,
         pullUpLoadThreshold1: 0,
-        showNoMore1: true,
+        showNoMore1: false,
         page1: 1,
+        nothing1: false,
         pullUpLoad2: true,
         pullUpLoadThreshold2: 0,
-        showNoMore2: true,
+        showNoMore2: false,
         page2: 1,
+        nothing2: false,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
         scrollToEasing: 'bounce',
-        scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce']
+        scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
+        temporaryItem: {}, // 缓存需要处理的item
+        temporaryType: ''
       }
     },
     created() {
+      this._getList()
     },
     methods: {
-      _getList() {
+      _getList(loading = true) {
         let data = {
           page: this[`page${this.tabIdx}`],
           status: this.tabIdx
         }
-        ServiceApi.getServiceList(data).then((res) => {
-          console.log(res)
+        ServiceApi.getServiceList(data, loading).then((res) => {
+          this.$loading.hide()
+          if (res.error === this.$ERR_OK) {
+            this._setTabNum(res)
+            this[`list${this.tabIdx}`] = res.data
+            if (!res.data.length) {
+              this[`nothing${this.tabIdx}`] = true
+            }
+            setTimeout(() => {
+              this.$refs[`scroll${this.tabIdx}`].forceUpdate()
+              this.$refs[`scroll${this.tabIdx}`].scrollTo(0, 0, 0, ease[this.scrollToEasing])
+            }, 20)
+          } else {
+            this.$toast.show(res.message)
+          }
         })
       },
-      changeTab(idx, item) {
+      refresh() {
+        this._initAny()
+        this._getList(false)
+      },
+      _setTabNum(obj) {
+        this.numObj = {
+          wait_online_count: obj.wait_online_count,
+          online_count: obj.online_count,
+          offline_count: obj.offline_count
+        }
+      },
+      changeTab(idx) {
         this.tabIdx = idx * 1
+        this._initAny()
         this._initAll()
+        this._getList()
       },
       showModal() {
         this.$refs.modal.show({msg: '该服务已关联活动，下架会导致活动下架，确定吗？'})
+      },
+      modalConfirm() {
+        if (!this.temporaryItem.id) return
+        switch (this.temporaryType) {
+          case 'down':
+            this._serviceDown(this.temporaryItem)
+            break
+          case 'del':
+            this._serviceDel(this.temporaryItem)
+            break
+        }
       },
       showEditor(item) {
         this['list' + this.tabIdx] = this['list' + this.tabIdx].map((item1) => {
@@ -151,18 +210,71 @@
         })
       },
       itemEditor(item) {
-        console.log(item)
         let id = item.id
         this.toDetail('editor', id)
       },
-      itemDown(item) {
-        console.log('down', item)
+      async itemDown(item) {
+        let res = await this._checkActivity(item)
+        if (res === 'error') return
+        this.temporaryItem = item
+        this.temporaryType = 'down'
+        if (res) {
+          this.$refs.modal.show({msg: '该服务已关联活动，下架会导致活动下架，确定吗？'})
+        } else {
+          this.$refs.modal.show({msg: '确定下架该服务吗？'})
+        }
       },
-      itemDelete(item) {
-        console.log('del', item)
+      _serviceDown(item) {
+        ServiceApi.setServiceDown(item.id).then((res) => {
+          this.$loading.hide()
+          if (res.error === this.$ERR_OK) {
+            this.$toast.show('操作成功')
+            this.numObj[this.tabsNumArr[this.tabIdx]]--
+            this.numObj[this.tabsNumArr[2]]++
+            this['list' + this.tabIdx] = this['list' + this.tabIdx].filter((item1) => {
+              return +item1.id !== +item.id
+            })
+            setTimeout(() => {
+              this.$refs[`scroll${this.tabIdx}`].forceUpdate()
+            }, 20)
+          }
+        })
+      },
+      async itemDelete(item) {
+        this.temporaryItem = item
+        this.temporaryType = 'del'
+        this.$refs.modal.show({msg: '确定删除该服务吗？'})
+      },
+      _serviceDel(item) {
+        ServiceApi.setServiceDel(item.id).then((res) => {
+          this.$loading.hide()
+          if (res.error === this.$ERR_OK) {
+            this.$toast.show('操作成功')
+            this.numObj[this.tabsNumArr[this.tabIdx]]--
+            this['list' + this.tabIdx] = this['list' + this.tabIdx].filter((item1) => {
+              return +item1.id !== +item.id
+            })
+            setTimeout(() => {
+              this.$refs[`scroll${this.tabIdx}`].forceUpdate()
+            }, 20)
+          }
+        })
+      },
+      async _checkActivity(item) {
+        let res = await ServiceApi.getServiceConect(item.id)
+        this.$loading.hide()
+        if (res.error === this.$ERR_OK) {
+          return res.data.length
+        } else {
+          this.$toast.show(res.message)
+          return 'error'
+        }
       },
       toDetail(type, id = '') {
-        let url = `/service-manage/editor-service?type=${type}&id=${id}`
+        if (type === 'new') {
+          this._initAll()
+        }
+        let url = `${this.$route.path}/editor-service?type=${type}&id=${id}`
         this.$router.push(url)
       },
       _initAll() {
@@ -173,14 +285,38 @@
           })
         }
       },
-      onPullingUp0() {
-        console.log(7776767)
+      _initAny() {
+        this[`page${this.tabIdx}`] = 1
+        this[`showNoMore${this.tabIdx}`] = false
+        this[`nothing${this.tabIdx}`] = false
       },
-      onPullingUp1() {
-        console.log(7776767)
-      },
-      onPullingUp2() {
-        console.log(7776767)
+      onPullingUp() {
+        if (this[`showNoMore${this.tabIdx}`]) {
+          this.$refs[`scroll${this.tabIdx}`].forceUpdate()
+          return
+        }
+        this[`page${this.tabIdx}`]++
+        let data = {
+          page: this[`page${this.tabIdx}`],
+          status: this.tabIdx
+        }
+        ServiceApi.getServiceList(data).then((res) => {
+          this.$loading.hide()
+          if (res.error === this.$ERR_OK) {
+            this._setTabNum(res)
+            if (!res.data.length) {
+              this[`showNoMore${this.tabIdx}`] = true
+              this[`page${this.tabIdx}`]--
+            } else {
+              this[`list${this.tabIdx}`] = [...this[`list${this.tabIdx}`], ...res.data]
+            }
+            setTimeout(() => {
+              this.$refs[`scroll${this.tabIdx}`].forceUpdate()
+            }, 20)
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
       },
       rebuildScroll() {
         this.$nextTick(() => {
@@ -317,6 +453,20 @@
             padding: 0 15px
             .list-item
               padding-top: 10px
+            .nothing-box
+              display: flex
+              flex-direction: column
+              align-items: center
+              font-size: 0
+              padding-top: 100px
+              .nothing-img
+                width: 100px
+                height: 80px
+                margin-bottom: 5px
+              .nothing-txt
+                font-size: $font-size-12
+                color: $color-CCCCCC
+                font-family: $font-family-regular
     .footer-box
       position: fixed
       width: 100vw
