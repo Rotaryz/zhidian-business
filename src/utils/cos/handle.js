@@ -6,17 +6,16 @@ const CHOICE_ERROR = '选择文件类型错误'
  * @param count 选择数量
  * @returns {Promise}
  */
-export function fileController(type, count = 1) {
+export function fileController(type, count = 2) {
   return new Promise((resolve, reject) => {
     let input = document.createElement('input')
     input.type = 'file'
     if (count > 1) {
       input.multiple = 'multiple'
     }
-    alert(22)
-    input.onchange = function () {
-      alert(33)
-      let files = this.files
+    input.onchange = function (e) {
+      // console.log(e.path[0].files)
+      let files = e.path[0].files
       let arr = _changeToArray(files)
       arr = arr.splice(0, count)
       switch (type) {
@@ -38,7 +37,6 @@ export function fileController(type, count = 1) {
       }
     }
     input.click()
-    alert(222233333)
   })
 }
 
