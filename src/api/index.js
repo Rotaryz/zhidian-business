@@ -6,6 +6,7 @@ import employee from './employee'
 import activity from './activity'
 import prize from './prize'
 import mine from './mine'
+import order from './order'
 
 export const ServiceApi = service
 
@@ -20,3 +21,5 @@ export const Employee = employee
 export const PrizeApi = prize
 
 export const Mine = mine
+
+export const OrderApi = order

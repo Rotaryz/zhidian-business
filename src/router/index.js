@@ -25,6 +25,9 @@ const EditorPrize = () => import('pages/editor-prize/editor-prize')
 const ShopQrCode = () => import('pages/shop-qr-code/shop-qr-code')
 const Property = () => import('pages/property/property')
 const Invitation = () => import('pages/invitation/invitation')
+const OrderManage = () => import('pages/order-manage/order-manage')
+const StaffScreen = () => import('pages/staff-screen/staff-screen')
+const OrderDetail = () => import('pages/order-detail/order-detail')
 
 Vue.use(Router)
 
@@ -100,6 +103,29 @@ const route = new Router({
                   component: EditorService,
                   meta: {
                     title: '新建服务'
+                  }
+                }
+              ]
+            },
+            {
+              path: 'order-manage',
+              component: OrderManage,
+              meta: {
+                title: '订单管理'
+              },
+              children: [
+                {
+                  path: 'staff-screen',
+                  component: StaffScreen,
+                  meta: {
+                    title: '选择店员'
+                  }
+                },
+                {
+                  path: 'order-detail',
+                  component: OrderDetail,
+                  meta: {
+                    title: '订单详情'
                   }
                 }
               ]

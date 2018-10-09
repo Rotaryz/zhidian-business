@@ -26,7 +26,7 @@
     {
       icon: 'one-3',
       title: '订单',
-      path: ''
+      path: '/order-manage'
     },
     {
       icon: 'two-1',
