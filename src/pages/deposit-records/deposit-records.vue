@@ -9,14 +9,14 @@
       @pullingUp="onPullingUp"
     >
       <ul class="recode-wrapper border-top-1px">
-        <li class="item-wrapper border-bottom-1px">
+        <li class="item-wrapper border-bottom-1px" v-for="(item, index) in dataArray" :key="index">
           <div class="item-container">
-            <div class="left">张志强-招商银行 6775</div>
-            <div class="right">-365.0</div>
+            <div class="left">{{item.title}}</div>
+            <div class="right">{{item.total}}</div>
           </div>
           <div class="item-container">
-            <div class="left small">2018-02-10 17:00:235</div>
-            <div class="right small">未处理</div>
+            <div class="left small">{{item.created_at}}</div>
+            <div class="right small">{{item.status_str}}</div>
           </div>
         </li>
       </ul>
@@ -61,10 +61,8 @@
             this.$toast.show(res.message)
             return
           }
-          console.log(res)
           if (!res.meta || res.meta.current_page === 1) {
             this.dataArray = res.data
-            this.dataArray = [1] // todo
             this.isEmpty = !this.dataArray.length
           } else {
             let arr = this.dataArray.concat(res.data)
