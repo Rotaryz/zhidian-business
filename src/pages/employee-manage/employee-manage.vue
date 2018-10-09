@@ -1,19 +1,21 @@
 <template>
   <div class="employee-box">
-    <scroll
-      bcColor="#f6f6f6"
-      ref="scroll"
-      :data="dataArray"
-      :pullUpLoad="pullUpLoadObj"
-      @pullingUp="onPullingUp"
-    >
-      <div class="employee-title">账号数量:{{dataArray.length}}</div>
-      <ul class="employee-list border-bottom-1px">
-        <li v-for="(item, index) in dataArray" :key="index">
-          <employee-item :item="item"></employee-item>
-        </li>
-      </ul>
-    </scroll>
+    <div class="scroll-wrapper">
+      <scroll
+        bcColor="#f6f6f6"
+        ref="scroll"
+        :data="dataArray"
+        :pullUpLoad="pullUpLoadObj"
+        @pullingUp="onPullingUp"
+      >
+        <div class="employee-title">账号数量:{{dataArray.length}}</div>
+        <ul class="employee-list border-bottom-1px">
+          <li v-for="(item, index) in dataArray" :key="index">
+            <employee-item :item="item"></employee-item>
+          </li>
+        </ul>
+      </scroll>
+    </div>
     <div class="footer-box" @click="jumpNew">
       <div class="footer-btn">新建店员</div>
     </div>
@@ -117,6 +119,13 @@
     fill-box()
     z-index: 51
     background: $color-F6F6F6
+
+  .scroll-wrapper
+    position :fixed
+    top:0
+    left:0
+    right :0
+    bottom :64px
 
   .footer-box
     position: fixed

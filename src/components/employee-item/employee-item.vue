@@ -10,7 +10,7 @@
           <div class="item-left-icon" v-if="item.role_id * 1 === 2">店员</div>
           <div class="item-left-icon" v-if="item.role_id * 1 === 3">财务</div>
         </div>
-        <div class="item-box-right" v-if="item.role_id * 1 === 1" @click="navTo(item)">
+        <div class="item-box-right" v-if="item.role_id * 1 !== 1" @click="navTo(item)">
           <div class="send-text">发送邀请</div>
           <img src="./icon-press_right@2x.png" class="arrow-icon">
         </div>
