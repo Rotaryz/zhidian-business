@@ -1,7 +1,7 @@
 <template>
   <div class="mine">
     <div class="bg"></div>
-    <section class="header">
+    <section class="header" @click="navTo({path: '/shop-qr-code'})">
       <div class="logo"></div>
       <div class="title">国颐堂(白云店)</div>
       <div class="qr-code"></div>

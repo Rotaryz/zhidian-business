@@ -35,8 +35,8 @@
     },
     {
       icon: 'two-2',
-      title: '砍价',
-      path: ''
+      title: '资产',
+      path: '/property'
     },
     {
       icon: 'two-3',

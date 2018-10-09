@@ -17,6 +17,13 @@ const ExchangeRecord = () => import('pages/exchange-record/exchange-record')
 const ShopInfo = () => import('pages/shop-info/shop-info')
 const OverView = () => import('pages/overview/overview')
 const Ranking = () => import('pages/ranking/ranking')
+const ActivityManage = () => import('pages/activity-manage/activity-manage')
+const EditorActivity = () => import('pages/editor-activity/editor-activity')
+const ExchangeManage = () => import('pages/exchange-manage/exchange-manage')
+const EditorPrize = () => import('pages/editor-prize/editor-prize')
+const ShopQrCode = () => import('pages/shop-qr-code/shop-qr-code')
+const Property = () => import('pages/property/property')
+const Invitation = () => import('pages/invitation/invitation')
 
 Vue.use(Router)
 
@@ -54,7 +61,22 @@ const route = new Router({
                   meta: {
                     title: '新建店员'
                   }
-                }]
+                },
+                {
+                  path: 'invitation',
+                  component: Invitation,
+                  meta: {
+                    title: '发送邀请'
+                  }
+                }
+              ]
+            },
+            {
+              path: 'shop-qr-code',
+              component: ShopQrCode,
+              meta: {
+                title: '店铺二维码'
+              }
             }
           ]
         },
@@ -78,12 +100,37 @@ const route = new Router({
                   meta: {
                     title: '新建服务'
                   }
-                },
+                }
+              ]
+            },
+            {
+              path: 'activity-manage',
+              component: ActivityManage,
+              meta: {
+                title: '活动管理'
+              },
+              children: [
                 {
-                  path: 'editor-service',
-                  component: EditorService,
+                  path: 'editor-activity',
+                  component: EditorActivity,
                   meta: {
-                    title: '新建服务'
+                    title: '新建活动'
+                  }
+                }
+              ]
+            },
+            {
+              path: 'exchange-manage',
+              component: ExchangeManage,
+              meta: {
+                title: '兑换券管理'
+              },
+              children: [
+                {
+                  path: 'editor-prize',
+                  component: EditorPrize,
+                  meta: {
+                    title: '新建兑换券'
                   }
                 }
               ]
@@ -100,6 +147,13 @@ const route = new Router({
               component: ExchangeRecord,
               meta: {
                 title: '核销记录'
+              }
+            },
+            {
+              path: 'property',
+              component: Property,
+              meta: {
+                title: '资产'
               }
             }
           ]
