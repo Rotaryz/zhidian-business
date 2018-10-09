@@ -132,13 +132,12 @@
         let page = ++this.page
         let limit = this.limit
         const data = {
-          merchant_id: this.userInfo.merchant_id,
-          employee_id: 0,
           page,
           limit,
           ..._data
         }
         Rank.getStaffList(data).then(res => {
+          this.$loading.hide()
           if (res.error === ERR_OK) {
             if (res.data && res.data.length) {
               let newArr = this.dataArray.concat(res.data)
@@ -158,13 +157,12 @@
         // 成功率类型 1： 0~50% 2：51%~80% 3：81~99%，4：100% - 0
         const _data = this._formatData()
         const data = {
-          merchant_id: this.userInfo.merchant_id,
-          employee_id: 0,
           page: 1,
           limit: LIMIT,
           ..._data
         }
         Rank.getStaffList(data).then(res => {
+          this.$loading.hide()
           if (res.error === ERR_OK) {
             this.dataArray = res.data
             this.isEmpty = !this.dataArray.length
@@ -317,13 +315,13 @@
     padding-top: 70px
 
   .ranking
-    position: fixed
+    position: absolute
     top: 62px
     bottom: 0px
     left: 0
     right: 0
     layout(column, block, nowrap)
-    background-color: $color-white-fff
+    background-color: $color-white
     .tool-bar-box
       .tab-one
         width: 270px
@@ -335,7 +333,7 @@
         .tab-one-item
           flex: 1
           height: 100%
-          font-family: $font-family-meddle
+          font-family: $font-family-medium
           font-size: $font-size-14
           color: $color-20202E
           letter-spacing: 0.3px
@@ -345,10 +343,10 @@
           border: 0.5px solid rgba(32, 32, 46, 0.10)
           border-radius: 1px
           transition: all .6s
-          background-color: $color-white-fff
+          background-color: $color-white
           &.active
-            color: $color-white-fff
-            background-color: $color-20202E
+            color: $color-white
+            background-color: $color-363547
       .tab-two-container
         border-bottom: 0.5px solid $color-col-line
         .tab-two-box
@@ -382,7 +380,7 @@
             .tab-line
               height: 3px
               width: 30px
-              background-color: $color-20202E
+              background-color: $color-EF705D
     .content
       position: absolute
       top: 113px

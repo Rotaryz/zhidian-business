@@ -16,6 +16,7 @@
     <section class="exception-box" v-if="isEmpty">
       <exception errType="nodata"></exception>
     </section>
+    <toast ref="toast"></toast>
     <router-view @refresh="refresh"></router-view>
   </article>
 </template>
@@ -60,14 +61,15 @@
         this.isAll = false
       },
       toCapacityModel(item) {
-        const id = item.employee_id
+        const id = item.shop_id
+        storage.set('user', item)
         const pageUrl = `/capacity-model`
-        console.log(pageUrl)
         this.$router.push({path: pageUrl, query: {id, pageUrl}})
       },
       _rqGetStaffSellList() {
-        const data = {page: 1, limit: LIMIT, merchant_id: this.userInfo.merchant_id}
+        const data = {page: 1, limit: LIMIT}
         Analyse.getStaffSellList(data).then(res => {
+          this.$loading.hide()
           if (res.error === ERR_OK) {
             this.dataArray = res.data
             this.isEmpty = !this.dataArray.length
@@ -83,8 +85,9 @@
         console.info('pulling up and load data')
         let page = ++this.page
         let limit = this.limit
-        const data = {page, limit, merchant_id: this.userInfo.merchant_id}
+        const data = {page, limit}
         Analyse.getStaffSellList(data).then(res => {
+          this.$loading.hide()
           if (res.error === ERR_OK) {
             if (res.data && res.data.length) {
               let newArr = this.dataArray.concat(res.data)
@@ -142,15 +145,18 @@
     padding-top: 137px
 
   .ai-analyse
-    fill-box()
-    overflow: hidden
+    position: absolute
+    top: 62px
     bottom: 0
+    left: 0
+    right: 0
+    background-color: greenyellow
     .ai-analyse-box
       fill-box()
       overflow: hidden
       top: 62px
       bottom: 0
-      background-color: $color-white-fff
+      background-color: $color-white
     .user-card-box
       height: 75px
       padding-left: 15px

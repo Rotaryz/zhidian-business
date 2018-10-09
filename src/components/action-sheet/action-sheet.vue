@@ -69,7 +69,7 @@
       bottom: 0
       left: 0
       right: 0
-      background-color: $color-white-fff
+      background-color: $color-white
       layout()
       .content-box
         flex: 1
@@ -85,7 +85,7 @@
             justify-content: space-between
             padding: 0 15px
             .left
-              font-family: $font-family-meddle
+              font-family: $font-family-medium
               font-size: $font-size-14
               color: $color-20202E
             .right

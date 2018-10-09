@@ -9,6 +9,8 @@ import mine from './mine'
 import echart from './echart'
 import rank from './rank'
 import analyse from './ai-analyse'
+import clientDetail from './clientDetail'
+import business from './business'
 
 export const ServiceApi = service
 
@@ -32,3 +34,9 @@ export const Echart = echart
 
 // 排行榜
 export const Rank = rank
+
+// 客户资料
+export const ClientDetail = clientDetail
+
+// 名片
+export const Business = business

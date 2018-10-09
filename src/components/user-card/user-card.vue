@@ -98,7 +98,7 @@
         align-items: center
         font-family: DINCondensed-Bold
         font-size: $font-size-20
-        color: $color-ccc
+        color: $color-CCCCCC
         &.one
           background-image: url("./icon-goldmedal@3x.png")
         &.two

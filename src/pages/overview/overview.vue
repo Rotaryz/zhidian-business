@@ -12,27 +12,27 @@
             </div>
             <div class="data-list">
               <div class="list-box">
-                <div class="number">{{allDatas.customer_sum}}</div>
+                <div class="number">{{allDatas.customer_total}}</div>
                 <div class="text">客户总数</div>
               </div>
               <div class="list-box">
-                <div class="number">{{allDatas.order_sum}}</div>
+                <div class="number">{{allDatas.order_total}}</div>
                 <div class="text">订单总数</div>
               </div>
               <div class="list-box">
-                <div class="number">{{allDatas.order_finish_sum}}</div>
+                <div class="number">{{allDatas.success_order_total}}</div>
                 <div class="text">成交总数</div>
               </div>
               <div class="list-box">
-                <div class="number">{{allDatas.goods_visits_sum}}</div>
+                <div class="number">{{allDatas.goods_visits_total}}</div>
                 <div class="text">产品访问数</div>
               </div>
               <div class="list-box">
-                <div class="number">{{allDatas.activity_visits_sum}}</div>
+                <div class="number">{{allDatas.activity_visits_total}}</div>
                 <div class="text">活动访问数</div>
               </div>
               <div class="list-box">
-                <div class="number">{{allDatas.live_logs_sum}}</div>
+                <div class="number">{{allDatas.live_logs_total}}</div>
                 <div class="text">动态访问数</div>
               </div>
             </div>
@@ -531,7 +531,8 @@
         })
       },
       getPieData() {
-        Echart.getPie(this.userInfo.merchant_id).then(res => {
+        Echart.getPie().then(res => {
+          this.$loading.hide()
           if (res.error === ERR_OK) {
             this.pieData = res.data
             this.drawPie()
@@ -541,7 +542,8 @@
         })
       },
       getActionLineData() {
-        Echart.getActionLine(this.userInfo.merchant_id).then(res => {
+        Echart.getActionLine().then(res => {
+          this.$loading.hide()
           if (res.error === ERR_OK) {
             this.ationLine = res.data
             this.drawLine()
@@ -551,7 +553,8 @@
         })
       },
       getAddActionLineData() {
-        Echart.getAddLine(this.userInfo.merchant_id).then(res => {
+        Echart.getAddLine().then(res => {
+          this.$loading.hide()
           if (res.error === ERR_OK) {
             this.addationLine = res.data
             this.drawAddLine()
@@ -561,7 +564,8 @@
         })
       },
       getBarData() {
-        Echart.getBar(this.userInfo.merchant_id).then(res => {
+        Echart.getBar().then(res => {
+          this.$loading.hide()
           if (res.error === ERR_OK) {
             this.barData = res.data
             this.drawBar()
@@ -571,7 +575,8 @@
         })
       },
       getSuccessData() {
-        Echart.getSuccess(this.userInfo.merchant_id, 0, 1).then(res => {
+        Echart.getSuccess().then(res => {
+          this.$loading.hide()
           if (res.error === ERR_OK) {
             this.successData = res.data
             this.drawSuccess()
@@ -589,7 +594,8 @@
         }
       },
       getAllDataObj(time) {
-        Echart.getAllData(time, this.userInfo.merchant_id, 0).then(res => {
+        Echart.getAllData(time).then(res => {
+          this.$loading.hide()
           if (res.error === ERR_OK) {
             this.allDatas = res.data
           } else {
@@ -640,7 +646,7 @@
       position: absolute
       z-index: 1
       height: 73px
-      background: #20202E
+      background: $color-363547
       width: 100%
       top: 0
       left: 0
@@ -674,14 +680,14 @@
             height: 30px
             font-size: $font-size-14
             color: #20202E
-            font-family: $font-family-meddle
+            font-family: $font-family-medium
             line-height: 30px
             width: 25%
             text-align: center
           .tab:last-child
             border-right: 0
           .active
-            background: #20202e
+            background: $color-363547
             color: #fff
         .data-list
           position: relative
@@ -700,7 +706,7 @@
             .text
               font-size: $font-size-12
               color: #20202e
-              font-family: $font-family-meddle
+              font-family: $font-family-medium
               margin-top: 5px
   .ai-box
     padding: 10px 15px
@@ -746,13 +752,13 @@
         top: 20px
         left: 0
         .title
-          font-size: $font-size-medium-x
+          font-size: $font-size-16
           color: #202020
           font-family: $font-family-regular
         .sub-title
           margin-top: 5px
-          font-size: $font-size-small
-          color: $color-text-88
+          font-size: $font-size-12
+          color: $color-888888
           font-family: $font-family-regular
       .bottom-des
         position: absolute
@@ -779,7 +785,7 @@
           .text
             font-size: $font-size-12
             font-family: $font-family-regular
-            color: $color-text
+            color: $color-20202E
       .pie-list
         layout(row)
         position: absolute
@@ -805,7 +811,7 @@
             background: #F9B43C
           .text
             line-height: 1
-            font-size: $font-size-small
+            font-size: $font-size-12
             color: #202020
             font-family: $font-family-regular
 
