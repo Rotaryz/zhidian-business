@@ -23,7 +23,8 @@
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in [1, 2, 3]" :key="index">
                 <div class="img-bc un-up"></div>
-                <div class="img-bc up" v-if="serviceDetail.goods_banner_images.length == index" @click="chooseBanner"></div>
+                <div class="img-bc up" v-if="serviceDetail.goods_banner_images.length == index"></div>
+                <input type="file" class="img-bc image-file" @change="_fileImage($event)" accept="image/*" v-if="serviceDetail.goods_banner_images.length == index">
               </div>
             </div>
             <div class="container-item">
@@ -78,7 +79,8 @@
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in [1, 2, 3, 4, 5]" :key="index">
                 <div class="img-bc un-up"></div>
-                <div class="img-bc up" v-if="serviceDetail.goods_images.length == index" @click="chooseDetail"></div>
+                <div class="img-bc up" v-if="serviceDetail.goods_images.length == index"></div>
+                <input type="file" class="img-bc image-file" @change="_fileDetail($event)" accept="image/*" v-if="serviceDetail.goods_images.length == index" multiple>
               </div>
             </div>
             <div class="container-item">
@@ -303,39 +305,35 @@
       delBanner(index) {
         this.serviceDetail.goods_banner_images.splice(index, 1)
       },
-      chooseBanner() {
-        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
-          this.$refs.cropper.show(res[0])
-        })
+      _fileImage(e) {
+        let arr = Array.from(e.target.files)
+        this.$refs.cropper.show(arr[0])
       },
-      chooseDetail() {
-        // 选择详情图片
-        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE, 5).then(async res => {
-          Promise.all(res.map(async item => {
-            let base64 = await this.$handle.fileReader2Base64(item)
-            let blob = this.$handle.getBlobBydataURI(base64)
-            let file = this.$handle.createFormData(blob)
-            return Upload.upLoadImage(file)
-          })).then((resArr) => {
-            this.$loading.hide()
-            let arr = []
-            resArr.map(item => {
-              if (item.error !== this.$ERR_OK) {
-                return this.$toast.show(item.message)
-              }
-              let obj = {
-                image_id: item.data.id,
-                image_url: item.data.url,
-                id: 0
-              }
-              arr.push(obj)
-            })
-            let newArr = this.serviceDetail.goods_images
-            newArr.push(...arr)
-            newArr = newArr.splice(0, 5)
-            this.serviceDetail.goods_images = newArr
+      _fileDetail(e) {
+        let arr = Array.from(e.target.files)
+        Promise.all(arr.map(async item => {
+          let base64 = await this.$handle.fileReader2Base64(item)
+          let blob = this.$handle.getBlobBydataURI(base64)
+          let file = this.$handle.createFormData(blob)
+          return Upload.upLoadImage(file)
+        })).then((resArr) => {
+          this.$loading.hide()
+          let arr = []
+          resArr.map(item => {
+            if (item.error !== this.$ERR_OK) {
+              return this.$toast.show(item.message)
+            }
+            let obj = {
+              image_id: item.data.id,
+              image_url: item.data.url,
+              id: 0
+            }
+            arr.push(obj)
           })
-          // todo
+          let newArr = this.serviceDetail.goods_images
+          newArr.push(...arr)
+          newArr = newArr.splice(0, 5)
+          this.serviceDetail.goods_images = newArr
         })
       },
       delDetail(index) {
@@ -745,6 +743,8 @@
             position: absolute
             left: 0
             top: 0
+            &.image-file
+              opacity: 0
             &.un-up
               icon-image('./icon-addpic_un')
             &.up

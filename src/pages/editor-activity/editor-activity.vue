@@ -36,7 +36,8 @@
             <div class="container-item">
               <div class="img-box">
                 <div class="img-bc un-up"></div>
-                <div class="img-bc up" v-if="!activityDetail.image_url" @click="chooseBanner"></div>
+                <div class="img-bc up" v-if="!activityDetail.image_url"></div>
+                <input type="file" class="img-bc image-file" @change="_fileImage($event)" accept="image/*" v-if="!activityDetail.image_url">
               </div>
             </div>
             <div class="container-item" v-if="activityDetail.image_url">
@@ -347,10 +348,9 @@
           }
         })
       },
-      chooseBanner() {
-        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
-          this.$refs.cropper.show(res[0])
-        })
+      _fileImage(e) {
+        let arr = Array.from(e.target.files)
+        this.$refs.cropper.show(arr[0])
       },
       cropperConfirm(e) {
         // this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e])
