@@ -31,7 +31,7 @@ export default {
     return url
   },
   // base64转流
-  getBlobBydataURI(dataURI, type = 'image/png') {
+  getBlobBydataURI(dataURI, type = 'image/jpeg') {
     let binary = atob(dataURI.split(',')[1])
     let array = []
     for (let i = 0; i < binary.length; i++) {
