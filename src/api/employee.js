@@ -7,7 +7,7 @@ export default {
     return request.get(url, data, loading)
   },
   // 成员(员工)列表
-  postNewEmployee(data, loading) {
+  createNewEmployee(data, loading) {
     const url = `/api/merchant/employees`
     return request.post(url, data, loading)
   }

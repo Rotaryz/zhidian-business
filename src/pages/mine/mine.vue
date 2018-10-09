@@ -21,6 +21,8 @@
 
 <script type="text/ecmascript-6">
   import Modal from 'components/confirm-msg/confirm-msg'
+  import { Mine } from 'api'
+
   const optionsArr = [
     {
       logo: 'shop',
@@ -49,15 +51,24 @@
       }
     },
     created() {
+      this._getShopInfo()
     },
     methods: {
       refresh() {
         // todo
-        console.log(2123)
+        this._getShopInfo()
       },
-      test() {
-        this.$storage.clear()
-        this.$login.show()
+      _getShopInfo() {
+        Mine.getShopInfo().then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          res.data.video = res.data.video ? res.data.video : {}
+          res.data.logo = res.data.logo ? res.data.logo : {}
+          console.log(res)
+        })
       },
       navTo(item) {
         if (item.logo === 'exit') {
@@ -108,8 +119,8 @@
         font-size: 18px
         color: #363547
         letter-spacing: 0.8px
-        text-align :justify
-        word-break :break-all
+        text-align: justify
+        word-break: break-all
       .qr-code
         width: 20px
         height: 20px
@@ -122,17 +133,17 @@
     .option-wrapper
       border-1px($color-E6E6E6)
       background: #fff
-      padding-left :15px
-      margin-top :11px
+      padding-left: 15px
+      margin-top: 11px
       .option-item
-        height :55px
+        height: 55px
         layout(row)
-        align-items :center
+        align-items: center
         &:last-child:after
-          display :none
+          display: none
         .logo
-          width :20px
-          height :20px
+          width: 20px
+          height: 20px
           &.shop
             icon-image(icon-info)
           &.staff
@@ -141,7 +152,7 @@
             icon-image(icon-sp_signout)
         .title
           flex: 1
-          padding :0 8px
+          padding: 0 8px
           font-family: PingFangSC-Regular
           font-size: 16px
           color: #363547

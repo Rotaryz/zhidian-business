@@ -17,7 +17,7 @@
     <div class="footer-box" @click="jumpNew">
       <div class="footer-btn">新建店员</div>
     </div>
-    <router-view-common></router-view-common>
+    <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
 
@@ -44,22 +44,30 @@
       this._getList()
     },
     methods: {
+      refresh() {
+        this.page = 1
+        this._getList()
+      },
       _getList(data = {page: 1}) {
+        if (!this.hasMore) return
         Employee.getEmployeeList({...data, limit: LIMIT}).then((res) => {
-          if (!this.hasMore) return
           this.$loading.hide()
           if (res.error !== this.$ERR_OK) {
             this.$toast.show(res.message)
             return
           }
-          if (res.meta.current_page === 1) {
+          if (!res.meta || res.meta.current_page === 1) {
             this.dataArray = res.data
           } else {
             let arr = this.dataArray.concat(res.data)
             this.dataArray = arr
           }
-          this.hasMore = res.meta.current_page !== res.meta.last_page
-          this.pullUpLoad = !this.hasMore
+          if (res.meta) {
+            this.hasMore = res.meta.current_page !== res.meta.last_page
+            this.pullUpLoad = !this.hasMore
+          } else {
+            this.pullUpLoad = false
+          }
         })
       },
       jumpNew() {
