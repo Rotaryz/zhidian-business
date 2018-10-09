@@ -35,7 +35,7 @@
             @pullingUp="onPullingUp"
           >
             <ul class="staff-list-wrapper border-bottom-1px">
-              <li class="staff-item-wrapper border-bottom-1px" v-for="(item, index) in dataArray" :key="index">
+              <li class="staff-item-wrapper border-bottom-1px" v-for="(item, index) in dataArray" :key="index" @click="navToGive(item)">
                 <section class="left">
                   <div class="avatar" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                   <div class="avatar" v-else></div>
@@ -110,6 +110,9 @@
         ]).then(() => {
           this.$loading.hide()
         })
+      },
+      navToGive(item) {
+        this.$router.push(this.$route.path + '/give-out?id=' + item.id)
       },
       changeTab(idx) {
         this.tabIdx = idx * 1

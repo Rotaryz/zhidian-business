@@ -35,6 +35,7 @@ const DepositRecords = () => import('pages/deposit-records/deposit-records')
 const Deposit = () => import('pages/deposit/deposit')
 const AddBankCard = () => import('pages/add-bank-card/add-bank-card')
 const EditorService = () => import('pages/editor-service/editor-service')
+const GiveOut = () => import('pages/give-out/give-out')
 
 Vue.use(Router)
 
@@ -204,6 +205,13 @@ const route = new Router({
                   component: DepositRecords,
                   meta: {
                     title: '提现记录'
+                  }
+                },
+                {
+                  path: 'give-out',
+                  component: GiveOut,
+                  meta: {
+                    title: '发放佣金'
                   }
                 },
                 {
