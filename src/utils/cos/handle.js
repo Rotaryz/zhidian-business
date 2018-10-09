@@ -102,6 +102,6 @@ export function getObjectURL(file) {
 
 export function createFormData($Blob) {
   let formData = new FormData()
-  formData.append('file', $Blob, 'file_' + Date.now() + '.png')
+  formData.append('file', $Blob, 'file_' + Date.now() + '.jpeg')
   return formData
 }
