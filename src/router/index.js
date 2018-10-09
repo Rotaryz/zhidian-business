@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import storage from 'storage-controller'
 
 const _this = () => import('@/main')
-
+const Demo = () => import('pages/Z-DEMO/z-demo')
 const ServiceManage = () => import('pages/service-manage/service-manage')
 const EditorService = () => import('pages/editor-service/editor-service')
 const Mine = () => import('pages/mine/mine')
@@ -15,11 +15,16 @@ const NewEmployee = () => import('pages/new-employee/new-employee')
 const ExchangeCode = () => import('pages/exchange-code/exchange-code')
 const ExchangeRecord = () => import('pages/exchange-record/exchange-record')
 const ShopInfo = () => import('pages/shop-info/shop-info')
+const OverView = () => import('pages/overview/overview')
+const Ranking = () => import('pages/ranking/ranking')
 const ActivityManage = () => import('pages/activity-manage/activity-manage')
 const EditorActivity = () => import('pages/editor-activity/editor-activity')
 const ChoiceGoods = () => import('pages/choice-goods/choice-goods')
 const ExchangeManage = () => import('pages/exchange-manage/exchange-manage')
 const EditorPrize = () => import('pages/editor-prize/editor-prize')
+const ShopQrCode = () => import('pages/shop-qr-code/shop-qr-code')
+const Property = () => import('pages/property/property')
+const Invitation = () => import('pages/invitation/invitation')
 
 Vue.use(Router)
 
@@ -57,7 +62,22 @@ const route = new Router({
                   meta: {
                     title: '新建店员'
                   }
-                }]
+                },
+                {
+                  path: 'invitation',
+                  component: Invitation,
+                  meta: {
+                    title: '发送邀请'
+                  }
+                }
+              ]
+            },
+            {
+              path: 'shop-qr-code',
+              component: ShopQrCode,
+              meta: {
+                title: '店铺二维码'
+              }
             }
           ]
         },
@@ -138,6 +158,13 @@ const route = new Router({
               meta: {
                 title: '核销记录'
               }
+            },
+            {
+              path: 'property',
+              component: Property,
+              meta: {
+                title: '资产'
+              }
             }
           ]
         },
@@ -146,7 +173,32 @@ const route = new Router({
           component: Radar,
           meta: {
             title: 'BOSS-AI'
-          }
+          },
+          children: [
+            {
+              path: 'overview',
+              component: OverView,
+              meta: {
+                title: '总览'
+              },
+              children: [
+                {
+                  path: 'demo',
+                  component: Demo,
+                  meta: {
+                    title: 'demo'
+                  }
+                }
+              ]
+            },
+            {
+              path: 'ranking',
+              component: Ranking,
+              meta: {
+                title: '排行榜'
+              }
+            }
+          ]
         }
       ]
     },
@@ -189,6 +241,9 @@ route.beforeEach(async (to, from, next) => {
       next({path: OAUTH_ROUTE, replace: true})
       self.$login.show()
     }
+  }
+  if (to.path === '/radar') {
+    next({path: '/radar/overview', replace: true})
   }
   next()
 })

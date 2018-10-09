@@ -1,12 +1,12 @@
 <template>
   <transition name="fade">
-    <div class="title-shadow"  v-show="showTitle">
-      <div class="title-box">
+    <div class="title-shadow"  v-show="showTitle" @click="hide">
+      <div class="title-box" @click.stop>
         <div class="title-top">
           <div class="title">{{title}}</div>
           <div class="data-bottom">
-            <div class="textarea-number">{{note.length}}<span>/40</span></div>
-            <textarea class="data-area" @touchmove.stop v-model="note" maxlength="40" :placeholder="placeholder"></textarea>
+            <div class="textarea-number">{{note.length}}<span>/{{maxLength}}</span></div>
+            <textarea class="data-area" @touchmove.stop v-model="note" :maxlength="maxLength" :placeholder="placeholder"></textarea>
           </div>
         </div>
         <div class="title-btn border-top-1px" @click="submitTitle">确定</div>
@@ -24,7 +24,8 @@
         title: '标题',
         placeholder: '请输入标题',
         showTitle: false,
-        type: 'title'
+        type: 'title',
+        maxLength: 40
       }
     },
     methods: {
@@ -33,11 +34,15 @@
         this.title = obj.title || '标题'
         this.placeholder = obj.placeholder || '请输入标题'
         this.type = obj.type || 'title'
+        this.maxLength = obj.maxLength || 40
         this.showTitle = true
       },
       submitTitle() {
         this.showTitle = false
         this.$emit('submitMsg', this.note, this.type)
+      },
+      hide() {
+        this.showTitle = false
       }
     }
   }

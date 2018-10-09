@@ -1,7 +1,7 @@
 <template>
   <div class="new-box">
     <div class="main-box border-bottom-1px">
-      <div class="list-item border-bottom-1px" @click="chooseBanner">
+      <div class="list-item border-bottom-1px avatar" @click="chooseBanner">
         <div class="item-left">
           <div class="item-img" :style="{backgroundImage: 'url(' + imageData.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
         </div>
@@ -96,6 +96,8 @@
       layout(row)
       align-items: center
       position: relative
+      &.avatar
+        height: 75px
       .item-left
         font-size: $font-size-14
         color: $color-9B9B9B

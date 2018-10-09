@@ -13,7 +13,7 @@ export function fileController(type, count = 1) {
     if (count > 1) {
       input.multiple = 'multiple'
     }
-    input.onchange = function () {
+    input['onchange'] = function () {
       let files = this.files
       let arr = _changeToArray(files)
       arr = arr.splice(0, count)
