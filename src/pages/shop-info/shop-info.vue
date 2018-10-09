@@ -184,6 +184,8 @@
             this.$toast.show(res.message)
             return
           }
+          res.data.video = res.data.video ? res.data.video : {}
+          res.data.logo = res.data.logo ? res.data.logo : {}
           Object.assign(this.shopInfo, res.data)
         })
       },

@@ -5,5 +5,9 @@ export default {
   verification(data, loading) {
     const url = `/api/merchant/verification`
     return request.post(url, data, loading)
+  },
+  getVerificationLog(data, loading) {
+    const url = `/api/merchant/verification-log`
+    return request.get(url, data, loading)
   }
 }

@@ -65,6 +65,8 @@
             this.$toast.show(res.message)
             return
           }
+          res.data.video = res.data.video ? res.data.video : {}
+          res.data.logo = res.data.logo ? res.data.logo : {}
           console.log(res)
         })
       },
