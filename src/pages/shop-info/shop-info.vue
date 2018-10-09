@@ -197,7 +197,7 @@
           this.$toast.show('保存成功')
           setTimeout(() => {
             this.$router.go(-1)
-          })
+          }, 2000)
         })
       },
       _fileChange(e, flag) {

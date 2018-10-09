@@ -31,8 +31,9 @@
 
 <script type="text/ecmascript-6">
   import Cropper from 'components/cropper/cropper'
-  import { Upload } from 'api'
+  import { Upload, Employee } from 'api'
   import { checkIsPhoneNumber } from 'common/js/utils'
+
   export default {
     name: 'new-employee',
     data() {
@@ -49,6 +50,19 @@
     created() {
     },
     methods: {
+      _createEmployee() {
+        Employee.createNewEmployee(this.staffInfo).then(res => {
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.$toast.show('创建成功')
+          this.$emit('refresh')
+          setTimeout(() => {
+            this.$router.back()
+          }, 2000)
+        })
+      },
       _fileChange(e) {
         let arr = Array.from(e.target.files)
         this.$refs.cropper.show(arr[0])
@@ -73,27 +87,28 @@
           this.$loading.hide()
           this.$refs.cropper.cancel()
         })
-      }
-    },
-    _checkForm() {
-      let arr = [
-        {value: this.nameReg, txt: '请输入店员的名称'},
-        {value: this.telephoneReg, txt: '请输入店员的手机号码'},
-        {value: this.positionReg, txt: '请输入店员的职位'},
-        {value: this.avatarReg, txt: '请添加店员的照片'}
-      ]
-      let res = this._testPropety(arr)
-      if (res) {
-      }
-    },
-    _testPropety(arr) {
-      for (let i = 0, j = arr.length; i < j; i++) {
-        if (!arr[i].value) {
-          this.$toast.show(arr[i].txt)
-          return false
+      },
+      _checkForm() {
+        let arr = [
+          {value: this.avatarReg, txt: '请添加店员的照片'},
+          {value: this.nameReg, txt: '请输入店员的名称'},
+          {value: this.telephoneReg, txt: '请输入店员的手机号码'},
+          {value: this.positionReg, txt: '请输入店员的职位'}
+        ]
+        let res = this._testPropety(arr)
+        if (res) {
+          this._createEmployee()
         }
-        if (i === j - 1 && arr[i].value) {
-          return true
+      },
+      _testPropety(arr) {
+        for (let i = 0, j = arr.length; i < j; i++) {
+          if (!arr[i].value) {
+            this.$toast.show(arr[i].txt)
+            return false
+          }
+          if (i === j - 1 && arr[i].value) {
+            return true
+          }
         }
       }
     },
@@ -127,6 +142,7 @@
     min-height: 100vh
     background: $color-F6F6F6
     padding-top: 10px
+
   .main-box
     padding-left: 15px
     background: $color-white
@@ -152,8 +168,8 @@
         color: $color-363547
         font-family: $font-family-regular
         flex: 1
-        overflow :hidden
-        text-align :right
+        overflow: hidden
+        text-align: right
         width: 100%
         height: 40px
         outline: none
@@ -163,15 +179,16 @@
         line-height: 60px
         &.avatar
           layout(row)
-          align-items :center
-          justify-content :flex-end
-          height :100%
+          align-items: center
+          justify-content: flex-end
+          height: 100%
       .item-right::-webkit-input-placeholder
         color: $color-CCCCCC
       .item-right::-ms-input-placeholder
         color: $color-CCCCCC
       .item-right::-moz-placeholder
         color: $color-CCCCCC
+
   .footer-box
     position: fixed
     width: 100vw
@@ -193,6 +210,7 @@
       color: $color-white
       font-size: $font-size-16
       letter-spacing: 0.8px
+
   .employee-title
     height: 45px
     line-height: 45px
