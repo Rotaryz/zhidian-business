@@ -26,22 +26,22 @@
     {
       icon: 'one-3',
       title: '订单',
-      path: ''
+      path: '/order-manage'
     },
     {
       icon: 'two-1',
-      title: '拼团',
-      path: ''
+      title: '活动',
+      path: '/activity-manage'
     },
     {
       icon: 'two-2',
-      title: '砍价',
-      path: ''
+      title: '资产',
+      path: '/property'
     },
     {
       icon: 'two-3',
-      title: '优惠券',
-      path: ''
+      title: '兑换券',
+      path: '/exchange-manage'
     },
     {
       icon: 'three-1',
@@ -114,9 +114,9 @@
             &.one-3
               icon-image(icon-order)
             &.two-1
-              icon-image(icon-group)
+              icon-image(icon-share)
             &.two-2
-              icon-image(icon-kanjia)
+              icon-image(icon-asset)
             &.two-3
               icon-image(icon-coupon)
 

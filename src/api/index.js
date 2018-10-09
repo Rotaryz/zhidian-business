@@ -5,6 +5,11 @@ import jwt from './jwt'
 import employee from './employee'
 import activity from './activity'
 import prize from './prize'
+import mine from './mine'
+import order from './order'
+import exchange from './exchange'
+
+export const Exchange = exchange
 
 export const ServiceApi = service
 
@@ -17,3 +22,7 @@ export const Upload = upload
 export const Employee = employee
 
 export const PrizeApi = prize
+
+export const Mine = mine
+
+export const OrderApi = order

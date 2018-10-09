@@ -9,10 +9,11 @@
       :background="status"
       :cropBoxResizable="status"
       :aspectRatio="aspect"
-      :autoCropArea="0.8"
+      :autoCropArea="1"
       :dragMode="'move'"
       :checkCrossOrigin="false"
       :cropBoxMovable="false"
+      :img="img"
     >
     </vueCropper>
     <div class="img-btn">
@@ -38,17 +39,19 @@
     data() {
       return {
         visible: false,
-        status: false
+        status: false,
+        img: ''
       }
     },
     methods: {
       show(imgUrl) {
         this.visible = true
         let img = this.$handle.getObjectURL(imgUrl)
+        this.img = img
         this.$refs.myCropper.replace(img)
       },
       confirm() {
-        let src = this.$refs.myCropper.getCroppedCanvas().toDataURL()
+        let src = this.$refs.myCropper.getCroppedCanvas().toDataURL('image/jpeg')
         this.$emit('confirm', src)
       },
       cancel() {
@@ -68,7 +71,7 @@
     left: 0
     right: 0
     bottom: 0
-    z-index: 100
+    z-index: 500
     background: #000
     .img-big
       background: #000

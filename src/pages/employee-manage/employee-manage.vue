@@ -1,14 +1,15 @@
 <template>
   <div class="employee-box">
-    <scroll ref="scroll0"
-            :data="list0"
-            bcColor="#f6f6f6"
-            :pullUpLoad="pullUpLoadObj0"
-            @pullingUp="onPullingUp"
-            :showNoMore="showNoMore0">
-      <div class="employee-title">账号数量:{{list0.length}}</div>
+    <scroll
+      bcColor="#f6f6f6"
+      ref="scroll"
+      :data="dataArray"
+      :pullUpLoad="pullUpLoadObj"
+      @pullingUp="onPullingUp"
+    >
+      <div class="employee-title">账号数量:{{dataArray.length}}</div>
       <ul class="employee-list border-bottom-1px">
-        <li v-for="(item, index) in list0" v-bind:key="index">
+        <li v-for="(item, index) in dataArray" :key="index">
           <employee-item :item="item"></employee-item>
         </li>
       </ul>
@@ -16,7 +17,7 @@
     <div class="footer-box" @click="jumpNew">
       <div class="footer-btn">新建店员</div>
     </div>
-    <router-view-common></router-view-common>
+    <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
 
@@ -24,42 +25,48 @@
   import Scroll from 'components/scroll/scroll'
   import EmployeeItem from 'components/employee-item/employee-item'
   import { Employee } from 'api'
-  import {ease} from 'common/js/ease'
+
+  const LIMIT = 10
   export default {
     name: 'employee-manage',
     data() {
       return {
-        list0: [],
-        tabIdx: 0,
-        pullUpLoad0: true,
-        pullUpLoadThreshold0: 0,
-        showNoMore0: false,
-        page0: 1,
-        nothing0: false,
-        scrollToEasing: 'bounce'
+        dataArray: [],
+        pullUpLoad: true,
+        pullUpLoadThreshold: 0,
+        pullUpLoadMoreTxt: '加载更多',
+        pullUpLoadNoMoreTxt: '没有更多了',
+        page: 1,
+        hasMore: true
       }
     },
     created() {
       this._getList()
     },
     methods: {
-      _getList(loading = true) {
-        let data = {
-          page: this[`page${this.tabIdx}`]
-        }
-        Employee.getEmployeeList(data, loading).then((res) => {
+      refresh() {
+        this.page = 1
+        this._getList()
+      },
+      _getList(data = {page: 1}) {
+        if (!this.hasMore) return
+        Employee.getEmployeeList({...data, limit: LIMIT}).then((res) => {
           this.$loading.hide()
-          if (res.error === this.$ERR_OK) {
-            this[`list${this.tabIdx}`] = res.data
-            if (!res.data.length) {
-              this[`nothing${this.tabIdx}`] = true
-            }
-            setTimeout(() => {
-              this.$refs[`scroll${this.tabIdx}`].forceUpdate()
-              this.$refs[`scroll${this.tabIdx}`].scrollTo(0, 0, 0, ease[this.scrollToEasing])
-            }, 20)
-          } else {
+          if (res.error !== this.$ERR_OK) {
             this.$toast.show(res.message)
+            return
+          }
+          if (!res.meta || res.meta.current_page === 1) {
+            this.dataArray = res.data
+          } else {
+            let arr = this.dataArray.concat(res.data)
+            this.dataArray = arr
+          }
+          if (res.meta) {
+            this.hasMore = res.meta.current_page !== res.meta.last_page
+            this.pullUpLoad = !this.hasMore
+          } else {
+            this.pullUpLoad = false
           }
         })
       },
@@ -68,18 +75,30 @@
         this.$router.push(path)
       },
       onPullingUp() {
+        // 更新数据
+        if (!this.pullUpLoad) return this.$refs.scroll.forceUpdate()
+        this._getList({page: ++this.page})
       },
       rebuildScroll() {
         this.$nextTick(() => {
-          this.$refs['scroll' + this.tabIdx].destroy()
-          this.$refs['scroll' + this.tabIdx].initScroll()
+          this.$refs.scroll.destroy()
+          this.$refs.scroll.initScroll()
         })
       }
     },
+    watch: {
+      pullUpLoadObj: {
+        handler() {
+          if (!this.pullUpLoad) return // 防止下拉报错
+          this.rebuildScroll()
+        },
+        deep: true
+      }
+    },
     computed: {
-      pullUpLoadObj0: function () {
-        return this.pullUpLoad0 ? {
-          threshold: parseInt(this.pullUpLoadThreshold0),
+      pullUpLoadObj: function () {
+        return this.pullUpLoad ? {
+          threshold: parseInt(this.pullUpLoadThreshold),
           txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
         } : false
       }
@@ -97,8 +116,8 @@
   .employee-box
     fill-box()
     z-index: 51
-    bottom: 64px
     background: $color-F6F6F6
+
   .footer-box
     position: fixed
     width: 100vw
@@ -120,6 +139,7 @@
       color: $color-white
       font-size: $font-size-16
       letter-spacing: 0.8px
+
   .employee-title
     height: 45px
     line-height: 45px

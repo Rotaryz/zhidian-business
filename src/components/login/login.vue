@@ -77,7 +77,7 @@
           const token = res.data.access_token
           const merchantInfo = res.data.merchant_info
           this.$storage.set('token', token)
-          this.$storage.set('merchantInfo', merchantInfo)
+          this.$storage.set('info', merchantInfo)
           this.hide()
           window.location.replace(window.location.href)
         }).catch(e => {
