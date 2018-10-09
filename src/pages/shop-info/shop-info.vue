@@ -60,9 +60,9 @@
               <div class="title">门店logo</div>
               <figure class="content">
                 <label class="add">
-                  <div class="img-show" v-if="shopInfo.logo.image_url" :style="{backgroundImage: 'url(' + shopInfo.logo.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-                  <div class="del-icon" v-if="shopInfo.logo.image_url" @click.stop="delDetail('logo')"></div>
-                  <input v-if="!shopInfo.logo.image_url" type="file" style="display: none" @change="_fileChange($event, 'logo')"
+                  <div class="img-show" v-if="shopInfo.logo.url" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                  <div class="del-icon" v-if="shopInfo.logo.url" @click.stop="delDetail('logo')"></div>
+                  <input v-if="!shopInfo.logo.url" type="file" style="display: none" @change="_fileChange($event, 'logo')"
                          accept="image/*">
                 </label>
                 <div class="explain one">点击图片预览实际展示效果</div>
@@ -84,7 +84,7 @@
                        v-for="(item, index) in shopImagesLen"
                        :key="index"
                 >
-                  <div class="img-show" v-if="shopInfo.images[index]" :style="{backgroundImage: 'url(' + shopInfo.images[index].image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                  <div class="img-show" v-if="shopInfo.images[index]" :style="{backgroundImage: 'url(' + shopInfo.images[index].url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                   <div class="del-icon" v-if="shopInfo.images[index]" @click.stop="delDetail(index)"></div>
                   <input v-if="shopInfo.images.length == index" type="file" style="display: none" @change="_fileChange($event, 'images')"
                          accept="image/*">
@@ -222,7 +222,7 @@
           }
           let obj = {
             image_id: res.data.id,
-            image_url: res.data.url,
+            url: res.data.url,
             id: res.data.id
           }
           switch (type) {
