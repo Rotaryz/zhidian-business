@@ -76,7 +76,6 @@
             this.$toast.show(res.message)
             return
           }
-          console.log(res)
           this.bankList = [res.data]
         })
       },

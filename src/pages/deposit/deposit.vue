@@ -3,7 +3,7 @@
     <div class="margin-box-10px"></div>
     <section class="card-wrapper" @click="navToBankCard">
       <div class="title" v-if="!bankInfo.bank">添加银行卡</div>
-      <div class="title active" v-else>{{bankInfo.bank}}</div>
+      <div class="title active" v-else>{{bankInfo.bank}}()</div>
       <div class="right">
         <div class="name">{{bankInfo.name}}</div>
         <div class="right-arrow"></div>
@@ -14,22 +14,29 @@
       <div class="title">提现金额</div>
       <div class="input-wrapper border-bottom-1px">
         <div class="unit">¥</div>
-        <input type="number" class="input-content">
+        <input type="number" class="input-content" v-model="getMoney">
       </div>
       <div class="explain">可提现金额 ¥{{bankInfo.remaining}}</div>
     </section>
     <div class="declare">微信按提现金额0.7%收取手续费，最低1元。</div>
-    <div class="btn">提现</div>
+    <div class="btn" :class="allowBtn?'active':''" @click="_checkForm">提现</div>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import { Property } from 'api'
+
   export default {
     data() {
       return {
-        bankInfo: {}
+        bankInfo: {
+          bank: '',
+          name: '',
+          card: '',
+          remaining: '0.00'
+        },
+        getMoney: ''
       }
     },
     created() {
@@ -37,7 +44,7 @@
     },
     methods: {
       refresh() {
-        // todo
+        this._getWithdrawalInfo()
       },
       navToBankCard() {
         this.$router.push(this.$route.path + '/add-bank-card')
@@ -49,9 +56,54 @@
             this.$toast.show(res.message)
             return
           }
-          console.log(res)
           this.bankInfo = res.data
         })
+      },
+      _getMoney() {
+        Property.getMoney({money: this.getMoney}).then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.$toast.show('提现成功')
+          this.$emit('refresh')
+          setTimeout(() => {
+            this.$router.back()
+          }, 1500)
+        })
+      },
+      _checkForm() {
+        let arr = [
+          {value: this.bankReg, txt: '请选择银行卡'},
+          {value: this.getMoneyReg, txt: '请输入正确的提现金额'}
+        ]
+        let res = this._testPropety(arr)
+        if (res) {
+          this._getMoney()
+        }
+      },
+      _testPropety(arr) {
+        for (let i = 0, j = arr.length; i < j; i++) {
+          if (!arr[i].value) {
+            this.$toast.show(arr[i].txt)
+            return false
+          }
+          if (i === j - 1 && arr[i].value) {
+            return true
+          }
+        }
+      }
+    },
+    computed: {
+      bankReg() {
+        return this.bankInfo.bank
+      },
+      getMoneyReg() {
+        return (typeof +this.getMoney === 'number') && +this.getMoney >= 1 && this.getMoney <= this.bankInfo.remaining
+      },
+      allowBtn() {
+        return this.bankReg && this.getMoneyReg
       }
     }
   }
@@ -84,14 +136,14 @@
         &.active
           color: #363547;
       .right
-        layout(row,block,nowrap)
-        align-items :center
+        layout(row, block, nowrap)
+        align-items: center
         .name
           font-family: PingFangSC-Regular;
           font-size: 14px;
           color: #363547;
           letter-spacing: 0.6px;
-          margin-right :5px
+          margin-right: 5px
     .money-wrapper
       padding-left: 15px
       background: #fff
@@ -139,4 +191,7 @@
       letter-spacing: 0.56px;
       text-align: center
       line-height: @height
+      opacity: 0.5
+      .&.active
+        opacity: 1
 </style>

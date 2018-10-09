@@ -24,5 +24,9 @@ export default {
   updateBankCard(data, loading) {
     let url = '/api/merchant/bank-cards'
     return request.post(url, data, loading)
+  },
+  getMoney(data, loading) {
+    let url = '/api/merchant/withdrawal'
+    return request.post(url, data, loading)
   }
 }

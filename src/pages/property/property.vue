@@ -100,7 +100,7 @@
     methods: {
       refresh() {
         this.page = 1
-        this._getInfo()
+        this._getBaseInfo()
       },
       _getBaseInfo() {
         this.$loading.show()
