@@ -8,5 +8,9 @@ export default {
   getStaffsIncome(data, loading) {
     let url = '/api/merchant/employee-commission'
     return request.get(url, data, loading)
+  },
+  getWithdrawalLog(data, loading) {
+    let url = '/api/merchant/withdrawal-log'
+    return request.get(url, data, loading)
   }
 }

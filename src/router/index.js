@@ -25,6 +25,7 @@ const EditorPrize = () => import('pages/editor-prize/editor-prize')
 const ShopQrCode = () => import('pages/shop-qr-code/shop-qr-code')
 const Property = () => import('pages/property/property')
 const Invitation = () => import('pages/invitation/invitation')
+const DepositRecords = () => import('pages/deposit-records/deposit-records')
 
 Vue.use(Router)
 
@@ -164,7 +165,16 @@ const route = new Router({
               component: Property,
               meta: {
                 title: '资产'
-              }
+              },
+              children: [
+                {
+                  path: 'deposit-records',
+                  component: DepositRecords,
+                  meta: {
+                    title: '提现记录'
+                  }
+                }
+              ]
             }
           ]
         },

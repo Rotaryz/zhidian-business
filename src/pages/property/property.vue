@@ -20,7 +20,7 @@
             <div class="explain">每天可提现一次，每笔限额1万元</div>
           </section>
           <div class="margin-box-10px"></div>
-          <router-link tag="div" class="bottom border-bottom-1px" to="">
+          <router-link tag="div" class="bottom border-bottom-1px" :to="$route.path + '/deposit-records'">
             <div class="name">提现记录</div>
             <div class="arrow-right"></div>
           </router-link>
@@ -67,7 +67,7 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
-  import { Property } from '../../api'
+  import { Property } from 'api'
 
   const TABS = [
     {txt: '店铺收入', id: 0},
