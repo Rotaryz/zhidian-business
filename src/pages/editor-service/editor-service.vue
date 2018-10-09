@@ -213,6 +213,7 @@
   }
   const MONEYREG = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
   const COUNTREG = /^[1-9]\d*$/
+  const RATEREG = /^[0-9]\d*$/
   export default {
     data() {
       return {
@@ -503,7 +504,7 @@
         return this.serviceDetail.total_stock && COUNTREG.test(this.serviceDetail.total_stock)
       },
       rateReg() {
-        return this.serviceDetail.commission_rate && COUNTREG.test(this.serviceDetail.commission_rate)
+        return this.serviceDetail.commission_rate && RATEREG.test(this.serviceDetail.commission_rate)
       },
       serviceDetailReg() {
         let arr = this.serviceDetail.detail_config.filter((item) => {

@@ -236,6 +236,7 @@
   }
   const MONEYREG = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
   const COUNTREG = /^[1-9]\d*$/
+  const RATEREG = /^[0-9]\d*$/
   export default {
     data() {
       return {
@@ -558,7 +559,7 @@
         return this.activityDetail.coupon_id
       },
       rateReg() {
-        return this.activityDetail.commission_rate && COUNTREG.test(this.activityDetail.commission_rate)
+        return this.activityDetail.commission_rate && RATEREG.test(this.activityDetail.commission_rate)
       },
       showSelectType() {
         if (this.ruleId) {
