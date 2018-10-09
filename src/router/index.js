@@ -23,6 +23,7 @@ const ExchangeManage = () => import('pages/exchange-manage/exchange-manage')
 const EditorPrize = () => import('pages/editor-prize/editor-prize')
 const ShopQrCode = () => import('pages/shop-qr-code/shop-qr-code')
 const Property = () => import('pages/property/property')
+const Invitation = () => import('pages/invitation/invitation')
 
 Vue.use(Router)
 
@@ -60,7 +61,15 @@ const route = new Router({
                   meta: {
                     title: '新建店员'
                   }
-                }]
+                },
+                {
+                  path: 'invitation',
+                  component: Invitation,
+                  meta: {
+                    title: '发送邀请'
+                  }
+                }
+              ]
             },
             {
               path: 'shop-qr-code',
