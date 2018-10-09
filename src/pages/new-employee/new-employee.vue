@@ -1,20 +1,21 @@
 <template>
   <div class="new-box">
-    <div class="main-box border-bottom-1px">
-      <div class="list-item border-bottom-1px avatar">
-        <div class="item-left">上传头像</div>
-        <label class="item-right avatar">
-          <div class="item-img" :style="{backgroundImage: 'url(' + staffInfo.imageData.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-          <input type="file" style="display: none" @change="_fileChange" accept="image/*">
-        </label>
-      </div>
+    <div class="margin-box-10px"></div>
+    <div class="main-box border-bottom-1px" >
+      <!--<div class="list-item border-bottom-1px avatar" v-if="false">-->
+        <!--<div class="item-left">上传头像</div>-->
+        <!--<label class="item-right avatar">-->
+          <!--<div class="item-img" :style="{backgroundImage: 'url(' + staffInfo.imageData.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>-->
+          <!--<input type="file" style="display: none" @change="_fileChange" accept="image/*">-->
+        <!--</label>-->
+      <!--</div>-->
       <div class="list-item border-bottom-1px">
         <div class="item-left">店员名称</div>
         <input type="text" placeholder="请输入" class="item-right" v-model="staffInfo.name" maxlength="30">
       </div>
       <div class="list-item border-bottom-1px">
         <div class="item-left">手机号码</div>
-        <input type="number" placeholder="请输入" class="item-right" v-model="staffInfo.telephone">
+        <input type="number" placeholder="请输入" class="item-right" v-model="staffInfo.mobile">
       </div>
       <div class="list-item border-bottom-1px">
         <div class="item-left">公司职位</div>
@@ -40,7 +41,7 @@
       return {
         staffInfo: {
           name: '',
-          telephone: '',
+          mobile: '',
           position: '',
           imageData: {}
         },
@@ -52,6 +53,7 @@
     methods: {
       _createEmployee() {
         Employee.createNewEmployee(this.staffInfo).then(res => {
+          this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)
             return
@@ -90,9 +92,9 @@
       },
       _checkForm() {
         let arr = [
-          {value: this.avatarReg, txt: '请添加店员的照片'},
+          // {value: this.avatarReg, txt: '请添加店员的照片'},
           {value: this.nameReg, txt: '请输入店员的名称'},
-          {value: this.telephoneReg, txt: '请输入店员的手机号码'},
+          {value: this.mobileReg, txt: '请输入店员的手机号码'},
           {value: this.positionReg, txt: '请输入店员的职位'}
         ]
         let res = this._testPropety(arr)
@@ -116,8 +118,8 @@
       nameReg() {
         return this.staffInfo.name
       },
-      telephoneReg() {
-        return checkIsPhoneNumber(this.staffInfo.telephone)
+      mobileReg() {
+        return checkIsPhoneNumber(this.staffInfo.mobile)
       },
       positionReg() {
         return this.staffInfo.position
@@ -138,10 +140,8 @@
   .new-box
     fill-box()
     z-index: 71
-    bottom: 0
-    min-height: 100vh
+    height: 100vh
     background: $color-F6F6F6
-    padding-top: 10px
 
   .main-box
     padding-left: 15px
@@ -169,7 +169,6 @@
         font-family: $font-family-regular
         flex: 1
         overflow: hidden
-        text-align: right
         width: 100%
         height: 40px
         outline: none

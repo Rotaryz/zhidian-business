@@ -14,6 +14,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { Exchange } from 'api'
+
   const dataArray = [
     {
       icon: '',
@@ -61,7 +63,7 @@
     },
     {
       icon: 'x',
-      txt: 'X'
+      txt: ''
     }
   ]
   export default {
@@ -72,6 +74,19 @@
       }
     },
     methods: {
+      _verification() {
+        let code = this.inputCode.join('')
+        let id = this.$storage.get('info').id
+        Exchange.verification({code, store_id: id}).then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.$toast.show('核销成功')
+          this.inputCode = []
+        })
+      },
       inputHandle(item) {
         this._vibrateHandle()
         if (!item.icon && this.inputCode.length < 10) {
@@ -81,12 +96,7 @@
           this.inputCode.pop()
         }
         if (item.icon === 'yz' && this.inputCode.length >= 10) {
-          this.$loading.show()
-          setTimeout(() => {
-            this.$loading.hide()
-          }, 20000)
-          console.log(222)
-          // todo
+          this._verification()
         }
       },
       _vibrateHandle() {
@@ -161,6 +171,13 @@
             color: #FFFFFF
           &:last-child
             opacity: 0
+            width: 12.8vw
+            height: @width
+            icon-image(icon-shop_delete2)
+            background-color: transparent
+            position :relative
+            left: -4vw
+            top: 1vw
           &:last-child.del
             opacity: 1
 
