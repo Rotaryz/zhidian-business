@@ -17,6 +17,13 @@ import rank from './rank'
 import analyse from './ai-analyse'
 import clientDetail from './clientDetail'
 import business from './business'
+import order from './order'
+import exchange from './exchange'
+import property from './property'
+
+export const Property = property
+
+export const Exchange = exchange
 
 export const ServiceApi = service
 
@@ -46,3 +53,5 @@ export const ClientDetail = clientDetail
 
 // 名片
 export const Business = business
+
+export const OrderApi = order

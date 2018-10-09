@@ -5,7 +5,7 @@ import storage from 'storage-controller'
 const _this = () => import('@/main')
 const Demo = () => import('pages/Z-DEMO/z-demo')
 const ServiceManage = () => import('pages/service-manage/service-manage')
-const EditorService = () => import('pages/editor-service/editor-service')
+// const EditorService = () => import('pages/editor-service/editor-service')
 const Mine = () => import('pages/mine/mine')
 const Radar = () => import('pages/radar/radar')
 const Shop = () => import('pages/shop/shop')
@@ -28,6 +28,9 @@ const EditorPrize = () => import('pages/editor-prize/editor-prize')
 const ShopQrCode = () => import('pages/shop-qr-code/shop-qr-code')
 const Property = () => import('pages/property/property')
 const Invitation = () => import('pages/invitation/invitation')
+const OrderManage = () => import('pages/order-manage/order-manage')
+const StaffScreen = () => import('pages/staff-screen/staff-screen')
+const OrderDetail = () => import('pages/order-detail/order-detail')
 const DepositRecords = () => import('pages/deposit-records/deposit-records')
 const Deposit = () => import('pages/deposit/deposit')
 const AddBankCard = () => import('pages/add-bank-card/add-bank-card')
@@ -106,6 +109,29 @@ const route = new Router({
                   component: EditorService,
                   meta: {
                     title: '新建服务'
+                  }
+                }
+              ]
+            },
+            {
+              path: 'order-manage',
+              component: OrderManage,
+              meta: {
+                title: '订单管理'
+              },
+              children: [
+                {
+                  path: 'staff-screen',
+                  component: StaffScreen,
+                  meta: {
+                    title: '选择店员'
+                  }
+                },
+                {
+                  path: 'order-detail',
+                  component: OrderDetail,
+                  meta: {
+                    title: '订单详情'
                   }
                 }
               ]

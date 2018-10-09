@@ -213,6 +213,7 @@
   }
   const MONEYREG = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
   const COUNTREG = /^[1-9]\d*$/
+  const RATEREG = /^[0-9]\d*$/
   export default {
     data() {
       return {
@@ -503,7 +504,7 @@
         return this.serviceDetail.total_stock && COUNTREG.test(this.serviceDetail.total_stock)
       },
       rateReg() {
-        return this.serviceDetail.commission_rate && COUNTREG.test(this.serviceDetail.commission_rate)
+        return this.serviceDetail.commission_rate && RATEREG.test(this.serviceDetail.commission_rate)
       },
       serviceDetailReg() {
         let arr = this.serviceDetail.detail_config.filter((item) => {
@@ -842,6 +843,20 @@
         flex: 1
         overflow: hidden
         font-size: 0
+        .right-num-box
+          width: 70px
+          height: 32px
+          outline: none
+          text-align: center
+          padding: 0
+          margin: 0
+          line-height: 32px
+          border: 1px solid $color-CCCCCC
+          font-size: $font-size-14
+          color: $color-20202E
+          display: flex
+          align-items: center
+          justify-content: center
         .num-input
           width: 70px
           height: 20px
