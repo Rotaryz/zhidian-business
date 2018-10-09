@@ -79,7 +79,7 @@ export function fileReader2Base64(file) {
 }
 
 // base64转流
-export function getBlobBydataURI(dataURI, type = 'image/png') {
+export function getBlobBydataURI(dataURI, type = 'image/jpeg') {
   let binary = atob(dataURI.split(',')[1])
   let array = []
   for (let i = 0; i < binary.length; i++) {
