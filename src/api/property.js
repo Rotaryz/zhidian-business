@@ -12,5 +12,13 @@ export default {
   getWithdrawalLog(data, loading) {
     let url = '/api/merchant/withdrawal-log'
     return request.get(url, data, loading)
+  },
+  getWithdrawalInfo(data, loading) {
+    let url = '/api/merchant/withdrawal-info'
+    return request.get(url, data, loading)
+  },
+  getBankCardList(data, loading) {
+    let url = '/api/merchant/banks'
+    return request.get(url, data, loading)
   }
 }

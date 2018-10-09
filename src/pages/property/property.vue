@@ -16,7 +16,7 @@
           <section class="top">
             <div class="title" @click="showMsg">可提现(元)</div>
             <div class="money">{{remaining}}</div>
-            <div class="btn">提现</div>
+            <router-link tag="div" class="btn" :to="$route.path + '/deposit'">提现</router-link>
             <div class="explain">每天可提现一次，每笔限额1万元</div>
           </section>
           <div class="margin-box-10px"></div>

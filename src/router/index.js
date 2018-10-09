@@ -26,6 +26,8 @@ const ShopQrCode = () => import('pages/shop-qr-code/shop-qr-code')
 const Property = () => import('pages/property/property')
 const Invitation = () => import('pages/invitation/invitation')
 const DepositRecords = () => import('pages/deposit-records/deposit-records')
+const Deposit = () => import('pages/deposit/deposit')
+const AddBankCard = () => import('pages/add-bank-card/add-bank-card')
 
 Vue.use(Router)
 
@@ -173,6 +175,22 @@ const route = new Router({
                   meta: {
                     title: '提现记录'
                   }
+                },
+                {
+                  path: 'deposit',
+                  component: Deposit,
+                  meta: {
+                    title: '提现'
+                  },
+                  children: [
+                    {
+                      path: 'add-bank-card',
+                      component: AddBankCard,
+                      meta: {
+                        title: '绑定银行卡'
+                      }
+                    }
+                  ]
                 }
               ]
             }

@@ -1,0 +1,142 @@
+<template>
+  <div class="deposit">
+    <div class="margin-box-10px"></div>
+    <section class="card-wrapper" @click="navToBankCard">
+      <div class="title" v-if="!bankInfo.bank">添加银行卡</div>
+      <div class="title active" v-else>{{bankInfo.bank}}</div>
+      <div class="right">
+        <div class="name">{{bankInfo.name}}</div>
+        <div class="right-arrow"></div>
+      </div>
+    </section>
+    <div class="margin-box-10px"></div>
+    <section class="money-wrapper">
+      <div class="title">提现金额</div>
+      <div class="input-wrapper border-bottom-1px">
+        <div class="unit">¥</div>
+        <input type="number" class="input-content">
+      </div>
+      <div class="explain">可提现金额 ¥{{bankInfo.remaining}}</div>
+    </section>
+    <div class="declare">微信按提现金额0.7%收取手续费，最低1元。</div>
+    <div class="btn">提现</div>
+    <router-view-common @refresh="refresh"></router-view-common>
+  </div>
+</template>
+
+<script type="text/ecmascript-6">
+  import { Property } from 'api'
+  export default {
+    data() {
+      return {
+        bankInfo: {}
+      }
+    },
+    created() {
+      this._getWithdrawalInfo()
+    },
+    methods: {
+      refresh() {
+        // todo
+      },
+      navToBankCard() {
+        this.$router.push(this.$route.path + '/add-bank-card')
+      },
+      _getWithdrawalInfo() {
+        Property.getWithdrawalInfo().then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          console.log(res)
+          this.bankInfo = res.data
+        })
+      }
+    }
+  }
+</script>
+
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  @import "~common/stylus/variable"
+  @import "~common/stylus/mixin"
+  .right-arrow
+    width: 7px
+    height: 12px
+    icon-image(icon-press_right)
+
+  .deposit
+    fill-box()
+    z-index: 71
+    background: $color-F6F6F6
+    .card-wrapper
+      height: 55px
+      layout(row)
+      justify-content: space-between
+      align-items: center
+      padding: 0 15px
+      background: #fff
+      .title
+        font-family: PingFangSC-Regular;
+        font-size: 14px;
+        color: #9B9B9B;
+        letter-spacing: 0.6px;
+        &.active
+          color: #363547;
+      .right
+        layout(row,block,nowrap)
+        align-items :center
+        .name
+          font-family: PingFangSC-Regular;
+          font-size: 14px;
+          color: #363547;
+          letter-spacing: 0.6px;
+          margin-right :5px
+    .money-wrapper
+      padding-left: 15px
+      background: #fff
+      .title
+        font-size: 14px;
+        color: #363547;
+        letter-spacing: 0.6px;
+        padding: 18px 0 8px
+      .input-wrapper
+        layout(row, block, nowrap)
+        align-items: center
+        height: 62px
+        .unit
+          font-family: PingFangSC-Medium;
+          font-size: 40px;
+          color: #363547;
+          letter-spacing: 1.54px;
+          line-height: 1
+        .input-content
+          flex: 1
+          overflow: hidden
+          padding: 0 15px 0 3px
+          height: 40px
+          font-family: DINAlternate-Bold;
+          font-size: 40px;
+          color: #363547;
+          letter-spacing: 1.54px;
+      .explain
+        font-size: 14px;
+        color: #706B82;
+        letter-spacing: 0.6px;
+        padding: 17px 0
+    .declare
+      padding: 15px 15px 20px
+      font-size: 12px;
+      color: #9B9B9B;
+      letter-spacing: 0.6px;
+    .btn
+      margin: 0 15px
+      height: 45px
+      background: #363547;
+      border-radius: 4px;
+      font-size: 14px;
+      color: #FFFFFF;
+      letter-spacing: 0.56px;
+      text-align: center
+      line-height: @height
+</style>
