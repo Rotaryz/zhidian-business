@@ -34,7 +34,6 @@
     },
     methods: {
       navHandle(item) {
-        console.log(this.$route.path + item.path)
         this.$router.push(this.$route.path + item.path)
       }
     }
