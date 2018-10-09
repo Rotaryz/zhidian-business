@@ -3,152 +3,157 @@
     <scroll :bcColor="'#ffffff'" ref="scroll">
       <div class="group-container">
         <div class="editor-item border-bottom-1px">
-          <div class="item-left">品类</div>
-          <div class="item-right">
-            <span class="right-txt">{{serviceDetail.industry_name}}</span>
+          <div class="item-left">活动类型</div>
+          <div class="item-right check-right">
+            <span class="right-txt" :class="ruleId && type !== 'editor' ? '' : 'gray'">{{activityType[ruleId]}}</span>
+            <img src="./icon-press_right@2x.png" class="arrow-icon">
+            <select v-model='ruleId' class="right-selected" v-if="type !== 'editor'">
+              <option v-for="(option, index) in showSelectType" :value="option.id">
+                {{ option.value }}
+              </option>
+            </select>
           </div>
         </div>
-        <div class="editor-item">
-          <div class="item-left">类型</div>
-          <div class="item-right">
-            <span class="right-txt">{{couponType[serviceDetail.promotion_type]}}</span>
+        <div class="editor-item border-bottom-1px">
+          <div class="item-left">选择商品</div>
+          <div class="item-right input-right" @click="selectAny('goods')">
+            <div class="right-txt" :class="type !== 'editor' ? '' : 'gray'" v-if="activityDetail.goods_title">{{activityDetail.goods_title}}</div>
+            <span class="right-txt-placeholder" v-if="!activityDetail.goods_title">请选择</span>
+            <img src="./icon-press_right@2x.png" class="arrow-icon">
           </div>
         </div>
-      </div>
-      <div class="margin-box-10px"></div>
-      <div class="group-container">
-        <div class="service-img-item border-bottom-1px">
-          <div class="item-title">优惠券服务项目图片</div>
+        <div class="editor-item border-bottom-1px">
+          <div class="item-left">活动标题</div>
+          <div class="item-right input-right" @click="showTitleModal">
+            <div class="right-txt" v-if="activityDetail.activity_name">{{activityDetail.activity_name}}</div>
+            <span class="right-txt-placeholder" v-if="!activityDetail.activity_name">请输入</span>
+            <img src="./icon-press_right@2x.png" class="arrow-icon">
+          </div>
+        </div>
+        <div class="editor-img-item border-bottom-1px">
+          <div class="item-title">活动封面 (选填)</div>
           <div class="img-container">
             <div class="container-item">
-              <div class="img-box" v-for="(item, index) in [1, 2, 3]" :key="index">
+              <div class="img-box">
                 <div class="img-bc un-up"></div>
-                <div class="img-bc up" v-if="serviceDetail.goods_banner_images.length == index" @click="chooseBanner"></div>
+                <div class="img-bc up" v-if="!activityDetail.image_url" @click="chooseBanner"></div>
               </div>
             </div>
-            <div class="container-item">
-              <div class="img-box" v-for="(item, index) in serviceDetail.goods_banner_images" :key="index">
-                <div class="img-show" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-                <div class="del-icon" v-if="item.image_url" @click.stop="delBanner(index)"></div>
+            <div class="container-item" v-if="activityDetail.image_url">
+              <div class="img-box">
+                <div class="img-show" v-if="activityDetail.image_url" :style="{backgroundImage: 'url(' + activityDetail.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                <div class="del-icon" v-if="activityDetail.image_url" @click.stop="delBanner"></div>
               </div>
             </div>
           </div>
-          <div class="item-subtitle">添加1-3张服务项目图片(尺寸:600*480,大小10M以下)</div>
-        </div>
-        <div class="editor-item border-bottom-1px">
-          <div class="item-left">标题</div>
-          <div class="item-right input-right" @click="showTitleModal('title')">
-            <div class="right-txt" v-if="serviceDetail.title">{{serviceDetail.title}}</div>
-            <span class="right-txt-placeholder" v-if="!serviceDetail.title">请输入</span>
-            <img src="./icon-press_right@2x.png" class="arrow-icon">
-          </div>
-        </div>
-        <div class="editor-item border-bottom-1px">
-          <div class="item-left">副标题</div>
-          <div class="item-right input-right" @click="showTitleModal('subtitle')">
-            <div class="right-txt" v-if="serviceDetail.subtitle">{{serviceDetail.subtitle}}</div>
-            <span class="right-txt-placeholder" v-if="!serviceDetail.subtitle">(选填)</span>
-            <img src="./icon-press_right@2x.png" class="arrow-icon">
-          </div>
-        </div>
-        <div class="editor-item border-bottom-1px">
-          <div class="item-left">平台价</div>
-          <div class="item-right">
-            <input type="number" class="input-box" v-model="serviceDetail.platform_price" placeholder="请输入">
-          </div>
-        </div>
-        <div class="editor-item border-bottom-1px">
-          <div class="item-left">门市价</div>
-          <div class="item-right">
-            <input type="number" class="input-box" v-model="serviceDetail.original_price" placeholder="请输入">
-          </div>
+          <div class="item-subtitle">可上传一张具有活动气息的照片</div>
         </div>
       </div>
       <div class="margin-box-10px"></div>
       <div class="group-container">
         <div class="editor-item border-bottom-1px">
-          <div class="item-left">服务详情</div>
-          <div class="item-right check-right" @click="checkService">
+          <div class="item-left">现价</div>
+          <div class="item-right check-right">
+            <span class="right-txt gray" v-if="!activityDetail.goods_id">请先选择商品</span>
+            <span class="right-txt" v-if="activityDetail.goods_id">{{activityDetail.goods_price}}</span>
+          </div>
+        </div>
+        <div class="editor-item border-bottom-1px" v-if="ruleId == 3">
+          <div class="item-left">库存</div>
+          <div class="item-right check-right">
+            <span class="right-txt" :class="activityDetail.goods_id ? activityDetail.stock ? '' : 'gray' : 'gray'">{{activityDetail.goods_id ? activityDetail.stock ? activityDetail.stock : '请选择' : '请先选择商品'}}</span>
             <img src="./icon-press_right@2x.png" class="arrow-icon">
+            <select v-model='activityDetail.stock' class="right-selected" :disabled="!activityDetail.goods_id">
+              <option v-for="(option, index) in braginStock" :value="option">
+                {{ option }}
+              </option>
+            </select>
           </div>
         </div>
-        <div class="service-img-item border-bottom-1px">
-          <div class="item-title">优惠券服务详情图片</div>
-          <div class="img-container">
-            <div class="container-item">
-              <div class="img-box" v-for="(item, index) in [1, 2, 3, 4, 5]" :key="index">
-                <div class="img-bc un-up"></div>
-                <div class="img-bc up" v-if="serviceDetail.goods_images.length == index" @click="chooseDetail"></div>
-              </div>
-            </div>
-            <div class="container-item">
-              <div class="img-box" v-for="(item, index) in serviceDetail.goods_images" :key="index">
-                <div class="img-show" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-                <div class="del-icon" v-if="item.image_url" @click.stop="delDetail(index)"></div>
-              </div>
-            </div>
+        <div class="editor-item border-bottom-1px" v-if="ruleId == 1">
+          <div class="item-left">库存</div>
+          <div class="item-right">
+            <input type="number" class="input-box" v-model="activityDetail.stock" :placeholder="activityDetail.goods_id ? '请输入' : '请先选择商品'" :disabled="!activityDetail.goods_id">
           </div>
-          <div class="item-subtitle">添加1-5张服务详情图片(大小10M以下)</div>
         </div>
-      </div>
-      <div class="margin-box-10px"></div>
-      <div class="group-container">
         <div class="editor-item border-bottom-1px">
-          <div class="item-left">售卖时间</div>
+          <div class="item-left">活动时间</div>
           <div class="item-right time-right">
             <div class="time-right-first" @click="chioseTime('sale1')">
-              <div class="time-none" v-if="!serviceDetail.sale_start_at">
+              <div class="time-none" v-if="!activityDetail.start_at">
                 <div class="time-item">开始时间</div>
                 <img src="./icon-press_right@2x.png" class="time-icon">
               </div>
-              <div class="time-txt" :class="type === 'editor' ? 'disabled' : ''" v-if="serviceDetail.sale_start_at">{{serviceDetail.sale_start_at}}</div>
+              <div class="time-txt" :class="type === 'editor' ? 'disabled' : ''" v-if="activityDetail.start_at">{{activityDetail.start_at}}</div>
             </div>
             <div class="meddle-time">至</div>
             <div class="time-right-first" @click="chioseTime('sale2')">
-              <div class="time-none" v-if="!serviceDetail.sale_end_at">
+              <div class="time-none" v-if="!activityDetail.end_at">
                 <div class="time-item">结束时间</div>
                 <img src="./icon-press_right@2x.png" class="time-icon">
               </div>
-              <div class="time-txt" v-if="serviceDetail.sale_end_at">{{serviceDetail.sale_end_at}}</div>
+              <div class="time-txt" v-if="activityDetail.end_at">{{activityDetail.end_at}}</div>
             </div>
           </div>
         </div>
+      </div>
+      <div class="margin-box-10px" v-if="ruleId"></div>
+      <div class="group-container">
+        <div class="editor-item border-bottom-1px" v-if="ruleId == 3">
+          <div class="item-left">底价</div>
+          <div class="item-right">
+            <input type="number" class="input-box" :class="type === 'editor' ? 'disabled' : ''" v-model="activityDetail.config.bottom_price" placeholder="能砍到的最低价格" :disabled="type === 'editor'">
+          </div>
+        </div>
+        <div class="editor-item" v-if="ruleId == 3">
+          <div class="item-left">砍价人数</div>
+          <div class="item-right check-right">
+            <span class="right-txt" :class="type !== 'editor' ? activityDetail.config.max_cut_num ? '' : 'gray' : 'gray'">{{activityDetail.config.max_cut_num ? activityDetail.config.max_cut_num : '请选择'}}</span>
+            <img src="./icon-press_right@2x.png" class="arrow-icon">
+            <select v-model='activityDetail.config.max_cut_num' class="right-selected" v-if="type !== 'editor'">
+              <option v-for="(option, index) in braginCount" :value="option">
+                {{ option }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="editor-item border-bottom-1px" v-if="ruleId == 1">
+          <div class="item-left">团购价</div>
+          <div class="item-right">
+            <input type="number" class="input-box" :class="type === 'editor' ? 'disabled' : ''" v-model="activityDetail.config.group_price" placeholder="成团时的商品价格" :disabled="type === 'editor'">
+          </div>
+        </div>
+        <div class="editor-item" v-if="ruleId == 1">
+          <div class="item-left">拼团人数</div>
+          <div class="item-right check-right">
+            <span class="right-txt" :class="type !== 'editor' ? activityDetail.config.group_number ? '' : 'gray' : 'gray'">{{activityDetail.config.group_number ? activityDetail.config.group_number : '请选择'}}</span>
+            <img src="./icon-press_right@2x.png" class="arrow-icon">
+            <select v-model='activityDetail.config.group_number' class="right-selected" v-if="type !== 'editor'">
+              <option v-for="(option, index) in groupCount" :value="option">
+                {{ option }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="margin-box-10px" v-if="ruleId == 3"></div>
+      <div class="group-container" v-if="ruleId == 3">
         <div class="editor-item border-bottom-1px">
-          <div class="item-left">券有效期</div>
-          <div class="item-right time-right">
-            <div class="time-right-first" @click="chioseTime('use1')">
-              <div class="time-none" v-if="!serviceDetail.start_at">
-                <div class="time-item">开始时间</div>
-                <img src="./icon-press_right@2x.png" class="time-icon">
-              </div>
-              <div class="time-txt" :class="type === 'editor' ? 'disabled' : ''" v-if="serviceDetail.start_at">{{serviceDetail.start_at}}</div>
-            </div>
-            <div class="meddle-time">至</div>
-            <div class="time-right-first" @click="chioseTime('use2')">
-              <div class="time-none" v-if="!serviceDetail.end_at">
-                <div class="time-item">结束时间</div>
-                <img src="./icon-press_right@2x.png" class="time-icon">
-              </div>
-              <div class="time-txt" v-if="serviceDetail.end_at">{{serviceDetail.end_at}}</div>
-            </div>
-          </div>
-        </div>
-        <div class="large-item">
-          <div class="item-left">最大可售数量</div>
-          <div class="item-right num-right">
-            <div class="right-num-box">
-              <input type="number" class="num-input" v-model="serviceDetail.total_stock">
-            </div>
+          <div class="item-left large">帮砍人兑换券</div>
+          <div class="item-right input-right" @click="selectAny('prize')">
+            <div class="right-txt" :class="type !== 'editor' ? '' : 'gray'" v-if="activityDetail.coupon_title">{{activityDetail.coupon_title}}</div>
+            <span class="right-txt-placeholder" v-if="!activityDetail.coupon_title">请选择</span>
+            <img src="./icon-press_right@2x.png" class="arrow-icon">
           </div>
         </div>
       </div>
       <div class="margin-box-10px"></div>
       <div class="group-container">
         <div class="royalty-item">
-          <div class="item-left">商品提成</div>
+          <div class="item-left">活动提成</div>
           <div class="item-right">
             <div class="right-num-box">
-              <input type="number" class="num-input" v-model="serviceDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" :disabled="type === 'editor'">
+              <input type="number" class="num-input" v-model="activityDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" :disabled="type === 'editor'">
             </div>
             <div class="right-txt-14">%</div>
             <div class="right-txt-12">按成交价计算</div>
@@ -160,33 +165,49 @@
         <div class="royalty-item">
           <div class="item-left">全员上架</div>
           <div class="item-right end-right">
-            <switch-box @switchChange="switchChange" :values="serviceDetail.is_sync * 1"></switch-box>
+            <switch-box @switchChange="switchChange" :values="activityDetail.is_sync * 1"></switch-box>
           </div>
         </div>
       </div>
       <div class="margin-box-10px"></div>
-      <div class="group-container">
-        <div class="only-title border-bottom-1px">购买须知</div>
-        <div class="large-item border-bottom-1px">
-          <div class="item-left">需要预约时间</div>
-          <div class="item-right">
-            <input type="text" class="input-box" placeholder="请输入" v-model="serviceDetail.note.need_subscribe">
-          </div>
+      <div class="group-container" v-if="ruleId == 3">
+        <div class="text-item">
+          <p class="item-title">1.什么是砍价抢购？</p>
+          <p class="item-txt">疯狂砍价是由商家发起的一种营销类活动，商家可添加商品，设置能砍到的底价和砍到底价所需次数。用户若想以底价购买该商品，可邀请好友一起砍价，每次砍价金额随机。</p>
         </div>
-        <div class="textarea-item">
-          <div class="textarea-title">其他</div>
-          <div class="textarea-box">
-            <textarea class="textarea-content" @touchmove.stop maxlength="20" placeholder="请输入" v-model="serviceDetail.note.remarks"></textarea>
-            <div class="count-box">{{serviceDetail.note.remarks.length}}/20</div>
-          </div>
+        <div class="text-item">
+          <p class="item-title">2.砍掉后的价格是否对所有用户有效？</p>
+          <p class="item-txt">是的。所有用户可对同一个商品进行砍价，并享有砍掉后的商品价格，如商品A现价100元，当某用户砍掉2元后，所有人看到的现价更新为98元，并可在98元的基础上再进行砍价，直到砍到底价为止。</p>
+        </div>
+        <div class="text-item">
+          <p class="item-title">3.未砍到底价时，用户能否购买？</p>
+          <p class="item-txt">能购买，如商品A现价100元，底价10元，当被砍到80元时，若某用户认为已达自己的可接受价位，即可下单购买（为突出商品稀有性，建议商家添加的数量在1-3个）。</p>
+        </div>
+        <div class="text-item">
+          <p class="item-title">4.用户一次能购买几件商品？</p>
+          <p class="item-txt">同一个用户一次下单只能购买一件商品。</p>
+        </div>
+        <div class="text-item">
+          <p class="item-title">5.砍价商品设置错了怎么办？</p>
+          <p class="item-txt">商家可在砍价列表页删除该商品，删除后所有用户不能对该商品进行砍价，已下单但未支付的用户不能再进行支付，已支付的用户不受影响。</p>
         </div>
       </div>
+      <div class="group-container" v-if="ruleId == 1">
+        <div class="text-item">
+          <p class="item-title">1.什么是火爆拼团？</p>
+          <p class="item-txt">由商家发起的一种促销活动，商家可添加商品，设置成团价格、成团人数和成团有效期等信息。消费者可发起拼团活动或参与他人发起的拼团活动，若在有效期内若拼团成功，则可以成团价（较优惠的价格）购买商品或服务。目的是以部分优惠吸引多人购买，增加销售额。</p>
+        </div>
+        <div class="text-item">
+          <p class="item-title">2.用户在多长时间内可成团？</p>
+          <p class="item-txt">系统统一设定为24小时。即用户开团成功后，需在24小时内邀请好友参团，当达到成团人数后可认定为拼团成功；反之拼团失败，用户所支付款项原路退回。</p>
+        </div>
+      </div>
+      <div class="last-box"></div>
     </scroll>
     <title-box ref="titleBox" @submitMsg="submitTile"></title-box>
     <div class="bottom-box border-top-1px">
       <div class="bottom-btn" @click="submitAll">保存</div>
     </div>
-    <detail-modal ref="detailModal" @serviceSuccess="serviceSuccess"></detail-modal>
     <awesome-picker
       ref="picker"
       type="date"
@@ -194,6 +215,7 @@
       @confirm="pickerConfirm">
     </awesome-picker>
     <div class="disabled-cover" @click.stop="" v-if="disabledCover"></div>
+    <router-view-common @refresh="refresh"></router-view-common>
     <cropper ref="cropper" @confirm="cropperConfirm"></cropper>
   </div>
 </template>
@@ -204,10 +226,12 @@
   import DetailModal from 'components/service-detail-modal/service-detail-modal'
   import SwitchBox from 'components/switch-box/switch-box'
   import Cropper from 'components/cropper/cropper'
-  import { ServiceApi, Upload } from 'api'
+  import { Upload, ActivityApi } from 'api'
 
-  const COUPON_TYPE = {
-    1: '套餐券'
+  const ACTIVITY_TYPE = {
+    0: '请选择',
+    1: '火爆拼团',
+    3: '砍价抢购'
   }
   const MONEYREG = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
   const COUNTREG = /^[1-9]\d*$/
@@ -216,63 +240,165 @@
       return {
         type: 'new',
         id: '',
-        ruleId: '',
-        couponType: COUPON_TYPE,
+        ruleId: 0,
+        optionsType: [
+          {value: '请选择', id: 0},
+          {value: '火爆拼团', id: 1},
+          {value: '砍价抢购', id: 3}
+        ],
+        activityType: ACTIVITY_TYPE,
         disabledCover: false, // 请求时禁止任何操作
         timeType: '',
-        serviceDetail: {
-          promotion_type: 1, // 1=套餐券;2=代金券;3=满减券;4=折扣券
-          goods_banner_images: [], // banner图片
-          image_id: '', // banner图片第一张
-          title: '', // 商品标题
-          subtitle: '', // 商品副标题
-          platform_price: '', // 平台价
-          original_price: '', // 门市价
-          goods_images: [], // 商品详情图片
-          sale_start_at: '', // 售卖开始
-          sale_end_at: '', // 售卖结束
-          start_at: '', // 券使用开始
-          end_at: '', // 券结束时间
-          commission_rate: '', // 佣金
-          total_stock: '', // 总库存
-          note: {
-            need_subscribe: '', // 预约信息
-            remarks: '' // 其他备注
+        braginStock: [1, 2, 3, 5, 10],
+        braginCount: [10, 20, 30, 50, 100],
+        groupCount: [2, 3, 5],
+        activityDetail: {
+          goods_id: '',
+          goods_title: '',
+          activity_name: '',
+          goods_price: '',
+          config: {
+            original_price: '',
+            bottom_price: '',
+            max_cut_num: '',
+            group_validity: 24,
+            group_number: '',
+            group_price: ''
           },
-          detail_config: [
-            {
-              servie: '',
-              number: '',
-              price: ''
-            }
-          ], // 服务详情
-          industry_name: '美业', // 品类
-          is_online: '1', // 是否上线
-          is_sync: 0 // 是否全员上架
+          stock: '',
+          is_sync: 0,
+          commission_rate: '',
+          start_at: '',
+          end_at: '',
+          image_id: '',
+          image_url: '',
+          coupon_id: '',
+          coupon_title: ''
         }
       }
     },
     created() {
       this.type = this.$route.query.type
       this.id = this.$route.query.id
-      this.ruleId = this.$route.query.ruleId
+      this.ruleId = +this.$route.query.ruleId
       if (this.id) {
-        this._getServiceDetail(this.id)
+        this._getDetail(this.id)
       }
     },
     methods: {
-      _getServiceDetail(id) {
-        ServiceApi.getServiceDetail(id).then((res) => {
+      refresh(item, type) {
+        switch (type) {
+          case 'goods':
+            this.activityDetail.goods_id = item.id
+            this.activityDetail.goods_title = item.title
+            this.activityDetail.goods_price = item.platform_price
+            this.activityDetail.config.original_price = item.platform_price
+            break
+          case 'prize':
+            this.activityDetail.coupon_id = item.id
+            this.activityDetail.coupon_title = item.title
+            break
+        }
+      },
+      selectAny(type) {
+        if (!this.ruleId) {
+          this.$toast.show('请先选择活动类型')
+          return
+        }
+        if (this.type === 'editor') return
+        let url = `${this.$route.path}/choice-goods?type=${type}&ruleId=${this.ruleId}`
+        this.$router.push(url)
+      },
+      showTitleModal() {
+        let obj = {
+          text: this.activityDetail.activity_name,
+          title: '活动标题',
+          placeholder: '请输入活动标题'
+        }
+        this.$refs.titleBox.showTitleBox(obj)
+      },
+      submitTile(txt) {
+        this.activityDetail.activity_name = txt
+      },
+      _getDetail(id) {
+        if (+this.ruleId === 1) {
+          this._getGroupDetail(id)
+        } else if (+this.ruleId === 3) {
+          this._getKanDetail(id)
+        }
+      },
+      _getGroupDetail(id) {
+        ActivityApi.getGroup(id).then((res) => {
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
-            this.serviceDetail = Object.assign({}, this.serviceDetail, res.data)
+            this.activityDetail = Object.assign({}, this.serviceDetail, res.data)
           } else {
             this.$toast.show(res.message)
           }
         })
       },
-      _newService() {
-        ServiceApi.newServiceMsg(this.serviceDetail).then((res) => {
+      _getKanDetail(id) {
+        ActivityApi.getBargain(id).then((res) => {
+          this.$loading.hide()
+          if (res.error === this.$ERR_OK) {
+            this.activityDetail = Object.assign({}, this.serviceDetail, res.data)
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
+      },
+      chooseBanner() {
+        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
+          this.$refs.cropper.show(res[0])
+        })
+      },
+      cropperConfirm(e) {
+        // this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e])
+        // this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e])
+        this.$loading.show()
+        let blob = this.$handle.getBlobBydataURI(e)
+        let file = this.$handle.createFormData(blob)
+        Upload.upLoadImage(file).then(res => {
+          if (res.error !== this.$ERR_OK) {
+            return this.$toast.show(res.message)
+          }
+          this.activityDetail.image_url = res.data.url
+          this.activityDetail.image_id = res.data.id
+          this.$loading.hide()
+          this.$refs.cropper.cancel()
+        })
+      },
+      delBanner() {
+        this.activityDetail.image_url = ''
+        this.activityDetail.image_id = ''
+      },
+      chioseTime(type) {
+        if (this.type === 'editor' && (type === 'sale1')) return
+        this.timeType = type
+        this.$refs.picker.show()
+      },
+      pickerCancel() {
+      },
+      pickerConfirm(e) {
+        let reg = /[\u4E00-\u9FA5]/g
+        let arr = e.map(item => {
+          return item.value.replace(reg, '')
+        })
+        let res = arr.join('-')
+        switch (this.timeType) {
+          case 'sale1':
+            this.activityDetail.start_at = res
+            break
+          case 'sale2':
+            this.activityDetail.end_at = res
+            break
+        }
+      },
+      switchChange(res) {
+        this.activityDetail.is_sync = res ? 1 : 0
+      },
+      _newGroupOn() {
+        ActivityApi.newGroupMsg(this.activityDetail).then((res) => {
           this.$loading.hide()
           this.disabledCover = false
           if (res.error === this.$ERR_OK) {
@@ -286,9 +412,9 @@
           }
         })
       },
-      _setService() {
-        this.serviceDetail.is_online = 1
-        ServiceApi.setServiceMsg(this.id, this.serviceDetail).then((res) => {
+      _setGroupOn() {
+        this.activityDetail.is_online = 1
+        ActivityApi.newGroupMsg(this.id, this.activityDetail).then((res) => {
           this.$loading.hide()
           this.disabledCover = false
           if (res.error === this.$ERR_OK) {
@@ -302,159 +428,87 @@
           }
         })
       },
-      delBanner(index) {
-        this.serviceDetail.goods_banner_images.splice(index, 1)
-      },
-      chooseBanner() {
-        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
-          this.$refs.cropper.show(res[0])
-        })
-      },
-      chooseDetail() {
-        // 选择详情图片
-        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE, 5).then(async res => {
-          Promise.all(res.map(async item => {
-            let base64 = await this.$handle.fileReader2Base64(item)
-            let blob = this.$handle.getBlobBydataURI(base64)
-            let file = this.$handle.createFormData(blob)
-            return Upload.upLoadImage(file)
-          })).then((resArr) => {
-            this.$loading.hide()
-            let arr = []
-            resArr.map(item => {
-              if (item.error !== this.$ERR_OK) {
-                return this.$toast.show(item.message)
-              }
-              let obj = {
-                image_id: item.data.id,
-                image_url: item.data.url,
-                id: 0
-              }
-              arr.push(obj)
-            })
-            let newArr = this.serviceDetail.goods_images
-            newArr.push(...arr)
-            newArr = newArr.splice(0, 5)
-            this.serviceDetail.goods_images = newArr
-          })
-          // todo
-        })
-      },
-      delDetail(index) {
-        this.serviceDetail.goods_images.splice(index, 1)
-      },
-      cropperConfirm(e) {
-        // this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e])
-        this.$loading.show()
-        let blob = this.$handle.getBlobBydataURI(e)
-        let file = this.$handle.createFormData(blob)
-        Upload.upLoadImage(file).then(res => {
-          if (res.error !== this.$ERR_OK) {
-            return this.$toast.show(res.message)
-          }
-          let obj = {
-            image_id: res.data.id,
-            image_url: res.data.url,
-            id: 0
-          }
-          this.serviceDetail.goods_banner_images.push(obj)
+      _newBargain() {
+        ActivityApi.newBargainMsg(this.activityDetail).then((res) => {
           this.$loading.hide()
-          this.$refs.cropper.cancel()
-        })
-        // toDo
-      },
-      showTitleModal(type) {
-        let obj
-        switch (type) {
-          case 'title':
-            obj = {
-              type,
-              text: this.serviceDetail.title,
-              title: '标题',
-              placeholder: '请输入标题'
-            }
-            break
-          case 'subtitle':
-            obj = {
-              type,
-              text: this.serviceDetail.subtitle,
-              title: '副标题',
-              placeholder: '请输入副标题'
-            }
-            break
-        }
-        this.$refs.titleBox.showTitleBox(obj)
-      },
-      submitTile(txt, type) {
-        this.serviceDetail[type] = txt
-      },
-      pickerCancel() {
-      },
-      pickerConfirm(e) {
-        let reg = /[\u4E00-\u9FA5]/g
-        let arr = e.map(item => {
-          return item.value.replace(reg, '')
-        })
-        let res = arr.join('-')
-        switch (this.timeType) {
-          case 'sale1':
-            this.serviceDetail.sale_start_at = res
-            break
-          case 'sale2':
-            this.serviceDetail.sale_end_at = res
-            break
-          case 'use1':
-            this.serviceDetail.start_at = res
-            break
-          case 'use2':
-            this.serviceDetail.end_at = res
-            break
-        }
-      },
-      chioseTime(type) {
-        if (this.type === 'editor' && (type === 'sale1' || type === 'use1')) return
-        this.timeType = type
-        this.$refs.picker.show()
-      },
-      checkService() {
-        this.$refs.detailModal.showCover(this.serviceDetail.detail_config)
-      },
-      serviceSuccess(res) {
-        this.serviceDetail.detail_config = res.map((item) => {
-          return Object.assign({}, item)
+          this.disabledCover = false
+          if (res.error === this.$ERR_OK) {
+            this.$emit('refresh')
+            this.$toast.show('创建成功')
+            setTimeout(() => {
+              this.$router.back()
+            }, 1500)
+          } else {
+            this.$toast.show(res.message)
+          }
         })
       },
-      switchChange(res) {
-        this.serviceDetail.is_sync = res ? 1 : 0
+      _setBargain() {
+        this.activityDetail.is_online = 1
+        ActivityApi.editBargainMsg(this.id, this.activityDetail).then((res) => {
+          this.$loading.hide()
+          this.disabledCover = false
+          if (res.error === this.$ERR_OK) {
+            this.$emit('refresh')
+            this.$toast.show('保存成功')
+            setTimeout(() => {
+              this.$router.back()
+            }, 1500)
+          } else {
+            this.$toast.show(res.message)
+          }
+        })
       },
       submitAll() {
         this.disabledCover = true
         this.checkForm()
       },
       checkForm() {
-        let arr = [
-          {value: this.bannerReg, txt: '请添加至少一张服务项目图片'},
-          {value: this.titleReg, txt: '请输入服务标题'},
-          {value: this.platformPriceNotReg, txt: '请输入合法的平台价格'},
-          {value: this.platformPriceRangeReg, txt: '平台价格不得高于门市价'},
-          {value: this.originalPriceNotReg, txt: '请输入合法的门市价格'},
-          {value: this.detailImgReg, txt: '请添加至少一张服务详情图片'},
-          {value: this.sale1TimeReg, txt: '请选择售卖开始时间'},
-          {value: this.sale2TimeReg, txt: '请选择售卖结束时间'},
-          {value: this.use1TimeReg, txt: '请选择券有效期开始时间'},
-          {value: this.use2TimeReg, txt: '请选择券有效期结束时间'},
-          {value: this.stockReg, txt: '请输入合法的最大可售数量'},
-          {value: this.rateReg, txt: '请输入正整数提成比例'},
-          {value: this.serviceDetailReg, txt: '请至少添加一条服务详情信息'}
-        ]
+        if (!this.ruleId) {
+          this.$toast.show('请先选择活动类型')
+          return
+        }
+        let arr
+        if (+this.ruleId === 1) {
+          arr = [
+            {value: this.goodsReg, txt: '请先选择好参与活动的商品'},
+            {value: this.titleReg, txt: '请输入活动标题'},
+            {value: this.stockReg, txt: '请选择或输入合法的库存数量'},
+            {value: this.use1TimeReg, txt: '请选择活动开始时间'},
+            {value: this.use2TimeReg, txt: '请选择活动结束时间'},
+            {value: this.groupPrizeReg, txt: '请输入合法的团购价'},
+            {value: this.groupNumReg, txt: '请选择拼团人数'},
+            {value: this.rateReg, txt: '请输入正整数提成比例'}
+          ]
+        } else if (+this.ruleId === 3) {
+          arr = [
+            {value: this.goodsReg, txt: '请先选择好参与活动的商品'},
+            {value: this.titleReg, txt: '请输入活动标题'},
+            {value: this.stockReg, txt: '请选择或输入合法的库存数量'},
+            {value: this.use1TimeReg, txt: '请选择活动开始时间'},
+            {value: this.use2TimeReg, txt: '请选择活动结束时间'},
+            {value: this.bottomReg, txt: '请输入合法的底价'},
+            {value: this.kanNumReg, txt: '请选择砍价人数'},
+            {value: this.couponReg, txt: '请选择帮砍人兑换券'},
+            {value: this.rateReg, txt: '请输入正整数提成比例'}
+          ]
+        }
         let res = this._testPropety(arr)
         if (res) {
           switch (this.type) {
             case 'new':
-              this._newService()
+              if (+this.ruleId === 1) {
+                this._newGroupOn()
+              } else if (+this.ruleId === 3) {
+                this._newBargain()
+              }
               break
             case 'editor':
-              this._setService()
+              if (+this.ruleId === 1) {
+                this._setGroupOn()
+              } else if (+this.ruleId === 3) {
+                this._setBargain()
+              }
               break
           }
         }
@@ -473,52 +527,47 @@
       }
     },
     computed: {
-      bannerReg() {
-        return this.serviceDetail.goods_banner_images.length
+      goodsReg() {
+        return this.activityDetail.goods_title && this.activityDetail.goods_id
       },
       titleReg() {
-        return this.serviceDetail.title
-      },
-      platformPriceNotReg() {
-        return this.serviceDetail.platform_price && MONEYREG.test(this.serviceDetail.platform_price)
-      },
-      platformPriceRangeReg() {
-        return +this.serviceDetail.platform_price <= +this.serviceDetail.original_price
-      },
-      originalPriceNotReg() {
-        return this.serviceDetail.original_price && MONEYREG.test(this.serviceDetail.original_price)
-      },
-      detailImgReg() {
-        return this.serviceDetail.goods_images.length
-      },
-      sale1TimeReg() {
-        return this.serviceDetail.sale_start_at
-      },
-      sale2TimeReg() {
-        return this.serviceDetail.sale_end_at
-      },
-      use1TimeReg() {
-        return this.serviceDetail.start_at
-      },
-      use2TimeReg() {
-        return this.serviceDetail.end_at
+        return this.activityDetail.activity_name
       },
       stockReg() {
-        return this.serviceDetail.total_stock && COUNTREG.test(this.serviceDetail.total_stock)
+        return this.activityDetail.stock && COUNTREG.test(this.activityDetail.stock)
+      },
+      use1TimeReg() {
+        return this.activityDetail.start_at
+      },
+      use2TimeReg() {
+        return this.activityDetail.end_at
+      },
+      bottomReg() {
+        return this.activityDetail.config.bottom_price && MONEYREG.test(this.activityDetail.config.bottom_price)
+      },
+      kanNumReg() {
+        return this.activityDetail.config.max_cut_num
+      },
+      groupPrizeReg() {
+        return this.activityDetail.config.group_price && MONEYREG.test(this.activityDetail.config.group_price)
+      },
+      groupNumReg() {
+        return this.activityDetail.config.group_number
+      },
+      couponReg() {
+        return this.activityDetail.coupon_id
       },
       rateReg() {
-        return this.serviceDetail.commission_rate && COUNTREG.test(this.serviceDetail.commission_rate)
+        return this.activityDetail.commission_rate && COUNTREG.test(this.activityDetail.commission_rate)
       },
-      serviceDetailReg() {
-        let arr = this.serviceDetail.detail_config.filter((item) => {
-          return item.servie || item.number || item.price
-        })
-        return arr.length
-      }
-    },
-    watch: {
-      'serviceDetail.goods_banner_images'(curVal) {
-        this.serviceDetail.image_id = curVal[0].image_id
+      showSelectType() {
+        if (this.ruleId) {
+          return this.optionsType.filter((item) => {
+            return item.id
+          })
+        } else {
+          return this.optionsType
+        }
       }
     },
     components: {
@@ -561,9 +610,24 @@
         color: $color-white
         background: $color-363537
         border-radius: 2px
+    .last-box
+      height: 82px
     .group-container
       padding-left: 15px
       background: $color-white
+    .text-item
+      padding-right: 15px
+      .item-title
+        line-height: 38px
+        padding-top: 6px
+        font-size: $font-size-14
+        color: $color-363537
+        font-family: $font-family-medium
+      .item-txt
+        font-family: $font-family-regular
+        color: $color-696771
+        font-size: $font-size-14
+        line-height: 21px
     .editor-item
       width: 100%
       height: 55px
@@ -577,6 +641,8 @@
         font-family: $font-family-regular
         font-size: $font-size-14
         letter-spacing: 0.6px
+        &.large
+          width: 110px
       .item-right
         flex: 1
         height: 55px
@@ -585,6 +651,23 @@
         overflow: hidden
         display: flex
         align-items: center
+        position: relative
+        .right-selected
+          position: absolute
+          width: 100%
+          height: 50px
+          left: 0
+          top: 0
+          opacity: 0
+        .select-right
+          layout(row)
+          align-items: center
+          .selecet-data
+            font-size: $font-size-14
+            color: $color-20202E
+            font-family: $font-family-regular
+        .select-right-active
+          flex: 1
         .right-txt
           font-family: $font-family-regular
           font-size: $font-size-14
@@ -593,6 +676,8 @@
           width: 100%
           height: 55px
           no-wrap()
+          &.gray
+            color: $color-CCCCCC
         .right-txt-placeholder
           font-family: $font-family-regular
           font-size: $font-size-14
@@ -610,12 +695,16 @@
           border: 0 none
           font-size: $font-size-14
           color: $color-363537
+          &.disabled
+            color: $color-CCCCCC
         .input-box::-webkit-input-placeholder
-          color: $color-9B9B9B
+          color: $color-CCCCCC
         .input-box::-ms-input-placeholder
-          color: $color-9B9B9B
+          color: $color-CCCCCC
         .input-box::-moz-placeholder
-          color: $color-9B9B9B
+          color: $color-CCCCCC
+        .input-box:disabled
+          background: $color-white
         .time-right-first
           width: 90px
           .time-none
@@ -654,6 +743,66 @@
       .item-right.time-right
         display: flex
         align-items: center
+    .editor-img-item
+      padding-bottom: 20px
+      .item-title
+        font-size: $font-size-14
+        font-family: $font-family-regular
+        color: $color-9B9B9B
+        padding-top: 20px
+        padding-bottom: 17px
+      .img-container
+        position: relative
+        height: 16vw
+        .container-item
+          position: absolute
+          left: 0
+          top: 0
+          display: flex
+        .img-box
+          width: 16vw
+          height: 16vw
+          margin-right: 2.6vw
+          position: relative
+          .img-bc
+            width: 100%
+            height: 100%
+            position: absolute
+            left: 0
+            top: 0
+            &.un-up
+              icon-image('./icon-addpic_un')
+            &.up
+              icon-image('./icon-addpic02')
+          .image-file
+            width: 100%
+            height: 100%
+            position: absolute
+            left: 0
+            top: 0
+            opacity: 0
+
+          .img-show
+            width: 100%
+            height: 100%
+            position: absolute
+            left: 0
+            top: 0
+            background: $color-white
+            box-sizing: border-box
+            border-1px($color-9B9B9B)
+          .del-icon
+            width: 16px
+            height: 16px
+            position: absolute
+            right: -6px
+            top: -6px
+            icon-image('./icon-del24')
+      .item-subtitle
+        font-size: $font-size-12
+        font-family: $font-family-regular
+        color: $color-CCCCCC
+        margin-top: 10px
     .large-item
       display: flex
       justify-content: space-between
@@ -844,6 +993,8 @@
         flex: 1
         overflow: hidden
         font-size: 0
+        .right-num-box
+          border: 1px solid $color-E6E6E6
         .num-input
           width: 70px
           height: 20px
@@ -856,7 +1007,9 @@
           font-size: $font-size-14
           color: $color-20202E
           &.disabled
-            color: $color-9B9B9B
+            color: $color-CCCCCC
+        .num-input:disabled
+          background: $color-white
         .right-txt-14
           font-size: $font-size-14
           color: $color-9B9B9B

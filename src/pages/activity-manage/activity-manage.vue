@@ -253,7 +253,7 @@
           }
         })
       },
-      toDetail(type, id = '', ruleId = '') {
+      toDetail(type, id = '', ruleId = 0) {
         if (type === 'new') {
           this._initAll()
         }
