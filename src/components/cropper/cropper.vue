@@ -9,7 +9,7 @@
       :background="status"
       :cropBoxResizable="status"
       :aspectRatio="aspect"
-      :autoCropArea="0.8"
+      :autoCropArea="1"
       :dragMode="'move'"
       :checkCrossOrigin="false"
       :cropBoxMovable="false"
@@ -51,7 +51,7 @@
         this.$refs.myCropper.replace(img)
       },
       confirm() {
-        let src = this.$refs.myCropper.getCroppedCanvas().toDataURL()
+        let src = this.$refs.myCropper.getCroppedCanvas().toDataURL('image/jpeg')
         this.$emit('confirm', src)
       },
       cancel() {

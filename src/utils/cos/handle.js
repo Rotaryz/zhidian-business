@@ -79,7 +79,7 @@ export function fileReader2Base64(file) {
 }
 
 // base64转流
-export function getBlobBydataURI(dataURI, type = 'image/png') {
+export function getBlobBydataURI(dataURI, type = 'image/jpeg') {
   let binary = atob(dataURI.split(',')[1])
   let array = []
   for (let i = 0; i < binary.length; i++) {
@@ -102,6 +102,6 @@ export function getObjectURL(file) {
 
 export function createFormData($Blob) {
   let formData = new FormData()
-  formData.append('file', $Blob, 'file_' + Date.now() + '.png')
+  formData.append('file', $Blob, 'file_' + Date.now() + '.jpeg')
   return formData
 }
