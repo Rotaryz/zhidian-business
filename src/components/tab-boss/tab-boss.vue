@@ -47,7 +47,7 @@
     top: 0
     width: 100vw
     height: $tab-boss-height
-    background: #20202E
+    background: $color-363547
     display: flex
     .tab-item
       position: relative
@@ -88,7 +88,7 @@
           .line
             width: 85px
             height: 32px
-            background-color: #56BA15
+            background-color: $color-EF705D
             border-radius: 100px
       &.router-link-active
         .line-wrapper

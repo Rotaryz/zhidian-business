@@ -6,6 +6,11 @@ import employee from './employee'
 import activity from './activity'
 import prize from './prize'
 import mine from './mine'
+import echart from './echart'
+import rank from './rank'
+import analyse from './ai-analyse'
+import clientDetail from './clientDetail'
+import business from './business'
 import order from './order'
 import exchange from './exchange'
 
@@ -24,5 +29,20 @@ export const Employee = employee
 export const PrizeApi = prize
 
 export const Mine = mine
+
+// ai分析
+export const Analyse = analyse
+
+// 图表
+export const Echart = echart
+
+// 排行榜
+export const Rank = rank
+
+// 客户资料
+export const ClientDetail = clientDetail
+
+// 名片
+export const Business = business
 
 export const OrderApi = order

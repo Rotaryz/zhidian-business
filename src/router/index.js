@@ -17,6 +17,9 @@ const ExchangeRecord = () => import('pages/exchange-record/exchange-record')
 const ShopInfo = () => import('pages/shop-info/shop-info')
 const OverView = () => import('pages/overview/overview')
 const Ranking = () => import('pages/ranking/ranking')
+const AI = () => import('pages/ai-analyse/ai-analyse')
+const CapacityModel = () => import('pages/capacity-model/capacity-model')
+const BusinessCard = () => import('pages/business-card/business-card')
 const ActivityManage = () => import('pages/activity-manage/activity-manage')
 const EditorActivity = () => import('pages/editor-activity/editor-activity')
 const ChoiceGoods = () => import('pages/choice-goods/choice-goods')
@@ -223,10 +226,31 @@ const route = new Router({
               meta: {
                 title: '排行榜'
               }
+            },
+            {
+              path: 'ai-analyse',
+              component: AI,
+              meta: {
+                title: 'AI分析'
+              }
             }
           ]
         }
       ]
+    },
+    {
+      path: '/capacity-model',
+      component: CapacityModel,
+      meta: {
+        title: '能力模型'
+      }
+    },
+    {
+      path: '/business-card',
+      component: BusinessCard,
+      meta: {
+        title: '名片'
+      }
     },
     {
       path: '/service-manage',
