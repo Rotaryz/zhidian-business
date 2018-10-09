@@ -2,8 +2,9 @@
   <div class="mine">
     <div class="bg"></div>
     <section class="header" @click="navTo({path: '/shop-qr-code'})">
-      <div class="logo"></div>
-      <div class="title">国颐堂(白云店)</div>
+      <div class="logo" v-if="shopInfo.logo" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+      <div class="logo" v-else></div>
+      <div class="title">{{shopInfo.name || '店铺名称'}}</div>
       <div class="qr-code"></div>
       <div class="right-arrow"></div>
     </section>
@@ -47,7 +48,8 @@
     },
     data() {
       return {
-        optionsArr
+        optionsArr,
+        shopInfo: {}
       }
     },
     created() {
@@ -55,7 +57,6 @@
     },
     methods: {
       refresh() {
-        // todo
         this._getShopInfo()
       },
       _getShopInfo() {
@@ -67,7 +68,7 @@
           }
           res.data.video = res.data.video ? res.data.video : {}
           res.data.logo = res.data.logo ? res.data.logo : {}
-          console.log(res)
+          this.shopInfo = res.data
         })
       },
       navTo(item) {
