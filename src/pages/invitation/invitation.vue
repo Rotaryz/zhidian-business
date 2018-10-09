@@ -3,7 +3,7 @@
     <article class="top">
       <div class="title">欢迎加入国颐堂养发馆</div>
       <div class="qr-code">
-        <img class="qr-img" src="./qr-code.svg" alt="">
+        <img class="qr-img" v-if="qrCode" :src="qrCode" alt="">
       </div>
       <div class="explain">微信扫一扫，或长按识别二维码</div>
     </article>
@@ -21,7 +21,30 @@
 </template>
 
 <script type="text/ecmascript-6">
-  export default {}
+  import { Mine } from 'api'
+
+  export default {
+    data() {
+      return {
+        qrCode: ''
+      }
+    },
+    created() {
+      this._getInviteQrcode()
+    },
+    methods: {
+      _getInviteQrcode() {
+        Mine.getInviteQrcode().then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.qrCode = res.data.qrcode
+        })
+      }
+    }
+  }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
@@ -60,7 +83,7 @@
         padding-bottom: 69.5px
 
     .btn-group
-      margin-top :40px
+      margin-top: 40px
       layout(row)
       justify-content: space-around
       .btn-item

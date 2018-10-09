@@ -1,25 +1,37 @@
 <template>
-    <div class="deposit-records">
-      <scroll
-        bcColor="#fff"
-        v-if="dataArray.length"
-        ref="scroll"
-        :data="dataArray"
-        :pullUpLoad="pullUpLoadObj"
-        @pullingUp="onPullingUp"
-      >
-        <div>1213</div>
-      </scroll>
-      <div class="nothing-box" v-if="isEmpty">
-        <img src="./pic-empty_order@2x.png" class="nothing-img">
-        <div class="nothing-txt">暂无数据</div>
-      </div>
+  <div class="deposit-records">
+    <scroll
+      bcColor="#fff"
+      v-if="dataArray.length"
+      ref="scroll"
+      :data="dataArray"
+      :pullUpLoad="pullUpLoadObj"
+      @pullingUp="onPullingUp"
+    >
+      <ul class="recode-wrapper border-top-1px">
+        <li class="item-wrapper border-bottom-1px">
+          <div class="item-container">
+            <div class="left">张志强-招商银行 6775</div>
+            <div class="right">-365.0</div>
+          </div>
+          <div class="item-container">
+            <div class="left small">2018-02-10 17:00:235</div>
+            <div class="right small">未处理</div>
+          </div>
+        </li>
+      </ul>
+    </scroll>
+    <div class="nothing-box" v-if="isEmpty">
+      <img src="./pic-empty_order@2x.png" class="nothing-img">
+      <div class="nothing-txt">暂无数据</div>
     </div>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import { Property } from 'api'
+
   const LIMIT = 10
   export default {
     components: {
@@ -52,6 +64,7 @@
           console.log(res)
           if (!res.meta || res.meta.current_page === 1) {
             this.dataArray = res.data
+            this.dataArray = [1] // todo
             this.isEmpty = !this.dataArray.length
           } else {
             let arr = this.dataArray.concat(res.data)
@@ -120,4 +133,34 @@
     fill-box()
     z-index: 70
     background: #fff
+    .recode-wrapper
+      padding-left: 15px
+      .item-wrapper
+        height: 70px
+        layout(column, block, nowrap)
+        justify-content: center
+        align-items: center
+        .item-container
+          layout(row, block, nowrap)
+          justify-content: space-between
+          align-items: center
+          width: 100%
+          &:first-child
+            margin-bottom: 10px
+          .left
+            font-size: 16px;
+            color: #363547;
+            letter-spacing: 0.34px;
+            &.small
+              font-size: 12px;
+              color: #9B9B9B;
+          .right
+            font-family: PingFangSC-Semibold;
+            font-size: 16px;
+            color: #181700;
+            letter-spacing: 0.3px;
+            margin-right :15px
+            &.small
+              font-size: 12px;
+              color: #9B9B9B;
 </style>
