@@ -65,7 +65,7 @@
             <span class="right-txt" :class="activityDetail.goods_id ? activityDetail.stock ? '' : 'gray' : 'gray'">{{activityDetail.goods_id ? activityDetail.stock ? activityDetail.stock : '请选择' : '请先选择商品'}}</span>
             <img src="./icon-press_right@2x.png" class="arrow-icon">
             <select v-model='activityDetail.stock' class="right-selected" :disabled="!activityDetail.goods_id">
-              <option v-for="(option, index) in braginStock" :value="option">
+              <option v-for="(option, index) in showBraginStock" :value="option">
                 {{ option }}
               </option>
             </select>
@@ -112,7 +112,7 @@
             <span class="right-txt" :class="type !== 'editor' ? activityDetail.config.max_cut_num ? '' : 'gray' : 'gray'">{{activityDetail.config.max_cut_num ? activityDetail.config.max_cut_num : '请选择'}}</span>
             <img src="./icon-press_right@2x.png" class="arrow-icon">
             <select v-model='activityDetail.config.max_cut_num' class="right-selected" v-if="type !== 'editor'">
-              <option v-for="(option, index) in braginCount" :value="option">
+              <option v-for="(option, index) in showBraginCount" :value="option">
                 {{ option }}
               </option>
             </select>
@@ -130,7 +130,7 @@
             <span class="right-txt" :class="type !== 'editor' ? activityDetail.config.group_number ? '' : 'gray' : 'gray'">{{activityDetail.config.group_number ? activityDetail.config.group_number : '请选择'}}</span>
             <img src="./icon-press_right@2x.png" class="arrow-icon">
             <select v-model='activityDetail.config.group_number' class="right-selected" v-if="type !== 'editor'">
-              <option v-for="(option, index) in groupCount" :value="option">
+              <option v-for="(option, index) in showGroupCount" :value="option">
                 {{ option }}
               </option>
             </select>
@@ -251,9 +251,9 @@
         activityType: ACTIVITY_TYPE,
         disabledCover: false, // 请求时禁止任何操作
         timeType: '',
-        braginStock: [1, 2, 3, 5, 10],
-        braginCount: [10, 20, 30, 50, 100],
-        groupCount: [2, 3, 5],
+        braginStock: ['', 1, 2, 3, 5, 10],
+        braginCount: ['', 10, 20, 30, 50, 100],
+        groupCount: ['', 2, 3, 5],
         activityDetail: {
           goods_id: '',
           goods_title: '',
@@ -568,6 +568,33 @@
           })
         } else {
           return this.optionsType
+        }
+      },
+      showBraginStock() {
+        if (this.activityDetail.stock) {
+          return this.braginStock.filter((item) => {
+            return item
+          })
+        } else {
+          return this.braginStock
+        }
+      },
+      showBraginCount() {
+        if (this.activityDetail.config.max_cut_num) {
+          return this.braginCount.filter((item) => {
+            return item
+          })
+        } else {
+          return this.braginCount
+        }
+      },
+      showGroupCount() {
+        if (this.activityDetail.config.group_number) {
+          return this.groupCount.filter((item) => {
+            return item
+          })
+        } else {
+          return this.groupCount
         }
       }
     },
@@ -995,7 +1022,19 @@
         overflow: hidden
         font-size: 0
         .right-num-box
-          border: 1px solid $color-E6E6E6
+          width: 70px
+          height: 32px
+          outline: none
+          text-align: center
+          padding: 0
+          margin: 0
+          line-height: 32px
+          border: 1px solid $color-CCCCCC
+          font-size: $font-size-14
+          color: $color-20202E
+          display: flex
+          align-items: center
+          justify-content: center
         .num-input
           width: 70px
           height: 20px

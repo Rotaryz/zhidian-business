@@ -843,6 +843,20 @@
         flex: 1
         overflow: hidden
         font-size: 0
+        .right-num-box
+          width: 70px
+          height: 32px
+          outline: none
+          text-align: center
+          padding: 0
+          margin: 0
+          line-height: 32px
+          border: 1px solid $color-CCCCCC
+          font-size: $font-size-14
+          color: $color-20202E
+          display: flex
+          align-items: center
+          justify-content: center
         .num-input
           width: 70px
           height: 20px
