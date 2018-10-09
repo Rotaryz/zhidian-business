@@ -1,19 +1,26 @@
 <template>
   <div class="employee-box">
-    <scroll
-      bcColor="#f6f6f6"
-      ref="scroll"
-      :data="dataArray"
-      :pullUpLoad="pullUpLoadObj"
-      @pullingUp="onPullingUp"
-    >
-      <div class="employee-title">账号数量:{{dataArray.length}}</div>
-      <ul class="employee-list border-bottom-1px">
-        <li v-for="(item, index) in dataArray" :key="index">
-          <employee-item :item="item"></employee-item>
-        </li>
-      </ul>
-    </scroll>
+    <div class="scroll-wrapper">
+      <scroll
+        v-if="dataArray.length"
+        bcColor="#f6f6f6"
+        ref="scroll"
+        :data="dataArray"
+        :pullUpLoad="pullUpLoadObj"
+        @pullingUp="onPullingUp"
+      >
+        <div class="employee-title">账号数量:{{dataArray.length}}</div>
+        <ul class="employee-list border-bottom-1px">
+          <li v-for="(item, index) in dataArray" :key="index">
+            <employee-item :item="item"></employee-item>
+          </li>
+        </ul>
+      </scroll>
+      <div class="nothing-box" v-if="isEmpty">
+        <img src="./pic-empty_order@2x.png" class="nothing-img">
+        <div class="nothing-txt">暂无数据</div>
+      </div>
+    </div>
     <div class="footer-box" @click="jumpNew">
       <div class="footer-btn">新建店员</div>
     </div>
@@ -37,7 +44,8 @@
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
         page: 1,
-        hasMore: true
+        hasMore: true,
+        isEmpty: false
       }
     },
     created() {
@@ -113,10 +121,33 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
+
+  .nothing-box
+    display: flex
+    flex-direction: column
+    align-items: center
+    font-size: 0
+    padding-top: 100px
+    .nothing-img
+      width: 100px
+      height: 80px
+      margin-bottom: 5px
+    .nothing-txt
+      font-size: $font-size-12
+      color: $color-CCCCCC
+      font-family: $font-family-regular
+
   .employee-box
     fill-box()
     z-index: 51
     background: $color-F6F6F6
+
+  .scroll-wrapper
+    position :fixed
+    top:0
+    left:0
+    right :0
+    bottom :64px
 
   .footer-box
     position: fixed

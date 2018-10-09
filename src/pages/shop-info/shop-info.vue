@@ -44,12 +44,12 @@
             <article class="base-item">
               <div class="left">营业时间</div>
               <figure class="time-item" @click="choosePicker('opening_hours','start')">
-                <div class="time">{{openingStart}}</div>
+                <div class="time">{{shopInfo.opening_hours.start}}</div>
                 <div class="right-arrow"></div>
               </figure>
               <div class="cut-line">至</div>
               <figure class="time-item" @click="choosePicker('opening_hours', 'end')">
-                <div class="time">{{openingEnd}}</div>
+                <div class="time">{{shopInfo.opening_hours.end}}</div>
                 <div class="right-arrow"></div>
               </figure>
             </article>
@@ -135,8 +135,9 @@
 
   const KEY = '206ec5511b39a51e02627ffbd8dfc16c'
 
+  const DEFAULT_INDUSTRY = '美业'
   const industryArr = [
-    ['美业']
+    [DEFAULT_INDUSTRY]
   ]
   export default {
     components: {
@@ -151,20 +152,18 @@
           name: '',
           intro: '', // 介绍
           telephone: '',
-          industry_name: '', // 行业名称
+          industry_name: DEFAULT_INDUSTRY, // 行业名称
           area: '',
           city: '',
           province: '',
           longitude: 0,
           latitude: 0,
           address: '', // 门店详细地址
-          opening_hours: [], // 营业时间
+          opening_hours: {}, // 营业时间
           logo: {}, // 门店logo
           video: {}, // 门店视频
           images: [] // 门店图片
         },
-        openingStart: '9:00',
-        openingEnd: '21:00',
         cityData,
         industryArr,
         pickerType: '',
@@ -173,8 +172,11 @@
       }
     },
     created() {
-      this.shopInfo.opening_hours = [this.openingStart, this.openingEnd]
       this._getShopInfo()
+    },
+    beforeRouteLeave(to, from, next) {
+      this.$emit('refresh')
+      next(true)
     },
     methods: {
       _getShopInfo() {
@@ -186,6 +188,7 @@
           }
           res.data.video = res.data.video ? res.data.video : {}
           res.data.logo = res.data.logo ? res.data.logo : {}
+          console.log(res)
           Object.assign(this.shopInfo, res.data)
         })
       },
@@ -197,9 +200,10 @@
             return
           }
           this.$toast.show('保存成功')
+          this.$emit('refresh')
           setTimeout(() => {
             this.$router.go(-1)
-          }, 2000)
+          }, 1500)
         })
       },
       _fileChange(e, flag) {
@@ -297,11 +301,9 @@
             }
             arr = arr.join(':')
             if (this.timeType === 'start') {
-              this.openingStart = arr
-              this.shopInfo.opening_hours[0] = arr
+              this.shopInfo.opening_hours.start = arr
             } else {
-              this.openingEnd = arr
-              this.shopInfo.opening_hours[1] = arr
+              this.shopInfo.opening_hours.end = arr
             }
             break
           case 'address':
@@ -336,7 +338,7 @@
           {value: this.shopVideoReg, txt: '请添加门店视频'},
           {value: this.shopImagesReg, txt: '请添加至少一张门店图片'}
         ]
-        let res = this._testPropety(arr) || true // todo
+        let res = this._testPropety(arr) // todo
         if (res) {
           this._getGeocoder(data => {
             this._updateShopInfo()
@@ -394,10 +396,10 @@
         return this.shopInfo.images.length > 0
       },
       shopVideoReg() {
-        return this.shopInfo.video.length > 0
+        return this.shopInfo.video.url || true // todo
       },
       shopLogoReg() {
-        return this.shopInfo.logo.length > 0
+        return this.shopInfo.logo.url
       },
       shopImagesLen() {
         return Math.min(this.shopInfo.images.length + 1, 10)
@@ -415,13 +417,13 @@
         return checkIsPhoneNumber(this.shopInfo.telephone)
       },
       addressReg() {
-        return this.shopInfo.address
+        return this.shopInfo.province
       },
       addressDetailReg() {
-        return this.shopInfo.address_detail
+        return this.shopInfo.address
       },
       openHoursReg() {
-        return this.shopInfo.opening_hours.length === 2
+        return this.shopInfo.opening_hours.start && this.shopInfo.opening_hours.end
       }
     }
   }

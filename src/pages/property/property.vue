@@ -14,109 +14,170 @@
       <div class="big-container" :style="'transform: translate(-' + tabIdx*50 + '%,0)'">
         <article class="container-item income">
           <section class="top">
-            <div class="title">可提现(元)</div>
-            <div class="money">6500.00</div>
-            <div class="btn">提现</div>
+            <div class="title" @click="showMsg">可提现(元)</div>
+            <div class="money">{{remaining}}</div>
+            <router-link tag="div" class="btn" :to="$route.path + '/deposit'">提现</router-link>
             <div class="explain">每天可提现一次，每笔限额1万元</div>
           </section>
           <div class="margin-box-10px"></div>
-          <router-link tag="div" class="bottom border-bottom-1px" to="">
+          <router-link tag="div" class="bottom border-bottom-1px" :to="$route.path + '/deposit-records'">
             <div class="name">提现记录</div>
             <div class="arrow-right"></div>
           </router-link>
         </article>
         <article class="container-item staff-income">
-          <scroll bcColor="#fff">
+          <scroll
+            bcColor="#fff"
+            v-if="dataArray.length"
+            ref="scroll"
+            :data="dataArray"
+            :pullUpLoad="pullUpLoadObj"
+            @pullingUp="onPullingUp"
+          >
             <ul class="staff-list-wrapper border-bottom-1px">
-              <li class="staff-item-wrapper border-bottom-1px">
+              <li class="staff-item-wrapper border-bottom-1px" v-for="(item, index) in dataArray" :key="index">
                 <section class="left">
-                  <div class="avatar"></div>
+                  <div class="avatar" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                  <div class="avatar" v-else></div>
                   <article class="info-wrapper">
-                    <div class="name">谭敏仪</div>
-                    <div class="position">店长</div>
+                    <div class="name">{{item.name}}</div>
+                    <div class="position">{{item.role}}</div>
                   </article>
                 </section>
                 <section class="middle">
                   <div class="title">获得佣金</div>
-                  <div class="money">230.00</div>
-                </section>
-                <section class="right">发放</section>
-              </li>
-              <li class="staff-item-wrapper border-bottom-1px">
-                <section class="left">
-                  <div class="avatar"></div>
-                  <article class="info-wrapper">
-                    <div class="name">谭敏仪</div>
-                    <div class="position">店长</div>
-                  </article>
-                </section>
-                <section class="middle">
-                  <div class="title">获得佣金</div>
-                  <div class="money">230.00</div>
+                  <div class="money">{{item.commission}}</div>
                 </section>
                 <section class="right">发放</section>
               </li>
             </ul>
           </scroll>
+          <div class="nothing-box" v-if="isEmpty">
+            <img src="./pic-empty_order@2x.png" class="nothing-img">
+            <div class="nothing-txt">暂无数据</div>
+          </div>
         </article>
       </div>
+      <confirm-msg ref="confirm" :isShowCancel="false"></confirm-msg>
+      <router-view-common @refresh="refresh"></router-view-common>
     </section>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
+  import ConfirmMsg from 'components/confirm-msg/confirm-msg'
+  import { Property } from 'api'
 
   const TABS = [
     {txt: '店铺收入', id: 0},
     {txt: '店员佣金', id: 1}
   ]
+  const LIMIT = 10
   export default {
     components: {
-      Scroll
+      Scroll,
+      ConfirmMsg
     },
     data() {
       return {
         tabList: TABS,
         tabIdx: 0,
-        list0: [],
-        pullUpLoad0: true,
-        pullUpLoadThreshold0: 0,
-        showNoMore0: false,
-        page0: 1,
-        nothing0: false,
+        remaining: '0.00',
+        dataArray: [],
+        pullUpLoad: true,
+        pullUpLoadThreshold: 0,
         pullUpLoadMoreTxt: '加载更多',
-        pullUpLoadNoMoreTxt: '没有更多了'
+        pullUpLoadNoMoreTxt: '没有更多了',
+        page: 1,
+        hasMore: true,
+        isEmpty: false
       }
+    },
+    created() {
+      this._getBaseInfo()
     },
     methods: {
+      refresh() {
+        this.page = 1
+        this._getBaseInfo()
+      },
+      _getBaseInfo() {
+        this.$loading.show()
+        Promise.all([
+          this._getShopIncome({}, false),
+          this._getStaffsIncome({page: 1}, false)
+        ]).then(() => {
+          this.$loading.hide()
+        })
+      },
       changeTab(idx) {
         this.tabIdx = idx * 1
-      }
-    },
-    computed: {
-      pullDownRefreshObj0: function () {
-        return this.pullDownRefresh0 ? {
-          threshold: parseInt(this.pullDownRefreshThreshold0),
-          stop: parseInt(this.pullDownRefreshStop),
-          txt: '没有更多了'
-        } : false
+      },
+      showMsg() {
+        let msg = '当顾客使用优惠券\n' +
+          '或优惠券过期，相关订单资金\n' +
+          '即转入可提现账户。'
+        this.$refs.confirm.show({msg})
+      },
+      _getShopIncome(data, loading) {
+        Property.getShopIncome(data, loading).then(res => {
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.remaining = res.data.remaining
+        })
+      },
+      _getStaffsIncome(data = {page: 1}, loading) {
+        if (!this.hasMore) return
+        Property.getStaffsIncome({...data, limit: LIMIT}, loading).then(res => {
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          if (!res.meta || res.meta.current_page === 1) {
+            this.dataArray = res.data
+            this.isEmpty = !this.dataArray.length
+          } else {
+            let arr = this.dataArray.concat(res.data)
+            this.dataArray = arr
+          }
+          if (res.meta) {
+            this.hasMore = res.meta.current_page !== res.meta.last_page
+            this.pullUpLoad = !this.hasMore
+          } else {
+            this.pullUpLoad = false
+          }
+        })
+      },
+      onPullingUp() {
+        // 更新数据
+        if (!this.pullUpLoad) return this.$refs.scroll.forceUpdate()
+        this._getStaffsIncome({page: ++this.page})
+      },
+      rebuildScroll() {
+        this.$nextTick(() => {
+          this.$refs.scroll.destroy()
+          this.$refs.scroll.initScroll()
+        })
       }
     },
     watch: {
       pullUpLoadObj: {
         handler() {
-          if (!this.pullUpLoad) return
+          if (!this.pullUpLoad) return // 防止下拉报错
           this.rebuildScroll()
         },
         deep: true
-      },
-      pullDownRefreshObj: {
-        handler() {
-          if (!this.pullDownRefresh) return
-          this.rebuildScroll()
-        },
-        deep: true
+      }
+    },
+    computed: {
+      pullUpLoadObj: function () {
+        return this.pullUpLoad ? {
+          threshold: parseInt(this.pullUpLoadThreshold),
+          txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
+        } : false
       }
     }
   }
@@ -125,6 +186,21 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
+
+  .nothing-box
+    display: flex
+    flex-direction: column
+    align-items: center
+    font-size: 0
+    padding-top: 100px
+    .nothing-img
+      width: 100px
+      height: 80px
+      margin-bottom: 5px
+    .nothing-txt
+      font-size: $font-size-12
+      color: $color-CCCCCC
+      font-family: $font-family-regular
 
   .property
     fill-box()
@@ -232,10 +308,10 @@
               height: 74.5px
               align-items: center
               &:last-child:after
-                display :none
+                display: none
               .left
                 flex: 1
-                overflow :hidden
+                overflow: hidden
                 layout(row, inline, nowrap)
                 .avatar
                   opacity: 0.8;
@@ -246,7 +322,7 @@
                   margin-right: 10px
                 .info-wrapper
                   flex: 1
-                  overflow :hidden
+                  overflow: hidden
                   .name
                     font-size: 14px;
                     color: #363547;
@@ -257,14 +333,14 @@
                     font-size: 12px;
                     color: #EF705D;
                     padding: 3px 0
-                    width :34px
+                    width: 34px
                     border: 1px solid #EF705D;
-                    text-align :center
+                    text-align: center
                     border-radius: 4px;
               .middle
                 flex: 1
-                overflow :hidden
-                padding-right :10px
+                overflow: hidden
+                padding-right: 10px
                 layout()
                 justify-content: center
                 .title

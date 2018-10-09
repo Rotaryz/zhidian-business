@@ -13,6 +13,9 @@ import clientDetail from './clientDetail'
 import business from './business'
 import order from './order'
 import exchange from './exchange'
+import property from './property'
+
+export const Property = property
 
 export const Exchange = exchange
 
