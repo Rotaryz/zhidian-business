@@ -2,6 +2,7 @@
   <div class="employee-box">
     <div class="scroll-wrapper">
       <scroll
+        v-if="dataArray.length"
         bcColor="#f6f6f6"
         ref="scroll"
         :data="dataArray"
@@ -15,6 +16,10 @@
           </li>
         </ul>
       </scroll>
+      <div class="nothing-box" v-if="isEmpty">
+        <img src="./pic-empty_order@2x.png" class="nothing-img">
+        <div class="nothing-txt">暂无数据</div>
+      </div>
     </div>
     <div class="footer-box" @click="jumpNew">
       <div class="footer-btn">新建店员</div>
@@ -39,7 +44,8 @@
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
         page: 1,
-        hasMore: true
+        hasMore: true,
+        isEmpty: false
       }
     },
     created() {
@@ -115,6 +121,22 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
+
+  .nothing-box
+    display: flex
+    flex-direction: column
+    align-items: center
+    font-size: 0
+    padding-top: 100px
+    .nothing-img
+      width: 100px
+      height: 80px
+      margin-bottom: 5px
+    .nothing-txt
+      font-size: $font-size-12
+      color: $color-CCCCCC
+      font-family: $font-family-regular
+
   .employee-box
     fill-box()
     z-index: 51

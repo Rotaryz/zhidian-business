@@ -3,7 +3,7 @@
     <article class="top">
       <div class="title">欢迎加入国颐堂养发馆</div>
       <div class="qr-code">
-        <img class="qr-img" src="" alt="">
+        <img class="qr-img" src="./qr-code.svg" alt="">
       </div>
       <div class="explain">微信扫一扫，或长按识别二维码</div>
     </article>

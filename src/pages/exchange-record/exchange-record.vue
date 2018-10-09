@@ -43,29 +43,7 @@
   import Scroll from 'components/scroll/scroll'
   import { Exchange } from '../../api'
 
-  // const dataArray = [
-  //   {
-  //     name: '养发护发优,养发护发优养发护发优养发护发优,养发护发优养发护发优养发护发优养发护发优养发护发优养发护发优',
-  //     id: 128392,
-  //     userId: 3272378,
-  //     time: '2017-01-01',
-  //     now: '13:08'
-  //   },
-  //   {
-  //     name: '养发护发优…',
-  //     id: 128392,
-  //     userId: 3272378,
-  //     time: '2017-01-01',
-  //     now: '13:08'
-  //   },
-  //   {
-  //     name: '养发护发优…',
-  //     id: 1,
-  //     userId: 1,
-  //     time: '2017-01-01',
-  //     now: '13:08'
-  //   }
-  // ]
+  const LIMIT = 10
   export default {
     name: 'ExchangeRecord',
     components: {
@@ -87,8 +65,9 @@
       this._getLog()
     },
     methods: {
-      _getLog() {
-        Exchange.getVerificationLog().then(res => {
+      _getLog(data = {page: 1}) {
+        if (!this.hasMore) return
+        Exchange.getVerificationLog({...data, limit: LIMIT}).then(res => {
           this.$loading.hide()
           if (res.error !== this.$ERR_OK) {
             this.$toast.show(res.message)

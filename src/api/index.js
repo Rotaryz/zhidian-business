@@ -7,6 +7,9 @@ import activity from './activity'
 import prize from './prize'
 import mine from './mine'
 import exchange from './exchange'
+import property from './property'
+
+export const Property = property
 
 export const Exchange = exchange
 
