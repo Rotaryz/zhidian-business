@@ -1,43 +1,47 @@
 <template>
   <div class="new-box">
     <div class="main-box border-bottom-1px">
-      <div class="list-item border-bottom-1px avatar" @click="chooseBanner">
-        <div class="item-left">
-          <div class="item-img" :style="{backgroundImage: 'url(' + imageData.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-        </div>
-        <div class="item-right">上传头像</div>
+      <div class="list-item border-bottom-1px avatar">
+        <div class="item-left">上传头像</div>
+        <label class="item-right avatar">
+          <div class="item-img" :style="{backgroundImage: 'url(' + staffInfo.imageData.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+          <input type="file" style="display: none" @change="_fileChange" accept="image/*">
+        </label>
       </div>
       <div class="list-item border-bottom-1px">
         <div class="item-left">店员名称</div>
-        <input type="text" placeholder="请输入" class="item-right">
+        <input type="text" placeholder="请输入" class="item-right" v-model="staffInfo.name" maxlength="30">
       </div>
       <div class="list-item border-bottom-1px">
         <div class="item-left">手机号码</div>
-        <input type="number" placeholder="请输入" class="item-right">
+        <input type="number" placeholder="请输入" class="item-right" v-model="staffInfo.telephone">
       </div>
       <div class="list-item border-bottom-1px">
         <div class="item-left">公司职位</div>
-        <input type="text" placeholder="请输入" class="item-right">
+        <input type="text" placeholder="请输入" class="item-right" v-model="staffInfo.position" maxlength="30">
       </div>
     </div>
     <div class="footer-box">
-      <div class="footer-btn">保存</div>
+      <div class="footer-btn" @click="saveBtn">保存</div>
     </div>
     <div class="disabled-cover" @click.stop="" v-if="disabledCover"></div>
-    <cropper ref="cropper" @confirm="cropperConfirm"></cropper>
+    <cropper ref="cropper" @confirm="cropperConfirm" :aspect="1"></cropper>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Cropper from 'components/cropper/cropper'
   import { Upload } from 'api'
+  import { checkIsPhoneNumber } from 'common/js/utils'
   export default {
     name: 'new-employee',
     data() {
       return {
-        imageData: {
+        staffInfo: {
           name: '',
-          mobile: ''
+          telephone: '',
+          position: '',
+          imageData: {}
         },
         disabledCover: false
       }
@@ -45,6 +49,13 @@
     created() {
     },
     methods: {
+      _fileChange(e) {
+        let arr = Array.from(e.target.files)
+        this.$refs.cropper.show(arr[0])
+      },
+      saveBtn() {
+        this._checkForm()
+      },
       cropperConfirm(e) {
         this.$loading.show()
         let blob = this.$handle.getBlobBydataURI(e)
@@ -58,19 +69,47 @@
             url: res.data.url,
             id: res.data.id
           }
-          this.imageData = obj
+          this.staffInfo.imageData = obj
           this.$loading.hide()
           this.$refs.cropper.cancel()
         })
-      },
-      chooseBanner() {
-        console.log(this.$handle)
-        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
-          this.$refs.cropper.show(res[0])
-        })
+      }
+    },
+    _checkForm() {
+      let arr = [
+        {value: this.nameReg, txt: '请输入店员的名称'},
+        {value: this.telephoneReg, txt: '请输入店员的手机号码'},
+        {value: this.positionReg, txt: '请输入店员的职位'},
+        {value: this.avatarReg, txt: '请添加店员的照片'}
+      ]
+      let res = this._testPropety(arr)
+      if (res) {
+      }
+    },
+    _testPropety(arr) {
+      for (let i = 0, j = arr.length; i < j; i++) {
+        if (!arr[i].value) {
+          this.$toast.show(arr[i].txt)
+          return false
+        }
+        if (i === j - 1 && arr[i].value) {
+          return true
+        }
       }
     },
     computed: {
+      nameReg() {
+        return this.staffInfo.name
+      },
+      telephoneReg() {
+        return checkIsPhoneNumber(this.staffInfo.telephone)
+      },
+      positionReg() {
+        return this.staffInfo.position
+      },
+      avatarReg() {
+        return this.staffInfo.imageData.url
+      }
     },
     components: {
       Cropper
@@ -104,24 +143,29 @@
         font-family: $font-family-regular
         min-width: 21.33333vw
       .item-img
-        width: 10.666vw
+        width: 50px
         height: @width
-        background: #ddd
-        margin-right: 10px
-        border-radius: 50px
-        position: relative
+        background: #ccc
+        border-radius: 50%
       .item-right
         font-size: $font-size-14
         color: $color-363547
         font-family: $font-family-regular
         flex: 1
+        overflow :hidden
+        text-align :right
         width: 100%
-        height: 100%
+        height: 40px
         outline: none
         padding: 0
         margin: 0
         padding-right: 15px
         line-height: 60px
+        &.avatar
+          layout(row)
+          align-items :center
+          justify-content :flex-end
+          height :100%
       .item-right::-webkit-input-placeholder
         color: $color-CCCCCC
       .item-right::-ms-input-placeholder
