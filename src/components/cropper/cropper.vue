@@ -51,7 +51,7 @@
         this.$refs.myCropper.replace(img)
       },
       confirm() {
-        let src = this.$refs.myCropper.getCroppedCanvas().toDataURL()
+        let src = this.$refs.myCropper.getCroppedCanvas().toDataURL('image/jpeg')
         this.$emit('confirm', src)
       },
       cancel() {
