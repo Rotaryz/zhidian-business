@@ -18,7 +18,7 @@
     },
     methods: {
       refresh() {
-        this.$emit('refresh')
+        this.$emit('refresh', ...arguments)
       }
     },
     watch: {

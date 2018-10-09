@@ -35,7 +35,8 @@
             <div class="container-item">
               <div class="img-box">
                 <div class="img-bc un-up"></div>
-                <div class="img-bc up" v-if="!prizeDetail.image_url" @click="chooseBanner"></div>
+                <div class="img-bc up" v-if="!prizeDetail.image_url"></div>
+                <input type="file" class="img-bc image-file" @change="_fileImage($event)" accept="image/*" v-if="!prizeDetail.image_url">
               </div>
             </div>
             <div class="container-item" v-if="prizeDetail.image_url">
@@ -148,10 +149,9 @@
             break
         }
       },
-      chooseBanner() {
-        this.$handle.fileController(this.$cosFileType.IMAGE_TYPE).then(res => {
-          this.$refs.cropper.show(res[0])
-        })
+      _fileImage(e) {
+        let arr = Array.from(e.target.files)
+        this.$refs.cropper.show(arr[0])
       },
       delBanner() {
         this.prizeDetail.image_url = ''
@@ -428,6 +428,8 @@
               position: absolute
               left: 0
               top: 0
+              &.image-file
+                opacity: 0
               &.un-up
                 icon-image('./icon-addpic_un')
               &.up
