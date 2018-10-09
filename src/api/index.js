@@ -8,18 +8,12 @@ import prize from './prize'
 import mine from './mine'
 import exchange from './exchange'
 import property from './property'
-
-export const Property = property
-
-export const Exchange = exchange
-import echart from './echart'
 import rank from './rank'
 import analyse from './ai-analyse'
 import clientDetail from './clientDetail'
 import business from './business'
 import order from './order'
-import exchange from './exchange'
-import property from './property'
+import echart from './echart'
 
 export const Property = property
 

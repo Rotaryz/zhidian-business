@@ -34,6 +34,7 @@ const OrderDetail = () => import('pages/order-detail/order-detail')
 const DepositRecords = () => import('pages/deposit-records/deposit-records')
 const Deposit = () => import('pages/deposit/deposit')
 const AddBankCard = () => import('pages/add-bank-card/add-bank-card')
+const EditorService = () => import('pages/editor-service/editor-service')
 
 Vue.use(Router)
 
