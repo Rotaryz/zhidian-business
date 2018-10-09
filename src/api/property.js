@@ -20,5 +20,9 @@ export default {
   getBankCardList(data, loading) {
     let url = '/api/merchant/banks'
     return request.get(url, data, loading)
+  },
+  updateBankCard(data, loading) {
+    let url = '/api/merchant/bank-cards'
+    return request.post(url, data, loading)
   }
 }

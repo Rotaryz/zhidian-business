@@ -17,7 +17,7 @@
         <div class="right-arrow"></div>
       </li>
     </ul>
-    <div class="btn">提现</div>
+    <div class="btn" :class="allowBtn?'active':''" @click="_checkForm">提现</div>
     <awesome-picker
       ref="picker"
       :data="bankList"
@@ -32,7 +32,11 @@
   export default {
     data() {
       return {
-        openBankInfo: {},
+        openBankInfo: {
+          bank: '',
+          withdrawal_card: '',
+          name: ''
+        },
         bankList: [],
         cardNum: ''
       }
@@ -42,8 +46,6 @@
     },
     methods: {
       getCode(e) {
-        console.log(typeof e.target.value)
-        // let reg = /-?(\d+|\d+\.\d+|\.\d+)([eE][-+]?\d+)?/
         this.cardNum = e.target.value.replace(/\s/g, '').replace(/(.{4})/g, '$1 ').trim()
       },
       showPicker() {
@@ -51,6 +53,21 @@
       },
       pickerConfirm(e) {
         this.openBankInfo.bank = e[0].value
+      },
+      _updateBankCard() {
+        this.openBankInfo.withdrawal_card = this.cardNum.replace(/\s/g, '')
+        Property.updateBankCard(this.openBankInfo).then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.$toast.show('绑定成功')
+          this.$emit('refresh')
+          setTimeout(() => {
+            this.$router.back()
+          }, 1500)
+        })
       },
       _getBankCardList() {
         Property.getBankCardList().then(res => {
@@ -66,12 +83,12 @@
       _checkForm() {
         let arr = [
           {value: this.nameReg, txt: '持卡人不能为空'},
-          {value: this.cardNumReg, txt: '银行卡号不能为空'},
+          {value: this.cardNumReg, txt: '请输入正确银行卡号'},
           {value: this.bankReg, txt: '开户行不能为空'}
         ]
         let res = this._testPropety(arr)
         if (res) {
-          // todo
+          this._updateBankCard()
         }
       },
       _testPropety(arr) {
@@ -88,13 +105,16 @@
     },
     computed: {
       cardNumReg() {
-        return this.openBankInfo.withdrawal_card
+        return this.cardNum.length === 23
       },
       bankReg() {
         return this.openBankInfo.bank
       },
       nameReg() {
         return this.openBankInfo.name
+      },
+      allowBtn() {
+        return this.cardNumReg && this.bankReg && this.nameReg
       }
     }
   }
@@ -147,5 +167,17 @@
             color: $color-CCCCCC
 
     .btn
-      height :10px
+      margin: 20px 15px
+      opacity: 0.5;
+      background: #363547;
+      border-radius: 4px;
+      height: 45px
+      line-height: @height
+      text-align: center
+      font-family: PingFangSC-Regular;
+      font-size: 14px;
+      color: #FFFFFF;
+      letter-spacing: 0.56px;
+      &.active
+        opacity: 1
 </style>
