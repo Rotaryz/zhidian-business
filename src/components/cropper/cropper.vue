@@ -9,7 +9,7 @@
       :background="status"
       :cropBoxResizable="status"
       :aspectRatio="aspect"
-      :autoCropArea="0.8"
+      :autoCropArea="1"
       :dragMode="'move'"
       :checkCrossOrigin="false"
       :cropBoxMovable="false"
