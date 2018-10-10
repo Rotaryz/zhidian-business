@@ -38,7 +38,6 @@
       }
     },
     data() {
-      console.log(this.info)
       return {
         dataArray
       }

@@ -91,7 +91,7 @@
       onPullingUp() {
         // 更新数据
         if (!this.pullUpLoad) return this.$refs.scroll.forceUpdate()
-        this._getList({page: ++this.page})
+        this._getLog({page: ++this.page})
       },
       rebuildScroll() {
         this.$nextTick(() => {
