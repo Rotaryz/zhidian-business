@@ -3,7 +3,7 @@
     <div class="margin-box-10px"></div>
     <section class="card-wrapper" @click="navToBankCard">
       <div class="title" v-if="!bankInfo.bank">添加银行卡</div>
-      <div class="title active" v-else>{{bankInfo.bank}}()</div>
+      <div class="title active" v-else>{{bankInfo.bank}}({{bankInfo.withdrawal_card.substring(bankInfo.withdrawal_card.length-4)}})</div>
       <div class="right">
         <div class="name">{{bankInfo.name}}</div>
         <div class="right-arrow"></div>
@@ -33,7 +33,7 @@
         bankInfo: {
           bank: '',
           name: '',
-          card: '',
+          withdrawal_card: '',
           remaining: '0.00'
         },
         getMoney: ''
@@ -47,7 +47,8 @@
         this._getWithdrawalInfo()
       },
       navToBankCard() {
-        this.$router.push(this.$route.path + '/add-bank-card')
+        let bankInfo = this.bankInfo
+        this.$router.push(this.$route.path + `/add-bank-card?name=${bankInfo.name}&withdrawal_card=${bankInfo.withdrawal_card}&bank=${bankInfo.bank}`)
       },
       _getWithdrawalInfo() {
         Property.getWithdrawalInfo().then(res => {
