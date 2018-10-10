@@ -450,6 +450,7 @@
           height: 100vh
           box-sizing: border-box
           padding: 45px 0 64px
+          background: $color-F6F6F6
           .list-container
             padding: 0 15px
             .list-item
