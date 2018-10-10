@@ -5,19 +5,23 @@
       <div class="qr-code">
         <img class="qr-img" v-if="qrCode" :src="qrCode" alt="">
       </div>
-      <div class="explain">微信扫一扫，或长按识别二维码</div>
-    </article>
-    <ul class="btn-group">
-      <li class="btn-item" @click="saveImage">
-        <div class="icon save"></div>
-        <div class="txt">保存</div>
-      </li>
-      <li class="btn-item" @click="copyUrl">
+      <div class="explain">请长按二维码保存或者发送给店员</div>
+      <div class="btn-item" @click="copyUrl">
         <div class="icon copy"></div>
         <div class="txt">复制链接</div>
-      </li>
-    </ul>
-    <input id="copy" onfocus="this.blur()" value="sssss"/>
+      </div>
+    </article>
+    <!--<ul class="btn-group">-->
+      <!--<li class="btn-item" @click="saveImage">-->
+        <!--<div class="icon save"></div>-->
+        <!--<div class="txt">保存</div>-->
+      <!--</li>-->
+      <!--<li class="btn-item" @click="copyUrl">-->
+        <!--<div class="icon copy"></div>-->
+        <!--<div class="txt">复制链接</div>-->
+      <!--</li>-->
+    <!--</ul>-->
+    <input id="copy" v-model="value"/>
   </div>
 </template>
 
@@ -28,7 +32,9 @@
   export default {
     data() {
       return {
-        qrCode: ''
+        qrCode: '',
+        linkUrl: '',
+        value: 'tttt'
       }
     },
     created() {
@@ -43,6 +49,7 @@
             return
           }
           this.qrCode = res.data.qrcode
+          this.linkUrl = res.data.link_url
         })
       },
       saveImage() {
@@ -77,10 +84,18 @@
         // })
       },
       copyUrl() {
-        var input = document.getElementById('copy')
+        let input = document.getElementById('copy')
         input.select()
-        document.execCommand('copy', false, null)
-        this.$toast.show('复制成功')
+        if (document.execCommand) {
+          document.execCommand('copy', false, null)
+          setTimeout(() => {
+            // input.setAttribute('disabled', false)
+            input.blur()
+          }, 10)
+          this.$toast.show('复制成功')
+        } else {
+          this.$toast.show('不支持复制')
+        }
       }
     }
   }
@@ -98,29 +113,40 @@
     .top
       background: $color-363537
       border-radius: 4px
+      padding-bottom: 20px
       .title
-        font-family: PingFangSC-Medium;
-        font-size: 16px;
-        color: #FFFFFF;
-        letter-spacing: 0.6px;
-        text-align: center;
-        padding-top: 65.5px
+        font-family: PingFangSC-Medium
+        font-size: 16px
+        color: #FFFFFF
+        letter-spacing: 0.6px
+        text-align: center
+        padding-top: 15vw
       .qr-code
         width: 60vw
         height: @width
         background: #FFFFFF;
-        border: 1px solid rgba(130, 138, 162, 0.20);
-        border-radius: 6px;
-        margin: 50px auto 12px
+        border: 1px solid rgba(130, 138, 162, 0.20)
+        border-radius: 6px
+        margin: 10vw auto 12px
         overflow: hidden
         .qr-img
           width: 100%
           height: 100%
       .explain
-        font-size: 12px;
-        color: #9B9B9B;
-        text-align: center;
-        padding-bottom: 69.5px
+        font-size: 14px
+        color: #f1f1f1
+        text-align: center
+        padding-top: 10px
+        padding-bottom: 10vw
+    .btn-item
+      width: 150px
+      height: 30px
+      line-height: 30px
+      border-radius: 20px
+      background: $color-EF705D
+      color: #fff
+      text-align: center
+      margin: 0 auto
 
     .btn-group
       margin-top: 40px
@@ -138,9 +164,9 @@
           &.copy
             icon-image(pic-link)
         .txt
-          font-size: 14px;
-          color: #706B82;
-          text-align: center;
+          font-size: 14px
+          color: #706B82
+          text-align: center
   #copy
     position: fixed
     left: -100px
