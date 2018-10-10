@@ -94,13 +94,13 @@
         this.timer = setInterval(() => {
           --this.codeSeconds
         }, 1000)
-        // getSms({mobile: this.phoneNumber}).then(res => {
-        //   this._hideLoading()
-        //   if (res.error !== ERR_OK) {
-        //     this._showToast(res.message)
-        //   }
-        //   this._showToast('验证码已发送，请注意查收')
-        // })
+        Jwt.getSms({mobile: this.phoneNumber}).then(res => {
+          this.$loading.hide()
+          if (res.error !== this.$ERR_OK) {
+            this.$toast.show(res.message)
+          }
+          this.$toast.show('验证码已发送，请注意查收')
+        })
       },
       _check() {
         if (!checkIsPhoneNumber(this.phoneNumber)) {
