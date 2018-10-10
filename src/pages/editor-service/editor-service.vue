@@ -139,7 +139,7 @@
           <div class="item-left">最大可售数量</div>
           <div class="item-right num-right">
             <div class="right-num-box">
-              <input type="number" class="num-input" v-model="serviceDetail.total_stock">
+              <input type="number" class="num-input" v-model="serviceDetail.usable_stock">
             </div>
           </div>
         </div>
@@ -236,7 +236,7 @@
           start_at: '', // 券使用开始
           end_at: '', // 券结束时间
           commission_rate: '', // 佣金
-          total_stock: '', // 总库存
+          usable_stock: '', // 总库存
           note: {
             need_subscribe: '', // 预约信息
             remarks: '' // 其他备注
@@ -501,7 +501,7 @@
         return this.serviceDetail.end_at
       },
       stockReg() {
-        return this.serviceDetail.total_stock && COUNTREG.test(this.serviceDetail.total_stock)
+        return this.serviceDetail.usable_stock && COUNTREG.test(this.serviceDetail.usable_stock)
       },
       rateReg() {
         return RATEREG.test(this.serviceDetail.commission_rate)
