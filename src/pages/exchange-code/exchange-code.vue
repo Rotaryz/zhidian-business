@@ -81,6 +81,7 @@
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)
+            alert(res.message)
             return
           }
           this.$toast.show('核销成功')
@@ -172,8 +173,8 @@
           &:last-child
             opacity: 0
             background-size: 12.8vw 12.8vw
-            background-repeat :no-repeat
-            background-position : left center
+            background-repeat: no-repeat
+            background-position: left center
             bg-image(icon-shop_delete2)
             background-color: transparent
           &:last-child.del
