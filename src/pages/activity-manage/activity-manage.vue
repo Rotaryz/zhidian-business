@@ -236,7 +236,7 @@
       async itemDelete(item) {
         this.temporaryItem = item
         this.temporaryType = 'del'
-        this.$refs.modal.show({msg: '确定删除该服务吗？'})
+        this.$refs.modal.show({msg: '确定删除该活动吗？'})
       },
       _serviceDel(item) {
         ActivityApi.setActivityDel(item.id).then((res) => {
