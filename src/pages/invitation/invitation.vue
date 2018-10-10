@@ -21,7 +21,7 @@
         <!--<div class="txt">复制链接</div>-->
       <!--</li>-->
     <!--</ul>-->
-    <input id="copy" v-model="value"/>
+    <input id="copy" v-model="linkUrl"/>
   </div>
 </template>
 
@@ -33,8 +33,7 @@
     data() {
       return {
         qrCode: '',
-        linkUrl: '',
-        value: 'tttt'
+        linkUrl: ''
       }
     },
     created() {
@@ -169,6 +168,6 @@
           text-align: center
   #copy
     position: fixed
-    left: -100px
-    bottom: -100px
+    left: -200px
+    bottom: -200px
 </style>
