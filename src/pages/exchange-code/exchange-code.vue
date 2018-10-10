@@ -100,7 +100,7 @@
         }
       },
       _vibrateHandle() {
-        navigator.vibrate && navigator.vibrate(1000)
+        navigator.vibrate && navigator.vibrate(50)
       }
     }
   }

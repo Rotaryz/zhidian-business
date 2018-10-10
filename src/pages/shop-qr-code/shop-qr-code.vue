@@ -3,8 +3,9 @@
     <section class="bg">
       <div class="wrapper">
         <section class="content">
-          <div class="avatar"></div>
-          <div class="title">国颐堂(白云店)</div>
+          <div class="logo" v-if="shopInfo.logo" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+          <div class="logo" v-else></div>
+          <div class="title">{{shopInfo.name || '店铺名称'}}</div>
           <div class="qr-code"></div>
           <div class="explain">
             <div class="e-c">长按识别二维码进店逛逛</div>
@@ -16,7 +17,31 @@
 </template>
 
 <script type="text/ecmascript-6">
-  export default {}
+  import { Mine } from 'api'
+  export default {
+    data() {
+      return {
+        shopInfo: {}
+      }
+    },
+    created() {
+      this._getShopInfo()
+    },
+    methods: {
+      _getShopInfo() {
+        Mine.getShopInfo().then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          res.data.video = res.data.video ? res.data.video : {}
+          res.data.logo = res.data.logo ? res.data.logo : {}
+          this.shopInfo = res.data
+        })
+      }
+    }
+  }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
@@ -40,7 +65,7 @@
         .content
           border: 1px solid rgba(112, 107, 130, 0.2)
           position: relative
-          .avatar
+          .logo
             border-radius: 2px
             width: 50px
             height: @width

@@ -1,11 +1,11 @@
 <template>
   <transition name="fade">
     <article class="confirm-msg" v-if="isShow">
-      <div class="mask"></div>
-      <section class="content">
+      <div class="mask" @click="cancel"></div>
+      <section class="content" @click.stop>
         <div class="msg">{{msg}}</div>
         <div class="btn-group border-top-1px">
-          <div class="btn cancel" @click="cancel">取消</div>
+          <div class="btn cancel" v-if="isShowCancel" @click="cancel">取消</div>
           <div class="btn confirm border-left-1px" @click="confirm">确定</div>
         </div>
       </section>
@@ -15,6 +15,12 @@
 
 <script type="text/ecmascript-6">
   export default {
+    props: {
+      isShowCancel: {
+        type: Boolean,
+        default: true
+      }
+    },
     data() {
       return {
         msg: '确定删除吗？',
@@ -55,7 +61,7 @@
     align-items: center
     .mask
       fill-box()
-      background: rgba(54,53,71,0.8)
+      background: rgba(54, 53, 71, 0.8)
     .content
       position: relative
       margin-top: 152px

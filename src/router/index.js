@@ -5,7 +5,7 @@ import storage from 'storage-controller'
 const _this = () => import('@/main')
 const Demo = () => import('pages/Z-DEMO/z-demo')
 const ServiceManage = () => import('pages/service-manage/service-manage')
-const EditorService = () => import('pages/editor-service/editor-service')
+// const EditorService = () => import('pages/editor-service/editor-service')
 const Mine = () => import('pages/mine/mine')
 const Radar = () => import('pages/radar/radar')
 const Shop = () => import('pages/shop/shop')
@@ -17,6 +17,9 @@ const ExchangeRecord = () => import('pages/exchange-record/exchange-record')
 const ShopInfo = () => import('pages/shop-info/shop-info')
 const OverView = () => import('pages/overview/overview')
 const Ranking = () => import('pages/ranking/ranking')
+const AI = () => import('pages/ai-analyse/ai-analyse')
+const CapacityModel = () => import('pages/capacity-model/capacity-model')
+const BusinessCard = () => import('pages/business-card/business-card')
 const ActivityManage = () => import('pages/activity-manage/activity-manage')
 const EditorActivity = () => import('pages/editor-activity/editor-activity')
 const ChoiceGoods = () => import('pages/choice-goods/choice-goods')
@@ -28,6 +31,9 @@ const Invitation = () => import('pages/invitation/invitation')
 const OrderManage = () => import('pages/order-manage/order-manage')
 const StaffScreen = () => import('pages/staff-screen/staff-screen')
 const OrderDetail = () => import('pages/order-detail/order-detail')
+const DepositRecords = () => import('pages/deposit-records/deposit-records')
+const Deposit = () => import('pages/deposit/deposit')
+const AddBankCard = () => import('pages/add-bank-card/add-bank-card')
 
 Vue.use(Router)
 
@@ -190,7 +196,32 @@ const route = new Router({
               component: Property,
               meta: {
                 title: '资产'
-              }
+              },
+              children: [
+                {
+                  path: 'deposit-records',
+                  component: DepositRecords,
+                  meta: {
+                    title: '提现记录'
+                  }
+                },
+                {
+                  path: 'deposit',
+                  component: Deposit,
+                  meta: {
+                    title: '提现'
+                  },
+                  children: [
+                    {
+                      path: 'add-bank-card',
+                      component: AddBankCard,
+                      meta: {
+                        title: '绑定银行卡'
+                      }
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -223,10 +254,31 @@ const route = new Router({
               meta: {
                 title: '排行榜'
               }
+            },
+            {
+              path: 'ai-analyse',
+              component: AI,
+              meta: {
+                title: 'AI分析'
+              }
             }
           ]
         }
       ]
+    },
+    {
+      path: '/capacity-model',
+      component: CapacityModel,
+      meta: {
+        title: '能力模型'
+      }
+    },
+    {
+      path: '/business-card',
+      component: BusinessCard,
+      meta: {
+        title: '名片'
+      }
     },
     {
       path: '/service-manage',

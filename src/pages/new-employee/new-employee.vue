@@ -11,15 +11,15 @@
       <!--</div>-->
       <div class="list-item border-bottom-1px">
         <div class="item-left">店员名称</div>
-        <input type="text" placeholder="请输入" class="item-right" v-model="staffInfo.name" maxlength="30">
+        <input type="text" placeholder="请输入员工的名称" class="item-right" v-model="staffInfo.name" maxlength="30">
       </div>
       <div class="list-item border-bottom-1px">
         <div class="item-left">手机号码</div>
-        <input type="number" placeholder="请输入" class="item-right" v-model="staffInfo.mobile">
+        <input type="number" placeholder="请输入员工的手机号" class="item-right" v-model="staffInfo.mobile">
       </div>
       <div class="list-item border-bottom-1px">
         <div class="item-left">公司职位</div>
-        <input type="text" placeholder="请输入" class="item-right" v-model="staffInfo.position" maxlength="30">
+        <input type="text" placeholder="请输入员工职位" class="item-right" v-model="staffInfo.position" maxlength="30">
       </div>
     </div>
     <div class="footer-box">
@@ -61,7 +61,7 @@
           this.$toast.show('创建成功')
           this.$emit('refresh')
           setTimeout(() => {
-            this.$router.back()
+            this.$router.go(-1)
           }, 2000)
         })
       },
@@ -94,7 +94,7 @@
         let arr = [
           // {value: this.avatarReg, txt: '请添加店员的照片'},
           {value: this.nameReg, txt: '请输入店员的名称'},
-          {value: this.mobileReg, txt: '请输入店员的手机号码'},
+          {value: this.mobileReg, txt: '请输入店员正确的手机号码'},
           {value: this.positionReg, txt: '请输入店员的职位'}
         ]
         let res = this._testPropety(arr)
