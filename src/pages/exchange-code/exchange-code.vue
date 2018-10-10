@@ -81,7 +81,7 @@
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)
-            alert(res.message)
+            // alert(res.message)
             return
           }
           this.$toast.show('核销成功')
