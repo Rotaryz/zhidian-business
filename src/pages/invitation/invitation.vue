@@ -21,7 +21,8 @@
         <!--<div class="txt">复制链接</div>-->
       <!--</li>-->
     <!--</ul>-->
-    <input id="copy" v-model="linkUrl"/>
+    <input id="copyTxt" readOnly="true" v-model="linkUrl"/>
+    <div id="copyIos">{{linkUrl}}</div>
   </div>
 </template>
 
@@ -83,17 +84,23 @@
         // })
       },
       copyUrl() {
-        let input = document.getElementById('copy')
-        input.select()
-        if (document.execCommand) {
-          document.execCommand('copy', false, null)
+        if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
+          window.getSelection().removeAllRanges()
+          let Url2 = document.getElementById('copyTxt')
+          let range = document.createRange()
+          range.selectNode(Url2)
+          window.getSelection().addRange(range)
+          document.execCommand('copy')
+          window.getSelection().removeAllRanges()
+        } else {
+          let input = document.getElementById('copyTxt')
+          input.select()
+          document.execCommand('copy')
           setTimeout(() => {
             // input.setAttribute('disabled', false)
             input.blur()
           }, 10)
           this.$toast.show('复制成功')
-        } else {
-          this.$toast.show('不支持复制')
         }
       }
     }
@@ -166,7 +173,7 @@
           font-size: 14px
           color: #706B82
           text-align: center
-  #copy
+  #copyTxt,#copyIos
     position: fixed
     left: -200px
     bottom: -200px
