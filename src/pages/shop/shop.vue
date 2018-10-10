@@ -16,7 +16,6 @@
   import SRouter from './s-router/s-router'
   import wx from 'weixin-js-sdk'
   import { Global } from 'api'
-  import {BASE_URL} from 'common/js/config'
   // import { Jwt } from 'api'
 
   export default {
@@ -42,7 +41,7 @@
         // todo
       },
       _getWxSdk() {
-        let url = BASE_URL + this.$route.path
+        let url = window.location.href
         Global.jssdkConfig({url}).then((res) => {
           if (res.error === this.$ERR_OK) {
             res = res.data
