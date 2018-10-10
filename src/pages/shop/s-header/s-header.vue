@@ -44,6 +44,7 @@
         this.$router.push(this.$route.path + item.path)
       },
       _getScanner(callback) {
+        let that = this
         wx.scanQRCode({
           needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
           scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
@@ -51,13 +52,11 @@
             let result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
             let obj = JSON.parse(result)
             Exchange.verification(obj).then((res) => {
-              alert(JSON.stringify(res))
-              this.$loading.hide()
-              alert(res.error)
-              if (res.error === this.$ERR_OK) {
-                this.$toast.show('核销成功')
+              that.$loading.hide()
+              if (res.error === that.$ERR_OK) {
+                that.$toast.show('核销成功')
               } else {
-                this.$toast.show(res.message)
+                that.$toast.show(res.message)
               }
             })
             callback && callback()
