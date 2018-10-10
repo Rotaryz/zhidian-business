@@ -17,7 +17,8 @@
               <div class="cliten-img">
                 <div class="detail-img-box">
                   <div class="img">
-                    <img :src="clientData.avatar" alt="">
+                    <img v-if="clientData.avatar" :src="clientData.avatar" alt="">
+                    <img v-else src="./pic-default_people@2x.png" alt="">
                   </div>
                   <div class="label-right">
                     <div class="label-name">{{clientData.name}}</div>
@@ -236,7 +237,6 @@
         </div>
       </div>
       <router-view></router-view>
-      <toast ref="toast"></toast>
     </div>
   </transition>
 </template>
@@ -244,9 +244,6 @@
 <script type="text/ecmascript-6">
   import {mapActions, mapGetters} from 'vuex'
   import {ClientDetail, Echart} from 'api'
-  import storage from 'storage-controller'
-  import {ERR_OK} from '../../common/js/config'
-  import Toast from 'components/toast/toast'
   import Scroll from 'components/scroll/scroll'
   import Exception from 'components/exception/exception'
   import {radarTimeFormat} from 'common/js/utils'
@@ -304,7 +301,6 @@
         twoList: [],
         tabhighgt: 216,
         highgt: 216,
-        pageUrl: '',
         labelList: [],
         pieData: [
           {value: 1, name: '对我感兴趣'},
@@ -331,21 +327,19 @@
     },
     created() {
       this.id = this.$route.query.id
-      this.pageUrl = this.$route.query.pageUrl
       this.clientData = {
-        name: storage.get('user').name,
-        avatar: storage.get('user').avatar,
-        position: storage.get('user').position
+        name: this.$storage.get('user').name,
+        avatar: this.$storage.get('user').avatar,
+        position: this.$storage.get('user').position
       }
-      // this.getClientId(this.id)
-      this.getActionLineData()
+      this.getActionLineData() // 员工能力模型图
       this.getPieData()
       this.getBarData()
       this.getSixData()
       this.getSuccessData()
-      this.getAllDataObj('all')
-      this.getNewActionList(this.id)
-      this.getDataRank()
+      this.getAllDataObj('all') // 全部数据展示
+      this.getNewActionList(this.id) // 行为事件列表
+      this.getDataRank() // 员工各能力排行
     },
     mounted() {
       this.highgt = this.$refs.eleven.offsetHeight
@@ -631,7 +625,7 @@
                     color: '#5394f5'
                   },
                   lineStyle: {
-                    color: 'rgba(86,186,21,.6)',
+                    color: '#5394f5',
                     width: 1
                   }
                 }
@@ -720,27 +714,17 @@
       getAllDataObj(time) {
         Echart.getAllData(time, this.id).then(res => {
           this.$loading.hide()
-          if (res.error === ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             this.allDatas = res.data
           } else {
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
           }
         })
       },
-      // getClientId(id) {
-      //   ClientDetail.getClientDetail(id).then((res) => {
-      //     this.$loading.hide()
-      //     if (res.error === ERR_OK) {
-      //       this.clientData = res.data
-      //       this.flow = res.data.flow
-      //       this.mobile = res.data.mobile
-      //     }
-      //   })
-      // },
       getNewActionList(id) {
         ClientDetail.getActionList(id).then((res) => {
           this.$loading.hide()
-          if (res.error === ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             this.actionList = res.data
           }
         })
@@ -754,7 +738,7 @@
         let number = this.actionList.length
         ClientDetail.getActionList(id, number).then((res) => {
           this.$loading.hide()
-          if (res.error === ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             if (res.data.length * 1 === 0) {
               // this.actionPage--
               this.actionMore = true
@@ -795,41 +779,41 @@
       getPieData() {
         Echart.getPie(this.id).then(res => {
           this.$loading.hide()
-          if (res.error === ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             this.pieData = res.data
           } else {
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
           }
         })
       },
       getActionLineData() {
         Echart.getActionLine(this.id).then(res => {
           this.$loading.hide()
-          if (res.error === ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             this.ationLine = res.data
           } else {
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
           }
         })
       },
       getBarData() {
         Echart.getBar(this.id).then(res => {
           this.$loading.hide()
-          if (res.error === ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             this.barData = res.data
           } else {
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
           }
         })
       },
       getSixData() {
         Echart.getEmployee(this.id).then(res => {
           this.$loading.hide()
-          if (res.error === ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             this.sixData = res.data
             this.drawSix()
           } else {
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
           }
         })
       },
@@ -840,26 +824,25 @@
       getSuccessData() {
         Echart.getSuccess(this.id).then(res => {
           this.$loading.hide()
-          if (res.error === ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             this.successData = res.data
           } else {
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
           }
         })
       },
       getDataRank() {
         Echart.getEmployeeRank(this.id).then(res => {
           this.$loading.hide()
-          if (res.error === ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             this.dataRank = res.data
           } else {
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
           }
         })
       }
     },
     components: {
-      Toast,
       Scroll,
       Exception
     },
@@ -875,7 +858,7 @@
         } : false
       },
       userInfo() {
-        return storage.get('info')
+        return this.$storage.get('info')
       }
     },
     filters: {
@@ -974,7 +957,8 @@
               width: 60px
               height: 60px
               border-radius: 50%
-              background: #333
+              background: #ccc
+              overflow: hidden
               img
                 width: 60px
                 height: 60px

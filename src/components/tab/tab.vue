@@ -51,10 +51,10 @@
         font-size: 0
         .icon
           display: block
-          width: 20px
-          height: 20px
+          width: 27px
+          height: 27px
           margin-bottom: 3px
-          background-size: 20px 20px
+          background-size: 27px 27px
           &.icon-radar
             bg-image('./icon-radar')
           &.icon-shop

@@ -35,7 +35,7 @@
             @pullingUp="onPullingUp"
           >
             <ul class="staff-list-wrapper border-bottom-1px">
-              <li class="staff-item-wrapper border-bottom-1px" v-for="(item, index) in dataArray" :key="index">
+              <li class="staff-item-wrapper border-bottom-1px" v-for="(item, index) in dataArray" :key="index" @click="navToGive(item)">
                 <section class="left">
                   <div class="avatar" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                   <div class="avatar" v-else></div>
@@ -68,6 +68,7 @@
   import Scroll from 'components/scroll/scroll'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import { Property } from 'api'
+  import { mapActions } from 'vuex'
 
   const TABS = [
     {txt: '店铺收入', id: 0},
@@ -98,6 +99,7 @@
       this._getBaseInfo()
     },
     methods: {
+      ...mapActions(['saveEmployee']),
       refresh() {
         this.page = 1
         this._getBaseInfo()
@@ -110,6 +112,10 @@
         ]).then(() => {
           this.$loading.hide()
         })
+      },
+      navToGive(item) {
+        this.saveEmployee(item)
+        this.$router.push(this.$route.path + '/give-out?id=' + item.id)
       },
       changeTab(idx) {
         this.tabIdx = idx * 1

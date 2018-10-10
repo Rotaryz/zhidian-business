@@ -16,7 +16,6 @@
     <section class="exception-box" v-if="isEmpty">
       <exception errType="nodata"></exception>
     </section>
-    <toast ref="toast"></toast>
     <router-view @refresh="refresh"></router-view>
   </article>
 </template>
@@ -25,10 +24,7 @@
   import UserCard from 'components/user-card/user-card'
   import Scroll from 'components/scroll/scroll'
   import {Analyse} from 'api'
-  import Toast from 'components/toast/toast'
-  import {ERR_OK} from 'common/js/config'
   import Exception from 'components/exception/exception'
-  import storage from 'storage-controller'
 
   const LIMIT = 10
   export default {
@@ -62,7 +58,7 @@
       },
       toCapacityModel(item) {
         const id = item.shop_id
-        storage.set('user', item)
+        this.$storage.set('user', item)
         const pageUrl = `/capacity-model`
         this.$router.push({path: pageUrl, query: {id, pageUrl}})
       },
@@ -70,11 +66,11 @@
         const data = {page: 1, limit: LIMIT}
         Analyse.getStaffSellList(data).then(res => {
           this.$loading.hide()
-          if (res.error === ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             this.dataArray = res.data
             this.isEmpty = !this.dataArray.length
           } else {
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
           }
         })
       },
@@ -88,7 +84,7 @@
         const data = {page, limit}
         Analyse.getStaffSellList(data).then(res => {
           this.$loading.hide()
-          if (res.error === ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             if (res.data && res.data.length) {
               let newArr = this.dataArray.concat(res.data)
               this.dataArray = newArr
@@ -97,7 +93,7 @@
               this.isAll = true
             }
           } else {
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
           }
         })
       },
@@ -125,13 +121,12 @@
         } : false
       },
       userInfo() {
-        return storage.get('info')
+        return this.$storage.get('info')
       }
     },
     components: {
       UserCard,
       Scroll,
-      Toast,
       Exception
     }
   }
@@ -155,7 +150,7 @@
       fill-box()
       overflow: hidden
       top: 62px
-      bottom: 0
+      bottom: 50px
       background-color: $color-white
     .user-card-box
       height: 75px

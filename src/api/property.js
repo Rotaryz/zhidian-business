@@ -28,5 +28,13 @@ export default {
   getMoney(data, loading) {
     let url = '/api/merchant/withdrawal'
     return request.post(url, data, loading)
+  },
+  getIssueLog(data, loading) {
+    let url = '/api/merchant/issue-commission-log'
+    return request.get(url, data, loading)
+  },
+  updateIssue(data, loading) {
+    let url = '/api/merchant/issue-commission'
+    return request.get(url, data, loading)
   }
 }
