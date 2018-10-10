@@ -171,11 +171,12 @@
         flex: 1
         overflow: hidden
         width: 100%
+        height: 24px
+        line-height: 24px
         outline: none
         padding: 0
         margin: 0
         padding-right: 15px
-        line-height: 60px
         &.avatar
           layout(row)
           align-items: center

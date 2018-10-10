@@ -23,6 +23,7 @@
 
 <script type="text/ecmascript-6">
   import { Mine } from 'api'
+  // import wx from 'weixin-js-sdk'
 
   export default {
     data() {
@@ -42,31 +43,38 @@
             return
           }
           this.qrCode = res.data.qrcode
-          let imgPathUrl = this.qrCode
-          let iframe = document.getElementById('IframeReportImg')
-          if (!iframe) {
-            iframe = document.createElement('iframe')
-            iframe.style.display = 'none'
-            iframe.id = 'IframeReportImg'
-            iframe.name = 'IframeReportImg'
-            iframe.onload = this.DoSaveAsIMG()
-            iframe.style.width = 0
-            iframe.style.height = 0
-            iframe.src = 'about:blank'
-            document.body.appendChild(iframe)
-          }
-          if (iframe.src !== imgPathUrl) {
-            iframe.src = imgPathUrl
-          }
         })
       },
       saveImage() {
         this.DoSaveAsIMG()
       },
+      jssdk() {
+        // let url = location.href
+        // Mine.jssdkConfig({weixin: 'ai_radar', url, current_type: 'weishang'}).then((res) => {
+        //   if (res.error === this.$ERR_OK) {
+        //     res = res.data
+        //     wx.config({
+        //       debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        //       appId: res.appid, // 必填，企业号的唯一标识，此处填写企业号corpid
+        //       timestamp: res.timestamp, // 必填，生成签名的时间戳
+        //       nonceStr: res.noncestr, // 必填，生成签名的随机串
+        //       signature: res.signature, // 必填，签名，见附录1
+        //       jsApiList: ['updateAppMessageShareData'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        //     })
+        //   }
+        // })
+      },
       DoSaveAsIMG() {
-        if (document.getElementById('IframeReportImg') && document.getElementById('IframeReportImg').src !== 'about:blank') {
-          document.frames('IframeReportImg').document.execCommand('SaveAs')
-        }
+        // wx.ready(function () {
+        //   wx.updateAppMessageShareData({
+        //     title: '', // 分享标题
+        //     desc: '', // 分享描述
+        //     link: '', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        //     imgUrl: '' // 分享图标
+        //   }, function(res) {
+        //     this.$toast.show('分享成功')
+        //   })
+        // })
       },
       copyUrl() {
         var input = document.getElementById('copy')
