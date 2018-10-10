@@ -6,14 +6,15 @@ import employee from './employee'
 import activity from './activity'
 import prize from './prize'
 import mine from './mine'
-import echart from './echart'
+import exchange from './exchange'
+import property from './property'
 import rank from './rank'
 import analyse from './ai-analyse'
 import clientDetail from './clientDetail'
 import business from './business'
 import order from './order'
-import exchange from './exchange'
-import property from './property'
+import echart from './echart'
+import global from './global'
 
 export const Property = property
 
@@ -49,3 +50,5 @@ export const ClientDetail = clientDetail
 export const Business = business
 
 export const OrderApi = order
+
+export const Global = global
