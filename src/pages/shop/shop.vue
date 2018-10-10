@@ -41,7 +41,8 @@
         // todo
       },
       _getWxSdk() {
-        Global.jssdkConfig().then((res) => {
+        let url = this.$route.path
+        Global.jssdkConfig({url}).then((res) => {
           if (res.error === this.$ERR_OK) {
             res = res.data
             wx.config({
