@@ -9,7 +9,7 @@ export default {
    */
   getUploadSign() {
     const url = `${baseURL.upload}/post_vod_sign`
-    return request.get(url, {})
+    return request.post(url, {})
   },
   /**
    * 获取文件夹存储桶

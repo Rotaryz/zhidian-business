@@ -13,7 +13,7 @@
     'customer': ['pic-customer', '暂无客户'],
     'delcard': ['pic-delcard', '名片被删除，请联系公司管理员'],
     'disablecard': ['pic-disablecard', '名片被禁用，请联系公司管理员'],
-    'nodata': ['pic-nodata', '暂无数据'],
+    'nodata': ['pic-empty_order', '暂无数据'],
     'nogroup': ['pic-nogroup', '暂无分组'],
     'noProduct': ['pic-nogroup', '开始创建你的第一个商品'],
     'nonews': ['pic-nonews', '暂无消息'],
@@ -44,10 +44,11 @@
     .e-content
       layout()
       align-items :center
+      padding-top: 40px
       .err-img
-        width: 162px
-        height: 117px
-        margin-bottom: 20px
+        width: 100px
+        height: 80px
+        margin-bottom: 5px
         &.pic-nogroup
           icon-image("pic-nogroup")
         &.pic-404
@@ -64,8 +65,10 @@
           icon-image("pic-nonews")
         &.pic-noresult
           icon-image("pic-noresult")
+        &.pic-empty_order
+          icon-image("pic-empty_order")
       .err-msg
+        font-size: $font-size-12
+        color: $color-CCCCCC
         font-family: $font-family-regular
-        font-size: $font-size-14
-        color: $color-888888
 </style>

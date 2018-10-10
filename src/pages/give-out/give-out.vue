@@ -21,7 +21,7 @@
             <input type="number" class="input-content" v-model="getMoney">
           </figure>
           <div class="explain">可发放金额 ¥{{employee.commission}}</div>
-          <div class="btn" :class="allowBtn?'active':''" @click="saveBtn">确定</div>
+          <div class="btn" :class="getMoneyReg?'active':''" @click="saveBtn">确定</div>
         </section>
         <div class="margin-box-10px"></div>
         <section class="give-list">
@@ -81,10 +81,8 @@
     created() {
       this.image_url = this.employee.image_url
       this.id = this.$route.query.id
-      console.log(this.employee)
       this._getIssueLog()
-      this.bankInfo.remaining = this.money
-      console.log(this.bankInfo)
+      this.bankInfo.remaining = this.employee.commission
     },
     methods: {
       _getIssueLog(data = {page: 1, shop_id: this.id}, loading) {
@@ -162,10 +160,7 @@
         } : false
       },
       getMoneyReg() {
-        return (typeof +this.getMoney === 'number') && +this.getMoney >= 1 && +this.getMoney <= +this.bankInfo.remaining
-      },
-      allowBtn() {
-        return this.getMoneyReg
+        return (typeof +this.getMoney === 'number') && +this.getMoney > 0 && +this.getMoney <= +this.bankInfo.remaining
       }
     }
   }

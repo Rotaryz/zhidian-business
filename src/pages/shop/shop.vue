@@ -16,6 +16,7 @@
   import SRouter from './s-router/s-router'
   import wx from 'weixin-js-sdk'
   import { Global } from 'api'
+  // import {getSignature} from 'utils/vod/vod'
   // import { Jwt } from 'api'
 
   export default {

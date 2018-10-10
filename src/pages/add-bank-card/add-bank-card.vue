@@ -17,7 +17,7 @@
         <div class="right-arrow"></div>
       </li>
     </ul>
-    <div class="btn" :class="allowBtn?'active':''" @click="_checkForm">提现</div>
+    <div class="btn" :class="allowBtn?'active':''" @click="_checkForm">确定</div>
     <awesome-picker
       ref="picker"
       :data="bankList"
