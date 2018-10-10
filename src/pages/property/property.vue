@@ -68,6 +68,7 @@
   import Scroll from 'components/scroll/scroll'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import { Property } from 'api'
+  import { mapActions } from 'vuex'
 
   const TABS = [
     {txt: '店铺收入', id: 0},
@@ -98,6 +99,7 @@
       this._getBaseInfo()
     },
     methods: {
+      ...mapActions(['saveEmployee']),
       refresh() {
         this.page = 1
         this._getBaseInfo()
@@ -112,6 +114,7 @@
         })
       },
       navToGive(item) {
+        this.saveEmployee(item)
         this.$router.push(this.$route.path + '/give-out?id=' + item.id)
       },
       changeTab(idx) {

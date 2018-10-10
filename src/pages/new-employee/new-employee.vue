@@ -54,6 +54,7 @@
       _createEmployee() {
         Employee.createNewEmployee(this.staffInfo).then(res => {
           this.$loading.hide()
+          console.log(res)
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)
             return
@@ -148,7 +149,7 @@
     background: $color-white
     .list-item
       height: 60px
-      layout(row)
+      display: flex
       align-items: center
       position: relative
       &.avatar
@@ -170,7 +171,6 @@
         flex: 1
         overflow: hidden
         width: 100%
-        height: 40px
         outline: none
         padding: 0
         margin: 0

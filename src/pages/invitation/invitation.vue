@@ -8,15 +8,16 @@
       <div class="explain">微信扫一扫，或长按识别二维码</div>
     </article>
     <ul class="btn-group">
-      <li class="btn-item">
+      <li class="btn-item" @click="saveImage">
         <div class="icon save"></div>
         <div class="txt">保存</div>
       </li>
-      <li class="btn-item">
+      <li class="btn-item" @click="copyUrl">
         <div class="icon copy"></div>
         <div class="txt">复制链接</div>
       </li>
     </ul>
+    <input id="copy" onfocus="this.blur()" value="sssss"/>
   </div>
 </template>
 
@@ -41,7 +42,37 @@
             return
           }
           this.qrCode = res.data.qrcode
+          let imgPathUrl = this.qrCode
+          let iframe = document.getElementById('IframeReportImg')
+          if (!iframe) {
+            iframe = document.createElement('iframe')
+            iframe.style.display = 'none'
+            iframe.id = 'IframeReportImg'
+            iframe.name = 'IframeReportImg'
+            iframe.onload = this.DoSaveAsIMG()
+            iframe.style.width = 0
+            iframe.style.height = 0
+            iframe.src = 'about:blank'
+            document.body.appendChild(iframe)
+          }
+          if (iframe.src !== imgPathUrl) {
+            iframe.src = imgPathUrl
+          }
         })
+      },
+      saveImage() {
+        this.DoSaveAsIMG()
+      },
+      DoSaveAsIMG() {
+        if (document.getElementById('IframeReportImg') && document.getElementById('IframeReportImg').src !== 'about:blank') {
+          document.frames('IframeReportImg').document.execCommand('SaveAs')
+        }
+      },
+      copyUrl() {
+        var input = document.getElementById('copy')
+        input.select()
+        document.execCommand('copy', false, null)
+        this.$toast.show('复制成功')
       }
     }
   }
@@ -73,6 +104,7 @@
         border: 1px solid rgba(130, 138, 162, 0.20);
         border-radius: 6px;
         margin: 50px auto 12px
+        overflow: hidden
         .qr-img
           width: 100%
           height: 100%
@@ -101,4 +133,8 @@
           font-size: 14px;
           color: #706B82;
           text-align: center;
+  #copy
+    position: fixed
+    left: -100px
+    bottom: -100px
 </style>
