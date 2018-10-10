@@ -171,13 +171,11 @@
             color: #FFFFFF
           &:last-child
             opacity: 0
-            width: 12.8vw
-            height: @width
-            icon-image(icon-shop_delete2)
+            background-size: 12.8vw 12.8vw
+            background-repeat :no-repeat
+            background-position : left center
+            bg-image(icon-shop_delete2)
             background-color: transparent
-            position :relative
-            left: -4vw
-            top: 1vw
           &:last-child.del
             opacity: 1
 
