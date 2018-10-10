@@ -86,20 +86,17 @@
       copyUrl() {
         if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
           window.getSelection().removeAllRanges()
-          let Url2 = document.getElementById('copyTxt')
+          let Url2 = document.getElementById('copyIos')
           let range = document.createRange()
           range.selectNode(Url2)
           window.getSelection().addRange(range)
           document.execCommand('copy')
           window.getSelection().removeAllRanges()
+          this.$toast.show('复制成功')
         } else {
           let input = document.getElementById('copyTxt')
           input.select()
           document.execCommand('copy')
-          setTimeout(() => {
-            // input.setAttribute('disabled', false)
-            input.blur()
-          }, 10)
           this.$toast.show('复制成功')
         }
       }
@@ -173,7 +170,7 @@
           font-size: 14px
           color: #706B82
           text-align: center
-  #copyTxt,#copyIos
+  #copyTxt
     position: fixed
     left: -200px
     bottom: -200px
