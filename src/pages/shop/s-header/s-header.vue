@@ -49,6 +49,7 @@
           scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
           success: function (res) {
             let result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
+            alert(result + 1)
             let obj = JSON.parse(result)
             Exchange.verification(obj).then((res) => {
               this.$loading.hide()
