@@ -51,6 +51,7 @@
             let result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
             let obj = JSON.parse(result)
             Exchange.verification(obj).then((res) => {
+              alert(JSON.stringify(res))
               this.$loading.hide()
               alert(res.error)
               if (res.error === this.$ERR_OK) {
