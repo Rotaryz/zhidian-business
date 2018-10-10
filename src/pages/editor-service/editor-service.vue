@@ -802,6 +802,7 @@
         border-1px($color-E6E6E6)
         position: relative
         .textarea-content
+          font-size: $font-size-14
           width: 100%
           height: 100%
           resize: none

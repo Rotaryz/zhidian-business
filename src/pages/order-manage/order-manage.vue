@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="right-box" @click="choiceStaff">
-        <span>店员筛选</span>
+        <span>店员</span>
         <img src="./icon-screen@2x.png" class="right-icon">
       </div>
     </div>
@@ -449,7 +449,7 @@
             background: $color-EF705D
             border-radius: 3px
       .right-box
-        width: 95px
+        width: 65px
         line-height: 45px
         display: flex
         align-items: center
