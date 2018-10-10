@@ -14,6 +14,7 @@ import clientDetail from './clientDetail'
 import business from './business'
 import order from './order'
 import echart from './echart'
+import global from './global'
 
 export const Property = property
 
@@ -49,3 +50,5 @@ export const ClientDetail = clientDetail
 export const Business = business
 
 export const OrderApi = order
+
+export const Global = global

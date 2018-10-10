@@ -8,6 +8,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import wx from 'weixin-js-sdk'
+
   const dataArray = [
     {
       icon: 'key',
@@ -34,7 +36,22 @@
     },
     methods: {
       navHandle(item) {
+        if (item.icon === 'scanner') {
+          this._getScanner()
+          return
+        }
         this.$router.push(this.$route.path + item.path)
+      },
+      _getScanner(callback) {
+        wx.scanQRCode({
+          needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+          scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+          success: function (res) {
+            let result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
+            alert(result)
+            callback && callback()
+          }
+        })
       }
     }
   }
@@ -57,7 +74,7 @@
       font-family: PingFangSC-Regular
       font-size: 14px
       color: #FFFFFF
-      z-index :22
+      z-index: 22
       .logo
         width: 32px
         height: 32px
