@@ -504,7 +504,7 @@
         return this.serviceDetail.total_stock && COUNTREG.test(this.serviceDetail.total_stock)
       },
       rateReg() {
-        return this.serviceDetail.commission_rate && RATEREG.test(this.serviceDetail.commission_rate)
+        return RATEREG.test(this.serviceDetail.commission_rate)
       },
       serviceDetailReg() {
         let arr = this.serviceDetail.detail_config.filter((item) => {
@@ -870,6 +870,8 @@
           color: $color-20202E
           &.disabled
             color: $color-9B9B9B
+        .num-input:disabled
+          background: $color-white
         .right-txt-14
           font-size: $font-size-14
           color: $color-9B9B9B

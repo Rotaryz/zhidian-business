@@ -559,7 +559,7 @@
         return this.activityDetail.coupon_id
       },
       rateReg() {
-        return this.activityDetail.commission_rate && RATEREG.test(this.activityDetail.commission_rate)
+        return RATEREG.test(this.activityDetail.commission_rate)
       },
       showSelectType() {
         if (this.ruleId) {
