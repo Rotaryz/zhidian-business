@@ -71,7 +71,6 @@
       </section>
     </section>
     <action-sheet ref="sheet" :dataArray="groupList" @changeGroup="changeGroup"></action-sheet>
-    <toast ref="toast"></toast>
     <router-view @refresh="refresh"></router-view>
   </article>
 </template>
@@ -80,11 +79,8 @@
   import UserCard from 'components/user-card/user-card'
   import Scroll from 'components/scroll/scroll'
   import {Rank} from 'api'
-  import Toast from 'components/toast/toast'
-  import {ERR_OK} from 'common/js/config'
   import ActionSheet from 'components/action-sheet/action-sheet'
   import Exception from 'components/exception/exception'
-  import storage from 'storage-controller'
 
   const LIMIT = 10
   const tabOne = ['按客户数', '按互动数', '按成交率']
@@ -138,7 +134,7 @@
         }
         Rank.getStaffList(data).then(res => {
           this.$loading.hide()
-          if (res.error === ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             if (res.data && res.data.length) {
               let newArr = this.dataArray.concat(res.data)
               this.dataArray = newArr
@@ -147,7 +143,7 @@
               this.$refs.scroll.forceUpdate()
             }
           } else {
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
           }
         })
       },
@@ -163,11 +159,11 @@
         }
         Rank.getStaffList(data).then(res => {
           this.$loading.hide()
-          if (res.error === ERR_OK) {
+          if (res.error === this.$ERR_OK) {
             this.dataArray = res.data
             this.isEmpty = !this.dataArray.length
           } else {
-            this.$refs.toast.show(res.message)
+            this.$toast.show(res.message)
           }
         })
       },
@@ -294,13 +290,12 @@
         return arr[idx]
       },
       userInfo() {
-        return storage.get('info')
+        return this.$storage.get('info')
       }
     },
     components: {
       UserCard,
       Scroll,
-      Toast,
       ActionSheet,
       Exception
     }

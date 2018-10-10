@@ -4,9 +4,10 @@
       <div class="wrapper">
         <section class="content">
           <div class="logo" v-if="shopInfo.logo" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-          <div class="logo" v-else></div>
+          <img class="logo" src="./pic-default_people@2x.png" v-else />
           <div class="title">{{shopInfo.name || '店铺名称'}}</div>
-          <div class="qr-code"></div>
+          <img class="qr-code" :src="shopInfo.image_url" v-if="shopInfo.image_url">
+          <img class="qr-code" v-else>
           <div class="explain">
             <div class="e-c">长按识别二维码进店逛逛</div>
           </div>
@@ -17,7 +18,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { Mine } from 'api'
+  import { Mine, Business } from 'api'
   export default {
     data() {
       return {
@@ -35,9 +36,25 @@
             this.$toast.show(res.message)
             return
           }
-          res.data.video = res.data.video ? res.data.video : {}
-          res.data.logo = res.data.logo ? res.data.logo : {}
-          this.shopInfo = res.data
+          this.shopInfo = {
+            logo: res.data.logo,
+            name: res.data.name,
+            id: res.data.id,
+            image_url: ''
+          }
+          this._getQrcode()
+        })
+      },
+      _getQrcode() {
+        let id = this.shopInfo.id
+        console.log(id, this.shopInfo)
+        Business.Myshop(id).then((res) => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.shopInfo.image_url = res.data.image_url || ''
         })
       }
     }
@@ -67,6 +84,7 @@
           position: relative
           .logo
             border-radius: 2px
+            display: block
             width: 50px
             height: @width
             background :rgba(164, 155, 200, 0.20)
@@ -79,10 +97,12 @@
             text-align: center
             line-height: 1.2
           .qr-code
-            width: 130px
+            display: block
+            width: 120px
             height: @width
+            padding: 6px
             background: #FFFFFF
-            border: 13px solid rgba(164, 155, 200, 0.20)
+            border: 6px solid rgba(164, 155, 200, 0.20)
             border-radius: 50%
             margin : 80px auto 40px
           .explain

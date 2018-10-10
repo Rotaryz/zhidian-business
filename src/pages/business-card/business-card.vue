@@ -1,5 +1,4 @@
 <template>
-  <transition :name="slide">
     <div class="share-card">
       <div class="card-con"></div>
       <div class="card-main">
@@ -12,13 +11,11 @@
         </div>
       </div>
     </div>
-  </transition>
 </template>
 
 <script>
   import {Business} from 'api'
   import {mapGetters} from 'vuex'
-  import storage from 'storage-controller'
 
   export default {
     name: 'share-card',
@@ -28,22 +25,24 @@
       }
     },
     created() {
-      let id = this.$route.query.id
-      Business.Myshop(id).then((res) => {
-        this.$loading.hide()
-        this.card = {
-          image_url: res.data.image_url || '',
-          avatar: storage.get('user').avatar,
-          name: storage.get('user').name
-        }
-        this.card.image_url = res.data.image_url || ''
-        if (this.card.position.length === 0) {
-          this.showPosition = false
-        }
-        if (this.card.business_card_mobile.length === 0) {
-          this.showMobile = false
-        }
-      })
+      this._getQrcode()
+    },
+    methods: {
+      _getQrcode() {
+        let id = this.$route.query.id
+        Business.Myshop(id).then((res) => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.card = {
+            image_url: res.data.image_url || '',
+            avatar: this.$storage.get('user').avatar,
+            name: this.$storage.get('user').name
+          }
+        })
+      }
     },
     computed: {
       ...mapGetters(['ios']),

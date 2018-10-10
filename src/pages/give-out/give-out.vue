@@ -12,15 +12,15 @@
           <div class="avatar" v-if="image_url" :style="{backgroundImage: 'url(' + image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
           <div class="avatar" v-else></div>
           <div class="name-wrapper">
-            <div class="name">谭敏仪</div>
-            <div class="position">店长</div>
+            <div class="name">{{employee.name}}</div>
+            <div class="position">{{employee.role}}</div>
           </div>
           <div class="title">发放金额</div>
           <figure class="input-wrapper">
             <div class="unit">¥</div>
             <input type="number" class="input-content" v-model="getMoney">
           </figure>
-          <div class="explain">可发放金额 ¥230.00</div>
+          <div class="explain">可发放金额 ¥{{employee.commission}}</div>
           <div class="btn" :class="allowBtn?'active':''" @click="saveBtn">确定</div>
         </section>
         <div class="margin-box-10px"></div>
@@ -49,6 +49,7 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import { Property } from 'api'
+  import { mapGetters } from 'vuex'
 
   const LIMIT = 10
 
@@ -73,14 +74,20 @@
           remaining: '100.00' // todo
         },
         getMoney: '',
-        image_url: ''
+        image_url: '',
+        id: ''
       }
     },
     created() {
+      this.image_url = this.employee.image_url
+      this.id = this.$route.query.id
+      console.log(this.employee)
       this._getIssueLog()
+      this.bankInfo.remaining = this.money
+      console.log(this.bankInfo)
     },
     methods: {
-      _getIssueLog(data = {page: 1}, loading) {
+      _getIssueLog(data = {page: 1, shop_id: this.id}, loading) {
         if (!this.hasMore) return
         Property.getIssueLog({...data, limit: LIMIT}, loading).then(res => {
           this.$loading.hide()
@@ -105,7 +112,7 @@
         })
       },
       _updateIssue() {
-        Property.updateIssue().then(res => {
+        Property.updateIssue({shop_id: this.id, money: this.getMoney}).then(res => {
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)
@@ -147,6 +154,7 @@
       }
     },
     computed: {
+      ...mapGetters(['employee']),
       pullUpLoadObj: function () {
         return this.pullUpLoad ? {
           threshold: parseInt(this.pullUpLoadThreshold),

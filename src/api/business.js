@@ -10,7 +10,7 @@ export default {
     return request.get(url, data)
   },
   /**
-   * 我的店铺-个性签名编辑
+   * 小程序二维码
    * @returns {*}
    */
   Myshop (shopId) {
