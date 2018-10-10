@@ -90,7 +90,11 @@
           let range = document.createRange()
           range.selectNode(Url2)
           window.getSelection().addRange(range)
-          document.execCommand('copy')
+          try {
+            this.$toast.show('复制成功')
+          } catch (err) {
+            this.$toast.show('失败')
+          }
           window.getSelection().removeAllRanges()
           this.$toast.show('复制成功')
         } else {
@@ -170,7 +174,7 @@
           font-size: 14px
           color: #706B82
           text-align: center
-  #copyTxt
+  #copyTxt,#copyIos
     position: fixed
     left: -200px
     bottom: -200px
