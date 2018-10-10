@@ -41,7 +41,7 @@
               </div>
               <div class="nothing-box" v-if="nothing0">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
-                <div class="nothing-txt">暂无数据</div>
+                <div class="nothing-txt">暂无订单</div>
               </div>
             </div>
           </scroll>
@@ -59,7 +59,7 @@
               </div>
               <div class="nothing-box" v-if="nothing1">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
-                <div class="nothing-txt">暂无数据</div>
+                <div class="nothing-txt">暂无订单</div>
               </div>
             </div>
           </scroll>
@@ -77,7 +77,7 @@
               </div>
               <div class="nothing-box" v-if="nothing2">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
-                <div class="nothing-txt">暂无数据</div>
+                <div class="nothing-txt">暂无订单</div>
               </div>
             </div>
           </scroll>
@@ -95,7 +95,7 @@
               </div>
               <div class="nothing-box" v-if="nothing3">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
-                <div class="nothing-txt">暂无数据</div>
+                <div class="nothing-txt">暂无订单</div>
               </div>
             </div>
           </scroll>
@@ -175,6 +175,7 @@
         this.searchTxt = ''
       },
       searchList() {
+        this.page = 1
         this._getList()
       },
       choiceStaff() {
@@ -474,6 +475,7 @@
     .container
       width: 100vw
       height: 100vh
+      overflow: hidden
       .big-container
         width: 400vw
         height: 100vh
