@@ -18,7 +18,15 @@ export default {
     return request.get(url, {}, loading)
   },
   /**
-   * 活动下架
+   * 活动删除
+   * @returns {*}
+   */
+  setActivityDel(id, loading = true) {
+    let url = `api/merchant/activity/${id}`
+    return request.delete(url, {}, loading)
+  },
+  /**
+   * 获取商品列表
    * @returns {*}
    */
   getGoodsList(data, loading = true) {

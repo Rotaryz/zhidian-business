@@ -415,7 +415,7 @@
       },
       _setGroupOn() {
         this.activityDetail.is_online = 1
-        ActivityApi.newGroupMsg(this.id, this.activityDetail).then((res) => {
+        ActivityApi.editGroupMsg(this.id, this.activityDetail).then((res) => {
           this.$loading.hide()
           this.disabledCover = false
           if (res.error === this.$ERR_OK) {
@@ -559,7 +559,7 @@
         return this.activityDetail.coupon_id
       },
       rateReg() {
-        return this.activityDetail.commission_rate && RATEREG.test(this.activityDetail.commission_rate)
+        return RATEREG.test(this.activityDetail.commission_rate)
       },
       showSelectType() {
         if (this.ruleId) {

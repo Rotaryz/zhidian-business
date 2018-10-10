@@ -139,7 +139,7 @@
           <div class="item-left">最大可售数量</div>
           <div class="item-right num-right">
             <div class="right-num-box">
-              <input type="number" class="num-input" v-model="serviceDetail.total_stock">
+              <input type="number" class="num-input" v-model="serviceDetail.usable_stock">
             </div>
           </div>
         </div>
@@ -236,7 +236,7 @@
           start_at: '', // 券使用开始
           end_at: '', // 券结束时间
           commission_rate: '', // 佣金
-          total_stock: '', // 总库存
+          usable_stock: '', // 总库存
           note: {
             need_subscribe: '', // 预约信息
             remarks: '' // 其他备注
@@ -501,10 +501,10 @@
         return this.serviceDetail.end_at
       },
       stockReg() {
-        return this.serviceDetail.total_stock && COUNTREG.test(this.serviceDetail.total_stock)
+        return this.serviceDetail.usable_stock && COUNTREG.test(this.serviceDetail.usable_stock)
       },
       rateReg() {
-        return this.serviceDetail.commission_rate && RATEREG.test(this.serviceDetail.commission_rate)
+        return RATEREG.test(this.serviceDetail.commission_rate)
       },
       serviceDetailReg() {
         let arr = this.serviceDetail.detail_config.filter((item) => {
@@ -802,6 +802,7 @@
         border-1px($color-E6E6E6)
         position: relative
         .textarea-content
+          font-size: $font-size-14
           width: 100%
           height: 100%
           resize: none
@@ -870,6 +871,8 @@
           color: $color-20202E
           &.disabled
             color: $color-9B9B9B
+        .num-input:disabled
+          background: $color-white
         .right-txt-14
           font-size: $font-size-14
           color: $color-9B9B9B

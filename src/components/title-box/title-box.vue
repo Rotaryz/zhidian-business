@@ -77,6 +77,7 @@
         margin-bottom: 18px
       .data-area
         width: 100%
+        font-size: $font-size-14
         resize: none
         border: 0 none
         outline: none

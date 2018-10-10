@@ -12,6 +12,10 @@
           <div class="list-item" v-for="(item, index) in list" :key="index">
             <select-item :item="item" :type="type" @selectSome="selectDone"></select-item>
           </div>
+          <div class="nothing-box" v-if="nothing">
+            <img src="./pic-empty_order@2x.png" class="nothing-img">
+            <div class="nothing-txt">暂无数据</div>
+          </div>
         </div>
       </scroll>
     </div>
@@ -211,6 +215,20 @@
           color: $color-363537
         .list-item
           padding-bottom: 10px
+        .nothing-box
+          display: flex
+          flex-direction: column
+          align-items: center
+          font-size: 0
+          padding-top: 100px
+          .nothing-img
+            width: 100px
+            height: 80px
+            margin-bottom: 5px
+          .nothing-txt
+            font-size: $font-size-12
+            color: $color-CCCCCC
+            font-family: $font-family-regular
     .bottom-box
       position: fixed
       left: 0

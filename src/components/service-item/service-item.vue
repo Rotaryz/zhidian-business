@@ -149,16 +149,16 @@
               icon-image('./icon-function_click')
     .editor-box
       position: absolute
-      height: 55px
+      height: 60px
       right: 14.6vw
-      bottom: 9px
+      bottom: 5px
       width: 110px
       overflow: hidden
       transition: all 0.3s
       .editor-container
         display: flex
         align-items: flex-end
-        height: 100%
+        height: 55px
         position: absolute
         right: 0
         top: 0

@@ -44,12 +44,12 @@
             <article class="base-item">
               <div class="left">营业时间</div>
               <figure class="time-item" @click="choosePicker('opening_hours','start')">
-                <div class="time">{{shopInfo.opening_hours.start}}</div>
+                <div class="time">{{start}}</div>
                 <div class="right-arrow"></div>
               </figure>
               <div class="cut-line">至</div>
               <figure class="time-item" @click="choosePicker('opening_hours', 'end')">
-                <div class="time">{{shopInfo.opening_hours.end}}</div>
+                <div class="time">{{end}}</div>
                 <div class="right-arrow"></div>
               </figure>
             </article>
@@ -164,6 +164,8 @@
           video: {}, // 门店视频
           images: [] // 门店图片
         },
+        start: '9:00',
+        end: '21:00',
         cityData,
         industryArr,
         pickerType: '',
@@ -188,8 +190,14 @@
           }
           res.data.video = res.data.video ? res.data.video : {}
           res.data.logo = res.data.logo ? res.data.logo : {}
-          console.log(res)
           Object.assign(this.shopInfo, res.data)
+          if (this.shopInfo.opening_hours.start) {
+            this.start = this.shopInfo.opening_hours.start
+          }
+          if (this.shopInfo.opening_hours.end) {
+            this.end = this.shopInfo.opening_hours.end
+          }
+          console.log(this.shopInfo)
         })
       },
       _updateShopInfo() {
@@ -301,9 +309,9 @@
             }
             arr = arr.join(':')
             if (this.timeType === 'start') {
-              this.shopInfo.opening_hours.start = arr
+              this.start = arr
             } else {
-              this.shopInfo.opening_hours.end = arr
+              this.end = arr
             }
             break
           case 'address':
@@ -338,7 +346,7 @@
           {value: this.shopVideoReg, txt: '请添加门店视频'},
           {value: this.shopImagesReg, txt: '请添加至少一张门店图片'}
         ]
-        let res = this._testPropety(arr) // todo
+        let res = this._testPropety(arr)
         if (res) {
           this._getGeocoder(data => {
             this._updateShopInfo()
@@ -357,6 +365,8 @@
         }
       },
       saveBtn() {
+        this.shopInfo.opening_hours.start = this.start
+        this.shopInfo.opening_hours.end = this.end
         this._checkForm()
       },
       _getGeocoder(callback) {

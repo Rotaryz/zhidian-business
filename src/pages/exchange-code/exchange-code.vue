@@ -76,11 +76,13 @@
     methods: {
       _verification() {
         let code = this.inputCode.join('')
-        let id = this.$storage.get('info').store_id
+        let info = this.$storage.get('info', {})
+        let id = info.store_id || 0
         Exchange.verification({code, store_id: id}).then(res => {
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)
+            // alert(res.message)
             return
           }
           this.$toast.show('核销成功')
@@ -171,13 +173,11 @@
             color: #FFFFFF
           &:last-child
             opacity: 0
-            width: 12.8vw
-            height: @width
-            icon-image(icon-shop_delete2)
+            background-size: 12.8vw 12.8vw
+            background-repeat: no-repeat
+            background-position: left center
+            bg-image(icon-shop_delete2)
             background-color: transparent
-            position :relative
-            left: -4vw
-            top: 1vw
           &:last-child.del
             opacity: 1
 

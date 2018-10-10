@@ -101,7 +101,7 @@
   import ServiceItem from 'components/activity-item/activity-item'
   import Modal from 'components/confirm-msg/confirm-msg'
   import Scroll from 'components/scroll/scroll'
-  import { ServiceApi, ActivityApi } from 'api'
+  import { ActivityApi } from 'api'
   import {ease} from 'common/js/ease'
   const TABS = [
     {txt: '未开始', id: 0},
@@ -236,10 +236,10 @@
       async itemDelete(item) {
         this.temporaryItem = item
         this.temporaryType = 'del'
-        this.$refs.modal.show({msg: '确定删除该服务吗？'})
+        this.$refs.modal.show({msg: '确定删除该活动吗？'})
       },
       _serviceDel(item) {
-        ServiceApi.setServiceDel(item.id).then((res) => {
+        ActivityApi.setActivityDel(item.id).then((res) => {
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
             this.$toast.show('操作成功')
@@ -476,6 +476,7 @@
     .container
       width: 100vw
       height: 100vh
+      overflow: hidden
       .big-container
         width: 300vw
         height: 100vh
@@ -486,6 +487,7 @@
           height: 100vh
           box-sizing: border-box
           padding: 45px 0 64px
+          background: $color-F6F6F6
           .list-container
             padding: 0 15px
             .list-item
