@@ -1,5 +1,5 @@
 import Upload from './api-upload'
-// import Vod from './lib'
+// import './lib'
 
 export let getSignature = function (callback) {
   Upload.getUploadSign().then((res) => {
@@ -13,5 +13,7 @@ export let getSignature = function (callback) {
     // }
   })
 }
+
+console.log(window.qcVideo)
 
 // console.log(Vod)

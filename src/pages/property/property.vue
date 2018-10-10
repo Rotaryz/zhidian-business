@@ -102,6 +102,7 @@
       ...mapActions(['saveEmployee']),
       refresh() {
         this.page = 1
+        this.hasMore = true
         this._getBaseInfo()
       },
       _getBaseInfo() {
