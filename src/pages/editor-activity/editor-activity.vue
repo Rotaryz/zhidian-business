@@ -415,7 +415,7 @@
       },
       _setGroupOn() {
         this.activityDetail.is_online = 1
-        ActivityApi.newGroupMsg(this.id, this.activityDetail).then((res) => {
+        ActivityApi.editGroupMsg(this.id, this.activityDetail).then((res) => {
           this.$loading.hide()
           this.disabledCover = false
           if (res.error === this.$ERR_OK) {
