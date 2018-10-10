@@ -47,7 +47,6 @@
       },
       _getQrcode() {
         let id = this.shopInfo.id
-        console.log(id, this.shopInfo)
         Business.Myshop(id).then((res) => {
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
