@@ -54,6 +54,7 @@
             Exchange.verification(obj).then((res) => {
               this.$loading.hide()
               if (res.error === this.$ERR_OK) {
+                alert(res.error)
                 this.$toast.show('核销成功')
               } else {
                 this.$toast.show(res.message)
