@@ -444,7 +444,7 @@
   @import "~common/stylus/mixin"
 
   input
-    height: 40px
+    height: 24px
     &::-webkit-input-placeholder
       color: $color-CCCCCC
     &::-ms-input-placeholder
