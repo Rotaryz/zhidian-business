@@ -77,7 +77,7 @@
       _verification() {
         let code = this.inputCode.join('')
         let info = this.$storage.get('info', {})
-        let id = info.id || 0
+        let id = info.store_id || 0
         Exchange.verification({code, store_id: id}).then(res => {
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
