@@ -1,4 +1,3 @@
-/*eslint-disable*/
 !function () {
   var $ = function () {
     function e(e) {
@@ -166,16 +165,11 @@
         if (!e || 'object' !== D.type(e) || e.nodeType || D.isWindow(e)) return !1
         try {if (e.constructor && !S.call(e, 'constructor') && !S.call(e.constructor.prototype, 'isPrototypeOf')) return !1} catch (n) {return !1}
         if (C.ownLast) for (t in e) return S.call(e, t)
-        for (t in e) {
-          return void 0 === t || S.call(e, t)
-        }
+        for (t in e)
+        return void 0 === t || S.call(e, t)
       }, type: function (e) {return null == e ? e + '' : 'object' == typeof e || 'function' == typeof e ? T[E.call(e)] || 'object' : typeof e}, globalEval: function (e) {e && D.trim(e) && (window.execScript || function (e) {window.eval.call(window, e)})(e)}, camelCase: function (e) {return e.replace(/^-ms-/, 'ms-').replace(/-([\da-z])/gi, N)}, nodeName: function (e, t) {return e.nodeName && e.nodeName.toLowerCase() === t.toLowerCase()}, each: function (t, n, r) {
         var i = 0, o = t.length, s = e(t)
-        if (r) {
-          if (s) for (; i < o && !1 !== n.apply(t[i], r); i++)  else
-          for (i in t) if (!1 === n.apply(t[i], r)) break
-        } else if (s) for (; i < o && !1 !== n.call(t[i], i, t[i]); i++)  else
-        for (i in t) if (!1 === n.call(t[i], i, t[i])) break
+        if (r) {if (s) for (; i < o && !1 !== n.apply(t[i], r); i++)  else for (i in t) if (!1 === n.apply(t[i], r)) break} else if (s) for (; i < o && !1 !== n.call(t[i], i, t[i]); i++)  else for (i in t) if (!1 === n.call(t[i], i, t[i])) break
         return t
       }, trim: function (e) {return null == e ? '' : (e + '').replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')}, makeArray: function (t, n) {
         var r = n || []
@@ -1377,7 +1371,7 @@ var CryptoJS = CryptoJS || function (g, l) {
   }, finishUpload = function (opts, result, signature) {
     'undefined' == getType(opts.retryFinishNum) && (opts.retryFinishNum = 3)
     var timeouts
-    timeouts = 3 == opts.retryFinishNum ? 3e3 : 2 == opts.retryFinishNum ? 5e3 : 1e4, $.ajax({url: 'https://vod2.qcloud.com/v3/index.php?Action=CommitUploadUGC', data: JSON.stringify({signature: signature, vodSessionKey: result.data.vodSessionKey}), type: 'POST', dataType: 'json', timeout: timeouts, success: function (result, status, xhr) {0 == result.code ? opts.finish && opts.finish({fileId: result.data.fileId, videoName: opts.videoFile && opts.videoFile.name, videoUrl: result.data.video && result.data.video.url, coverName: opts.coverFile && opts.coverFile.name, coverUrl: result.data.cover && result.data.cover.url}) : result.code >= 2e4 && result.code <= 29999 && opts.retryFinishNum > 0 ? (opts.retryFinishNum--, finishUpload(opts, result, signature)) : errorCallBack(opts, '', result.message)()}, error: function (xhr, status, error) {opts.retryFinishNum > 0 ? (opts.retryFinishNum--, finishUpload(opts, result, signature)) : errorCallBack(opts, '', error)()}})
-  }
+    timeouts = 3 == opts.retryFinishNum ? 3e3 : 2 == opts.retryFinishNum ? 5e3 : 1e4, $.ajax({url: "https://vod2.qcloud.com/v3/index.php?Action=CommitUploadUGC", data: JSON.stringify({signature: signature, vodSessionKey: result.data.vodSessionKey}), type: "POST", dataType: "json", timeout: timeouts, success: function (result, status, xhr) {0 == result.code ? opts.finish && opts.finish({fileId: result.data.fileId, videoName: opts.videoFile && opts.videoFile.name, videoUrl: result.data.video && result.data.video.url, coverName: opts.coverFile && opts.coverFile.name, coverUrl: result.data.cover && result.data.cover.url}) : result.code >= 2e4 && result.code <= 29999 && opts.retryFinishNum > 0 ? (opts.retryFinishNum--, finishUpload(opts, result, signature)) : errorCallBack(opts, "", result.message)()}, error: function (xhr, status, error) {opts.retryFinishNum > 0 ? (opts.retryFinishNum--, finishUpload(opts, result, signature)) : errorCallBack(opts, "", error)()}})
+  };
   qcVideo.ugcUploader.start = startUpload, qcVideo.ugcUploader.cancel = cancelUpload
 }();

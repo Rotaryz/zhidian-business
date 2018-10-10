@@ -1,5 +1,6 @@
 <template>
   <div class="shop">
+    <input type="file" value="上传视频" @change="vv" style="position: fixed;top:0;z-index:999">
     <scroll>
       <s-header></s-header>
       <s-data :info="ShopDashboard"></s-data>
@@ -16,8 +17,7 @@
   import SRouter from './s-router/s-router'
   import wx from 'weixin-js-sdk'
   import { Global } from 'api'
-  import {getSignature} from 'utils/vod/vod'
-  // import { Jwt } from 'api'
+  import { uploadFiles } from 'utils/vod/vod'
 
   export default {
     components: {
@@ -27,10 +27,8 @@
       SRouter
     },
     created() {
-      // Jwt.getToken()
       this._getWxSdk()
       this._getShopDashboard()
-      getSignature()
     },
     data() {
       return {
@@ -42,13 +40,22 @@
       refresh() {
         // todo
       },
+      vv(e) {
+        let file = e.target.files[0]
+        // let blob = this.$handle.createFile(file)
+        // let formData = new FormData()
+        // formData.append('file', blob, file.name)
+        // console.log(formData)
+        console.log(file)
+        uploadFiles(file)
+      },
       _getWxSdk() {
         let url = window.location.href
         Global.jssdkConfig({url}).then((res) => {
           if (res.error === this.$ERR_OK) {
             res = res.data
             wx.config({
-              debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+              debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
               appId: res.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
               timestamp: res.timestamp, // 必填，生成签名的时间戳
               nonceStr: res.noncestr, // 必填，生成签名的随机串
