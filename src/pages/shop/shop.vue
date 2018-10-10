@@ -1,6 +1,6 @@
 <template>
   <div class="shop">
-    <input type="file" value="上传视频" @change="vv" style="position: fixed;top:0;z-index:999">
+    <input type="file" value="上传视频" @change="vv" style="position: fixed;top:0;z-index:999" v-if="false">
     <scroll>
       <s-header></s-header>
       <s-data :info="ShopDashboard"></s-data>
