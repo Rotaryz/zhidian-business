@@ -2,7 +2,7 @@
   <div class="shop">
     <scroll>
       <s-header></s-header>
-      <s-data></s-data>
+      <s-data :info="ShopDashboard"></s-data>
       <s-router></s-router>
     </scroll>
     <router-view-common @refresh="refresh"></router-view-common>
@@ -28,10 +28,12 @@
     created() {
       // Jwt.getToken()
       this._getWxSdk()
+      this._getShopDashboard()
     },
     data() {
       return {
-        isTabHide: false
+        isTabHide: false,
+        ShopDashboard: {}
       }
     },
     methods: {
@@ -51,6 +53,16 @@
               jsApiList: ['previewImage', 'scanQRCode'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
             })
           }
+        })
+      },
+      _getShopDashboard() {
+        Global.getShopDashboard().then((res) => {
+          this.$loading.hide()
+          if (res.error !== this.$ERR_OK) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.ShopDashboard = res.data || {}
         })
       }
     }

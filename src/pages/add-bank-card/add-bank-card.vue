@@ -42,6 +42,10 @@
       }
     },
     created() {
+      Object.assign(this.openBankInfo, this.$route.query)
+      if (this.$route.query && this.$route.query.withdrawal_card) {
+        this.cardNum = this.$route.query.withdrawal_card.replace(/\s/g, '').replace(/(.{4})/g, '$1 ').trim()
+      }
       this._getBankCardList()
     },
     methods: {
@@ -66,7 +70,7 @@
           this.$emit('refresh')
           setTimeout(() => {
             this.$router.back()
-          }, 1500)
+          }, 1000)
         })
       },
       _getBankCardList() {

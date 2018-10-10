@@ -2,11 +2,13 @@
   <div class="s-data">
     <div class="title">
       <div class="icon"></div>
-      <div>BOSS雷达</div>
+      <div>门店信息概览</div>
     </div>
     <ul class="content">
       <li class="item-wrapper" v-for="(item, index) in dataArray" :key="index">
-        <div class="number">{{item.number}}</div>
+        <div class="number" v-if="index===0">{{info.customer_total}}</div>
+        <div class="number" v-if="index===1">{{info.order_total}}</div>
+        <div class="number" v-if="index===2">{{info.success_order_total}}</div>
         <div class="title">{{item.title}}</div>
       </li>
     </ul>
@@ -29,7 +31,14 @@
     }
   ]
   export default {
+    props: {
+      info: {
+        type: Object,
+        default: {}
+      }
+    },
     data() {
+      console.log(this.info)
       return {
         dataArray
       }

@@ -8,5 +8,9 @@ export default {
   jssdkConfig (data, loading = false) {
     let url = '/api/wechat/jssdk'
     return request.get(url, data, loading)
+  },
+  getShopDashboard (data, loading) {
+    let url = '/api/merchant/stores/dashboard'
+    return request.get(url, data, loading)
   }
 }
