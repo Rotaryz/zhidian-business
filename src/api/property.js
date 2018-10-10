@@ -35,6 +35,6 @@ export default {
   },
   updateIssue(data, loading) {
     let url = '/api/merchant/issue-commission'
-    return request.get(url, data, loading)
+    return request.post(url, data, loading)
   }
 }

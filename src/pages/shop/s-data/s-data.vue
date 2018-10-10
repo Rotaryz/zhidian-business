@@ -1,5 +1,5 @@
 <template>
-  <div class="s-data">
+  <router-link tag="div" class="s-data" :to="'/radar/overview'">
     <div class="title">
       <div class="icon"></div>
       <div>门店信息概览</div>
@@ -12,7 +12,7 @@
         <div class="title">{{item.title}}</div>
       </li>
     </ul>
-  </div>
+  </router-link>
 </template>
 
 <script type="text/ecmascript-6">
