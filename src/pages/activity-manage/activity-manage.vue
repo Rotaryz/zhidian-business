@@ -101,7 +101,7 @@
   import ServiceItem from 'components/activity-item/activity-item'
   import Modal from 'components/confirm-msg/confirm-msg'
   import Scroll from 'components/scroll/scroll'
-  import { ServiceApi, ActivityApi } from 'api'
+  import { ActivityApi } from 'api'
   import {ease} from 'common/js/ease'
   const TABS = [
     {txt: '未开始', id: 0},
@@ -239,7 +239,7 @@
         this.$refs.modal.show({msg: '确定删除该服务吗？'})
       },
       _serviceDel(item) {
-        ServiceApi.setServiceDel(item.id).then((res) => {
+        ActivityApi.setActivityDel(item.id).then((res) => {
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
             this.$toast.show('操作成功')
