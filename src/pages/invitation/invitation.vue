@@ -6,30 +6,33 @@
         <img class="qr-img" v-if="qrCode" :src="qrCode" alt="">
       </div>
       <div class="explain">请长按二维码保存或者发送给店员</div>
-      <div class="btn-item" @click="copyUrl">
+      <div class="btn-item">
         <div class="icon copy"></div>
-        <div class="txt" data-clipboard-action="copy" data-clipboard-target="#copyIos" id="copy_btn">复制链接</div>
+        <div class="txt" v-clipboard:copy="linkUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</div>
       </div>
     </article>
     <!--<ul class="btn-group">-->
-      <!--<li class="btn-item" @click="saveImage">-->
-        <!--<div class="icon save"></div>-->
-        <!--<div class="txt">保存</div>-->
-      <!--</li>-->
-      <!--<li class="btn-item" @click="copyUrl">-->
-        <!--<div class="icon copy"></div>-->
-        <!--<div class="txt">复制链接</div>-->
-      <!--</li>-->
+    <!--<li class="btn-item" @click="saveImage">-->
+    <!--<div class="icon save"></div>-->
+    <!--<div class="txt">保存</div>-->
+    <!--</li>-->
+    <!--<li class="btn-item" @click="copyUrl">-->
+    <!--<div class="icon copy"></div>-->
+    <!--<div class="txt">复制链接</div>-->
+    <!--</li>-->
     <!--</ul>-->
     <!--<input id="copyTxt" readOnly="true" v-model="linkUrl"/>-->
-    <div id="copyIos">{{linkUrl}}</div>
+    <!--<div id="copyIos" >{{linkUrl}}</div>-->
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import Vue from 'vue'
   import { Mine } from 'api'
-  import Clipboard from 'clipboard'
   // import wx from 'weixin-js-sdk'
+  import VueClipboard from 'vue-clipboard2'
+
+  Vue.use(VueClipboard)
 
   export default {
     data() {
@@ -40,7 +43,6 @@
     },
     created() {
       this._getInviteQrcode()
-      console.log(Clipboard)
     },
     methods: {
       _getInviteQrcode() {
@@ -85,34 +87,13 @@
         //   })
         // })
       },
-      copyUrl() {
-        var clipboard = new Clipboard('#copy_btn')
-        clipboard.on('success', function(e) {
-          this.$toast.show('复制成功')
-          e.clearSelection()
-        })
-        clipboard.on('error', function(e) {
-          this.$toast.show('当前浏览器不支持复制')
-        })
-        // if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
-        //   window.getSelection().removeAllRanges()
-        //   let Url2 = document.getElementById('copyIos')
-        //   let range = document.createRange()
-        //   range.selectNode(Url2)
-        //   window.getSelection().addRange(range)
-        //   try {
-        //     this.$toast.show('复制成功')
-        //   } catch (err) {
-        //     this.$toast.show('失败')
-        //   }
-        //   window.getSelection().removeAllRanges()
-        //   this.$toast.show('复制成功')
-        // } else {
-        //   let input = document.getElementById('copyTxt')
-        //   input.select()
-        //   document.execCommand('copy')
-        //   this.$toast.show('复制成功')
-        // }
+      onCopy(e) {
+        console.log(e)
+        let msg = `${e.text}\n已经复制至剪切板`
+        this.$toast.show(msg)
+      },
+      onError(e) {
+        console.error(e)
       }
     }
   }
@@ -184,7 +165,8 @@
           font-size: 14px
           color: #706B82
           text-align: center
-  #copyTxt,#copyIos
+
+  #copyTxt, #copyIos
     position: fixed
     left: -200px
     bottom: -200px
