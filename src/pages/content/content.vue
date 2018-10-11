@@ -18,16 +18,27 @@
           </article>
           <ul class="detail-wrapper">
             <li class="item-wrapper" v-if="!info.details.length">
-              <div class="add-btn"></div>
+              <div class="add-btn" @click="addHandle"></div>
             </li>
             <li class="item-wrapper" v-else v-for="(item,index) in info.details" :key="index">
-              <div class="add-btn"></div>
-              <section class="content-wrapper" @touchmove.stop>
-                <div class="content-container" @touchmove.stop>
-                  <div class="box text" @touchmove.stop v-if="+item.type === 1">{{item.text}}</div>
+              <section class="add-btn" @click="addHandle(item)">
+                <transition name="fade">
+                  <ul class="add-control-wrapper" v-show="item.isShow">
+                    <li class="add-btn text" @click="addText"></li>
+                    <li class="add-btn video" @click="addVideo"></li>
+                    <li class="add-btn image" @click="addImage"></li>
+                  </ul>
+                </transition>
+              </section>
+              <section class="content-wrapper">
+                <div class="content-container">
+                  <div class="box text" v-if="+item.type === 1">{{item.text}}</div>
                   <div class="box img" v-if="+item.type === 0"></div>
                   <div class="box video" v-if="+item.type === 2"></div>
                 </div>
+                <div class="btn del" @click="delHandle(item)"></div>
+                <div class="btn up" v-if="index !== 0" @click="upHandle(item)"></div>
+                <div class="btn down" v-if="index !== info.details.length - 1" @click="downHandle(item)"></div>
               </section>
             </li>
           </ul>
@@ -49,19 +60,22 @@
       type: 0,
       text: '',
       image_url: '',
-      video_url: ''
+      video_url: '',
+      isShow: false
     },
     {
       type: 1,
       text: '安徽省大家卡刷点卡的哈萨克的啊速度加快啥的卡仕达看见啥的卡很大空间啊十大科技哈师大看啥德哈卡记得哈速度快安徽省大家卡刷点卡的哈萨克的啊速度加快啥的卡仕达看见啥的卡很大空间啊十大科技哈师大看啥德哈卡记得哈速度快安徽省大家卡刷点卡的哈萨克的啊速度加快啥的卡仕达看见啥的卡很大空间啊十大科技哈师大看啥德哈卡记得哈速度快安徽省大家卡刷点卡的哈萨克的啊速度加快啥的卡仕达看见啥的卡很大空间啊十大科技哈师大看啥德哈卡记得哈速度快',
       image_url: '',
-      video_url: ''
+      video_url: '',
+      isShow: false
     },
     {
       type: 2,
       text: '',
       image_url: '',
-      video_url: ''
+      video_url: '',
+      isShow: false
     }
   ]
   export default {
@@ -91,6 +105,27 @@
             this.info.video_url = res.data.url
           })
         }
+      },
+      addHandle(item) {
+        item.isShow = !item.isShow
+      },
+      delHandle(item) {
+        console.log(0)
+      },
+      upHandle(item) {
+        console.log(1)
+      },
+      downHandle(item) {
+        console.log(2)
+      },
+      addText(item) {
+        console.log('text')
+      },
+      addImage(item) {
+        console.log('image')
+      },
+      addVideo(item) {
+        console.log('video')
       }
     }
   }
@@ -189,13 +224,30 @@
         padding: 0 15px
         layout()
         align-items: center
+        z-index: 2
         .add-btn
           margin: 10px 0 15px
           width: 24px
           height: @width
           icon-image(icon-add_nr)
+          position: relative
+          .add-control-wrapper
+            row-center()
+            height: 55.5px
+            width: 196px
+            icon-image(pic-adddo)
+            top: -51px
+            layout(row)
+            align-items: center
+            justify-content: space-around
+            box-sizing: border-box
+            padding: 0px 15px 5px
+            .add-btn
+              width: 25px
+              height: 19px
+              background: #ccc
         .content-wrapper
-          height: 120px
+          min-height: 120px
           width: 100%
           box-sizing: border-box
           padding: 15px 20px
@@ -204,15 +256,33 @@
           border-1px($color-E6E6E6, 4px)
           .content-container
             padding: 7px 10px
-            height: 100%
+            min-height: 90px
             box-sizing: border-box
-            overflow-y: auto
             background-color: $color-E6E6E6
             border-radius: 2px
+            position: relative
             .box
               font-size: 14px;
               color: #363547;
               text-align: justify;
               word-break: break-all
               line-height: 1.2
+          .btn
+            width: 10px
+            height: @width
+            extend-click()
+            position: absolute
+            &.del
+              top: 6.5px
+              left: 6.5px
+              icon-image(icon-delete_nr)
+            &.up
+              top: 6.5px
+              right: 6.5px
+              icon-image(icon-moveup)
+            &.down
+              bottom: 6.5px
+              right: 6.5px
+              icon-image(icon-movedown)
+
 </style>
