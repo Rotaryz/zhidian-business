@@ -16,6 +16,7 @@
             <input class="input-container" type="text" maxlength="20" placeholder="点击设置主标题" v-model="info.title">
             <div class="input-number">{{info.title.length}}/20</div>
           </article>
+          <div style="height: 10px"></div>
           <ul class="detail-wrapper">
             <li class="item-wrapper" v-if="details.length" v-for="(item,index) in details" :key="index" @click="closeAllAddBox">
               <section class="add-btn" @click.stop="addHandle(item)">
@@ -36,7 +37,7 @@
               </section>
               <section class="content-wrapper">
                 <div class="content-container" :class="+item.type !== 1 ? 'media':''">
-                  <div class="box text" v-if="+item.type === 1">{{item.text}}</div>
+                  <div class="box text" v-if="+item.type === 1" @click="addText(details.length)">{{item.text}}</div>
                   <div class="box img" v-if="+item.type === 0">
                     <img class="img-style" v-if="item.image_url" :src="item.image_url" alt="">
                     <label class="video-mask">
@@ -53,9 +54,9 @@
                     </label>
                   </div>
                 </div>
-                <div class="btn del" @click="delHandle(item)"></div>
-                <div class="btn up" v-if="index !== 0" @click="upHandle(item)"></div>
-                <div class="btn down" v-if="index !== details.length - 1" @click="downHandle(item)"></div>
+                <div class="btn del" @click.stop="delHandle(index)"></div>
+                <div class="btn up" v-if="index !== 0" @click.stop="upHandle(index)"></div>
+                <div class="btn down" v-if="index !== details.length - 1" @click.stop="downHandle(index)"></div>
               </section>
             </li>
             <li class="item-wrapper">
@@ -84,6 +85,7 @@
     <footer class="btn-wrapper border-top-1px">
       <div class="btn">发布</div>
     </footer>
+    <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
 
@@ -141,6 +143,9 @@
           this.$refs.scroll.initScroll()
         })
       },
+      refresh() {
+        // todo
+      },
       _fileChange(e, flag, item) {
         let arr = Array.from(e.target.files)
         if (flag === 'header-video') {
@@ -190,19 +195,33 @@
       },
       addHandle(item) {
         item.isShow = !item.isShow
+        // if (typeof item === 'number') {
+        //   if (this.details.length !== item) {
+        //     this.details[item].isShow = false
+        //   } else {
+        //     this.isShow = false
+        //   }
+        // } else {
+        //   item.isShow = !item.isShow
+        // }
       },
-      delHandle(item) {
-        let index = this.details.findIndex(val => val.id === item.id)
+      delHandle(index) {
         this.details.splice(index, 1)
       },
-      upHandle(item) {
-        console.log(1)
+      upHandle(index) {
+        let arr = this.details
+        let changeIndex = index - 1
+        arr[index] = arr.splice(changeIndex, 1, arr[index])[0]
+        this.details = arr
       },
-      downHandle(item) {
-        console.log(2)
+      downHandle(index) {
+        let arr = this.details
+        let changeIndex = index + 1
+        arr[index] = arr.splice(changeIndex, 1, arr[index])[0]
+        this.details = arr
       },
       addText(index) {
-        console.log('text', index)
+        this.$router.push(this.$route.path + '/content-text?index=' + index)
       },
       _addImage(item, obj) {
         if (typeof item === 'number') {
