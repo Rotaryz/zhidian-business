@@ -1,25 +1,31 @@
 <template>
   <div class="invitation">
-    <article class="top">
-      <div class="title">欢迎加入国颐堂养发馆</div>
-      <div class="qr-code">
-        <img class="qr-img" v-if="qrCode" :src="qrCode" alt="">
-      </div>
-      <div class="explain">请长按二维码保存或者发送给店员</div>
-    </article>
-    <!--<ul class="btn-group">-->
-    <!--<li class="btn-item" @click="saveImage">-->
-    <!--<div class="icon save"></div>-->
-    <!--<div class="txt">保存</div>-->
-    <!--</li>-->
-    <!--<li class="btn-item" @click="copyUrl">-->
-    <!--<div class="icon copy"></div>-->
-    <!--<div class="txt">复制链接</div>-->
-    <!--</li>-->
-    <!--</ul>-->
-    <div class="btn-item">
-      <div class="txt" v-clipboard:copy="linkUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</div>
-    </div>
+    <scroll ref="scroll"
+            bcColor="#fff"
+    >
+      <div class="scroll-main">
+        <article class="top">
+          <div class="title">欢迎加入国颐堂养发馆</div>
+          <div class="qr-code">
+            <img class="qr-img" v-if="qrCode" :src="qrCode" alt="">
+          </div>
+          <div class="explain">请长按二维码保存或者发送给店员</div>
+        </article>
+        <!--<ul class="btn-group">-->
+        <!--<li class="btn-item" @click="saveImage">-->
+        <!--<div class="icon save"></div>-->
+        <!--<div class="txt">保存</div>-->
+        <!--</li>-->
+        <!--<li class="btn-item" @click="copyUrl">-->
+        <!--<div class="icon copy"></div>-->
+        <!--<div class="txt">复制链接</div>-->
+        <!--</li>-->
+        <!--</ul>-->
+        <div class="btn-item">
+          <div class="txt" v-clipboard:copy="linkUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</div>
+        </div>
+        </div>
+    </scroll>
   </div>
 </template>
 
@@ -28,10 +34,12 @@
   import { Mine } from 'api'
   // import wx from 'weixin-js-sdk'
   import VueClipboard from 'vue-clipboard2'
+  import Scroll from '../../components/scroll/scroll'
 
   Vue.use(VueClipboard)
 
   export default {
+    components: {Scroll},
     data() {
       return {
         qrCode: '',
@@ -103,10 +111,17 @@
   @import "~common/stylus/mixin"
 
   .invitation
+    overflow: hidden
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
     fill-box()
     z-index: 71
     background: #fff
     padding: 30px 35px 0
+    .scroll-main
+      padding-bottom: 10px
     .top
       background: $color-363537
       border-radius: 4px
