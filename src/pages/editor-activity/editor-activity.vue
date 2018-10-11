@@ -713,6 +713,7 @@
           font-family: $font-family-regular
           font-size: $font-size-14
           color: $color-CCCCCC
+          flex: 1
         .arrow-icon
           width: 7.5px
           height: 12.5px
