@@ -95,27 +95,27 @@
                 </div>
                 <div class="data-list">
                   <div class="list-box">
-                    <div class="number">{{allDatas.customer_sum  || 0}}</div>
+                    <div class="number">{{allDatas.customer_total  || 0}}</div>
                     <div class="text">客户总数</div>
                   </div>
                   <div class="list-box">
-                    <div class="number">{{allDatas.order_sum  || 0}}</div>
+                    <div class="number">{{allDatas.order_total  || 0}}</div>
                     <div class="text">订单总数</div>
                   </div>
                   <div class="list-box">
-                    <div class="number">{{allDatas.order_finish_sum  || 0}}</div>
+                    <div class="number">{{allDatas.success_order_total  || 0}}</div>
                     <div class="text">成交总数</div>
                   </div>
                   <div class="list-box">
-                    <div class="number">{{allDatas.goods_visits_sum  || 0}}</div>
+                    <div class="number">{{allDatas.goods_visits_total  || 0}}</div>
                     <div class="text">产品访问数</div>
                   </div>
                   <div class="list-box">
-                    <div class="number">{{allDatas.activity_visits_sum  || 0}}</div>
+                    <div class="number">{{allDatas.activity_visits_total  || 0}}</div>
                     <div class="text">活动访问数</div>
                   </div>
                   <div class="list-box">
-                    <div class="number">{{allDatas.live_logs_sum  || 0}}</div>
+                    <div class="number">{{allDatas.live_logs_total  || 0}}</div>
                     <div class="text">动态访问数</div>
                   </div>
                 </div>
@@ -295,8 +295,8 @@
         list: [],
         pullUpLoad: true,
         pullUpLoadThreshold: 0,
-        pullUpLoadMoreTxt: ' ',
-        pullUpLoadNoMoreTxt: ' ',
+        pullUpLoadMoreTxt: '加载更多',
+        pullUpLoadNoMoreTxt: '没有更多了',
         page: 1,
         twoList: [],
         tabhighgt: 216,
