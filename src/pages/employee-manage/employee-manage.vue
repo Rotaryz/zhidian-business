@@ -54,6 +54,7 @@
     methods: {
       refresh() {
         this.page = 1
+        this.hasMore = true
         this._getList()
       },
       _getList(data = {page: 1}) {
