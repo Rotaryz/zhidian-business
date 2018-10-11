@@ -20,8 +20,8 @@
     },
     {
       icon: 'one-2',
-      title: '内容',
-      path: ''
+      title: '品牌故事',
+      path: '/content'
     },
     {
       icon: 'one-3',
