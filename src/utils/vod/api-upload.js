@@ -11,15 +11,15 @@ export default {
     const url = `${baseURL.upload}/post_vod_sign`
     return request.post(url, {}, false)
   },
-  /**
-   * 获取文件夹存储桶
-   * @param data
-   * @returns {Promise.<*>}
-   */
-  getUploadParam(data) {
-    const url = `${baseURL.upload}/api/cos/params`
-    return request.get(url, data)
-  },
+  // /**
+  //  * 获取文件夹存储桶
+  //  * @param data
+  //  * @returns {Promise.<*>}
+  //  */
+  // getUploadParam(data) {
+  //   const url = `${baseURL.upload}/api/cos/params`
+  //   return request.get(url, data)
+  // },
   /**
    * 数据入库
    * @param data

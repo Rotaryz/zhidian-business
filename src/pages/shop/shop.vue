@@ -1,6 +1,6 @@
 <template>
   <div class="shop">
-    <input type="file" value="上传视频" @change="vv" style="position: fixed;top:0;z-index:999" v-if="false">
+    <!--<input type="file" value="上传视频" @change="vv" style="position: fixed;top:0;z-index:999" v-if="true">-->
     <scroll>
       <s-header></s-header>
       <s-data :info="ShopDashboard"></s-data>
@@ -17,9 +17,6 @@
   import SRouter from './s-router/s-router'
   import wx from 'weixin-js-sdk'
   import { Global } from 'api'
-  import { uploadFiles } from 'utils/vod/vod'
-  // import {getSignature} from 'utils/vod/vod'
-  // import { Jwt } from 'api'
 
   export default {
     components: {
@@ -44,12 +41,9 @@
       },
       vv(e) {
         let file = e.target.files[0]
-        // let blob = this.$handle.createFile(file)
-        // let formData = new FormData()
-        // formData.append('file', blob, file.name)
-        // console.log(formData)
-        console.log(file)
-        uploadFiles(file)
+        this.$vod.uploadFiles(file).then(res => {
+          console.log(res)
+        })
       },
       _getWxSdk() {
         let url = window.location.href
