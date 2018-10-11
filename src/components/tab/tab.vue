@@ -13,7 +13,7 @@
   const COMPONENT_NAME = 'Tab'
   const TABS = [
     {text: '店铺', path: '/shop', id: 1, iconClass: 'icon-shop'},
-    {text: 'BOSS雷达', path: '/radar', id: 2, iconClass: 'icon-radar'},
+    {text: 'BOSS雷达', path: '/radar/overview', id: 2, iconClass: 'icon-radar'},
     {text: '我的', path: '/mine', id: 3, iconClass: 'icon-mine'}
   ]
   export default {
