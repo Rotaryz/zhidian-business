@@ -8,7 +8,7 @@
       <div class="explain">请长按二维码保存或者发送给店员</div>
       <div class="btn-item" @click="copyUrl">
         <div class="icon copy"></div>
-        <div class="txt">复制链接</div>
+        <div class="txt" data-clipboard-action="copy" data-clipboard-target="#copyIos" id="copy_btn">复制链接</div>
       </div>
     </article>
     <!--<ul class="btn-group">-->
@@ -21,13 +21,14 @@
         <!--<div class="txt">复制链接</div>-->
       <!--</li>-->
     <!--</ul>-->
-    <input id="copyTxt" readOnly="true" v-model="linkUrl"/>
+    <!--<input id="copyTxt" readOnly="true" v-model="linkUrl"/>-->
     <div id="copyIos">{{linkUrl}}</div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import { Mine } from 'api'
+  import Clipboard from 'clipboard'
   // import wx from 'weixin-js-sdk'
 
   export default {
@@ -39,6 +40,7 @@
     },
     created() {
       this._getInviteQrcode()
+      console.log(Clipboard)
     },
     methods: {
       _getInviteQrcode() {
@@ -84,25 +86,33 @@
         // })
       },
       copyUrl() {
-        if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
-          window.getSelection().removeAllRanges()
-          let Url2 = document.getElementById('copyIos')
-          let range = document.createRange()
-          range.selectNode(Url2)
-          window.getSelection().addRange(range)
-          try {
-            this.$toast.show('复制成功')
-          } catch (err) {
-            this.$toast.show('失败')
-          }
-          window.getSelection().removeAllRanges()
+        var clipboard = new Clipboard('#copy_btn')
+        clipboard.on('success', function(e) {
           this.$toast.show('复制成功')
-        } else {
-          let input = document.getElementById('copyTxt')
-          input.select()
-          document.execCommand('copy')
-          this.$toast.show('复制成功')
-        }
+          e.clearSelection()
+        })
+        clipboard.on('error', function(e) {
+          this.$toast.show('当前浏览器不支持复制')
+        })
+        // if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) {
+        //   window.getSelection().removeAllRanges()
+        //   let Url2 = document.getElementById('copyIos')
+        //   let range = document.createRange()
+        //   range.selectNode(Url2)
+        //   window.getSelection().addRange(range)
+        //   try {
+        //     this.$toast.show('复制成功')
+        //   } catch (err) {
+        //     this.$toast.show('失败')
+        //   }
+        //   window.getSelection().removeAllRanges()
+        //   this.$toast.show('复制成功')
+        // } else {
+        //   let input = document.getElementById('copyTxt')
+        //   input.select()
+        //   document.execCommand('copy')
+        //   this.$toast.show('复制成功')
+        // }
       }
     }
   }
