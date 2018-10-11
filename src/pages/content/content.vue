@@ -195,15 +195,6 @@
       },
       addHandle(item) {
         item.isShow = !item.isShow
-        // if (typeof item === 'number') {
-        //   if (this.details.length !== item) {
-        //     this.details[item].isShow = false
-        //   } else {
-        //     this.isShow = false
-        //   }
-        // } else {
-        //   item.isShow = !item.isShow
-        // }
       },
       delHandle(index) {
         this.details.splice(index, 1)
