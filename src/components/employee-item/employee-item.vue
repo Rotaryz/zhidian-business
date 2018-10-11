@@ -35,7 +35,7 @@
           setTimeout(() => {
             location.reload()
             location.reload()
-          }, 200)
+          }, 300)
         }
       }
     },
