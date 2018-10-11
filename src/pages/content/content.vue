@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="scroll-wrapper">
-      <scroll bcColor="#f6f6f6">
+      <scroll bcColor="#f6f6f6" :dataArray="info">
         <div>
           <article class="header-video">
             <label class="video-mask">
@@ -20,8 +20,8 @@
             <li class="item-wrapper" v-if="!info.details.length">
               <div class="add-btn" @click="addHandle"></div>
             </li>
-            <li class="item-wrapper" v-else v-for="(item,index) in info.details" :key="index">
-              <section class="add-btn" @click="addHandle(item)">
+            <li class="item-wrapper" v-else v-for="(item,index) in info.details" :key="index" @click="closeAllAddBox">
+              <section class="add-btn" @click.stop="addHandle(item)">
                 <transition name="fade">
                   <ul class="add-control-wrapper" v-show="item.isShow">
                     <li class="add-btn text" @click="addText"></li>
@@ -31,10 +31,23 @@
                 </transition>
               </section>
               <section class="content-wrapper">
-                <div class="content-container">
+                <div class="content-container" :class="+item.type !== 1 ? 'media':''">
                   <div class="box text" v-if="+item.type === 1">{{item.text}}</div>
-                  <div class="box img" v-if="+item.type === 0"></div>
-                  <div class="box video" v-if="+item.type === 2"></div>
+                  <div class="box img" v-if="+item.type === 0">
+                    <img class="img-style" v-if="item.image_url" :src="item.image_url" alt="">
+                    <label class="video-mask">
+                      <input type="file" style="display: none" @change="_fileChange($event, 'image', item)"
+                             accept="image/*">
+                    </label>
+                  </div>
+                  <div class="box video" v-if="+item.type === 2">
+                    <img class="img-style" v-if="item.video_url" :src="item.video_url" alt="">
+                    <label class="video-mask">
+                      <div class="icon-btn play"/>
+                      <input type="file" style="display: none" @change="_fileChange($event, 'video', item)"
+                             accept="video/*">
+                    </label>
+                  </div>
                 </div>
                 <div class="btn del" @click="delHandle(item)"></div>
                 <div class="btn up" v-if="index !== 0" @click="upHandle(item)"></div>
@@ -54,12 +67,12 @@
 
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
-
+  import { Upload } from 'api'
   const test = [
     {
       type: 0,
       text: '',
-      image_url: '',
+      image_url: 'http://t2.hddhhn.com/uploads/tu/201610/198/51wgjnwngl1.jpg',
       video_url: '',
       isShow: false
     },
@@ -74,7 +87,7 @@
       type: 2,
       text: '',
       image_url: '',
-      video_url: '',
+      video_url: 'http://t2.hddhhn.com/uploads/tu/201610/198/51wgjnwngl1.jpg',
       isShow: false
     }
   ]
@@ -92,7 +105,7 @@
       }
     },
     methods: {
-      _fileChange(e, flag) {
+      _fileChange(e, flag, item) {
         let arr = Array.from(e.target.files)
         if (flag === 'header-video') {
           this.$loading.show('视频上传中...')
@@ -105,6 +118,39 @@
             this.info.video_url = res.data.url
           })
         }
+        if (flag === 'video') {
+          this.$loading.show('视频上传中...')
+          this.$vod.uploadFiles(arr[0]).then(res => {
+            this.$loading.hide()
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            item.video_url = res.data.url
+          })
+        }
+        if (flag === 'image') {
+          this.$loading.show('图片上传中...')
+          let file = new FormData()
+          file.append('file', arr[0], arr[0].name)
+          Upload.upLoadImage(file).then(res => {
+            if (res.error !== this.$ERR_OK) {
+              return this.$toast.show(res.message)
+            }
+            let obj = {
+              image_id: res.data.id,
+              url: res.data.url,
+              id: res.data.id
+            }
+            item.image_url = obj.url
+            this.$loading.hide()
+          })
+        }
+      },
+      closeAllAddBox() {
+        this.info.details.forEach(item => {
+          item.isShow = false
+        })
       },
       addHandle(item) {
         item.isShow = !item.isShow
@@ -224,13 +270,13 @@
         padding: 0 15px
         layout()
         align-items: center
-        z-index: 2
         .add-btn
           margin: 10px 0 15px
           width: 24px
           height: @width
           icon-image(icon-add_nr)
           position: relative
+          z-index: 2
           .add-control-wrapper
             row-center()
             height: 55.5px
@@ -245,7 +291,12 @@
             .add-btn
               width: 25px
               height: 19px
-              background: #ccc
+              &.text
+                icon-image(icon-text)
+              &.image
+                icon-image(icon-picadd)
+              &.video
+                icon-image(icon-videoadd)
         .content-wrapper
           min-height: 120px
           width: 100%
@@ -261,12 +312,31 @@
             background-color: $color-E6E6E6
             border-radius: 2px
             position: relative
+            &.media
+              padding: 0
             .box
               font-size: 14px;
               color: #363547;
               text-align: justify;
               word-break: break-all
               line-height: 1.2
+              position: relative
+              .img-style
+                width: 100%
+              .video-mask
+                display: block
+                fill-box(absolute)
+                background: transparent
+                z-index: 1
+                layout()
+                justify-content: center
+                align-items: center
+                .icon-btn
+                  width: 13.33vw
+                  height: @width
+                  border-radius: 50%
+                  &.play
+                    icon-image(icon-video2)
           .btn
             width: 10px
             height: @width
