@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div class="scroll-wrapper">
-      <scroll bcColor="#f6f6f6" :dataArray="info">
+      <scroll bcColor="#f6f6f6" ref="scroll" :data="details">
         <div>
           <article class="header-video">
             <label class="video-mask">
@@ -17,17 +17,21 @@
             <div class="input-number">{{info.title.length}}/20</div>
           </article>
           <ul class="detail-wrapper">
-            <li class="item-wrapper" v-if="!info.details.length">
-              <div class="add-btn" @click="addHandle"></div>
-            </li>
-            <li class="item-wrapper" v-else v-for="(item,index) in info.details" :key="index" @click="closeAllAddBox">
+            <li class="item-wrapper" v-if="details.length" v-for="(item,index) in details" :key="index" @click="closeAllAddBox">
               <section class="add-btn" @click.stop="addHandle(item)">
                 <transition name="fade">
-                  <ul class="add-control-wrapper" v-show="item.isShow">
-                    <li class="add-btn text" @click="addText"></li>
-                    <li class="add-btn video" @click="addVideo"></li>
-                    <li class="add-btn image" @click="addImage"></li>
-                  </ul>
+                  <nav class="add-control-wrapper" v-show="item.isShow">
+                    <label class="add-btn text" @click="addText(index)">
+                    </label>
+                    <label class="add-btn video">
+                      <input type="file" style="display: none" @change="_fileChange($event, 'video', index)"
+                             accept="video/*">
+                    </label>
+                    <label class="add-btn image">
+                      <input type="file" style="display: none" @change="_fileChange($event, 'image', index)"
+                             accept="image/*">
+                    </label>
+                  </nav>
                 </transition>
               </section>
               <section class="content-wrapper">
@@ -51,7 +55,25 @@
                 </div>
                 <div class="btn del" @click="delHandle(item)"></div>
                 <div class="btn up" v-if="index !== 0" @click="upHandle(item)"></div>
-                <div class="btn down" v-if="index !== info.details.length - 1" @click="downHandle(item)"></div>
+                <div class="btn down" v-if="index !== details.length - 1" @click="downHandle(item)"></div>
+              </section>
+            </li>
+            <li class="item-wrapper">
+              <section class="add-btn" @click.stop="isShow = !isShow">
+                <transition name="fade">
+                  <nav class="add-control-wrapper" v-show="isShow">
+                    <label class="add-btn text" @click="addText(details.length)">
+                    </label>
+                    <label class="add-btn video">
+                      <input type="file" style="display: none" @change="_fileChange($event, 'video', details.length)"
+                             accept="video/*">
+                    </label>
+                    <label class="add-btn image">
+                      <input type="file" style="display: none" @change="_fileChange($event, 'image', details.length)"
+                             accept="image/*">
+                    </label>
+                  </nav>
+                </transition>
               </section>
             </li>
           </ul>
@@ -68,8 +90,10 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import { Upload } from 'api'
+
   const test = [
     {
+      id: 1,
       type: 0,
       text: '',
       image_url: 'http://t2.hddhhn.com/uploads/tu/201610/198/51wgjnwngl1.jpg',
@@ -77,6 +101,7 @@
       isShow: false
     },
     {
+      id: 2,
       type: 1,
       text: '安徽省大家卡刷点卡的哈萨克的啊速度加快啥的卡仕达看见啥的卡很大空间啊十大科技哈师大看啥德哈卡记得哈速度快安徽省大家卡刷点卡的哈萨克的啊速度加快啥的卡仕达看见啥的卡很大空间啊十大科技哈师大看啥德哈卡记得哈速度快安徽省大家卡刷点卡的哈萨克的啊速度加快啥的卡仕达看见啥的卡很大空间啊十大科技哈师大看啥德哈卡记得哈速度快安徽省大家卡刷点卡的哈萨克的啊速度加快啥的卡仕达看见啥的卡很大空间啊十大科技哈师大看啥德哈卡记得哈速度快',
       image_url: '',
@@ -84,6 +109,7 @@
       isShow: false
     },
     {
+      id: 3,
       type: 2,
       text: '',
       image_url: '',
@@ -100,11 +126,21 @@
         info: {
           title: '',
           video_url: '',
-          details: test
-        }
+          details: []
+        },
+        details: test,
+        isShow: false
       }
     },
+    beforeDestroy() {
+    },
     methods: {
+      rebuildScroll() {
+        this.$nextTick(() => {
+          this.$refs.scroll.destroy()
+          this.$refs.scroll.initScroll()
+        })
+      },
       _fileChange(e, flag, item) {
         let arr = Array.from(e.target.files)
         if (flag === 'header-video') {
@@ -126,7 +162,7 @@
               this.$toast.show(res.message)
               return
             }
-            item.video_url = res.data.url
+            this._addVideo(item, res.data)
           })
         }
         if (flag === 'image') {
@@ -134,6 +170,7 @@
           let file = new FormData()
           file.append('file', arr[0], arr[0].name)
           Upload.upLoadImage(file).then(res => {
+            this.$loading.hide()
             if (res.error !== this.$ERR_OK) {
               return this.$toast.show(res.message)
             }
@@ -142,8 +179,7 @@
               url: res.data.url,
               id: res.data.id
             }
-            item.image_url = obj.url
-            this.$loading.hide()
+            this._addImage(item, obj)
           })
         }
       },
@@ -156,7 +192,8 @@
         item.isShow = !item.isShow
       },
       delHandle(item) {
-        console.log(0)
+        let index = this.details.findIndex(val => val.id === item.id)
+        this.details.splice(index, 1)
       },
       upHandle(item) {
         console.log(1)
@@ -164,14 +201,52 @@
       downHandle(item) {
         console.log(2)
       },
-      addText(item) {
-        console.log('text')
+      addText(index) {
+        console.log('text', index)
       },
-      addImage(item) {
-        console.log('image')
+      _addImage(item, obj) {
+        if (typeof item === 'number') {
+          if (this.details.length !== item) {
+            this.details[item].isShow = false
+          } else {
+            this.isShow = false
+          }
+          let newObj = {
+            id: 0,
+            type: 0,
+            text: '',
+            image_url: 'http://t2.hddhhn.com/uploads/tu/201610/198/51wgjnwngl1.jpg',
+            video_url: '',
+            isShow: false
+          }
+          newObj.image_url = obj.url
+          newObj.id = obj.id
+          this.details.splice(item, 0, newObj)
+        } else {
+          item.image_url = obj.url
+        }
       },
-      addVideo(item) {
-        console.log('video')
+      _addVideo(item, obj) {
+        if (typeof item === 'number') {
+          if (this.details.length !== item) {
+            this.details[item].isShow = false
+          } else {
+            this.isShow = false
+          }
+          let newObj = {
+            id: 0,
+            type: 2,
+            text: '',
+            image_url: 'http://t2.hddhhn.com/uploads/tu/201610/198/51wgjnwngl1.jpg',
+            video_url: '',
+            isShow: false
+          }
+          newObj.video_url = obj.url
+          newObj.id = obj.id
+          this.details.splice(item, 0, newObj)
+        } else {
+          item.video_url = obj.url
+        }
       }
     }
   }
@@ -271,6 +346,7 @@
         layout()
         align-items: center
         .add-btn
+          display: block
           margin: 10px 0 15px
           width: 24px
           height: @width
