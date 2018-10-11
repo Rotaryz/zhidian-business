@@ -74,8 +74,13 @@ export function formatTime(time) {
   const minute = date.getMinutes()
 
   const t1 = [year, month, day].join('/')
-  const t2 = [hour, minute].map(this.formatNumber).join(':')
+  const t2 = [hour, minute].map(formatNumber).join(':')
   return `${t1} ${t2}`
+}
+
+export function formatNumber (n) {
+  const str = n.toString()
+  return str[1] ? str : `0${str}`
 }
 
 export const cityData = doCity(CITY_JSON)

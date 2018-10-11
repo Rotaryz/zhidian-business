@@ -60,8 +60,8 @@ export default {
    * 行为记录列表
    * @returns {*}
    */
-  getActionList(customerId = 0, from = 0, limit = 30, page = 0) {
-    let url = `api/merchant/customers/${customerId}/visits`
+  getActionList(shopId = 0, from = 0, limit = 30, page = 0) {
+    let url = `api/merchant/employees/${shopId}/visits`
     let data = {
       from,
       limit,
