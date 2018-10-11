@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import storage from 'storage-controller'
 
 const _this = () => import('@/main')
-const Demo = () => import('pages/Z-DEMO/z-demo')
+// const Demo = () => import('pages/Z-DEMO/z-demo')
 const ServiceManage = () => import('pages/service-manage/service-manage')
 const EditorService = () => import('pages/editor-service/editor-service')
 const Mine = () => import('pages/mine/mine')
@@ -245,16 +245,7 @@ const route = new Router({
               component: OverView,
               meta: {
                 title: '总览'
-              },
-              children: [
-                {
-                  path: 'demo',
-                  component: Demo,
-                  meta: {
-                    title: 'demo'
-                  }
-                }
-              ]
+              }
             },
             {
               path: 'ranking',
