@@ -171,7 +171,7 @@
         <div class="only-title border-bottom-1px">购买须知</div>
         <div class="large-item border-bottom-1px">
           <div class="item-left">需要预约时间</div>
-          <div class="item-right">
+          <div class="item-right meddle-right">
             <input type="text" class="input-box" placeholder="请输入" v-model="serviceDetail.note.need_subscribe">
           </div>
         </div>
@@ -697,11 +697,11 @@
           color: $color-20202E
         .input-box
           width: 100%
-          height: 100%
+          height: 20px
           outline: none
           padding: 0
           margin: 0
-          line-height: 55px
+          line-height: 20px
           border: 0 none
           font-size: $font-size-14
           color: $color-363537
@@ -717,6 +717,9 @@
         justify-content: flex-end
         align-items: center
         padding-right: 15px
+      .meddle-right.item-right
+        display: flex
+        align-items: center
     .service-img-item
       padding-bottom: 20px
       .item-title
