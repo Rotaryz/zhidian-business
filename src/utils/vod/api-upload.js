@@ -26,7 +26,7 @@ export default {
    * @returns {Promise.<*>}
    */
   saveFile(data) {
-    const url = `${baseURL.upload}/api/cos/file`
+    const url = `${baseURL.upload}/api/merchant/check_default_image`
     return request.post(url, data)
   }
 }

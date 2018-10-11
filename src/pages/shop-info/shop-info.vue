@@ -72,7 +72,15 @@
             <article class="media-item border-bottom-1px">
               <div class="title">门店视频</div>
               <figure class="content">
-                <div class="add"></div>
+                <label class="add">
+                  <div class="img-show" v-if="shopInfo.video.url" :style="{backgroundImage: 'url(' + shopInfo.video.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                  <div class="del-icon" v-if="shopInfo.video.url" @click.stop="delDetail('video')"></div>
+                  <div class="video-mask" v-if="shopInfo.video.url">
+                    <div class="icon-btn"/>
+                  </div>
+                  <input v-if="!shopInfo.video || !shopInfo.video.url" type="file" style="display: none" @change="_fileChange($event, 'video')"
+                         accept="video/*">
+                </label>
                 <div class="explain one">点击视频预览实际展示效果</div>
                 <div class="explain">添加30S左右视频</div>
               </figure>
@@ -197,7 +205,6 @@
           if (this.shopInfo.opening_hours.end) {
             this.end = this.shopInfo.opening_hours.end
           }
-          console.log(this.shopInfo)
         })
       },
       _updateShopInfo() {
@@ -218,10 +225,27 @@
         let arr = Array.from(e.target.files)
         flag === 'images' && this.$refs['cropper-shop_images'].show(arr[0])
         flag === 'logo' && this.$refs['cropper-shop_logo'].show(arr[0])
+        if (flag === 'video') {
+          this.$loading.show('视频上传中...')
+          this.$vod.uploadFiles(arr[0]).then(res => {
+            this.$loading.hide()
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            this.shopInfo.video = res.data
+          }).catch(err => {
+            this.$toast.show(err)
+          })
+        }
       },
       delDetail(index) {
         if (index === 'logo') {
           this.shopInfo.logo = ''
+          return
+        }
+        if (index === 'video') {
+          this.shopInfo.video = ''
           return
         }
         this.shopInfo.images.splice(index, 1)
@@ -365,8 +389,7 @@
         }
       },
       saveBtn() {
-        this.shopInfo.opening_hours.start = this.start
-        this.shopInfo.opening_hours.end = this.end
+        this.shopInfo.opening_hours = {start: this.start, end: this.end}
         this._checkForm()
       },
       _getGeocoder(callback) {
@@ -406,7 +429,7 @@
         return this.shopInfo.images.length > 0
       },
       shopVideoReg() {
-        return this.shopInfo.video.url || true // todo
+        return this.shopInfo.video.url
       },
       shopLogoReg() {
         return this.shopInfo.logo.url
@@ -538,6 +561,9 @@
               background: $color-white
               box-sizing: border-box
               border-1px($color-9B9B9B)
+              &.video
+                width: 64px
+                height: @width
             .del-icon
               width: 16px
               height: 16px
@@ -546,6 +572,21 @@
               top: -6px
               icon-image('./icon-del24')
               z-index: 2
+            .video-mask
+              fill-box(absolute)
+              background: transparent
+              z-index: 1
+              layout()
+              justify-content: center
+              align-items: center
+              .icon-btn
+                icon-image(icon-video)
+                transform: scale(0.5)
+                width: 50px
+                height: 50px
+                border-radius: 50%
+                border: 1px solid $color-FFFFFF
+                box-sizing: border-box
           .explain
             font-size: 12px
             color: $color-CCCCCC
