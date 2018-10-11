@@ -21,6 +21,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {mapGetters} from 'vuex'
   export default {
     name: 'employee-item',
     props: ['item'],
@@ -29,8 +30,17 @@
     },
     methods: {
       navTo(item) {
-        this.$router.push(this.$route.path + '/invitation')
+        this.$router.push(`${this.$route.path}/invitation?id=${item.shop_id}`)
+        if (this.ios) {
+          setTimeout(() => {
+            location.reload()
+            location.reload()
+          }, 200)
+        }
       }
+    },
+    computed: {
+      ...mapGetters(['ios'])
     }
   }
 </script>
