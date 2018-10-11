@@ -1,6 +1,5 @@
 <template>
   <div class="shop">
-    <!--<input type="file" value="上传视频" @change="vv" style="position: fixed;top:0;z-index:999" v-if="true">-->
     <scroll>
       <s-header></s-header>
       <s-data :info="ShopDashboard"></s-data>
@@ -37,13 +36,7 @@
     },
     methods: {
       refresh() {
-        // todo
-      },
-      vv(e) {
-        let file = e.target.files[0]
-        this.$vod.uploadFiles(file).then(res => {
-          console.log(res)
-        })
+        this._getShopDashboard()
       },
       _getWxSdk() {
         let url = window.location.href
