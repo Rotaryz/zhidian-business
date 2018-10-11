@@ -35,15 +35,17 @@
     data() {
       return {
         qrCode: '',
-        linkUrl: ''
+        linkUrl: '',
+        id: ''
       }
     },
     created() {
+      this.id = this.$route.query.id
       this._getInviteQrcode()
     },
     methods: {
       _getInviteQrcode() {
-        Mine.getInviteQrcode().then(res => {
+        Mine.getInviteQrcode({shop_id: this.id}).then(res => {
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)
