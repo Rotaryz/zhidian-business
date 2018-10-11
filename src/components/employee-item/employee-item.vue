@@ -3,7 +3,8 @@
     <div class="employee-item">
       <div class="item-box border-bottom-1px">
         <div class="item-box-left">
-          <div class="item-left" :style="{backgroundImage: 'url(' + item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+          <div class="item-left" v-if="item.avatar" :style="{backgroundImage: 'url(' + item.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+          <img class="item-left" src="./pic-default_people@2x.png" v-else />
           <div class="item-left-name">{{item.name}}</div>
           <div class="item-left-icon" v-if="item.role_id * 1 === 0">未知</div>
           <div class="item-left-icon" v-if="item.role_id * 1 === 1">店长</div>
