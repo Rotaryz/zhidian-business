@@ -6,10 +6,6 @@
         <img class="qr-img" v-if="qrCode" :src="qrCode" alt="">
       </div>
       <div class="explain">请长按二维码保存或者发送给店员</div>
-      <div class="btn-item">
-        <div class="icon copy"></div>
-        <div class="txt" v-clipboard:copy="linkUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</div>
-      </div>
     </article>
     <!--<ul class="btn-group">-->
     <!--<li class="btn-item" @click="saveImage">-->
@@ -21,8 +17,9 @@
     <!--<div class="txt">复制链接</div>-->
     <!--</li>-->
     <!--</ul>-->
-    <!--<input id="copyTxt" readOnly="true" v-model="linkUrl"/>-->
-    <!--<div id="copyIos" >{{linkUrl}}</div>-->
+    <div class="btn-item">
+      <div class="txt" v-clipboard:copy="linkUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</div>
+    </div>
   </div>
 </template>
 
@@ -125,7 +122,7 @@
         background: #FFFFFF;
         border: 1px solid rgba(130, 138, 162, 0.20)
         border-radius: 6px
-        margin: 10vw auto 12px
+        margin: 7vw auto 12px
         overflow: hidden
         .qr-img
           width: 100%
@@ -136,15 +133,6 @@
         text-align: center
         padding-top: 10px
         padding-bottom: 10vw
-    .btn-item
-      width: 150px
-      height: 30px
-      line-height: 30px
-      border-radius: 20px
-      background: $color-EF705D
-      color: #fff
-      text-align: center
-      margin: 0 auto
 
     .btn-group
       margin-top: 40px
@@ -165,7 +153,17 @@
           font-size: 14px
           color: #706B82
           text-align: center
-
+  .btn-item
+    width: 160px
+    height: 32px
+    line-height: 32px
+    font-size: $font-size-14
+    border-radius: 20px
+    color: $color-EF705D
+    text-align: center
+    margin: 0 auto
+    margin-top: 30px
+    border: 1px solid $color-EF705D
   #copyTxt, #copyIos
     position: fixed
     left: -200px
