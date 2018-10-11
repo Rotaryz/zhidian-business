@@ -182,6 +182,7 @@
       }
     },
     created() {
+      console.log(1222)
       this._getShopInfo()
     },
     beforeRouteLeave(to, from, next) {
@@ -190,6 +191,7 @@
     },
     methods: {
       _getShopInfo() {
+        console.log(666)
         Mine.getShopInfo().then(res => {
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
