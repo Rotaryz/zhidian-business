@@ -22,8 +22,9 @@
         </div>
       </div>
       <div class="right-box" @click="choiceStaff">
-        <span>店员</span>
-        <img src="./icon-screen@2x.png" class="right-icon">
+        <span class="right-name" :class="shopId ? 'active' : ''">店员</span>
+        <img src="./icon-screen@2x.png" class="right-icon" v-if="!shopId">
+        <img src="./icon-screen_pick@2x.png" class="right-icon" v-if="shopId">
       </div>
     </div>
     <div class="container">
@@ -471,6 +472,8 @@
           height: 11px
           margin-left: 2px
           display: block
+        .right-name.active
+          color: $color-EF705D
 
     .container
       width: 100vw
