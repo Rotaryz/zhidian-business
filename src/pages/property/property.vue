@@ -115,7 +115,6 @@
         })
       },
       navToGive(item) {
-        console.log('naToGive')
         this.saveEmployee(item)
         this.$router.push(this.$route.path + '/give-out?id=' + item.id)
       },
