@@ -989,7 +989,7 @@
               margin: auto
 
   .select-tab
-    layout(row)
+    display: flex
     height: 48px
     line-height: 47px
     border-bottom: 1px solid rgba(0, 0, 0, .1)
@@ -1010,6 +1010,7 @@
       width: 33.33%
       height: 3px
       bottom: 0
+      left: 0
       transition: all .3s
       .chilen-line
         height: 3px
