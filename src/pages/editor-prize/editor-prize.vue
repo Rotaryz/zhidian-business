@@ -206,14 +206,15 @@
       _newPrize() {
         PrizeApi.newPrize(this.prizeDetail).then((res) => {
           this.$loading.hide()
-          this.disabledCover = false
           if (res.error === this.$ERR_OK) {
             this.$emit('refresh')
             this.$toast.show('创建成功')
             setTimeout(() => {
+              this.disabledCover = false
               this.$router.back()
             }, 1500)
           } else {
+            this.disabledCover = false
             this.$toast.show(res.message)
           }
         })
@@ -222,14 +223,15 @@
         this.prizeDetail.is_online = 1
         PrizeApi.editPrize(this.id, this.prizeDetail).then((res) => {
           this.$loading.hide()
-          this.disabledCover = false
           if (res.error === this.$ERR_OK) {
             this.$emit('refresh')
             this.$toast.show('保存成功')
             setTimeout(() => {
+              this.disabledCover = false
               this.$router.back()
             }, 1500)
           } else {
+            this.disabledCover = false
             this.$toast.show(res.message)
           }
         })

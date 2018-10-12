@@ -275,14 +275,15 @@
       _newService() {
         ServiceApi.newServiceMsg(this.serviceDetail).then((res) => {
           this.$loading.hide()
-          this.disabledCover = false
           if (res.error === this.$ERR_OK) {
             this.$emit('refresh')
             this.$toast.show('创建成功')
             setTimeout(() => {
+              this.disabledCover = false
               this.$router.back()
             }, 1500)
           } else {
+            this.disabledCover = false
             this.$toast.show(res.message)
           }
         })
@@ -291,14 +292,15 @@
         this.serviceDetail.is_online = 1
         ServiceApi.setServiceMsg(this.id, this.serviceDetail).then((res) => {
           this.$loading.hide()
-          this.disabledCover = false
           if (res.error === this.$ERR_OK) {
             this.$emit('refresh')
             this.$toast.show('保存成功')
             setTimeout(() => {
+              this.disabledCover = false
               this.$router.back()
             }, 1500)
           } else {
+            this.disabledCover = false
             this.$toast.show(res.message)
           }
         })
@@ -504,7 +506,7 @@
         return this.serviceDetail.usable_stock && COUNTREG.test(this.serviceDetail.usable_stock)
       },
       rateReg() {
-        return RATEREG.test(this.serviceDetail.commission_rate)
+        return RATEREG.test(this.serviceDetail.commission_rate) && +this.serviceDetail.commission_rate <= 100
       },
       serviceDetailReg() {
         let arr = this.serviceDetail.detail_config.filter((item) => {

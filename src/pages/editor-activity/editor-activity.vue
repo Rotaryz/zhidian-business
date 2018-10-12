@@ -401,14 +401,15 @@
       _newGroupOn() {
         ActivityApi.newGroupMsg(this.activityDetail).then((res) => {
           this.$loading.hide()
-          this.disabledCover = false
           if (res.error === this.$ERR_OK) {
             this.$emit('refresh')
             this.$toast.show('创建成功')
             setTimeout(() => {
+              this.disabledCover = false
               this.$router.back()
             }, 1500)
           } else {
+            this.disabledCover = false
             this.$toast.show(res.message)
           }
         })
@@ -417,14 +418,15 @@
         this.activityDetail.is_online = 1
         ActivityApi.editGroupMsg(this.id, this.activityDetail).then((res) => {
           this.$loading.hide()
-          this.disabledCover = false
           if (res.error === this.$ERR_OK) {
             this.$emit('refresh')
             this.$toast.show('保存成功')
             setTimeout(() => {
+              this.disabledCover = false
               this.$router.back()
             }, 1500)
           } else {
+            this.disabledCover = false
             this.$toast.show(res.message)
           }
         })
@@ -432,14 +434,15 @@
       _newBargain() {
         ActivityApi.newBargainMsg(this.activityDetail).then((res) => {
           this.$loading.hide()
-          this.disabledCover = false
           if (res.error === this.$ERR_OK) {
             this.$emit('refresh')
             this.$toast.show('创建成功')
             setTimeout(() => {
+              this.disabledCover = false
               this.$router.back()
             }, 1500)
           } else {
+            this.disabledCover = false
             this.$toast.show(res.message)
           }
         })
@@ -448,14 +451,15 @@
         this.activityDetail.is_online = 1
         ActivityApi.editBargainMsg(this.id, this.activityDetail).then((res) => {
           this.$loading.hide()
-          this.disabledCover = false
           if (res.error === this.$ERR_OK) {
             this.$emit('refresh')
             this.$toast.show('保存成功')
             setTimeout(() => {
+              this.disabledCover = false
               this.$router.back()
             }, 1500)
           } else {
+            this.disabledCover = false
             this.$toast.show(res.message)
           }
         })
@@ -467,6 +471,7 @@
       checkForm() {
         if (!this.ruleId) {
           this.$toast.show('请先选择活动类型')
+          this.disabledCover = false
           return
         }
         let arr
@@ -559,7 +564,7 @@
         return this.activityDetail.coupon_id
       },
       rateReg() {
-        return RATEREG.test(this.activityDetail.commission_rate)
+        return RATEREG.test(this.activityDetail.commission_rate) && +this.activityDetail.commission_rate <= 100
       },
       showSelectType() {
         if (this.ruleId) {

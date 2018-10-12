@@ -41,7 +41,7 @@ const ContentText = () => import('pages/content-text/content-text')
 Vue.use(Router)
 
 const route = new Router({
-  mode: 'history',
+  mode: 'hash',
   routes: [
     {
       path: '/',
