@@ -62,16 +62,14 @@
       },
       _getMoney() {
         Property.getMoney({money: this.getMoney}).then(res => {
-          this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
+            this.$loading.hide()
             this.$toast.show(res.message)
             return
           }
           this.$toast.show('提现成功')
           this.$emit('refresh')
-          setTimeout(() => {
-            this.$router.back()
-          }, 1500)
+          this.$router.back()
         })
       },
       _checkForm() {

@@ -152,8 +152,8 @@
       },
       _updateContent() {
         Content.updateContent(this.info).then(res => {
-          this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
+            this.$loading.hide()
             this.$toast.show(res.message)
             return
           }

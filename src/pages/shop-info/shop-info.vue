@@ -209,16 +209,14 @@
       },
       _updateShopInfo() {
         Mine.updateShopInfo(this.shopInfo).then(res => {
-          this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
+            this.$loading.hide()
             this.$toast.show(res.message)
             return
           }
           this.$toast.show('保存成功')
           this.$emit('refresh')
-          setTimeout(() => {
-            this.$router.go(-1)
-          }, 1500)
+          this.$router.go(-1)
         })
       },
       _fileChange(e, flag) {

@@ -53,17 +53,14 @@
     methods: {
       _createEmployee() {
         Employee.createNewEmployee(this.staffInfo).then(res => {
-          this.$loading.hide()
-          console.log(res)
           if (this.$ERR_OK !== res.error) {
+            this.$loading.hide()
             this.$toast.show(res.message)
             return
           }
           this.$toast.show('创建成功')
           this.$emit('refresh')
-          setTimeout(() => {
-            this.$router.go(-1)
-          }, 2000)
+          this.$router.go(-1)
         })
       },
       _fileChange(e) {
