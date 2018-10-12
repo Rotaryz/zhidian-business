@@ -40,7 +40,7 @@ const Content = () => import('pages/content/content')
 Vue.use(Router)
 
 const route = new Router({
-  mode: 'history',
+  mode: 'hash',
   routes: [
     {
       path: '/',
