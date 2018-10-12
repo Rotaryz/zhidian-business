@@ -529,6 +529,7 @@
               position: relative
               height: 90px
               overflow: hidden
+              white-space: pre
               .img-style
                 width: 100%
                 height: 100%
