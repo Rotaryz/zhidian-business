@@ -83,7 +83,7 @@
       </scroll>
     </div>
     <footer class="btn-wrapper border-top-1px">
-      <div class="btn">发布</div>
+      <div class="btn" :class="saveBtnStyle" @click="saveBtn">发布</div>
     </footer>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
@@ -290,12 +290,55 @@
         } else {
           item.video_url = obj.url
         }
+      },
+      saveBtn() {
+        this.info.details = this.details
+        this._checkForm()
+      },
+      _checkForm() {
+        let arr = [
+          {value: this.videoReg, txt: '请上传主视频'},
+          {value: this.titleReg, txt: '请输入主标题'},
+          {value: this.detailsReg, txt: '请添加故事内容'}
+        ]
+        let res = this._testPropety(arr)
+        if (res) {
+          this.$toast.show('发布成功')
+          this.$router.back()
+        }
+      },
+      _testPropety(arr) {
+        for (let i = 0, j = arr.length; i < j; i++) {
+          if (!arr[i].value) {
+            this.$toast.show(arr[i].txt)
+            return false
+          }
+          if (i === j - 1 && arr[i].value) {
+            return true
+          }
+        }
       }
     },
     computed: {
       ...mapGetters([
         'contentText'
-      ])
+      ]),
+      titleReg() {
+        return this.info.title
+      },
+      videoReg() {
+        return this.info.video_url
+      },
+      detailsReg() {
+        return this.details.length > 0
+      },
+      saveBtnStyle() {
+        let btnClass = ''
+        if (this.titleReg && this.videoReg && this.detailsReg) {
+          btnClass = 'active'
+        }
+        return btnClass
+      }
     }
   }
 </script>
@@ -343,6 +386,9 @@
         color: #FFFFFF;
         letter-spacing: 0.8px;
         text-align: center;
+        opacity: 0.5
+        &.active
+          opacity: 1
     .scroll-wrapper
       position: fixed
       left: 0

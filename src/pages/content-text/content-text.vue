@@ -3,7 +3,7 @@
     <textarea class="data-area" style="resize:none" @touchmove.stop @keyup.enter="saveBtn" :autofocus="true" v-model="note" :maxlength="maxLength" placeholder="请输入"></textarea>
     <div class="text-number">{{note.length}}/{{maxLength}}</div>
     <footer class="btn-wrapper border-top-1px">
-      <div class="btn" @click.enter="saveBtn">确定</div>
+      <div class="btn" :class="saveBtnStyle" @click.enter="saveBtn">确定</div>
     </footer>
   </div>
 </template>
@@ -64,6 +64,13 @@
       ]),
       noteReg() {
         return this.note
+      },
+      saveBtnStyle() {
+        let btnClass = ''
+        if (this.noteReg) {
+          btnClass = 'active'
+        }
+        return btnClass
       }
     }
   }
@@ -99,6 +106,9 @@
         color: #FFFFFF;
         letter-spacing: 0.8px;
         text-align: center;
+        opacity: 0.5
+        &.active
+          opacity: 1
     .data-area
       min-height: 250px
       box-sizing: border-box
