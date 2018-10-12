@@ -332,7 +332,7 @@
       },
       _checkForm() {
         let arr = [
-          {value: this.videoReg, txt: '请上传主视频'},
+          // {value: this.videoReg, txt: '请上传主视频'},
           {value: this.titleReg, txt: '请输入主标题'},
           {value: this.detailsReg, txt: '请添加故事内容'}
         ]

@@ -365,7 +365,7 @@
           {value: this.addressDetailReg, txt: '请输入您的门店的详细地址'},
           {value: this.openHoursReg, txt: '请选择您的营业时间'},
           {value: this.shopLogoReg, txt: '请添加门店logo'},
-          {value: this.shopVideoReg, txt: '请添加门店视频'},
+          // {value: this.shopVideoReg, txt: '请添加门店视频'},
           {value: this.shopImagesReg, txt: '请添加至少一张门店图片'}
         ]
         let res = this._testPropety(arr)
