@@ -1,2 +1,3 @@
 export const TYPE = 'TYPE'
 export const SAVE_EMPLOYEE = 'SAVE_EMPLOYEE'
+export const UPDATE_CONTENT_TEXT = 'UPDATE_CONTENT_TEXT'

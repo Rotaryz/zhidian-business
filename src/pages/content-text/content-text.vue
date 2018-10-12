@@ -9,6 +9,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     data() {
       return {
@@ -16,9 +18,52 @@
         maxLength: 1000
       }
     },
+    created() {
+      this._getParams()
+    },
     methods: {
+      ...mapActions([
+        'updateContentText'
+      ]),
+      _getParams() {
+        this.note = this.contentText.txt
+      },
+      _checkForm() {
+        let arr = [
+          {value: this.noteReg, txt: '请输入内容'}
+        ]
+        let res = this._testPropety(arr)
+        if (res) {
+          let contentText = this.contentText
+          let txt = this.note
+          let index = contentText.index
+          let actionType = contentText.actionType
+          this.updateContentText({txt, index, actionType})
+          this.$emit('refresh')
+          this.$router.back()
+        }
+      },
+      _testPropety(arr) {
+        for (let i = 0, j = arr.length; i < j; i++) {
+          if (!arr[i].value) {
+            this.$toast.show(arr[i].txt)
+            return false
+          }
+          if (i === j - 1 && arr[i].value) {
+            return true
+          }
+        }
+      },
       saveBtn() {
-        console.log(11)
+        this._checkForm()
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'contentText'
+      ]),
+      noteReg() {
+        return this.note
       }
     }
   }

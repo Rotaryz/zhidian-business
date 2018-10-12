@@ -18,26 +18,28 @@
           </article>
           <div style="height: 10px"></div>
           <ul class="detail-wrapper">
-            <li class="item-wrapper" v-if="details.length" v-for="(item,index) in details" :key="index" @click="closeAllAddBox">
-              <section class="add-btn" @click.stop="addHandle(item)">
+            <li class="item-wrapper" @click="closeAllAddBox">
+              <section class="add-btn" @click.stop="isShow = !isShow">
                 <transition name="fade">
-                  <nav class="add-control-wrapper" v-show="item.isShow">
-                    <label class="add-btn text" @click="addText(index)">
+                  <nav class="add-control-wrapper" v-show="isShow">
+                    <label class="add-btn text" @click="addText('nothing')">
                     </label>
                     <label class="add-btn video">
-                      <input type="file" style="display: none" @change="_fileChange($event, 'video', index)"
+                      <input type="file" style="display: none" @change="_fileChange($event, 'video', 'nothing')"
                              accept="video/*">
                     </label>
                     <label class="add-btn image">
-                      <input type="file" style="display: none" @change="_fileChange($event, 'image', index)"
+                      <input type="file" style="display: none" @change="_fileChange($event, 'image', 'nothing')"
                              accept="image/*">
                     </label>
                   </nav>
                 </transition>
               </section>
+            </li>
+            <li class="item-wrapper" v-if="details.length" v-for="(item,index) in details" :key="index" @click="closeAllAddBox">
               <section class="content-wrapper">
-                <div class="content-container" :class="+item.type !== 1 ? 'media':''">
-                  <div class="box text" v-if="+item.type === 1" @click="addText(details.length)">{{item.text}}</div>
+                <div class="content-container" :class="+item.type !== 1 ? 'media':''" @click="+item.type === 1?addText(index, item, 'un-add'):''">
+                  <div class="box text" v-if="+item.type === 1">{{item.text}}</div>
                   <div class="box img" v-if="+item.type === 0">
                     <img class="img-style" v-if="item.image_url" :src="item.image_url" alt="">
                     <label class="video-mask">
@@ -58,19 +60,17 @@
                 <div class="btn up" v-if="index !== 0" @click.stop="upHandle(index)"></div>
                 <div class="btn down" v-if="index !== details.length - 1" @click.stop="downHandle(index)"></div>
               </section>
-            </li>
-            <li class="item-wrapper">
-              <section class="add-btn" @click.stop="isShow = !isShow">
+              <section class="add-btn" @click.stop="addHandle(item)">
                 <transition name="fade">
-                  <nav class="add-control-wrapper" v-show="isShow">
-                    <label class="add-btn text" @click="addText(details.length)">
+                  <nav class="add-control-wrapper" v-show="item.isShow">
+                    <label class="add-btn text" @click="addText(index, {text: ''}, 'add')">
                     </label>
                     <label class="add-btn video">
-                      <input type="file" style="display: none" @change="_fileChange($event, 'video', details.length)"
+                      <input type="file" style="display: none" @change="_fileChange($event, 'video', index)"
                              accept="video/*">
                     </label>
                     <label class="add-btn image">
-                      <input type="file" style="display: none" @change="_fileChange($event, 'image', details.length)"
+                      <input type="file" style="display: none" @change="_fileChange($event, 'image', index)"
                              accept="image/*">
                     </label>
                   </nav>
@@ -92,6 +92,7 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import { Upload } from 'api'
+  import { mapActions, mapGetters } from 'vuex'
 
   const test = [
     {
@@ -137,6 +138,9 @@
     beforeDestroy() {
     },
     methods: {
+      ...mapActions([
+        'updateContentText'
+      ]),
       rebuildScroll() {
         this.$nextTick(() => {
           this.$refs.scroll.destroy()
@@ -144,7 +148,7 @@
         })
       },
       refresh() {
-        // todo
+        this._actionAddText()
       },
       _fileChange(e, flag, item) {
         let arr = Array.from(e.target.files)
@@ -211,16 +215,38 @@
         arr[index] = arr.splice(changeIndex, 1, arr[index])[0]
         this.details = arr
       },
-      addText(index) {
-        this.$router.push(this.$route.path + '/content-text?index=' + index)
+      addText(index, item, actionType) {
+        let obj = {}
+        if (index === 'nothing') {
+          obj = {txt: '', index, actionType}
+          this.isShow = true
+        } else {
+          obj = {txt: item.text, index, actionType}
+          item.isShow = false
+          console.log(item)
+        }
+        this.updateContentText(obj)
+        this.$router.push(this.$route.path + '/content-text')
+      },
+      _actionAddText() {
+        const {index, txt, actionType} = this.contentText
+        let newObj = {
+          type: 1,
+          text: txt,
+          image_url: '',
+          video_url: '',
+          isShow: false
+        }
+        if (index === 'nothing') {
+          this.details.unshift(newObj)
+        } else if (actionType === 'add') {
+          this.details.splice(index + 1, 0, newObj)
+        } else {
+          this.details.splice(index, 1, newObj)
+        }
       },
       _addImage(item, obj) {
-        if (typeof item === 'number') {
-          if (this.details.length !== item) {
-            this.details[item].isShow = false
-          } else {
-            this.isShow = false
-          }
+        if (typeof item === 'number' || item === 'nothing') {
           let newObj = {
             id: 0,
             type: 0,
@@ -231,18 +257,19 @@
           }
           newObj.image_url = obj.url
           newObj.id = obj.id
-          this.details.splice(item, 0, newObj)
+          if (typeof item === 'number') {
+            this.details[item].isShow = false
+            this.details.splice(item + 1, 0, newObj)
+          } else if (item === 'nothing') {
+            this.isShow = false
+            this.details.unshift(newObj)
+          }
         } else {
           item.image_url = obj.url
         }
       },
       _addVideo(item, obj) {
-        if (typeof item === 'number') {
-          if (this.details.length !== item) {
-            this.details[item].isShow = false
-          } else {
-            this.isShow = false
-          }
+        if (typeof item === 'number' || item === 'nothing') {
           let newObj = {
             id: 0,
             type: 2,
@@ -253,11 +280,22 @@
           }
           newObj.video_url = obj.url
           newObj.id = obj.id
-          this.details.splice(item, 0, newObj)
+          if (typeof item === 'number') {
+            this.details[item].isShow = false
+            this.details.splice(item + 1, 0, newObj)
+          } else if (item === 'nothing') {
+            this.isShow = false
+            this.details.unshift(newObj)
+          }
         } else {
           item.video_url = obj.url
         }
       }
+    },
+    computed: {
+      ...mapGetters([
+        'contentText'
+      ])
     }
   }
 </script>
