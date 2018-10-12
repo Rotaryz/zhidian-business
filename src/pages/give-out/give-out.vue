@@ -82,6 +82,7 @@
       this.image_url = this.employee.image_url
       this.id = this.$route.query.id
       this._getIssueLog()
+      console.log(this.employee)
       this.bankInfo.remaining = this.employee.commission
     },
     methods: {
