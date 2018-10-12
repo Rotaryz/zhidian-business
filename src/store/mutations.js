@@ -7,7 +7,7 @@ const mutations = {
   [TYPES.SAVE_EMPLOYEE](state, employee) {
     state.employee = employee
   },
-  [TYPES.SAVE_EMPLOYEE](state, obj) {
+  [TYPES.UPDATE_CONTENT_TEXT](state, obj) {
     state.contentText = obj
   }
 }
