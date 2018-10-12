@@ -1,8 +1,6 @@
 <template>
   <div class="invitation">
-    <scroll ref="scroll"
-            bcColor="#fff"
-    >
+    <scroll ref="scroll" bcColor="#fff" >
       <div class="scroll-main">
         <article class="top">
           <div class="title">欢迎加入{{shopName}}</div>
@@ -124,10 +122,6 @@
 
   .invitation
     overflow: hidden
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
     fill-box()
     z-index: 71
     background: #fff
