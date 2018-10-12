@@ -1,24 +1,30 @@
 <template>
   <div class="shop-qr-code">
-    <section class="bg">
-      <div class="wrapper">
-        <section class="content">
-          <div class="logo" v-if="shopInfo.logo" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-          <img class="logo" src="./pic-default_people@2x.png" v-else />
-          <div class="title">{{shopInfo.name || '店铺名称'}}</div>
-          <img class="qr-code" :src="shopInfo.image_url" v-if="shopInfo.image_url">
-          <img class="qr-code" v-else>
-          <div class="explain">
-            <div class="e-c">长按识别二维码进店逛逛</div>
+    <scroll ref="scroll" bcColor="#363547" >
+      <div class="pad">
+        <section class="bg">
+          <div class="wrapper">
+            <section class="content">
+              <div class="logo" v-if="shopInfo.logo" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+              <img class="logo" src="./pic-default_people@2x.png" v-else />
+              <div class="title">{{shopInfo.name || '店铺名称'}}</div>
+              <img class="qr-code" :src="shopInfo.image_url" v-if="shopInfo.image_url">
+              <img class="qr-code" v-else>
+              <div class="explain">
+                <div class="e-c">长按识别二维码进店逛逛</div>
+              </div>
+            </section>
           </div>
         </section>
       </div>
-    </section>
+    </scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import { Mine, Business } from 'api'
+  import Scroll from '../../components/scroll/scroll'
+
   export default {
     data() {
       return {
@@ -56,6 +62,9 @@
           this.shopInfo.image_url = res.data.image_url || ''
         })
       }
+    },
+    components: {
+      Scroll
     }
   }
 </script>
@@ -65,11 +74,13 @@
   @import '~common/stylus/mixin'
 
   .shop-qr-code
+    overflow: hidden
     fill-box()
     z-index: 50
-    background: $color-363537
+    background: $color-363547
+    .pad
+      padding: 15vw 35px
     .bg
-      margin: 60px 35px
       background: #DAD7E4
       border-radius: 4px
       padding :16px 13px
@@ -97,13 +108,13 @@
             line-height: 1.2
           .qr-code
             display: block
-            width: 120px
+            width: 35vw
             height: @width
             padding: 6px
             background: #FFFFFF
             border: 6px solid rgba(164, 155, 200, 0.20)
             border-radius: 50%
-            margin : 80px auto 40px
+            margin : 20vw auto 10vw
           .explain
             position: absolute
             bottom: -6px
