@@ -4,6 +4,7 @@
       <scroll bcColor="#f6f6f6" ref="scroll" :data="details">
         <div>
           <article class="header-video">
+            <div class="img-style" v-if="info.cover_image" :style="{backgroundImage: 'url(' + info.cover_image + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
             <label class="video-mask">
               <div class="icon-btn add" v-if="!info.video_url"/>
               <div class="add-txt" v-if="!info.video_url">上传视频</div>
@@ -41,14 +42,15 @@
                 <div class="content-container" :class="+item.type !== 1 ? 'media':''" @click="+item.type === 1?addText(index, item, 'un-add'):''">
                   <div class="box text" v-if="+item.type === 1">{{item.text}}</div>
                   <div class="box img" v-if="+item.type === 0">
-                    <img class="img-style" v-if="item.image_url" :src="item.image_url" alt="">
+                    <!--<img class="img-style" v-if="item.image_url" :src="item.image_url" alt="">-->
+                    <div class="img-style" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                     <label class="video-mask">
                       <input type="file" style="display: none" @change="_fileChange($event, 'image', item)"
                              accept="image/*">
                     </label>
                   </div>
                   <div class="box video" v-if="+item.type === 2">
-                    <img class="img-style" v-if="item.video_url" :src="item.video_url" alt="">
+                    <img class="img-style" v-if="item.cover_image" :src="item.cover_image" alt="">
                     <label class="video-mask">
                       <div class="icon-btn play"/>
                       <input type="file" style="display: none" @change="_fileChange($event, 'video', item)"
@@ -56,7 +58,7 @@
                     </label>
                   </div>
                 </div>
-                <div class="btn del" @click.stop="delHandle(index)"></div>
+                <div class="btn del" @click.stop="delHandle(index, item)"></div>
                 <div class="btn up" v-if="index !== 0" @click.stop="upHandle(index)"></div>
                 <div class="btn down" v-if="index !== details.length - 1" @click.stop="downHandle(index)"></div>
               </section>
@@ -85,57 +87,39 @@
     <footer class="btn-wrapper border-top-1px">
       <div class="btn" :class="saveBtnStyle" @click="saveBtn">发布</div>
     </footer>
+    <confirm-msg ref="confirm" @confirm="_deleteContentItem"></confirm-msg>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
-  import { Upload } from 'api'
+  import ConfirmMsg from 'components/confirm-msg/confirm-msg'
+  import { Upload, Content } from 'api'
   import { mapActions, mapGetters } from 'vuex'
 
-  const test = [
-    {
-      id: 1,
-      type: 0,
-      text: '',
-      image_url: 'http://t2.hddhhn.com/uploads/tu/201610/198/51wgjnwngl1.jpg',
-      video_url: '',
-      isShow: false
-    },
-    {
-      id: 2,
-      type: 1,
-      text: '安徽省大家卡刷点卡的哈萨克的啊速度加快啥的卡仕达看见啥的卡很大空间啊十大科技哈师大看啥德哈卡记得哈速度快安徽省大家卡刷点卡的哈萨克的啊速度加快啥的卡仕达看见啥的卡很大空间啊十大科技哈师大看啥德哈卡记得哈速度快安徽省大家卡刷点卡的哈萨克的啊速度加快啥的卡仕达看见啥的卡很大空间啊十大科技哈师大看啥德哈卡记得哈速度快安徽省大家卡刷点卡的哈萨克的啊速度加快啥的卡仕达看见啥的卡很大空间啊十大科技哈师大看啥德哈卡记得哈速度快',
-      image_url: '',
-      video_url: '',
-      isShow: false
-    },
-    {
-      id: 3,
-      type: 2,
-      text: '',
-      image_url: '',
-      video_url: 'http://t2.hddhhn.com/uploads/tu/201610/198/51wgjnwngl1.jpg',
-      isShow: false
-    }
-  ]
   export default {
     components: {
-      Scroll
+      Scroll,
+      ConfirmMsg
     },
     data() {
       return {
         info: {
+          id: 0,
           title: '',
           video_url: '',
+          video_id: 0,
+          cover_image: '',
           details: []
         },
-        details: test,
-        isShow: false
+        details: [],
+        isShow: false,
+        delObject: {}
       }
     },
-    beforeDestroy() {
+    created() {
+      this._getContent()
     },
     methods: {
       ...mapActions([
@@ -150,6 +134,46 @@
       refresh() {
         this._actionAddText()
       },
+      _getContent() {
+        Content.getContent().then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          let arr = []
+          res.data.details.forEach(item => {
+            item.isShow = false
+            arr.push(item)
+          })
+          Object.assign(this.info, res.data)
+          this.details = this.info.details
+        })
+      },
+      _updateContent() {
+        Content.updateContent(this.info).then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.$toast.show('发布成功')
+          this.$router.back()
+        })
+      },
+      _deleteContentItem() {
+        let id = this.delObject.item.id
+        let index = this.delObject.index
+        Content.deleteContentItem({id}).then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.details.splice(index, 1)
+          this.delObject = {}
+        })
+      },
       _fileChange(e, flag, item) {
         let arr = Array.from(e.target.files)
         if (flag === 'header-video') {
@@ -161,6 +185,8 @@
               return
             }
             this.info.video_url = res.data.url
+            this.info.video_id = res.data.file_id
+            this.info.cover_image = res.data.url
           })
         }
         if (flag === 'video') {
@@ -200,8 +226,11 @@
       addHandle(item) {
         item.isShow = !item.isShow
       },
-      delHandle(index) {
-        this.details.splice(index, 1)
+      delHandle(index, item) {
+        this.delObject = {index, item}
+        console.log(this.delObject)
+        this.$refs.confirm.show()
+        // this.details.splice(index, 1)
       },
       upHandle(index) {
         let arr = this.details
@@ -218,19 +247,19 @@
       addText(index, item, actionType) {
         let obj = {}
         if (index === 'nothing') {
-          obj = {txt: '', index, actionType}
+          obj = {txt: '', index, actionType, id: 0}
           this.isShow = true
         } else {
-          obj = {txt: item.text, index, actionType}
+          obj = {txt: item.text, index, actionType, id: item.id}
           item.isShow = false
-          console.log(item)
         }
         this.updateContentText(obj)
         this.$router.push(this.$route.path + '/content-text')
       },
       _actionAddText() {
-        const {index, txt, actionType} = this.contentText
+        const {index, txt, actionType, id} = this.contentText
         let newObj = {
+          id: id,
           type: 1,
           text: txt,
           image_url: '',
@@ -250,13 +279,11 @@
           let newObj = {
             id: 0,
             type: 0,
-            text: '',
-            image_url: 'http://t2.hddhhn.com/uploads/tu/201610/198/51wgjnwngl1.jpg',
-            video_url: '',
+            image_url: '',
+            image_id: obj.id,
             isShow: false
           }
           newObj.image_url = obj.url
-          newObj.id = obj.id
           if (typeof item === 'number') {
             this.details[item].isShow = false
             this.details.splice(item + 1, 0, newObj)
@@ -266,20 +293,21 @@
           }
         } else {
           item.image_url = obj.url
+          item.image_id = obj.id
         }
       },
       _addVideo(item, obj) {
+        obj.id = obj.file_id
         if (typeof item === 'number' || item === 'nothing') {
           let newObj = {
             id: 0,
             type: 2,
-            text: '',
-            image_url: 'http://t2.hddhhn.com/uploads/tu/201610/198/51wgjnwngl1.jpg',
             video_url: '',
+            video_id: obj.id,
+            cover_image: '',
             isShow: false
           }
           newObj.video_url = obj.url
-          newObj.id = obj.id
           if (typeof item === 'number') {
             this.details[item].isShow = false
             this.details.splice(item + 1, 0, newObj)
@@ -289,10 +317,17 @@
           }
         } else {
           item.video_url = obj.url
+          item.video_id = obj.id
+          item.cover_image = obj.url
         }
       },
       saveBtn() {
-        this.info.details = this.details
+        let arr = []
+        this.details.forEach((item, index) => {
+          item.sort = index
+          arr.push(item)
+        })
+        this.info.details = arr
         this._checkForm()
       },
       _checkForm() {
@@ -303,8 +338,7 @@
         ]
         let res = this._testPropety(arr)
         if (res) {
-          this.$toast.show('发布成功')
-          this.$router.back()
+          this._updateContent()
         }
       },
       _testPropety(arr) {
@@ -399,6 +433,9 @@
         height: 56.26vw
         background: #363547;
         position: relative
+        .img-style
+          width: 100%
+          height: 100%
         .video-mask
           display: block
           fill-box(absolute)
@@ -477,9 +514,8 @@
           border-1px($color-E6E6E6, 4px)
           .content-container
             padding: 7px 10px
-            min-height: 90px
             box-sizing: border-box
-            background-color: $color-E6E6E6
+            background-color: #f3f3f3
             border-radius: 2px
             position: relative
             &.media
@@ -491,8 +527,11 @@
               word-break: break-all
               line-height: 1.2
               position: relative
+              height: 90px
+              overflow: hidden
               .img-style
                 width: 100%
+                height: 100%
               .video-mask
                 display: block
                 fill-box(absolute)

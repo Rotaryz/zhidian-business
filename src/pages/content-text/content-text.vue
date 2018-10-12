@@ -1,6 +1,6 @@
 <template>
   <div class="content-text">
-    <textarea class="data-area" style="resize:none" @touchmove.stop @keyup.enter="saveBtn" :autofocus="true" v-model="note" :maxlength="maxLength" placeholder="请输入"></textarea>
+    <textarea class="data-area" style="resize:none" @touchmove.stop @keyup.enter="" :autofocus="true" v-model="note" :maxlength="maxLength" placeholder="请输入"></textarea>
     <div class="text-number">{{note.length}}/{{maxLength}}</div>
     <footer class="btn-wrapper border-top-1px">
       <div class="btn" :class="saveBtnStyle" @click.enter="saveBtn">确定</div>
@@ -38,7 +38,8 @@
           let txt = this.note
           let index = contentText.index
           let actionType = contentText.actionType
-          this.updateContentText({txt, index, actionType})
+          let id = contentText.id
+          this.updateContentText({txt, index, actionType, id})
           this.$emit('refresh')
           this.$router.back()
         }
