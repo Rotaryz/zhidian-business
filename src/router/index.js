@@ -36,6 +36,7 @@ const Deposit = () => import('pages/deposit/deposit')
 const AddBankCard = () => import('pages/add-bank-card/add-bank-card')
 const GiveOut = () => import('pages/give-out/give-out')
 const Content = () => import('pages/content/content')
+const ContentText = () => import('pages/content-text/content-text')
 
 Vue.use(Router)
 
@@ -120,7 +121,16 @@ const route = new Router({
               component: Content,
               meta: {
                 title: '品牌故事'
-              }
+              },
+              children: [
+                {
+                  path: 'content-text',
+                  component: ContentText,
+                  meta: {
+                    title: '请输入文字'
+                  }
+                }
+              ]
             },
             {
               path: 'order-manage',

@@ -646,7 +646,9 @@
     .last-box
       height: 82px
     .group-container
+      width: 100vw
       padding-left: 15px
+      box-sizing: border-box
       background: $color-white
     .text-item
       padding-right: 15px
@@ -708,6 +710,7 @@
           color: $color-363537
           width: 100%
           height: 55px
+          flex: 1
           no-wrap()
           &.gray
             color: $color-CCCCCC
@@ -715,6 +718,7 @@
           font-family: $font-family-regular
           font-size: $font-size-14
           color: $color-CCCCCC
+          flex: 1
         .arrow-icon
           width: 7.5px
           height: 12.5px
