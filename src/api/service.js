@@ -54,7 +54,6 @@ export default {
    * @returns {*}
    */
   newServiceMsg(data, loading = true) {
-    console.log(data)
     let url = `api/merchant/goods`
     return request.post(url, data, loading)
   }
