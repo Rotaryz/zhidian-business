@@ -1,5 +1,7 @@
 import Upload from './api-upload'
 
+const time = 10 * 1000
+
 /*eslint-disable*/
 
 function getSignature(callback) {
@@ -20,7 +22,7 @@ export function uploadFiles(file, callback) {
       finish: (res => {
         setTimeout(() => {
           Upload.saveFile({file_id: res.fileId}).then(resolve)
-        }, 2000)
+        }, time)
       }),
       progress(result) {
         let curr = result.curr * 100
