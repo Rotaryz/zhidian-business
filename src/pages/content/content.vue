@@ -115,7 +115,8 @@
         },
         details: [],
         isShow: false,
-        delObject: {}
+        delObject: {},
+        delArr: [] // 待删除的
       }
     },
     created() {
@@ -164,15 +165,23 @@
       _deleteContentItem() {
         let id = this.delObject.item.id
         let index = this.delObject.index
-        Content.deleteContentItem({id}).then(res => {
-          this.$loading.hide()
-          if (this.$ERR_OK !== res.error) {
-            this.$toast.show(res.message)
-            return
-          }
-          this.details.splice(index, 1)
-          this.delObject = {}
+        if (id) {
+          this.delArr.push(id)
+        }
+        this.details.splice(index, 1)
+        this.delObject = {}
+      },
+      _actionDel(callback) {
+        this.delArr.forEach(id => {
+          Content.deleteContentItem({id}).then(res => {
+            if (this.$ERR_OK !== res.error) {
+              this.$toast.show(res.message)
+              return
+            }
+            callback && callback()
+          })
         })
+        !this.delArr.length && callback && callback()
       },
       _fileChange(e, flag, item) {
         let arr = Array.from(e.target.files)
@@ -232,9 +241,7 @@
       },
       delHandle(index, item) {
         this.delObject = {index, item}
-        console.log(this.delObject)
         this.$refs.confirm.show()
-        // this.details.splice(index, 1)
       },
       upHandle(index) {
         let arr = this.details
@@ -342,7 +349,9 @@
         ]
         let res = this._testPropety(arr)
         if (res) {
-          this._updateContent()
+          this._actionDel(() => {
+            this._updateContent()
+          })
         }
       },
       _testPropety(arr) {
