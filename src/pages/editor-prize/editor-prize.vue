@@ -180,6 +180,7 @@
         })
       },
       submitAll() {
+        if (this.disabledCover) return
         this.disabledCover = true
         this.checkForm()
       },
