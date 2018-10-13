@@ -172,16 +172,17 @@
         this.delObject = {}
       },
       _actionDel(callback) {
-        this.delArr.forEach(id => {
-          Content.deleteContentItem({id}).then(res => {
+        if (this.delArr.length) {
+          Content.deleteContentItem({detail_ids: this.delArr}).then(res => {
             if (this.$ERR_OK !== res.error) {
               this.$toast.show(res.message)
               return
             }
             callback && callback()
           })
-        })
-        !this.delArr.length && callback && callback()
+        } else {
+          callback && callback()
+        }
       },
       _fileChange(e, flag, item) {
         let arr = Array.from(e.target.files)

@@ -10,7 +10,7 @@ export default {
     return request.post(url, data, loading)
   },
   deleteContentItem(data, loading) {
-    let url = '/api/merchant/history/detail/' + data.id
-    return request.delete(url, data, loading)
+    let url = '/api/merchant/history_detail'
+    return request.post(url, data, loading)
   }
 }
