@@ -19,7 +19,7 @@
       <div class="explain">可提现金额 ¥{{bankInfo.remaining}}</div>
     </section>
     <div class="declare">微信按提现金额0.7%收取手续费，最低1元。</div>
-    <div class="btn" :class="allowBtn?'active':''" @click="_checkForm">提现</div>
+    <div class="btn" :class="getMoneyReg?'active':''" @click="_checkForm">提现</div>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
@@ -99,10 +99,7 @@
         return this.bankInfo.bank
       },
       getMoneyReg() {
-        return (typeof +this.getMoney === 'number') && +this.getMoney >= 1 && this.getMoney <= this.bankInfo.remaining
-      },
-      allowBtn() {
-        return this.bankReg && this.getMoneyReg
+        return (typeof +this.getMoney === 'number') && +this.getMoney > 0 && this.getMoney <= this.bankInfo.remaining
       }
     }
   }
@@ -191,6 +188,6 @@
       text-align: center
       line-height: @height
       opacity: 0.5
-      .&.active
+      &.active
         opacity: 1
 </style>
