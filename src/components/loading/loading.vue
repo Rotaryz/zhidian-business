@@ -33,6 +33,9 @@
       hide() {
         this.content = '数据加载中'
         this.isShow = false
+      },
+      showCurr(curr) {
+        this.content = `上传中...${curr}%`
       }
     }
   }

@@ -6,7 +6,7 @@
         <div class="icon-warn"></div>
         <div>手机号码格式错误</div>
       </section>
-      <form class="content">
+      <div class="content">
         <section class="input-wrapper mobile border-bottom-1px">
           <div class="left">
             <input class="input" ref="phone" type="number" placeholder="请输入手机号码" maxlength="11" v-model="phoneNumber">
@@ -23,7 +23,7 @@
         <section class="btn" :class="btnStyle || codeStyle?'unable':''" @click="submit">
           <div class="txt">登录</div>
         </section>
-      </form>
+      </div>
     </div>
   </transition>
 </template>

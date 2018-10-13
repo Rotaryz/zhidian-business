@@ -225,7 +225,9 @@
         flag === 'logo' && this.$refs['cropper-shop_logo'].show(arr[0])
         if (flag === 'video') {
           this.$loading.show('视频上传中...')
-          this.$vod.uploadFiles(arr[0]).then(res => {
+          this.$vod.uploadFiles(arr[0], curr => {
+            this.$loading.showCurr(curr)
+          }).then(res => {
             this.$loading.hide()
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)

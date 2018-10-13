@@ -178,7 +178,9 @@
         let arr = Array.from(e.target.files)
         if (flag === 'header-video') {
           this.$loading.show('视频上传中...')
-          this.$vod.uploadFiles(arr[0]).then(res => {
+          this.$vod.uploadFiles(arr[0], (curr) => {
+            this.$loading.showCurr(curr)
+          }).then(res => {
             this.$loading.hide()
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
@@ -191,7 +193,9 @@
         }
         if (flag === 'video') {
           this.$loading.show('视频上传中...')
-          this.$vod.uploadFiles(arr[0]).then(res => {
+          this.$vod.uploadFiles(arr[0], curr => {
+            this.$loading.showCurr(curr)
+          }).then(res => {
             this.$loading.hide()
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
