@@ -427,6 +427,7 @@
         this.serviceDetail.is_sync = res ? 1 : 0
       },
       submitAll() {
+        if (this.disabledCover) return
         this.disabledCover = true
         this.checkForm()
       },
