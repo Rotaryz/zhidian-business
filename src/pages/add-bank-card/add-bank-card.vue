@@ -61,16 +61,14 @@
       _updateBankCard() {
         this.openBankInfo.withdrawal_card = this.cardNum.replace(/\s/g, '')
         Property.updateBankCard(this.openBankInfo).then(res => {
-          this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
+            this.$loading.hide()
             this.$toast.show(res.message)
             return
           }
           this.$toast.show('绑定成功')
           this.$emit('refresh')
-          setTimeout(() => {
-            this.$router.back()
-          }, 1000)
+          this.$router.back()
         })
       },
       _getBankCardList() {

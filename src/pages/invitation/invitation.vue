@@ -1,11 +1,9 @@
 <template>
   <div class="invitation">
-    <scroll ref="scroll"
-            bcColor="#fff"
-    >
+    <scroll ref="scroll" bcColor="#fff" >
       <div class="scroll-main">
         <article class="top">
-          <div class="title">欢迎加入国颐堂养发馆</div>
+          <div class="title">欢迎加入{{shopName}}</div>
           <div class="qr-code">
             <img class="qr-img" v-if="qrCode" :src="qrCode" alt="">
           </div>
@@ -44,12 +42,14 @@
       return {
         qrCode: '',
         linkUrl: '',
-        id: ''
+        id: '',
+        shopName: ''
       }
     },
     created() {
       this.id = this.$route.query.id
       this._getInviteQrcode()
+      this._getShopInfo()
     },
     methods: {
       _getInviteQrcode() {
@@ -61,6 +61,16 @@
           }
           this.qrCode = res.data.qrcode
           this.linkUrl = res.data.link_url
+        })
+      },
+      _getShopInfo() {
+        Mine.getShopInfo().then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.shopName = res.data.name
         })
       },
       saveImage() {
@@ -112,10 +122,6 @@
 
   .invitation
     overflow: hidden
-    top: 0
-    left: 0
-    right: 0
-    bottom: 0
     fill-box()
     z-index: 71
     background: #fff
@@ -139,7 +145,7 @@
         background: #FFFFFF;
         border: 1px solid rgba(130, 138, 162, 0.20)
         border-radius: 6px
-        margin: 7vw auto 12px
+        margin: 8vw auto 12px
         overflow: hidden
         .qr-img
           width: 100%

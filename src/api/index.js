@@ -15,6 +15,9 @@ import business from './business'
 import order from './order'
 import echart from './echart'
 import global from './global'
+import content from './content'
+
+export const Content = content
 
 export const Property = property
 

@@ -6,6 +6,9 @@ const mutations = {
   },
   [TYPES.SAVE_EMPLOYEE](state, employee) {
     state.employee = employee
+  },
+  [TYPES.UPDATE_CONTENT_TEXT](state, obj) {
+    state.contentText = obj
   }
 }
 

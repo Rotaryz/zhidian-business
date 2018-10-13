@@ -34,12 +34,9 @@
             </div>
           </div>
         </div>
-        <div class="select-tab select-client">
-          <div class="tab" v-for="(item, index) in tabList" v-bind:key="index" @click="switchTab(index)">{{item}}
-          </div>
-          <div class="line" :style="'transform:translate3d('+ (100 * menuIdx) + '%, 0, 0)'">
-            <div class="chilen-line"></div>
-          </div>
+        <div class="tab-wrapper select-client">
+          <div class="line-wrap select-client" :style="'transform: translate3d('+ (menuIdx * 100) +'%, 0, 0)'"></div>
+          <div class="tab" v-for="(item,index) in tabList" :key="index" @click="switchTab(index)">{{item}}</div>
         </div>
         <div class="capacity" v-if="menuIdx * 1 === 0">
           <div class=""></div>
@@ -228,12 +225,16 @@
           </section>
         </div>
       </scroll>
-      <div class="select-tab" v-if="showTab">
-        <div class="tab" v-for="(item, index) in tabList" v-bind:key="index" @click="switchTab(index)">{{item}}</div>
-        <div class="line" :style="'transform:translate3d('+ (100 * menuIdx) + '%, 0, 0)'">
-          <div class="chilen-line"></div>
-        </div>
+      <div class="tab-wrapper" v-if="showTab">
+        <div class="line-wrap" :style="'transform: translate3d('+ (menuIdx * 100) +'%, 0, 0)'"></div>
+        <div class="tab" v-for="(item,index) in tabList" :key="index" @click="switchTab(index)">{{item}}</div>
       </div>
+      <!--<div class="select-tab" v-if="showTab">-->
+        <!--<div class="tab" v-for="(item, index) in tabList" v-bind:key="index" @click="switchTab(index)">{{item}}</div>-->
+        <!--<div class="line" :style="'transform:translate3d('+ (100 * menuIdx) + '%, 0, 0)'">-->
+          <!--<div class="chilen-line"></div>-->
+        <!--</div>-->
+      <!--</div>-->
       <router-view></router-view>
     </div>
   </transition>
@@ -987,36 +988,39 @@
               top: 0
               bottom: 0
               margin: auto
-
-  .select-tab
-    layout(row)
-    height: 48px
-    line-height: 47px
-    border-bottom: 1px solid rgba(0, 0, 0, .1)
+  .tab-wrapper
+    display: flex
     position: fixed
     width: 100%
     top: 0
     left: 0
     z-index: 11
     background: #F0F2F5
+    height: 48px
+    line-height: 47px
+    layout(row, block, nowrap)
+    border-bottom: 1px solid rgba(0,0,0,.1)
     .tab
       flex: 1
-      text-align: center
+      font-family: $font-family-regular
       font-size: $font-size-16
       color: $color-20202E
-      font-family: $font-family-regular
-    .line
+      letter-spacing: 0.6px
+      text-align: center;
+    .line-wrap
       position: absolute
-      width: 33.33%
-      height: 3px
+      left: 0
       bottom: 0
-      transition: all .3s
-      .chilen-line
-        height: 3px
+      right: 0
+      width: 33.333%
+      layout()
+      align-items: center
+      transition: all 0.3s
+      &:after
+        content: ''
         width: 30px
+        height: 3px
         background: $color-EF705D
-        margin: 0 auto
-
   .select-client
     position: relative
 

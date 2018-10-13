@@ -1,14 +1,16 @@
 <template>
   <div class="content-text">
-    <textarea class="data-area" style="resize:none" @touchmove.stop @keyup.enter="saveBtn" :autofocus="true" v-model="note" :maxlength="maxLength" placeholder="请输入"></textarea>
+    <textarea class="data-area" style="resize:none" @touchmove.stop @keyup.enter="" :autofocus="true" v-model="note" :maxlength="maxLength" placeholder="请输入"></textarea>
     <div class="text-number">{{note.length}}/{{maxLength}}</div>
     <footer class="btn-wrapper border-top-1px">
-      <div class="btn" @click.enter="saveBtn">确定</div>
+      <div class="btn" :class="saveBtnStyle" @click.enter="saveBtn">确定</div>
     </footer>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import { mapGetters, mapActions } from 'vuex'
+
   export default {
     data() {
       return {
@@ -16,9 +18,60 @@
         maxLength: 1000
       }
     },
+    created() {
+      this._getParams()
+    },
     methods: {
+      ...mapActions([
+        'updateContentText'
+      ]),
+      _getParams() {
+        this.note = this.contentText.txt
+      },
+      _checkForm() {
+        let arr = [
+          {value: this.noteReg, txt: '请输入内容'}
+        ]
+        let res = this._testPropety(arr)
+        if (res) {
+          let contentText = this.contentText
+          let txt = this.note
+          let index = contentText.index
+          let actionType = contentText.actionType
+          let id = contentText.id
+          this.updateContentText({txt, index, actionType, id})
+          this.$emit('refresh')
+          this.$router.back()
+        }
+      },
+      _testPropety(arr) {
+        for (let i = 0, j = arr.length; i < j; i++) {
+          if (!arr[i].value) {
+            this.$toast.show(arr[i].txt)
+            return false
+          }
+          if (i === j - 1 && arr[i].value) {
+            return true
+          }
+        }
+      },
       saveBtn() {
-        console.log(11)
+        this._checkForm()
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'contentText'
+      ]),
+      noteReg() {
+        return this.note
+      },
+      saveBtnStyle() {
+        let btnClass = ''
+        if (this.noteReg) {
+          btnClass = 'active'
+        }
+        return btnClass
       }
     }
   }
@@ -54,6 +107,9 @@
         color: #FFFFFF;
         letter-spacing: 0.8px;
         text-align: center;
+        opacity: 0.5
+        &.active
+          opacity: 1
     .data-area
       min-height: 250px
       box-sizing: border-box

@@ -209,16 +209,14 @@
       },
       _updateShopInfo() {
         Mine.updateShopInfo(this.shopInfo).then(res => {
-          this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
+            this.$loading.hide()
             this.$toast.show(res.message)
             return
           }
           this.$toast.show('保存成功')
           this.$emit('refresh')
-          setTimeout(() => {
-            this.$router.go(-1)
-          }, 1500)
+          this.$router.go(-1)
         })
       },
       _fileChange(e, flag) {
@@ -227,7 +225,9 @@
         flag === 'logo' && this.$refs['cropper-shop_logo'].show(arr[0])
         if (flag === 'video') {
           this.$loading.show('视频上传中...')
-          this.$vod.uploadFiles(arr[0]).then(res => {
+          this.$vod.uploadFiles(arr[0], curr => {
+            this.$loading.showCurr(curr)
+          }).then(res => {
             this.$loading.hide()
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)
@@ -367,7 +367,7 @@
           {value: this.addressDetailReg, txt: '请输入您的门店的详细地址'},
           {value: this.openHoursReg, txt: '请选择您的营业时间'},
           {value: this.shopLogoReg, txt: '请添加门店logo'},
-          {value: this.shopVideoReg, txt: '请添加门店视频'},
+          // {value: this.shopVideoReg, txt: '请添加门店视频'},
           {value: this.shopImagesReg, txt: '请添加至少一张门店图片'}
         ]
         let res = this._testPropety(arr)

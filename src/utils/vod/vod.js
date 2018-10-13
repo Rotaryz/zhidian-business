@@ -1,5 +1,7 @@
 import Upload from './api-upload'
 
+const time = 1 * 1000
+
 /*eslint-disable*/
 
 function getSignature(callback) {
@@ -11,8 +13,8 @@ function getSignature(callback) {
   })
 }
 
-export function uploadFiles(file) {
-  return new Promise((resolve,reject)=>{
+export function uploadFiles(file, callback) {
+  return new Promise((resolve, reject) => {
     qcVideo.ugcUploader.start({
       videoFile: file, // 视频，类型为 File
       getSignature: getSignature, // 前文中所述的获取上传签名的函数
@@ -20,17 +22,17 @@ export function uploadFiles(file) {
       finish: (res => {
         setTimeout(() => {
           Upload.saveFile({file_id: res.fileId}).then(resolve)
-        }, 2000)
-      })
-      // error: function (result) { // 上传失败时的回调函数
-      //   console.log('上传失败的原因：' + result.msg)
-      // },
-      // finish: function (result) { // 上传成功时的回调函数
-      //   console.log('上传结果的fileId：' + result.fileId)
-      //   console.log('上传结果的视频名称：' + result.videoName)
-      //   console.log('上传结果的视频地址：' + result.videoUrl)
-      // }
+        }, time)
+      }),
+      progress(result) {
+        let curr = result.curr * 100
+        curr = Math.min(99, Math.floor(curr))
+        callback && callback(curr, result)
+      }
     })
   })
+}
 
+export function cancelUpload(reuslt) {
+  qcVideo.ugcUploader.cancel(reuslt)
 }

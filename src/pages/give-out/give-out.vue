@@ -111,16 +111,13 @@
       },
       _updateIssue() {
         Property.updateIssue({shop_id: this.id, money: this.getMoney}).then(res => {
-          this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)
             return
           }
           this.$toast.show('发送成功')
           this.$emit('refresh')
-          setTimeout(() => {
-            this.$router.back()
-          }, 1500)
+          this.$router.back()
         })
       },
       saveBtn() {
