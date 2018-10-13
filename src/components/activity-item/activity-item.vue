@@ -15,7 +15,7 @@
           <div class="right-down">
             <div class="down-left">
               <p class="down-txt">{{item.rule_id * 1 === 3 ? '底价' : '团购价'}}：¥{{item.platform_price}}</p>
-              <p class="down-txt second"><span class="first-txt">库存：{{item.stock}}</span></p>
+              <p class="down-txt second"><span class="first-txt">库存：{{item.stock}}</span><span v-if="tabIdx != 0">销量：{{item.sale_count}}</span></p>
             </div>
             <div class="down-right">
               <div class="down-right-icon" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
