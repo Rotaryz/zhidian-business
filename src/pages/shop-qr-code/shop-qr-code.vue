@@ -9,7 +9,7 @@
               <img class="logo" src="./pic-default_people@2x.png" v-else />
               <div class="title">{{shopInfo.name || '店铺名称'}}</div>
               <img class="qr-code" :src="shopInfo.image_url" v-if="shopInfo.image_url">
-              <img class="qr-code" v-else>
+              <img class="qr-code qr-code-width" v-else>
               <div class="explain">
                 <div class="e-c">长按识别二维码进店逛逛</div>
               </div>
@@ -36,23 +36,23 @@
     },
     methods: {
       _getShopInfo() {
-        Mine.getShopInfo().then(res => {
+        Mine.getUserInfo().then(res => {
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)
             return
           }
           this.shopInfo = {
-            logo: res.data.logo,
-            name: res.data.name,
-            id: res.data.id,
+            logo: res.data.avatar,
+            name: res.data.name || res.data.nickname,
+            id: res.data.shop_id,
             image_url: ''
           }
           this._getQrcode()
         })
       },
       _getQrcode() {
-        let id = this.shopInfo.id
+        let id = this.shopInfo.shop_id
         Business.Myshop(id).then((res) => {
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
@@ -115,6 +115,9 @@
             border: 6px solid rgba(164, 155, 200, 0.20)
             border-radius: 50%
             margin : 20vw auto 10vw
+          .qr-code-width
+            width: 0
+            border: 0
           .explain
             position: absolute
             bottom: -6px
