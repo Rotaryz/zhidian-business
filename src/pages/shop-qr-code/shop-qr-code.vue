@@ -5,7 +5,7 @@
         <section class="bg">
           <div class="wrapper">
             <section class="content">
-              <div class="logo" v-if="shopInfo.logo" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+              <div class="logo" v-if="shopInfo.avatar" :style="{backgroundImage: 'url(' + shopInfo.avatar + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
               <img class="logo" src="./pic-default_people@2x.png" v-else />
               <div class="title">{{shopInfo.name || '店铺名称'}}</div>
               <img class="qr-code" :src="shopInfo.image_url" v-if="shopInfo.image_url">
@@ -43,9 +43,9 @@
             return
           }
           this.shopInfo = {
-            logo: res.data.avatar,
+            avatar: res.data.avatar,
             name: res.data.name || res.data.nickname,
-            id: res.data.shop_id,
+            shop_id: res.data.shop_id,
             image_url: ''
           }
           this._getQrcode()
