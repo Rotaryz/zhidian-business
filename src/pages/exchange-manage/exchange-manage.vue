@@ -74,7 +74,7 @@
   import ServiceItem from 'components/exchange-item/exchange-item'
   import Modal from 'components/confirm-msg/confirm-msg'
   import Scroll from 'components/scroll/scroll'
-  import { ServiceApi, PrizeApi } from 'api'
+  import { PrizeApi } from 'api'
   import {ease} from 'common/js/ease'
   const TABS = [
     {txt: '可使用', id: 1},
@@ -231,7 +231,7 @@
           page: this[`page${this.tabIdx}`],
           status: this.tabIdx
         }
-        ServiceApi.getServiceList(data).then((res) => {
+        PrizeApi.getList(data).then((res) => {
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
             this._setTabNum(res)
