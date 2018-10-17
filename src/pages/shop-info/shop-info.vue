@@ -29,16 +29,16 @@
           </section>
           <div class="margin-box-10px"></div>
           <section class="base-wrapper extend-wrapper">
-            <article class="base-item border-bottom-1px" @click="choosePicker('address')">
-              <div class="left">所在地区</div>
-              <div class="middle" v-if="!shopInfo.province">请选择门店所在区域</div>
-              <div class="middle active" v-else>{{formatPCA}}</div>
-              <div class="right right-arrow"></div>
-            </article>
-            <article class="base-item border-bottom-1px" @click="showTitleModal('address')">
-              <div class="left">详细地址</div>
-              <div class="middle" v-if="!shopInfo.address">请输入门店详细地址</div>
-              <div class="middle active" v-else>{{shopInfo.address}}</div>
+            <!--<article class="base-item border-bottom-1px" @click="choosePicker('address')">-->
+            <!--<div class="left">所在地区</div>-->
+            <!--<div class="middle" v-if="!shopInfo.province">请选择门店所在区域</div>-->
+            <!--<div class="middle active" v-else>{{formatPCA}}</div>-->
+            <!--<div class="right right-arrow"></div>-->
+            <!--</article>-->
+            <article class="base-item border-bottom-1px" @click="chooseLocation">
+              <div class="left">门店地址</div>
+              <div class="middle" v-if="!shopInfo.address">请输入门地址</div>
+              <div class="middle active address" v-else>{{shopInfo.address}}</div>
               <div class="right right-arrow"></div>
             </article>
             <article class="base-item">
@@ -115,12 +115,12 @@
       @cancel="pickerCancel"
       @confirm="pickerConfirm">
     </awesome-picker>
-    <awesome-picker
-      ref="picker-address"
-      :data="cityData"
-      @cancel="pickerCancel"
-      @confirm="pickerConfirm">
-    </awesome-picker>
+    <!--<awesome-picker-->
+    <!--ref="picker-address"-->
+    <!--:data="cityData"-->
+    <!--@cancel="pickerCancel"-->
+    <!--@confirm="pickerConfirm">-->
+    <!--</awesome-picker>-->
     <awesome-picker
       ref="picker-opening_hours"
       type="time"
@@ -129,6 +129,11 @@
     </awesome-picker>
     <cropper ref="cropper-shop_images" @confirm="cropperConfirm"></cropper>
     <cropper ref="cropper-shop_logo" @confirm="cropperConfirm($event ,'logo')" :aspect="1"></cropper>
+    <div class="map-picker" v-show="isShow">
+      <iframe id="mapPage" width="100%" height="100%" frameborder=0
+              src="https://apis.map.qq.com/tools/locpicker?policy=1&search=1&type=1&key=2N7BZ-WZK3Q-XUO5Y-GHVQ3-YDNDV-NSFER&referer=myapp">
+      </iframe>
+    </div>
   </form>
 </template>
 
@@ -141,7 +146,7 @@
   import Cropper from 'components/cropper/cropper'
   import VueCropper from 'vue-cropperjs'
 
-  const KEY = '206ec5511b39a51e02627ffbd8dfc16c'
+  // const KEY = '2N7BZ-WZK3Q-XUO5Y-GHVQ3-YDNDV-NSFER'
 
   const DEFAULT_INDUSTRY = '美业'
   const industryArr = [
@@ -166,7 +171,7 @@
           province: '',
           longitude: 0,
           latitude: 0,
-          address: '', // 门店详细地址
+          address: '', // 门店地址
           opening_hours: {}, // 营业时间
           logo: {}, // 门店logo
           video: {}, // 门店视频
@@ -178,10 +183,14 @@
         industryArr,
         pickerType: '',
         timeType: '',
-        visible: false
+        visible: false,
+        isShow: false
       }
     },
     created() {
+      if (!window.messageEvent) {
+        window.messageEvent = window.addEventListener('message', this.handler.bind(this), false)
+      }
       this._getShopInfo()
     },
     beforeRouteLeave(to, from, next) {
@@ -189,6 +198,18 @@
       next(true)
     },
     methods: {
+      chooseLocation() {
+        this.isShow = true
+      },
+      handler(event) {
+        let ctx = this
+        // 接收位置信息，用户选择确认位置点后选点组件会触发该事件，回传用户的位置信息
+        let loc = event.data
+        if (loc && loc.module === 'locationPicker') { // 防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
+          ctx.shopInfo.address = loc.poiaddress + loc.poiname
+          ctx.isShow = false
+        }
+      },
       _getShopInfo() {
         Mine.getShopInfo().then(res => {
           this.$loading.hide()
@@ -274,6 +295,7 @@
               break
           }
           this.$loading.hide()
+          JSON.stringify()
         })
       },
       showTitleModal(type) {
@@ -339,13 +361,13 @@
             }
             break
           case 'address':
-            arr = []
-            for (let i = 0; i < e.length; i++) {
-              e[i].value && arr.push(e[i].value)
-            }
-            this.shopInfo.province = e[0].value
-            this.shopInfo.city = e[1].value
-            this.shopInfo.area = e[2].value
+            // arr = []
+            // for (let i = 0; i < e.length; i++) {
+            //   e[i].value && arr.push(e[i].value)
+            // }
+            // this.shopInfo.province = e[0].value
+            // this.shopInfo.city = e[1].value
+            // this.shopInfo.area = e[2].value
             break
           default:
             break
@@ -363,8 +385,8 @@
           {value: this.introReg, txt: '请描述您的门店'},
           {value: this.telephoneReg, txt: '请输入正确的手机号码'},
           {value: this.industryReg, txt: '请选择您的行业类型'},
-          {value: this.addressReg, txt: '请选择您的门店所在的地区'},
-          {value: this.addressDetailReg, txt: '请输入您的门店的详细地址'},
+          {value: this.addressReg, txt: '请选择您的门店地址'},
+          // {value: this.addressDetailReg, txt: '请输入您的门店的详细地址'},
           {value: this.openHoursReg, txt: '请选择您的营业时间'},
           {value: this.shopLogoReg, txt: '请添加门店logo'},
           // {value: this.shopVideoReg, txt: '请添加门店视频'},
@@ -372,9 +394,10 @@
         ]
         let res = this._testPropety(arr)
         if (res) {
-          this._getGeocoder(data => {
-            this._updateShopInfo()
+          this._getGeocoder(() => {
+            console.log(this.shopInfo)
           })
+          // this._updateShopInfo()
         }
       },
       _testPropety(arr) {
@@ -392,11 +415,31 @@
         this.shopInfo.opening_hours = {start: this.start, end: this.end}
         this._checkForm()
       },
+      // _getGeocoder(callback) {
+      //   this.$loading.show()
+      //   let shopInfo = this.shopInfo
+      //   let text = shopInfo.address
+      //   axios.get(`https://apis.map.qq.com/ws/geocoder/v1/?address=${text}&key=${KEY}`)
+      //     .then(res => {
+      //       if (res && res.status === 0) {
+      //         this.$toast.show('输入地址有误,请重新选择')
+      //         return
+      //       }
+      //       let result = res.result
+      //       shopInfo.longitude = result.location.lng
+      //       shopInfo.latitude = result.location.lat
+      //       shopInfo.province = result.address_components.province
+      //       shopInfo.city = result.address_components.city
+      //       shopInfo.area = result.address_components.district
+      //       shopInfo.address = result.title
+      //       callback && callback()
+      //     })
+      // },
       _getGeocoder(callback) {
         this.$loading.show()
+        const KEY = '206ec5511b39a51e02627ffbd8dfc16c'
         let shopInfo = this.shopInfo
-        let pca = shopInfo.province + shopInfo.city + shopInfo.area
-        let text = pca + shopInfo.address
+        let text = shopInfo.address
         axios.get(`https://restapi.amap.com/v3/geocode/geo?address=${text}&key=${KEY}`)
           .then(res => {
             if (res && res.statusText !== 'OK') {
@@ -406,25 +449,22 @@
             let location = res.data.geocodes[0].location.split(',')
             shopInfo.longitude = location[0]
             shopInfo.latitude = location[1]
-            let data = {
-              address: shopInfo.address,
-              province: shopInfo.province,
-              city: shopInfo.city,
-              area: shopInfo.area,
-              longitude: shopInfo.longitude,
-              latitude: shopInfo.latitude
-            }
-            callback && callback(data)
+            shopInfo.province = res.data.geocodes[0].province
+            shopInfo.city = res.data.geocodes[0].city
+            shopInfo.area = res.data.geocodes[0].district
+            callback && callback()
+            this.$loading.hide()
           })
       }
     },
     computed: {
-      formatPCA() {
-        let province = this.shopInfo.province
-        let city = this.shopInfo.city ? `-${this.shopInfo.city}` : ''
-        let area = this.shopInfo.area ? `-${this.shopInfo.area}` : ''
-        return province + city + area
-      },
+      // formatPCA() {
+      //   let province = this.shopInfo.province || ''
+      //   let city = this.shopInfo.city || ''
+      //   let area = this.shopInfo.area || ''
+      //   let address = this.shopInfo.address || ''
+      //   return province + city + area + address
+      // },
       shopImagesReg() {
         return this.shopInfo.images.length > 0
       },
@@ -450,11 +490,11 @@
         return checkIsPhoneNumber(this.shopInfo.telephone)
       },
       addressReg() {
-        return this.shopInfo.province
-      },
-      addressDetailReg() {
         return this.shopInfo.address
       },
+      // addressDetailReg() {
+      //   return this.shopInfo.address
+      // },
       openHoursReg() {
         return this.shopInfo.opening_hours.start && this.shopInfo.opening_hours.end
       }
@@ -465,6 +505,13 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
+  .map-picker
+    position fixed
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    z-index: 499
 
   input
     height: 24px
@@ -518,6 +565,7 @@
           flex: 1
           color: $color-CCCCCC
           padding: 0 24px
+          line-height: 1.2
           no-wrap()
           &.active
             color: $color-363547

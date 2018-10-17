@@ -22,5 +22,3 @@ const PROD_URL = {
 export const BASE_URL = env.NODE_ENV === 'production' ? PROD_URL : env.NODE_ENV === 'test' ? TEST_URL : env.NODE_ENV === 'dev' ? DEV_URL : LOCAL_URL
 
 export const ERR_OK = 0
-
-console.warn('环境：' + env.NODE_ENV)
