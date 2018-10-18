@@ -1,6 +1,8 @@
 import CITY_JSON from 'common/js/city'
+import axios from 'axios'
 
 const REGPHONE = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/
+
 // 获取设备信息
 export function getPlatform() {
   const navigator = window.navigator
@@ -78,9 +80,27 @@ export function formatTime(time) {
   return `${t1} ${t2}`
 }
 
-export function formatNumber (n) {
+export function formatNumber(n) {
   const str = n.toString()
   return str[1] ? str : `0${str}`
 }
 
 export const cityData = doCity(CITY_JSON)
+
+export function getLocation(address) {
+  const KEY = '206ec5511b39a51e02627ffbd8dfc16c'
+  return new Promise((resolve, reject) => {
+    axios.get(`https://restapi.amap.com/v3/geocode/geo?address=${address}&key=${KEY}`)
+      .then(resolve)
+      .catch(reject)
+  })
+}
+
+export function getAddress(location) {
+  const KEY = '206ec5511b39a51e02627ffbd8dfc16c'
+  return new Promise((resolve, reject) => {
+    axios.get(`https://restapi.amap.com/v3/geocode/regeo?location=${location}&key=${KEY}`)
+      .then(resolve)
+      .catch(reject)
+  })
+}

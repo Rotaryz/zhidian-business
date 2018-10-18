@@ -29,17 +29,19 @@
           </section>
           <div class="margin-box-10px"></div>
           <section class="base-wrapper extend-wrapper">
-            <!--<article class="base-item border-bottom-1px" @click="choosePicker('address')">-->
-            <!--<div class="left">所在地区</div>-->
-            <!--<div class="middle" v-if="!shopInfo.province">请选择门店所在区域</div>-->
-            <!--<div class="middle active" v-else>{{formatPCA}}</div>-->
-            <!--<div class="right right-arrow"></div>-->
-            <!--</article>-->
-            <article class="base-item border-bottom-1px" @click="chooseLocation">
-              <div class="left">门店地址</div>
-              <div class="middle" v-if="!shopInfo.address">请输入门地址</div>
-              <div class="middle active address" v-else>{{shopInfo.address}}</div>
-              <div class="right right-arrow"></div>
+            <article class="base-item border-bottom-1px" @click="choosePicker('address')">
+              <div class="left">地区信息</div>
+              <div class="middle" v-if="!shopInfo.province">请选择门店的地区信息</div>
+              <div class="middle active" v-else>{{formatPCA}}</div>
+              <div class="right right-location" @click.stop="chooseLocation"></div>
+            </article>
+            <article class="base-item border-bottom-1px" @click="showTitleModal('address')">
+              <div class="left">详细地址</div>
+              <div class="middle-address" v-if="!shopInfo.address">请输入门店的街道门牌</div>
+              <div class="middle-address active" v-else>
+                <p class="detail">{{shopInfo.address}}</p>
+              </div>
+              <div v-if="shopInfo.address.length>0" class="right right-del" @click.stop="delAddress"></div>
             </article>
             <article class="base-item">
               <div class="left">营业时间</div>
@@ -115,12 +117,12 @@
       @cancel="pickerCancel"
       @confirm="pickerConfirm">
     </awesome-picker>
-    <!--<awesome-picker-->
-    <!--ref="picker-address"-->
-    <!--:data="cityData"-->
-    <!--@cancel="pickerCancel"-->
-    <!--@confirm="pickerConfirm">-->
-    <!--</awesome-picker>-->
+    <awesome-picker
+      ref="picker-address"
+      :data="cityData"
+      @cancel="pickerCancel"
+      @confirm="pickerConfirm">
+    </awesome-picker>
     <awesome-picker
       ref="picker-opening_hours"
       type="time"
@@ -140,13 +142,10 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import TitleBox from 'components/title-box/title-box'
-  import { checkIsPhoneNumber, cityData } from 'common/js/utils'
-  import axios from 'axios'
+  import { checkIsPhoneNumber, cityData, getAddress, getLocation } from 'common/js/utils'
   import { Upload, Mine } from 'api'
   import Cropper from 'components/cropper/cropper'
   import VueCropper from 'vue-cropperjs'
-
-  // const KEY = '2N7BZ-WZK3Q-XUO5Y-GHVQ3-YDNDV-NSFER'
 
   const DEFAULT_INDUSTRY = '美业'
   const industryArr = [
@@ -201,13 +200,27 @@
       chooseLocation() {
         this.isShow = true
       },
+      delAddress() {
+        this.shopInfo.address = ''
+      },
       handler(event) {
         let ctx = this
         // 接收位置信息，用户选择确认位置点后选点组件会触发该事件，回传用户的位置信息
         let loc = event.data
         if (loc && loc.module === 'locationPicker') { // 防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
-          ctx.shopInfo.address = loc.poiaddress + loc.poiname
-          ctx.isShow = false
+          ctx.shopInfo.location = loc.latlng.lng
+          ctx.shopInfo.latitude = loc.latlng.lat
+          let location = loc.latlng.lng + ',' + loc.latlng.lat
+          ctx.$loading.show()
+          getAddress(location).then(res => {
+            ctx.$loading.hide()
+            let data = res.data.regeocode.addressComponent
+            ctx.shopInfo.province = data.province
+            ctx.shopInfo.city = data.city
+            ctx.shopInfo.area = data.district
+            ctx.shopInfo.address = res.data.regeocode.formatted_address.split(data.province + data.city + data.district)[1]
+            ctx.isShow = false
+          })
         }
       },
       _getShopInfo() {
@@ -295,7 +308,6 @@
               break
           }
           this.$loading.hide()
-          JSON.stringify()
         })
       },
       showTitleModal(type) {
@@ -320,11 +332,12 @@
             }
             break
           case 'address':
+            console.log(22)
             obj = {
               type,
               text: this.shopInfo[type],
-              title: '门店详细地址',
-              placeholder: '请输入',
+              title: '详细地址',
+              placeholder: '请输入门店的街道门牌',
               maxLength: 100
             }
             break
@@ -361,13 +374,13 @@
             }
             break
           case 'address':
-            // arr = []
-            // for (let i = 0; i < e.length; i++) {
-            //   e[i].value && arr.push(e[i].value)
-            // }
-            // this.shopInfo.province = e[0].value
-            // this.shopInfo.city = e[1].value
-            // this.shopInfo.area = e[2].value
+            arr = []
+            for (let i = 0; i < e.length; i++) {
+              e[i].value && arr.push(e[i].value)
+            }
+            this.shopInfo.province = e[0].value
+            this.shopInfo.city = e[1].value
+            this.shopInfo.area = e[2].value
             break
           default:
             break
@@ -385,8 +398,8 @@
           {value: this.introReg, txt: '请描述您的门店'},
           {value: this.telephoneReg, txt: '请输入正确的手机号码'},
           {value: this.industryReg, txt: '请选择您的行业类型'},
-          {value: this.addressReg, txt: '请选择您的门店地址'},
-          // {value: this.addressDetailReg, txt: '请输入您的门店的详细地址'},
+          {value: this.addressReg, txt: '请选择您的门店所在的区域'},
+          {value: this.addressDetailReg, txt: '请输入您的门店的详细地址'},
           {value: this.openHoursReg, txt: '请选择您的营业时间'},
           {value: this.shopLogoReg, txt: '请添加门店logo'},
           // {value: this.shopVideoReg, txt: '请添加门店视频'},
@@ -394,10 +407,9 @@
         ]
         let res = this._testPropety(arr)
         if (res) {
-          this._getGeocoder(() => {
-            console.log(this.shopInfo)
-          })
-          // this._updateShopInfo()
+          this._updateShopInfo()
+        } else {
+          this.$loading.hide()
         }
       },
       _testPropety(arr) {
@@ -412,59 +424,24 @@
         }
       },
       saveBtn() {
+        let address = this.shopInfo.province + this.shopInfo.city + this.shopInfo.area + this.shopInfo.address
         this.shopInfo.opening_hours = {start: this.start, end: this.end}
-        this._checkForm()
-      },
-      // _getGeocoder(callback) {
-      //   this.$loading.show()
-      //   let shopInfo = this.shopInfo
-      //   let text = shopInfo.address
-      //   axios.get(`https://apis.map.qq.com/ws/geocoder/v1/?address=${text}&key=${KEY}`)
-      //     .then(res => {
-      //       if (res && res.status === 0) {
-      //         this.$toast.show('输入地址有误,请重新选择')
-      //         return
-      //       }
-      //       let result = res.result
-      //       shopInfo.longitude = result.location.lng
-      //       shopInfo.latitude = result.location.lat
-      //       shopInfo.province = result.address_components.province
-      //       shopInfo.city = result.address_components.city
-      //       shopInfo.area = result.address_components.district
-      //       shopInfo.address = result.title
-      //       callback && callback()
-      //     })
-      // },
-      _getGeocoder(callback) {
         this.$loading.show()
-        const KEY = '206ec5511b39a51e02627ffbd8dfc16c'
-        let shopInfo = this.shopInfo
-        let text = shopInfo.address
-        axios.get(`https://restapi.amap.com/v3/geocode/geo?address=${text}&key=${KEY}`)
-          .then(res => {
-            if (res && res.statusText !== 'OK') {
-              this.$toast.show('输入地址有误,请重新选择')
-              return
-            }
-            let location = res.data.geocodes[0].location.split(',')
-            shopInfo.longitude = location[0]
-            shopInfo.latitude = location[1]
-            shopInfo.province = res.data.geocodes[0].province
-            shopInfo.city = res.data.geocodes[0].city
-            shopInfo.area = res.data.geocodes[0].district
-            callback && callback()
-            this.$loading.hide()
-          })
+        getLocation(address).then(res => {
+          let location = res.data.geocodes[0].location.split(',')
+          this.shopInfo.longitude = location[0]
+          this.shopInfo.latitude = location[1]
+          this._checkForm()
+        })
       }
     },
     computed: {
-      // formatPCA() {
-      //   let province = this.shopInfo.province || ''
-      //   let city = this.shopInfo.city || ''
-      //   let area = this.shopInfo.area || ''
-      //   let address = this.shopInfo.address || ''
-      //   return province + city + area + address
-      // },
+      formatPCA() {
+        let province = this.shopInfo.province + ' ' || ''
+        let city = this.shopInfo.city + ' ' || ''
+        let area = this.shopInfo.area || ''
+        return province + city + area
+      },
       shopImagesReg() {
         return this.shopInfo.images.length > 0
       },
@@ -490,11 +467,11 @@
         return checkIsPhoneNumber(this.shopInfo.telephone)
       },
       addressReg() {
+        return this.formatPCA
+      },
+      addressDetailReg() {
         return this.shopInfo.address
       },
-      // addressDetailReg() {
-      //   return this.shopInfo.address
-      // },
       openHoursReg() {
         return this.shopInfo.opening_hours.start && this.shopInfo.opening_hours.end
       }
@@ -528,6 +505,20 @@
     icon-image(icon-press_right)
     margin-right: 15px
 
+  .right-del
+    width: 17px
+    height: 17px
+    icon-image(icon-del34)
+    margin-right: 15px
+    extend-click()
+
+  .right-location
+    width: 13px
+    height: 17px
+    icon-image(icon-address)
+    margin-right: 15px
+    extend-click()
+
   .shop-info
     fill-box()
     z-index: 70
@@ -542,7 +533,7 @@
       padding-left: 15px
       background: #fff
       .base-item
-        height: 55.5px
+        min-height: 55.5px
         font-family: PingFangSC-Regular
         font-size: 14px
         layout(row)
@@ -566,7 +557,15 @@
           color: $color-CCCCCC
           padding: 0 24px
           line-height: 1.2
+          overflow: hidden
           no-wrap()
+          &.active
+            color: $color-363547
+        .middle-address
+          flex: 1
+          color: $color-CCCCCC
+          padding: 10px 14px 10px 24px
+          line-height: 1.2
           &.active
             color: $color-363547
         .right
