@@ -142,7 +142,7 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import TitleBox from 'components/title-box/title-box'
-  import { checkIsPhoneNumber, cityData, getAddress, getLocation } from 'common/js/utils'
+  import { checkIsPhoneNumber, cityData, getAddress } from 'common/js/utils'
   import { Upload, Mine } from 'api'
   import Cropper from 'components/cropper/cropper'
   import VueCropper from 'vue-cropperjs'
@@ -210,6 +210,7 @@
         if (loc && loc.module === 'locationPicker') { // 防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
           ctx.shopInfo.location = loc.latlng.lng
           ctx.shopInfo.latitude = loc.latlng.lat
+          let address = loc.poiaddress + loc.poiname
           let location = loc.latlng.lng + ',' + loc.latlng.lat
           ctx.$loading.show()
           getAddress(location).then(res => {
@@ -218,7 +219,7 @@
             ctx.shopInfo.province = data.province
             ctx.shopInfo.city = data.city
             ctx.shopInfo.area = data.district
-            ctx.shopInfo.address = res.data.regeocode.formatted_address.split(data.province + data.city + data.district)[1]
+            ctx.shopInfo.address = address.split(data.province + data.city + data.district)[1]
             ctx.isShow = false
           })
         }
@@ -402,6 +403,7 @@
           {value: this.openHoursReg, txt: '请选择您的营业时间'},
           {value: this.shopLogoReg, txt: '请添加门店logo'},
           // {value: this.shopVideoReg, txt: '请添加门店视频'},
+          {value: this.locationReg, txt: '请选择地理位置'},
           {value: this.shopImagesReg, txt: '请添加至少一张门店图片'}
         ]
         let res = this._testPropety(arr)
@@ -423,15 +425,16 @@
         }
       },
       saveBtn() {
-        let address = this.shopInfo.province + this.shopInfo.city + this.shopInfo.area + this.shopInfo.address
         this.shopInfo.opening_hours = {start: this.start, end: this.end}
-        this.$loading.show()
-        getLocation(address).then(res => {
-          let location = res.data.geocodes[0].location.split(',')
-          this.shopInfo.longitude = location[0]
-          this.shopInfo.latitude = location[1]
-          this._checkForm()
-        })
+        this._checkForm()
+        // let address = this.shopInfo.province + this.shopInfo.city + this.shopInfo.area + this.shopInfo.address
+        // this.$loading.show()
+        // getLocation(address).then(res => {
+        //   let location = res.data.geocodes[0].location.split(',')
+        //   this.shopInfo.longitude = location[0]
+        //   this.shopInfo.latitude = location[1]
+        //   this._checkForm()
+        // })
       }
     },
     computed: {
@@ -440,6 +443,9 @@
         let city = this.shopInfo.city + ' ' || ''
         let area = this.shopInfo.area || ''
         return province + city + area
+      },
+      locationReg() {
+        return this.shopInfo.latitude || this.shopInfo.longitude
       },
       shopImagesReg() {
         return this.shopInfo.images.length > 0
