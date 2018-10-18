@@ -38,7 +38,6 @@
 
   .order-item
     width: 100%
-    height: 134px
     background: $color-white
     box-sizing: border-box
     padding: 0 15px
@@ -54,14 +53,17 @@
       .status
         color: $color-706B82
     .down
-      height: 64px
       padding: 15px 0
       .title
         font-size: $font-size-14
         margin-bottom: 12px
+        word-break: break-all
+        display: -webkit-box
+        overflow: hidden
+        -webkit-line-clamp: 2
+        -webkit-box-orient: vertical
       .down-msg
         display: flex
-        height: 38px
         align-items: flex-end
         justify-content: space-between
         .left
