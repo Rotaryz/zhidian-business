@@ -332,7 +332,6 @@
             }
             break
           case 'address':
-            console.log(22)
             obj = {
               type,
               text: this.shopInfo[type],
