@@ -37,6 +37,7 @@ const AddBankCard = () => import('pages/add-bank-card/add-bank-card')
 const GiveOut = () => import('pages/give-out/give-out')
 const Content = () => import('pages/content/content')
 const ContentText = () => import('pages/content-text/content-text')
+const MapPicker = () => import('pages/map-picker/map-picker')
 
 Vue.use(Router)
 
@@ -59,7 +60,16 @@ const route = new Router({
               component: ShopInfo,
               meta: {
                 title: '门店信息'
-              }
+              },
+              children: [
+                {
+                  path: 'map-picker',
+                  component: MapPicker,
+                  meta: {
+                    title: '门店地区'
+                  }
+                }
+              ]
             },
             {
               path: 'employee-manage',

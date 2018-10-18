@@ -131,11 +131,12 @@
     </awesome-picker>
     <cropper ref="cropper-shop_images" @confirm="cropperConfirm"></cropper>
     <cropper ref="cropper-shop_logo" @confirm="cropperConfirm($event ,'logo')" :aspect="1"></cropper>
-    <div class="map-picker" v-show="isShow">
-      <iframe id="mapPage" width="100%" height="100%" frameborder=0
-              src="https://apis.map.qq.com/tools/locpicker?policy=1&search=1&type=1&key=2N7BZ-WZK3Q-XUO5Y-GHVQ3-YDNDV-NSFER&referer=myapp">
-      </iframe>
-    </div>
+    <!--<div class="map-picker" v-show="isShow">-->
+    <!--<iframe id="mapPage" width="100%" height="100%" frameborder=0-->
+    <!--src="https://apis.map.qq.com/tools/locpicker?policy=1&search=1&type=1&key=2N7BZ-WZK3Q-XUO5Y-GHVQ3-YDNDV-NSFER&referer=myapp">-->
+    <!--</iframe>-->
+    <!--</div>-->
+    <router-view-common @refresh="refresh"></router-view-common>
   </form>
 </template>
 
@@ -182,14 +183,10 @@
         industryArr,
         pickerType: '',
         timeType: '',
-        visible: false,
-        isShow: false
+        visible: false
       }
     },
     created() {
-      if (!window.messageEvent) {
-        window.messageEvent = window.addEventListener('message', this.handler.bind(this), false)
-      }
       this._getShopInfo()
     },
     beforeRouteLeave(to, from, next) {
@@ -197,16 +194,19 @@
       next(true)
     },
     methods: {
+      refresh(loc) {
+        this._handler(loc)
+      },
       chooseLocation() {
-        this.isShow = true
+        this.$router.push(this.$route.path + '/map-picker')
       },
       delAddress() {
         this.shopInfo.address = ''
       },
-      handler(event) {
+      _handler(event) {
         let ctx = this
         // 接收位置信息，用户选择确认位置点后选点组件会触发该事件，回传用户的位置信息
-        let loc = event.data
+        let loc = event
         if (loc && loc.module === 'locationPicker') { // 防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
           ctx.shopInfo.location = loc.latlng.lng
           ctx.shopInfo.latitude = loc.latlng.lat
@@ -220,7 +220,6 @@
             ctx.shopInfo.city = data.city
             ctx.shopInfo.area = data.district
             ctx.shopInfo.address = address.split(data.province + data.city + data.district)[1]
-            ctx.isShow = false
           })
         }
       },
