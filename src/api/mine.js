@@ -16,5 +16,9 @@ export default {
   getInviteQrcode(data, loading) {
     let url = '/api/merchant/create-invite-qrcode'
     return request.post(url, data, loading)
+  },
+  getUserInfo() {
+    let url = '/api/merchant/profile'
+    return request.get(url)
   }
 }

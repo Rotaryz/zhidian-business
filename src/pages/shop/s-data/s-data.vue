@@ -6,9 +6,9 @@
     </div>
     <ul class="content">
       <li class="item-wrapper" v-for="(item, index) in dataArray" :key="index">
-        <div class="number" v-if="index===0">{{info.customer_total}}</div>
-        <div class="number" v-if="index===1">{{info.order_total}}</div>
-        <div class="number" v-if="index===2">{{info.success_order_total}}</div>
+        <div class="number" v-if="index===0">{{info.customer_total || 0}}</div>
+        <div class="number" v-if="index===1">{{info.order_total || 0}}</div>
+        <div class="number" v-if="index===2">{{info.success_order_total || 0}}</div>
         <div class="title">{{item.title}}</div>
       </li>
     </ul>
