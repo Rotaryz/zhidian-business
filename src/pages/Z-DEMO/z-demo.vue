@@ -43,8 +43,8 @@
           this.$refs.cropper.show(res[0])
         })
       },
-      cropperConfirm(src) {
-        this.testSrc = src
+      cropperConfirm(e) {
+        this.testSrc = e.src
       }
     }
   }

@@ -54,7 +54,9 @@
       },
       confirm() {
         let src = this.$refs.myCropper.getCroppedCanvas().toDataURL(this.imgType)
-        this.$emit('confirm', src)
+        let blob = this.$handle.getBlobBydataURI(src, this.imgType)
+        let formData = this.$handle.createFormData(blob, this.imgType)
+        this.$emit('confirm', {src, blob, formData})
       },
       cancel() {
         this.visible = false
