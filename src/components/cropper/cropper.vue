@@ -40,7 +40,8 @@
       return {
         visible: false,
         status: false,
-        img: ''
+        img: '',
+        imgType: 'image/jpeg'
       }
     },
     methods: {
@@ -48,11 +49,14 @@
         this.visible = true
         let img = this.$handle.getObjectURL(imgUrl)
         this.img = img
+        this.imgType = imgUrl.type || 'image/jpeg'
         this.$refs.myCropper.replace(img)
       },
       confirm() {
-        let src = this.$refs.myCropper.getCroppedCanvas().toDataURL('image/jpeg')
-        this.$emit('confirm', src)
+        let src = this.$refs.myCropper.getCroppedCanvas().toDataURL(this.imgType)
+        let blob = this.$handle.getBlobBydataURI(src, this.imgType)
+        let formData = this.$handle.createFormData(blob, this.imgType)
+        this.$emit('confirm', {src, blob, formData})
       },
       cancel() {
         this.visible = false

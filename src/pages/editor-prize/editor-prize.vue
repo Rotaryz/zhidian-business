@@ -167,9 +167,9 @@
       cropperConfirm(e) {
         // this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e])
         this.$loading.show()
-        let blob = this.$handle.getBlobBydataURI(e)
-        let file = this.$handle.createFormData(blob)
-        Upload.upLoadImage(file).then(res => {
+        // let blob = this.$handle.getBlobBydataURI(e)
+        // let file = this.$handle.createFormData(blob)
+        Upload.upLoadImage(e.formData).then(res => {
           if (res.error !== this.$ERR_OK) {
             return this.$toast.show(res.message)
           }

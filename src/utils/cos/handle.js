@@ -1,6 +1,8 @@
-import {fileType} from './file-config'
+import { fileType } from './file-config'
+
 const {IMAGE_TYPE, VIDEO_TYPE} = fileType
 const CHOICE_ERROR = '选择文件类型错误'
+
 /**
  * @param type 文件类型
  * @param count 选择数量
@@ -100,8 +102,9 @@ export function getObjectURL(file) {
   return url
 }
 
-export function createFormData($Blob) {
+export function createFormData($Blob, type = 'image/jpeg') {
+  let imageExt = '.' + type.split('/')[1]
   let formData = new FormData()
-  formData.append('file', $Blob, 'file_' + Date.now() + '.jpeg')
+  formData.append('file', $Blob, 'file_' + Date.now() + imageExt)
   return formData
 }
