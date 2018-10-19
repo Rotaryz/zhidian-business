@@ -1,6 +1,6 @@
 <template>
   <div class="invitation">
-    <scroll ref="scroll" bcColor="#fff" >
+    <scroll ref="scroll" bcColor="#fff">
       <div class="scroll-main">
         <article class="top">
           <div class="title">欢迎加入{{shopName}}</div>
@@ -22,7 +22,7 @@
         <div class="btn-item">
           <div class="txt" v-clipboard:copy="linkUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</div>
         </div>
-        </div>
+      </div>
     </scroll>
   </div>
 </template>
@@ -32,7 +32,8 @@
   import { Mine } from 'api'
   // import wx from 'weixin-js-sdk'
   import VueClipboard from 'vue-clipboard2'
-  import Scroll from '../../components/scroll/scroll'
+  import Scroll from 'components/scroll/scroll'
+  import QrCodeUtil from 'common/js/util-qr-code'
 
   Vue.use(VueClipboard)
 
@@ -59,7 +60,8 @@
             this.$toast.show(res.message)
             return
           }
-          this.qrCode = res.data.qrcode
+          let qrCodeUrl = QrCodeUtil.createQrCodeSvg(res.data.link_url)
+          this.qrCode = qrCodeUrl
           this.linkUrl = res.data.link_url
         })
       },
@@ -148,6 +150,8 @@
         margin: 8vw auto 12px
         overflow: hidden
         .qr-img
+          box-sizing border-box
+          padding: 15px
           width: 100%
           height: 100%
       .explain
@@ -176,6 +180,7 @@
           font-size: 14px
           color: #706B82
           text-align: center
+
   .btn-item
     width: 160px
     height: 32px
@@ -187,6 +192,7 @@
     margin: 0 auto
     margin-top: 30px
     border: 1px solid $color-EF705D
+
   #copyTxt, #copyIos
     position: fixed
     left: -200px
