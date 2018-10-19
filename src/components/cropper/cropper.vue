@@ -49,7 +49,7 @@
         this.visible = true
         let img = this.$handle.getObjectURL(imgUrl)
         this.img = img
-        this.type = imgUrl.type || 'image/jpeg'
+        this.imgType = imgUrl.type || 'image/jpeg'
         this.$refs.myCropper.replace(img)
       },
       confirm() {
