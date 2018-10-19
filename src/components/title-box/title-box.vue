@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="title-shadow"  v-show="showTitle" @click="hide">
+    <div class="title-shadow" v-show="showTitle" @click="hide">
       <div class="title-box" @click.stop>
         <div class="title-top">
           <div class="title">{{title}}</div>
@@ -39,7 +39,7 @@
       },
       submitTitle() {
         this.showTitle = false
-        this.$emit('submitMsg', this.note, this.type)
+        this.$emit('submitMsg', this.note.trim(), this.type)
       },
       hide() {
         this.showTitle = false
@@ -58,7 +58,8 @@
     left: 0
     top: 0
     z-index: 555
-    background: rgba(54,53,71,0.80)
+    background: rgba(54, 53, 71, 0.80)
+
   .title-box
     background: $color-white
     min-height: 225px
@@ -69,7 +70,7 @@
       box-sizing: border-box
       padding: 25px 15px 0 20px
       min-height: 180px
-      border-bottom-1px(rgba(32,32,46,0.1))
+      border-bottom-1px(rgba(32, 32, 46, 0.1))
       .title
         font-family: $font-family-regular
         color: $color-363537
@@ -89,10 +90,11 @@
       font-size: $font-size-14
       font-family: $font-family-medium
       text-align: center
+
   .data-bottom
     position: relative
     z-index: 71
-    border-bottom-1px(rgba(236,237,241,1))
+    border-bottom-1px(rgba(236, 237, 241, 1))
     .title
       font-size: $font-size-medium
       color: $color-text-88
@@ -105,7 +107,7 @@
       color: $color-20202E
       font-family: $font-family-regular
       height: 95px
-      outline:none
+      outline: none
       padding: 0 !important
       word-break: break-all
     .data-area::-webkit-input-placeholder
