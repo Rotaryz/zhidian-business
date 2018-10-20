@@ -3,7 +3,7 @@ import Upload from './api-upload'
 import Util from './cos-util'
 import { fileType } from './file-config'
 
-const {IMAGE_TYPE, VIDEO_TYPE} = fileType
+const {IMAGE_TYPE} = fileType
 
 const SIGN_ERROR = 1
 const CHOICE_ERROR = 2
@@ -28,23 +28,6 @@ let cos = new COS({
   }
 })
 
-// let sign = `'q-sign-algorithm=sha1&q-ak=AKIDhKsMsWwDvUacZMvQrGRYWiv0ufGc2561&q-sign-time=1538206913;1538207513&q-key-time=1538206913;1538207513&q-header-list=&q-url-param-list=&q-signature=5df7c55da8d8a8969b01b86ff3c949658b619d01'`
-// let cos = new COS({
-//   getAuthorization: function (params, callback) {
-//     Upload.getUploadSign().then((res) => {
-//       // callback(res.data.sign)
-//       callback(sign)
-//     }).catch((err) => {
-//       if (err) {
-//         throw _handleException(SIGN_ERROR)
-//       }
-//     })
-//   }
-// })
-// let cos = new COS({
-//   getAuthorization: 'q-sign-algorithm=sha1&q-ak=AKIDhKsMsWwDvUacZMvQrGRYWiv0ufGc2561&q-sign-time=1538206913;1538207513&q-key-time=1538206913;1538207513&q-header-list=&q-url-param-list=&q-signature=5df7c55da8d8a8969b01b86ff3c949658b619d01'
-// })
-
 /**
  * 选择文件
  * @param fileType 文件类型
@@ -53,37 +36,37 @@ let cos = new COS({
  * @param count 选择数量
  * @returns {Promise}
  */
-export function chooseFiles(fileType, showProcess, processCallBack, count = 9) {
-  return new Promise((resolve, reject) => {
-    _fileController(fileType, count).then((files) => {
-      showProcess && showProcess()
-      let type = fileType !== IMAGE_TYPE ? 'video' : 'image'
-      let requests = files.map((file) => {
-        return Upload.getUploadParam().then((res) => {
-          const data = res.data
-          if (data) {
-            let params = _reorganizeParams(data, file, processCallBack)
-            console.log(params)
-            return postObject(params, type)
-          }
-        }).catch((err) => {
-          if (err) {
-            reject(_handleException(UPLOAD_ERROR))
-          }
-        })
-      })
-      Promise.all(requests).then((res) => {
-        resolve(res)
-      }).catch((err) => {
-        if (err) {
-          reject(err)
-        }
-      })
-    }).catch(err => {
-      err && console.error(err, '选择图片失败')
-    })
-  })
-}
+// export function chooseFiles(fileType, showProcess, processCallBack, count = 9) {
+//   return new Promise((resolve, reject) => {
+//     _fileController(fileType, count).then((files) => {
+//       showProcess && showProcess()
+//       let type = fileType !== IMAGE_TYPE ? 'video' : 'image'
+//       let requests = files.map((file) => {
+//         return Upload.getUploadParam().then((res) => {
+//           const data = res.data
+//           if (data) {
+//             let params = _reorganizeParams(data, file, processCallBack)
+//             console.log(params)
+//             return postObject(params, type)
+//           }
+//         }).catch((err) => {
+//           if (err) {
+//             reject(_handleException(UPLOAD_ERROR))
+//           }
+//         })
+//       })
+//       Promise.all(requests).then((res) => {
+//         resolve(res)
+//       }).catch((err) => {
+//         if (err) {
+//           reject(err)
+//         }
+//       })
+//     }).catch(err => {
+//       err && console.error(err, '选择图片失败')
+//     })
+//   })
+// }
 
 /**
  * 跳过选择图片的操作，直接上传
@@ -95,6 +78,9 @@ export function chooseFiles(fileType, showProcess, processCallBack, count = 9) {
  * @returns {Promise<any>}
  */
 export function uploadFiles(fileType, filePaths, showProcess, processCallBack) {
+  if (!filePaths.map) {
+    throw new Error('please use Array')
+  }
   return new Promise((resolve, reject) => {
     showProcess && showProcess()
     let type = fileType !== IMAGE_TYPE ? 'video' : 'image'
@@ -126,37 +112,37 @@ export function uploadFiles(fileType, filePaths, showProcess, processCallBack) {
  * @param count 选择数量
  * @returns {Promise}
  */
-function _fileController(type, count) {
-  return new Promise((resolve, reject) => {
-    let input = document.createElement('input')
-    input.type = 'file'
-    if (count > 1) {
-      input.multiple = 'multiple'
-    }
-    input.onchange = function () {
-      let files = this.files
-      let arr = Util.changeToArray(files)
-      arr = arr.splice(0, count)
-      switch (type) {
-        case IMAGE_TYPE:
-          if (!Util.isAllImage(arr)) {
-            reject(_handleException(CHOICE_ERROR))
-          }
-          resolve(arr)
-          break
-        case VIDEO_TYPE:
-          if (!Util.isAllVideo(arr)) {
-            reject(_handleException(CHOICE_ERROR))
-          }
-          resolve(arr)
-          break
-        default:
-          break
-      }
-    }
-    input.click()
-  })
-}
+// function _fileController(type, count) {
+//   return new Promise((resolve, reject) => {
+//     let input = document.createElement('input')
+//     input.type = 'file'
+//     if (count > 1) {
+//       input.multiple = 'multiple'
+//     }
+//     input.onchange = function () {
+//       let files = this.files
+//       let arr = Util.changeToArray(files)
+//       arr = arr.splice(0, count)
+//       switch (type) {
+//         case IMAGE_TYPE:
+//           if (!Util.isAllImage(arr)) {
+//             reject(_handleException(CHOICE_ERROR))
+//           }
+//           resolve(arr)
+//           break
+//         case VIDEO_TYPE:
+//           if (!Util.isAllVideo(arr)) {
+//             reject(_handleException(CHOICE_ERROR))
+//           }
+//           resolve(arr)
+//           break
+//         default:
+//           break
+//       }
+//     }
+//     input.click()
+//   })
+// }
 
 /**
  * 整理数据工具类
@@ -169,7 +155,7 @@ function _reorganizeParams(data, file, callback) {
   const {bucket, region} = data
   let type = Util.checkCreateFileType(file)
   let blob = type === 'base64' ? Util.getBlobBydataURI(file) : type === 'file' ? Util.createFile(file) : file
-  let key = file.name || '' + Date.now()
+  let key = file.name
   const params = {
     Bucket: bucket,
     Region: region,
@@ -193,8 +179,6 @@ function _reorganizeParams(data, file, callback) {
 function postObject(params, fileType) {
   return new Promise((resolve, reject) => {
     cos.putObject(params, function (err, data) {
-      console.info(err)
-      console.info(data)
       if (!err && data.statusCode === 200) {
         Upload.saveFile({path: `/${params.Key}`, file_type: fileType || ''}).then(files => {
           // Todo 隐藏加载器
