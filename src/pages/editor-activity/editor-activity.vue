@@ -344,6 +344,13 @@
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
             this.activityDetail = Object.assign({}, this.serviceDetail, res.data)
+            let idx = this.braginStock.indexOf(this.activityDetail.stock)
+            if (idx < 0) {
+              this.braginStock.push(this.activityDetail.stock)
+              this.braginStock = this.braginStock.sort(function(a, b) {
+                return a - b
+              })
+            }
           } else {
             this.$toast.show(res.message)
           }
