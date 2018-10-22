@@ -17,15 +17,21 @@ const ERR_OK = 0
  */
 let cos = new COS({
   getAuthorization: function (params, callback) {
-    console.log(params, '.....//')
-    Upload.getUploadSign().then((res) => {
-      let obj = {Authorization: res.data.sign}
-      callback(obj)
-    }).catch((err) => {
-      if (err) {
-        throw _handleException(SIGN_ERROR)
-      }
-    })
+    console.log(params, '-=-')
+    let obj = {
+      'Authorization': 'q-sign-algorithm=sha1&q-ak=AKIDyPBNq132MB0RziM0shXsxm7gRpMCC7eO&q-sign-time=1540190443;1540191043&q-key-time=1540190443;1540191043&q-header-list=&q-url-param-list=&q-signature=64f6162aa61e01bfa6c2880ec75edfce77f02a77',
+      'XCosSecurityToken': 'e1e26aa5b41910713866b2ea219226411d9e54bb30001'
+    }
+    callback && callback(obj)
+    // Upload.getUploadSign().then((res) => {
+    //   console.log(res)
+    //   let obj = {Authorization: res.data.sign}
+    //   callback(obj)
+    // }).catch((err) => {
+    //   if (err) {
+    //     throw _handleException(SIGN_ERROR)
+    //   }
+    // })
   }
 })
 
@@ -78,6 +84,35 @@ let cos = new COS({
  * @param processCallBack 进度条回调方法
  * @returns {Promise<any>}
  */
+// export function uploadFiles(fileType, filePaths, showProcess, processCallBack) {
+//   if (!filePaths.map) {
+//     throw new Error('please use Array')
+//   }
+//   return new Promise((resolve, reject) => {
+//     showProcess && showProcess()
+//     let type = fileType !== IMAGE_TYPE ? 'video' : 'image'
+//     let requests = filePaths.map((filePath) => {
+//       return Upload.getUploadParam().then((res) => {
+//         const data = res.data
+//         if (data) {
+//           let params = _reorganizeParams(data, filePath, processCallBack)
+//           return postObject(params, type)
+//         }
+//       }).catch((err) => {
+//         if (err) {
+//           reject(_handleException(UPLOAD_ERROR))
+//         }
+//       })
+//     })
+//     Promise.all(requests).then((res) => {
+//       resolve(res)
+//     }).catch((err) => {
+//       if (err) {
+//         reject(err)
+//       }
+//     })
+//   })
+// }
 export function uploadFiles(fileType, filePaths, showProcess, processCallBack) {
   if (!filePaths.map) {
     throw new Error('please use Array')
@@ -86,6 +121,8 @@ export function uploadFiles(fileType, filePaths, showProcess, processCallBack) {
     showProcess && showProcess()
     let type = fileType !== IMAGE_TYPE ? 'video' : 'image'
     let requests = filePaths.map((filePath) => {
+      // let params = _reorganizeParams({}, filePath, processCallBack)
+      // return postObject(params, type)
       return Upload.getUploadParam().then((res) => {
         const data = res.data
         if (data) {
@@ -159,8 +196,8 @@ function _reorganizeParams(data, file, callback) {
   let blob = type === 'base64' ? Util.getBlobBydataURI(file) : type === 'file' ? Util.createFile(file) : file
   let key = file.name || Date.now() + '.png'
   const params = {
-    Bucket: bucket,
-    Region: region,
+    Bucket: bucket || 'zhidian-1255606079',
+    Region: region || 'ap-guangzhou',
     Key: key,
     Body: blob,
     onProgress: function (info) {

@@ -12,6 +12,7 @@ const DEV_URL = {
 const TEST_URL = {
   api: 'https://zhidian-api.jkweixin.net' + version,
   upload: 'https://zhidian-api.jkweixin.net' + version
+  // upload: 'http://192.168.9.46'
 }
 
 const PROD_URL = {

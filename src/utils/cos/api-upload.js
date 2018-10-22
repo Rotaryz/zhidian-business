@@ -1,5 +1,6 @@
 import request from 'common/js/request'
 import { BASE_URL } from 'common/js/config'
+
 const baseURL = BASE_URL
 
 export default {
@@ -8,7 +9,8 @@ export default {
    * @returns {Promise.<*>}
    */
   getUploadSign() {
-    const url = `${baseURL.upload}/api/cos/signature`
+    // const url = `${baseURL.upload}/api/cos/signature`
+    const url = `http://192.168.9.46/test.php?method=PUT`
     return request.get(url, {})
   },
   /**

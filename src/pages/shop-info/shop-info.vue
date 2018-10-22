@@ -287,7 +287,6 @@
       },
       cropperConfirm(e, type) {
         this.$loading.show()
-        console.log(e)
         this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e.blob]).then(res => {
           this.$loading.hide()
           console.log(res)
