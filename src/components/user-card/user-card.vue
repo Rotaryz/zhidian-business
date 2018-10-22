@@ -152,6 +152,11 @@
           font-family: $font-family-regular
           font-size: $font-size-16
           color: $color-20202E
+          .name
+            max-width: 175px
+            white-space: nowrap
+            text-overflow: ellipsis
+            overflow: hidden
           .txt
             font-size: $font-size-12
             color: $color-888888
