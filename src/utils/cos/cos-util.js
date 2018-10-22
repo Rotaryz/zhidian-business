@@ -40,13 +40,14 @@ export default {
     return new Blob([new Uint8Array(array)], {type: type})
   },
   checkCreateFileType(obj) {
-    switch (typeof obj) {
-      case 'object':
-        return obj.type ? 'file' : 'blob'
-      case 'string':
-        return 'base64'
-      default:
-        break
+    if (obj instanceof File) {
+      return 'file'
+    }
+    if (obj instanceof String) {
+      return 'base64'
+    }
+    if (obj instanceof Blob) {
+      return 'blob'
     }
   }
 }

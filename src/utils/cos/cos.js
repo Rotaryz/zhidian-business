@@ -17,6 +17,7 @@ const ERR_OK = 0
  */
 let cos = new COS({
   getAuthorization: function (params, callback) {
+    console.log(params, '.....//')
     Upload.getUploadSign().then((res) => {
       let obj = {Authorization: res.data.sign}
       callback(obj)
@@ -154,8 +155,9 @@ export function uploadFiles(fileType, filePaths, showProcess, processCallBack) {
 function _reorganizeParams(data, file, callback) {
   const {bucket, region} = data
   let type = Util.checkCreateFileType(file)
+  console.log(type)
   let blob = type === 'base64' ? Util.getBlobBydataURI(file) : type === 'file' ? Util.createFile(file) : file
-  let key = file.name
+  let key = file.name || Date.now() + '.png'
   const params = {
     Bucket: bucket,
     Region: region,
@@ -167,6 +169,7 @@ function _reorganizeParams(data, file, callback) {
       }
     }
   }
+  console.log(params)
   return params
 }
 
@@ -178,6 +181,7 @@ function _reorganizeParams(data, file, callback) {
  */
 function postObject(params, fileType) {
   return new Promise((resolve, reject) => {
+    console.log(22123)
     cos.putObject(params, function (err, data) {
       if (!err && data.statusCode === 200) {
         Upload.saveFile({path: `/${params.Key}`, file_type: fileType || ''}).then(files => {

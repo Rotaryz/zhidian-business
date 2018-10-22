@@ -144,7 +144,8 @@
   import Scroll from 'components/scroll/scroll'
   import TitleBox from 'components/title-box/title-box'
   import { checkIsPhoneNumber, cityData, getAddress } from 'common/js/utils'
-  import { Upload, Mine } from 'api'
+  // import { Upload, Mine } from 'api'
+  import { Mine } from 'api'
   import Cropper from 'components/cropper/cropper'
   import VueCropper from 'vue-cropperjs'
 
@@ -286,27 +287,33 @@
       },
       cropperConfirm(e, type) {
         this.$loading.show()
-        Upload.upLoadImage(e.formData).then(res => {
-          if (res.error !== this.$ERR_OK) {
-            return this.$toast.show(res.message)
-          }
-          let obj = {
-            image_id: res.data.id,
-            url: res.data.url,
-            id: res.data.id
-          }
-          switch (type) {
-            case 'logo' :
-              this.shopInfo.logo = obj
-              this.$refs['cropper-shop_logo'].cancel()
-              break
-            default:
-              this.shopInfo.images.push(obj)
-              this.$refs['cropper-shop_images'].cancel()
-              break
-          }
+        console.log(e)
+        this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e.blob]).then(res => {
           this.$loading.hide()
+          console.log(res)
         })
+        // this.$loading.show()
+        // Upload.upLoadImage(e.formData).then(res => {
+        //   if (res.error !== this.$ERR_OK) {
+        //     return this.$toast.show(res.message)
+        //   }
+        //   let obj = {
+        //     image_id: res.data.id,
+        //     url: res.data.url,
+        //     id: res.data.id
+        //   }
+        //   switch (type) {
+        //     case 'logo' :
+        //       this.shopInfo.logo = obj
+        //       this.$refs['cropper-shop_logo'].cancel()
+        //       break
+        //     default:
+        //       this.shopInfo.images.push(obj)
+        //       this.$refs['cropper-shop_images'].cancel()
+        //       break
+        //   }
+        //   this.$loading.hide()
+        // })
       },
       showTitleModal(type) {
         let obj
