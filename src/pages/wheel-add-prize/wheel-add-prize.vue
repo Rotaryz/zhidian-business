@@ -8,13 +8,13 @@
       >
         <ul class="card-wrapper">
           <li class="card-item-wrapper" v-for="(item, idx) in prizeList" :key="idx">
-            <card-item></card-item>
+            <card-item :dataInfo="item"></card-item>
           </li>
         </ul>
       </scroll>
     </div>
     <section class="btn-wrapper border-top-1px" v-if="prizeList.length">
-      <div class="btn" @click="saveBtn">保存</div>
+      <div class="btn" :class="saveReg?'active':''" @click="saveBtn">保存</div>
     </section>
     <section class="blank-wrapper" v-else>
       <blank></blank>
@@ -43,7 +43,10 @@
       }
     },
     computed: {
-      ...mapGetters(['prizeList'])
+      ...mapGetters(['prizeList']),
+      saveReg() {
+        return this.prizeList.some(item => item.isCheck)
+      }
     }
   }
 </script>
@@ -105,4 +108,7 @@
       letter-spacing: 0.8px
       text-align: center
       line-height: 44px
+      opacity: 0.5
+      &.active
+        opacity: 1
 </style>

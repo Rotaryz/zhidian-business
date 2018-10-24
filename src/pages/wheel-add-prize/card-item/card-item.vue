@@ -14,18 +14,22 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { mapActions } from 'vuex'
+
   export default {
-    data() {
-      return {
-        isCheck: false,
-        serverImg: 'https://zhidian-img.jkweixin.com/10/2018/10/12/153933233549115.png',
-        title: '超值双人套餐超值双人套餐…',
-        store: 50
+    props: {
+      dataInfo: {
+        type: Object,
+        default: {}
       }
     },
+    data() {
+      return this.dataInfo
+    },
     methods: {
+      ...mapActions(['choosePrize']),
       choose() {
-        this.isCheck = !this.isCheck
+        this.choosePrize(this.dataInfo)
       }
     }
   }

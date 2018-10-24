@@ -67,7 +67,8 @@
   import Scroll from 'components/scroll/scroll'
   import Panel from './panel/panel'
   import PrizeItem from './prize-item/prize-item'
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
+  import { ActiveExtend } from 'api'
 
   export default {
     components: {
@@ -82,7 +83,20 @@
         isOpen: false
       }
     },
+    created() {
+      this._getPrizeList()
+    },
     methods: {
+      ...mapActions(['getPrizeList']),
+      _getPrizeList() {
+        ActiveExtend.getPrizeList().then(res => {
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.getPrizeList(res.data)
+        })
+      },
       navTo(item) {
         if (item < 0) return
         this.$router.push(this.$route.path + `/wheel-add-prize?prizeType=${item}`)

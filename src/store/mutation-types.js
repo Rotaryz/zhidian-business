@@ -1,3 +1,5 @@
 export const TYPE = 'TYPE'
 export const SAVE_EMPLOYEE = 'SAVE_EMPLOYEE'
 export const UPDATE_CONTENT_TEXT = 'UPDATE_CONTENT_TEXT'
+export const GET_PRIZE_LIST = 'GET_PRIZE_LIST'
+export const CHOOSE_PRIZE = 'CHOOSE_PRIZE'
