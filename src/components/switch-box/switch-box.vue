@@ -40,6 +40,7 @@
         this.checked = boolean
       },
       toggleSwitch() {
+        console.log(22)
         this.checked = !this.checked
       }
     }
@@ -64,6 +65,7 @@
       background: $color-white
       margin-left: 2px
       transition: all .3s
+
   .checkbox.checked
     background: #56BA15
     .circle-btn

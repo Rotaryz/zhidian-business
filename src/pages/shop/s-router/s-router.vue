@@ -45,8 +45,8 @@
     },
     {
       icon: 'three-1',
-      title: '',
-      path: ''
+      title: '大转盘',
+      path: '/wheel'
     },
     {
       icon: 'three-2',
@@ -119,5 +119,7 @@
               icon-image(icon-asset)
             &.two-3
               icon-image(icon-coupon)
+            &.three-1
+              icon-image(icon-turntable)
 
 </style>
