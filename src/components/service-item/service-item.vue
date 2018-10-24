@@ -2,14 +2,14 @@
   <div class="service-item">
     <div class="item-content">
       <div class="item-left" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
-        <div class="left-cover" :class="tabIdx == 1 ? '' : 'hide'">已下架</div>
+        <!--<div class="left-cover" :class="tabIdx == 1 ? '' : 'hide'">已下架</div>-->
       </div>
       <div class="item-right">
         <div class="right-title">{{item.title}}</div>
         <div class="right-down">
           <div class="down-left">
-            <p class="down-txt">现价：¥{{item.platform_price}}</p>
-            <p class="down-txt second"><span class="first-txt">库存：{{item.stock}}</span><span>销量：{{item.sale_count}}</span></p>
+            <p class="down-txt"><span class="first-txt">库存：{{item.stock}}</span></p>
+            <p class="down-txt second"><i class="small">¥</i>{{item.platform_price}}</p>
           </div>
           <div class="down-right">
             <div class="down-right-icon" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
@@ -133,9 +133,12 @@
               font-size: $font-size-14
               letter-spacing: 0.6px
             .second
-              margin-top: 7px
-              display: flex
-              justify-content: space-between
+              color: #181700
+              font-size: $font-size-18
+              margin-top: 6px
+              .small
+                font-style: normal
+                font-size: 14px
           .down-right
             width: 10.6vw
             height: 5.3vw

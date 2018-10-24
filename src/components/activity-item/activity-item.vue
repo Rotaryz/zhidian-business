@@ -1,21 +1,16 @@
 <template>
   <div class="activity-item">
     <div class="item-container">
-      <div class="item-header border-bottom-1px">
-        <p class="activity-type">{{item.rule_id * 1 === 3 ? '砍价活动' : '拼团优惠'}}</p>
-        <p class="activity-time">距离本场结束：{{item.endTime}}</p>
-        <p class="activity-time" v-if="false">距离本场开始：{{item.endTime}}</p>
-      </div>
       <div class="service-content">
         <div class="item-left" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
-          <div class="left-cover" :class="tabIdx == 2 ? '' : 'hide'">已下架</div>
+          <!--<div class="left-cover" :class="tabIdx == 2 ? '' : 'hide'">已下架</div>-->
         </div>
         <div class="item-right">
           <div class="right-title">{{item.goods_title}}</div>
           <div class="right-down">
             <div class="down-left">
-              <p class="down-txt">{{item.rule_id * 1 === 3 ? '底价' : '团购价'}}：¥{{item.platform_price}}</p>
-              <p class="down-txt second"><span class="first-txt">库存：{{item.stock}}</span><span v-if="tabIdx != 0">销量：{{item.sale_count}}</span></p>
+              <p class="down-txt"><span class="first-txt">库存{{item.stock}}</span></p>
+              <p class="down-txt second"><span class="first-txt"><i class="small">¥</i>{{item.platform_price}}</span></p>
             </div>
             <div class="down-right">
               <div class="down-right-icon" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
@@ -41,6 +36,15 @@
             <div class="editor-arrow"></div>
           </div>
         </div>
+      </div>
+      <p class="activity-type" :class="{'group' : item.rule_id * 1 === 1}"></p>
+      <div class="item-header border-top-1px" v-if="item.start_at_timestamp">
+        <p class="activity-time">距开始
+          <span v-if="item.endTime && item.endTime.day" class="date">{{item.endTime.day}}</span>:
+          <span v-if="item.endTime && item.endTime.hour" class="date">{{item.endTime.hour}}</span>:
+          <span v-if="item.endTime && item.endTime.minute" class="date">{{item.endTime.minute}}</span>:
+          <span v-if="item.endTime && item.endTime.second" class="date">{{item.endTime.second}}</span>
+        </p>
       </div>
     </div>
   </div>
@@ -96,15 +100,34 @@
       display: flex
       align-items: center
       justify-content: space-between
-      .activity-type
-        font-family: $font-family-regular
-        font-size: $font-size-16
-        color: $color-20202E
       .activity-time
-        font-family: $font-family-regular
-        font-size: $font-size-14
+        font-size: 14px
+        display: flex
+        align-items: center
         color: $color-20202E
-
+        .date
+          width: 18px
+          height: 18px
+          line-height: 18px
+          text-align: center
+          background: $color-20202E
+          border-radius: 2px
+          margin: 0 2px
+          font-size: $font-size-10
+          color: $color-white
+          &:first-child
+            margin-left: 4px
+    .activity-type
+      bg-image(pic-label_kj)
+      width: 10vw
+      height: 10vw
+      background-size: 100% 100%
+      position: absolute
+      left: -3px
+      top: 13px
+    .group
+      bg-image(pic-label_pt)
+      background-size: 100% 100%
     .service-content
       width: 100%
       height: 69%
@@ -112,6 +135,7 @@
       padding: 15px 0
       display: flex
       align-items: center
+      position: relative
       .item-left
         width: 18.666vw
         height: @width
@@ -157,13 +181,21 @@
             overflow: hidden
             .down-txt
               font-family: $font-family-regular
-              color: $color-706B82
+              color: #706b82
               font-size: $font-size-14
               letter-spacing: 0.6px
+              overflow: hidden
+              text-overflow: ellipsis
+              white-space: nowrap
+              .small
+                font-style: normal
+                font-size: 14px
             .second
-              margin-top: 7px
+              margin-top: 8px
+              color: #181700
+              font-size: $font-size-18
               display: flex
-              justify-content: space-between
+              align-items: center
           .down-right
             width: 10.6vw
             height: 5.3vw

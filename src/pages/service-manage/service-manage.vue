@@ -79,8 +79,8 @@
   import { ServiceApi } from 'api'
   import {ease} from 'common/js/ease'
   const TABS = [
-    {txt: '上架', id: 0},
-    {txt: '下架', id: 1}
+    {txt: '已上架', id: 0},
+    {txt: '已下架', id: 1}
   ]
   const TABSNUM = ['online_count', 'offline_count']
   export default {
