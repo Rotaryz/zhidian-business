@@ -285,34 +285,29 @@
         }
         this.shopInfo.images.splice(index, 1)
       },
-      cropperConfirm(e, type) {
+      async cropperConfirm(e, type) {
         this.$loading.show()
-        this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e.blob]).then(res => {
-          this.$loading.hide()
-          console.log(res)
-        })
-        // this.$loading.show()
-        // Upload.upLoadImage(e.formData).then(res => {
-        //   if (res.error !== this.$ERR_OK) {
-        //     return this.$toast.show(res.message)
-        //   }
-        //   let obj = {
-        //     image_id: res.data.id,
-        //     url: res.data.url,
-        //     id: res.data.id
-        //   }
-        //   switch (type) {
-        //     case 'logo' :
-        //       this.shopInfo.logo = obj
-        //       this.$refs['cropper-shop_logo'].cancel()
-        //       break
-        //     default:
-        //       this.shopInfo.images.push(obj)
-        //       this.$refs['cropper-shop_images'].cancel()
-        //       break
-        //   }
-        //   this.$loading.hide()
-        // })
+        let resArr = await this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e.file])
+        let res = resArr[0]
+        if (res.error !== this.$ERR_OK) {
+          return this.$toast.show(res.message)
+        }
+        let obj = {
+          image_id: res.data.id,
+          url: res.data.url,
+          id: res.data.id
+        }
+        switch (type) {
+          case 'logo' :
+            this.shopInfo.logo = obj
+            this.$refs['cropper-shop_logo'].cancel()
+            break
+          default:
+            this.shopInfo.images.push(obj)
+            this.$refs['cropper-shop_images'].cancel()
+            break
+        }
+        this.$loading.hide()
       },
       showTitleModal(type) {
         let obj
