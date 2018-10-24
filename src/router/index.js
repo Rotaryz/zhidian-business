@@ -38,6 +38,8 @@ const GiveOut = () => import('pages/give-out/give-out')
 const Content = () => import('pages/content/content')
 const ContentText = () => import('pages/content-text/content-text')
 const MapPicker = () => import('pages/map-picker/map-picker')
+const Wheel = () => import('pages/wheel/wheel')
+const WheelAddPrize = () => import('pages/wheel-add-prize/wheel-add-prize')
 
 Vue.use(Router)
 
@@ -110,6 +112,22 @@ const route = new Router({
             title: '商户助手'
           },
           children: [
+            {
+              path: 'wheel',
+              component: Wheel,
+              meta: {
+                title: '大转盘'
+              },
+              children: [
+                {
+                  path: 'wheel-add-prize',
+                  component: WheelAddPrize,
+                  meta: {
+                    title: '选择奖品'
+                  }
+                }
+              ]
+            },
             {
               path: 'service-manage',
               component: ServiceManage,
