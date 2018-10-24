@@ -86,7 +86,8 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import Cropper from 'components/cropper/cropper'
-  import { PrizeApi, Upload } from 'api'
+  import { PrizeApi } from 'api'
+
   const COUNTREG = /^[1-9]\d*$/
   export default {
     data() {
@@ -164,20 +165,17 @@
       addNum() {
         this.prizeDetail.stock++
       },
-      cropperConfirm(e) {
-        // this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e])
+      async cropperConfirm(e) {
         this.$loading.show()
-        // let blob = this.$handle.getBlobBydataURI(e)
-        // let file = this.$handle.createFormData(blob)
-        Upload.upLoadImage(e.formData).then(res => {
-          if (res.error !== this.$ERR_OK) {
-            return this.$toast.show(res.message)
-          }
-          this.prizeDetail.image_url = res.data.url
-          this.prizeDetail.image_id = res.data.id
-          this.$loading.hide()
-          this.$refs.cropper.cancel()
-        })
+        let resArr = await this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e.file])
+        let res = resArr[0]
+        if (res.error !== this.$ERR_OK) {
+          return this.$toast.show(res.message)
+        }
+        this.prizeDetail.image_url = res.data.url
+        this.prizeDetail.image_id = res.data.id
+        this.$loading.hide()
+        this.$refs.cropper.cancel()
       },
       submitAll() {
         if (this.disabledCover) return
@@ -398,7 +396,6 @@
             color: $color-9B9B9B
             font-size: $font-size-14
             margin: 0 20px
-
 
         .between.item-right
           justify-content: space-between

@@ -206,7 +206,7 @@
   import DetailModal from 'components/service-detail-modal/service-detail-modal'
   import SwitchBox from 'components/switch-box/switch-box'
   import Cropper from 'components/cropper/cropper'
-  import { ServiceApi, Upload } from 'api'
+  import { ServiceApi } from 'api'
 
   const COUPON_TYPE = {
     1: '套餐券'
@@ -314,14 +314,7 @@
       },
       _fileDetail(e) {
         let arr = Array.from(e.target.files)
-        Promise.all(arr.map(async item => {
-          // let base64 = await this.$handle.fileReader2Base64(item)
-          // let blob = this.$handle.getBlobBydataURI(base64)
-          // let file = this.$handle.createFormData(blob)
-          let file = new FormData()
-          file.append('file', item, item.name)
-          return Upload.upLoadImage(file)
-        })).then((resArr) => {
+        this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, arr).then((resArr) => {
           this.$loading.hide()
           let arr = []
           resArr.map(item => {
@@ -344,25 +337,21 @@
       delDetail(index) {
         this.serviceDetail.goods_images.splice(index, 1)
       },
-      cropperConfirm(e) {
-        // this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e])
+      async cropperConfirm(e) {
         this.$loading.show()
-        // let blob = this.$handle.getBlobBydataURI(e)
-        // let file = this.$handle.createFormData(blob)
-        Upload.upLoadImage(e.formData).then(res => {
-          if (res.error !== this.$ERR_OK) {
-            return this.$toast.show(res.message)
-          }
-          let obj = {
-            image_id: res.data.id,
-            image_url: res.data.url,
-            id: 0
-          }
-          this.serviceDetail.goods_banner_images.push(obj)
-          this.$loading.hide()
-          this.$refs.cropper.cancel()
-        })
-        // toDo
+        let resArr = await this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e.file])
+        let res = resArr[0]
+        if (res.error !== this.$ERR_OK) {
+          return this.$toast.show(res.message)
+        }
+        let obj = {
+          image_id: res.data.id,
+          image_url: res.data.url,
+          id: 0
+        }
+        this.serviceDetail.goods_banner_images.push(obj)
+        this.$loading.hide()
+        this.$refs.cropper.cancel()
       },
       showTitleModal(type) {
         let obj

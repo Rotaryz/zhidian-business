@@ -131,11 +131,6 @@
     </awesome-picker>
     <cropper ref="cropper-shop_images" @confirm="cropperConfirm"></cropper>
     <cropper ref="cropper-shop_logo" @confirm="cropperConfirm($event ,'logo')" :aspect="1"></cropper>
-    <!--<div class="map-picker" v-show="isShow">-->
-    <!--<iframe id="mapPage" width="100%" height="100%" frameborder=0-->
-    <!--src="https://apis.map.qq.com/tools/locpicker?policy=1&search=1&type=1&key=2N7BZ-WZK3Q-XUO5Y-GHVQ3-YDNDV-NSFER&referer=myapp">-->
-    <!--</iframe>-->
-    <!--</div>-->
     <router-view-common @refresh="refresh"></router-view-common>
   </form>
 </template>
@@ -144,7 +139,6 @@
   import Scroll from 'components/scroll/scroll'
   import TitleBox from 'components/title-box/title-box'
   import { checkIsPhoneNumber, cityData, getAddress } from 'common/js/utils'
-  // import { Upload, Mine } from 'api'
   import { Mine } from 'api'
   import Cropper from 'components/cropper/cropper'
   import VueCropper from 'vue-cropperjs'
@@ -285,35 +279,29 @@
         }
         this.shopInfo.images.splice(index, 1)
       },
-      cropperConfirm(e, type) {
+      async cropperConfirm(e, type) {
         this.$loading.show()
-        console.log(e)
-        this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e.blob]).then(res => {
-          this.$loading.hide()
-          console.log(res)
-        })
-        // this.$loading.show()
-        // Upload.upLoadImage(e.formData).then(res => {
-        //   if (res.error !== this.$ERR_OK) {
-        //     return this.$toast.show(res.message)
-        //   }
-        //   let obj = {
-        //     image_id: res.data.id,
-        //     url: res.data.url,
-        //     id: res.data.id
-        //   }
-        //   switch (type) {
-        //     case 'logo' :
-        //       this.shopInfo.logo = obj
-        //       this.$refs['cropper-shop_logo'].cancel()
-        //       break
-        //     default:
-        //       this.shopInfo.images.push(obj)
-        //       this.$refs['cropper-shop_images'].cancel()
-        //       break
-        //   }
-        //   this.$loading.hide()
-        // })
+        let resArr = await this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e.file])
+        let res = resArr[0]
+        if (res.error !== this.$ERR_OK) {
+          return this.$toast.show(res.message)
+        }
+        let obj = {
+          image_id: res.data.id,
+          url: res.data.url,
+          id: res.data.id
+        }
+        switch (type) {
+          case 'logo' :
+            this.shopInfo.logo = obj
+            this.$refs['cropper-shop_logo'].cancel()
+            break
+          default:
+            this.shopInfo.images.push(obj)
+            this.$refs['cropper-shop_images'].cancel()
+            break
+        }
+        this.$loading.hide()
       },
       showTitleModal(type) {
         let obj
@@ -431,14 +419,6 @@
       saveBtn() {
         this.shopInfo.opening_hours = {start: this.start, end: this.end}
         this._checkForm()
-        // let address = this.shopInfo.province + this.shopInfo.city + this.shopInfo.area + this.shopInfo.address
-        // this.$loading.show()
-        // getLocation(address).then(res => {
-        //   let location = res.data.geocodes[0].location.split(',')
-        //   this.shopInfo.longitude = location[0]
-        //   this.shopInfo.latitude = location[1]
-        //   this._checkForm()
-        // })
       }
     },
     computed: {
