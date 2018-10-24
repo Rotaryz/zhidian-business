@@ -95,7 +95,7 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import ConfirmMsg from 'components/confirm-msg/confirm-msg'
-  import { Upload, Content } from 'api'
+  import { Content } from 'api'
   import { mapActions, mapGetters } from 'vuex'
 
   export default {
@@ -216,10 +216,9 @@
         }
         if (flag === 'image') {
           this.$loading.show('图片上传中...')
-          let file = new FormData()
-          file.append('file', arr[0], arr[0].name)
-          Upload.upLoadImage(file).then(res => {
+          this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, arr).then(resArr => {
             this.$loading.hide()
+            let res = resArr[0]
             if (res.error !== this.$ERR_OK) {
               return this.$toast.show(res.message)
             }

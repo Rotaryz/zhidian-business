@@ -1,14 +1,7 @@
 <template>
   <div class="new-box">
     <div class="margin-box-10px"></div>
-    <div class="main-box border-bottom-1px" >
-      <!--<div class="list-item border-bottom-1px avatar" v-if="false">-->
-        <!--<div class="item-left">上传头像</div>-->
-        <!--<label class="item-right avatar">-->
-          <!--<div class="item-img" :style="{backgroundImage: 'url(' + staffInfo.imageData.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>-->
-          <!--<input type="file" style="display: none" @change="_fileChange" accept="image/*">-->
-        <!--</label>-->
-      <!--</div>-->
+    <div class="main-box border-bottom-1px">
       <div class="list-item border-bottom-1px">
         <div class="item-left">店员名称</div>
         <input type="text" placeholder="请输入员工的名称" class="item-right" v-model="staffInfo.name" maxlength="30">
@@ -26,13 +19,11 @@
       <div class="footer-btn" @click="saveBtn">保存</div>
     </div>
     <div class="disabled-cover" @click.stop="" v-if="disabledCover"></div>
-    <cropper ref="cropper" @confirm="cropperConfirm" :aspect="1"></cropper>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Cropper from 'components/cropper/cropper'
-  import { Upload, Employee } from 'api'
+  import { Employee } from 'api'
   import { checkIsPhoneNumber } from 'common/js/utils'
 
   export default {
@@ -42,8 +33,7 @@
         staffInfo: {
           name: '',
           mobile: '',
-          position: '',
-          imageData: {}
+          position: ''
         },
         disabledCover: false
       }
@@ -70,27 +60,8 @@
       saveBtn() {
         this._checkForm()
       },
-      cropperConfirm(e) {
-        this.$loading.show()
-        // let blob = this.$handle.getBlobBydataURI(e)
-        // let file = this.$handle.createFormData(blob)
-        Upload.upLoadImage(e.formData).then(res => {
-          if (res.error !== this.$ERR_OK) {
-            return this.$toast.show(res.message)
-          }
-          let obj = {
-            image_id: res.data.id,
-            url: res.data.url,
-            id: res.data.id
-          }
-          this.staffInfo.imageData = obj
-          this.$loading.hide()
-          this.$refs.cropper.cancel()
-        })
-      },
       _checkForm() {
         let arr = [
-          // {value: this.avatarReg, txt: '请添加店员的照片'},
           {value: this.nameReg, txt: '请输入店员的名称'},
           {value: this.mobileReg, txt: '请输入店员正确的手机号码'},
           {value: this.positionReg, txt: '请输入店员的职位'}
@@ -121,13 +92,7 @@
       },
       positionReg() {
         return this.staffInfo.position
-      },
-      avatarReg() {
-        return this.staffInfo.imageData.url
       }
-    },
-    components: {
-      Cropper
     }
   }
 </script>

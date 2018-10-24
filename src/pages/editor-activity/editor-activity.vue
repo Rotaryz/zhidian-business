@@ -227,7 +227,7 @@
   import DetailModal from 'components/service-detail-modal/service-detail-modal'
   import SwitchBox from 'components/switch-box/switch-box'
   import Cropper from 'components/cropper/cropper'
-  import { Upload, ActivityApi } from 'api'
+  import { ActivityApi } from 'api'
 
   const ACTIVITY_TYPE = {
     0: '请选择',
@@ -347,7 +347,7 @@
             let idx = this.braginStock.indexOf(this.activityDetail.stock)
             if (idx < 0) {
               this.braginStock.push(this.activityDetail.stock)
-              this.braginStock = this.braginStock.sort(function(a, b) {
+              this.braginStock = this.braginStock.sort(function (a, b) {
                 return a - b
               })
             }
@@ -360,19 +360,14 @@
         let arr = Array.from(e.target.files)
         this.$refs.cropper.show(arr[0])
       },
-      cropperConfirm(e) {
-        // this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e])
-        // this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e])
+      async cropperConfirm(e) {
         this.$loading.show()
-        Upload.upLoadImage(e.formData).then(res => {
-          if (res.error !== this.$ERR_OK) {
-            return this.$toast.show(res.message)
-          }
-          this.activityDetail.image_url = res.data.url
-          this.activityDetail.image_id = res.data.id
-          this.$loading.hide()
-          this.$refs.cropper.cancel()
-        })
+        let resArr = await this.$cos.uploadFiles(this.$cosFileType.IMAGE_TYPE, [e.file])
+        let res = resArr[0]
+        this.activityDetail.image_url = res.data.url
+        this.activityDetail.image_id = res.data.id
+        this.$loading.hide()
+        this.$refs.cropper.cancel()
       },
       delBanner() {
         this.activityDetail.image_url = ''
