@@ -2,14 +2,14 @@
   <div class="service-item">
     <div class="item-content">
       <div class="item-left" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
-        <div class="left-cover" :class="tabIdx == 2 ? '' : 'hide'">已下架</div>
+        <div class="left-cover" :class="tabIdx == 1 ? '' : 'hide'">已下架</div>
       </div>
       <div class="item-right">
         <div class="right-title">{{item.title}}</div>
         <div class="right-down">
           <div class="down-left">
             <p class="down-txt">现价：¥{{item.platform_price}}</p>
-            <p class="down-txt second"><span class="first-txt">库存：{{item.stock}}</span><span v-if="tabIdx != 0">销量：{{item.sale_count}}</span></p>
+            <p class="down-txt second"><span class="first-txt">库存：{{item.stock}}</span><span>销量：{{item.sale_count}}</span></p>
           </div>
           <div class="down-right">
             <div class="down-right-icon" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
@@ -23,11 +23,11 @@
               <div class="item-icon edit"></div>
               <div class="item-txt">编辑</div>
             </div>
-            <div class="editor-item" v-if="tabIdx != 2" @click.stop="itemDown(item)">
+            <div class="editor-item" v-if="tabIdx === 0" @click.stop="itemDown(item)">
               <div class="item-icon down"></div>
               <div class="item-txt">下架</div>
             </div>
-            <div class="editor-item" v-if="tabIdx == 2" @click.stop="itemDelete(item)">
+            <div class="editor-item" v-if="tabIdx === 1" @click.stop="itemDelete(item)">
               <div class="item-icon del"></div>
               <div class="item-txt">删除</div>
             </div>
