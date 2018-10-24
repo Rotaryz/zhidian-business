@@ -1,5 +1,5 @@
 <template>
-  <div class="card-item" @click="choose">
+  <div class="card-item" @click="choose(dataInfo)">
     <article class="container">
       <section class="left">
         <div class="avatar-wrapper" :style="{backgroundImage: 'url(' + serverImg + ')'}"></div>
@@ -14,22 +14,28 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { mapActions } from 'vuex'
-
   export default {
     props: {
       dataInfo: {
         type: Object,
         default: {}
+      },
+      prizeFlag: {
+        type: Number,
+        default: 0
       }
     },
     data() {
-      return this.dataInfo
+      return {
+        ...this.dataInfo,
+        isCheck: this.dataInfo.checkArr[this.prizeFlag]
+      }
+    },
+    created() {
     },
     methods: {
-      ...mapActions(['choosePrize']),
-      choose() {
-        this.choosePrize(this.dataInfo)
+      choose(item) {
+        this.$emit('choose', item)
       }
     }
   }

@@ -3,17 +3,17 @@
     <div class="scroll-wrapper">
       <scroll :bcColor="'#F6F6F6'"
               ref="scroll"
-              :data="prizeList"
-              v-if="prizeList.length"
+              :data="dataArray"
+              v-if="dataArray.length"
       >
         <ul class="card-wrapper">
-          <li class="card-item-wrapper" v-for="(item, idx) in prizeList" :key="idx">
-            <card-item :dataInfo="item"></card-item>
+          <li class="card-item-wrapper" v-for="(item, idx) in dataArray" :key="idx">
+            <card-item :dataInfo="item" :prizeFlag="prizeFlag" @choose="chooseHandle"></card-item>
           </li>
         </ul>
       </scroll>
     </div>
-    <section class="btn-wrapper border-top-1px" v-if="prizeList.length">
+    <section class="btn-wrapper border-top-1px" v-if="dataArray.length">
       <div class="btn" :class="saveReg?'active':''" @click="saveBtn">保存</div>
     </section>
     <section class="blank-wrapper" v-else>
@@ -34,18 +34,37 @@
       CardItem,
       Blank
     },
-    data() {
-      return {}
+    data () {
+      return {
+        dataArray: [],
+        prizeFlag: -1
+      }
+    },
+    created () {
+      this.dataArray = [...this.prizeCollection.prizeList]
+      this.prizeFlag = +this.$route.query.prizeFlag
+      console.log(this.dataArray)
     },
     methods: {
-      saveBtn() {
+      saveBtn () {
         // todo
+      },
+      chooseHandle(obj) {
+        let arr = []
+        this.dataArray.map(item => {
+          item.checkArr[this.prizeFlag] = false
+          if (item.id === obj.id) {
+            item.checkArr[this.prizeFlag] = true
+          }
+          arr.push(item)
+        })
+        this.dataArray = arr
       }
     },
     computed: {
-      ...mapGetters(['prizeList']),
-      saveReg() {
-        return this.prizeList.some(item => item.isCheck)
+      ...mapGetters(['prizeCollection']),
+      saveReg () {
+        return false
       }
     }
   }

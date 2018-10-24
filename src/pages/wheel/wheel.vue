@@ -1,7 +1,11 @@
 <template>
   <div class="wheel">
     <div class="scroll-wrapper">
-      <scroll :bcColor="'#F6F6F6'" ref="scroll">
+      <scroll
+        :bcColor="'#F6F6F6'"
+        ref="scroll"
+        :data="prizeCollection.prizePool"
+      >
         <article class="container">
           <panel title="添加奖品" subHead="奖品数量越大中奖几率越高">
             <div class="wheel-wrapper">
@@ -14,8 +18,8 @@
           </panel>
           <div class="margin-box-10px"></div>
           <panel title="奖品池">
-            <ul class="prize-wrapper" v-if="prizePool.length">
-              <li class="prize-item-wrapper" v-for="(item, idx) in prizePool" :key="idx">
+            <ul class="prize-wrapper" v-if="prizeCollection.prizePool.length">
+              <li class="prize-item-wrapper" v-for="(item, idx) in prizeCollection.prizePool" :key="idx">
                 <prize-item :idx="idx"></prize-item>
               </li>
             </ul>
@@ -44,7 +48,9 @@
           <panel title="兑换说明">
             <section class="texts-wrapper border-bottom-1px">
               <div class="texts-number">{{explainTxt.length}}<span>/{{maxLength}}</span></div>
-              <textarea class="data-area" @touchmove.stop v-model="explainTxt" :maxlength="maxLength" placeholder="请填写"></textarea>
+              <div class="data-wrapper">
+                <textarea class="data-area" @touchmove.stop v-model="explainTxt" :maxlength="maxLength" placeholder="请填写"></textarea>
+              </div>
             </section>
           </panel>
           <section class="open-wrapper border-top-1px">
@@ -76,19 +82,19 @@
       Panel,
       PrizeItem
     },
-    data() {
+    data () {
       return {
         explainTxt: '',
         maxLength: 30,
         isOpen: false
       }
     },
-    created() {
+    created () {
       this._getPrizeList()
     },
     methods: {
       ...mapActions(['getPrizeList']),
-      _getPrizeList() {
+      _getPrizeList () {
         ActiveExtend.getPrizeList().then(res => {
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
@@ -98,19 +104,29 @@
           this.getPrizeList(res.data)
         })
       },
-      navTo(item) {
-        if (item < 0) return
-        this.$router.push(this.$route.path + `/wheel-add-prize?prizeType=${item}`)
+      _updateWheel() {
+        ActiveExtend.updateWheel().then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          console.log(res, '---')
+        })
       },
-      saveBtn() {
+      navTo (item) {
+        if (item < 0) return
+        this.$router.push(this.$route.path + `/wheel-add-prize?prizeFlag=${item}`)
+      },
+      saveBtn () {
         // todo
       },
-      checkSwitch() {
+      checkSwitch () {
         this.isOpen = !this.isOpen
       }
     },
     computed: {
-      ...mapGetters(['prizePool'])
+      ...mapGetters(['prizeCollection'])
     }
   }
 </script>
@@ -232,26 +248,28 @@
     padding: 18px 0 20px
     position: relative
     border-bottom-1px(rgba(236, 237, 241, 1))
-    .data-area
-      resize: none
-      box-sizing: border-box
-      width: 100%
-      border-color: rgba(0, 0, 0, 0)
-      font-size: $font-size-14
-      color: $color-20202E
-      font-family: $font-family-regular
-      height: 75px
-      outline: none
-      word-break: break-all
-      background: $color-F9F9F9
-      padding: 10px 9px !important
-      line-height: 1.4
-      .&::-webkit-input-placeholder
-        color: $color-9B9B9B
-      .&::-ms-input-placeholder
-        color: $color-9B9B9B
-      .&::-moz-placeholder
-        color: $color-9B9B9B
+    .data-wrapper
+      border-1px(#F0EFF5, 2px)
+      .data-area
+        resize: none
+        box-sizing: border-box
+        width: 100%
+        border-color: rgba(0, 0, 0, 0)
+        font-size: $font-size-14
+        color: $color-20202E
+        font-family: $font-family-regular
+        height: 75px
+        outline: none
+        word-break: break-all
+        background: $color-F9F9F9
+        padding: 10px 9px !important
+        line-height: 1.4
+        .&::-webkit-input-placeholder
+          color: $color-9B9B9B
+        .&::-ms-input-placeholder
+          color: $color-9B9B9B
+        .&::-moz-placeholder
+          color: $color-9B9B9B
     .texts-number
       position: absolute
       bottom: 30px
