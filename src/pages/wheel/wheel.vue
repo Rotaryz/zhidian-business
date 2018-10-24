@@ -90,6 +90,7 @@
       ...mapActions(['getPrizeList']),
       _getPrizeList() {
         ActiveExtend.getPrizeList().then(res => {
+          this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)
             return
