@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="container">
-      <div class="big-container" :style="'transform: translate(-' + tabIdx*33.333 + '%,0)'">
+      <div class="big-container" :style="'transform: translate(-' + tabIdx*50 + '%,0)'">
         <div class="container-item">
           <scroll ref="scroll0"
                   :data="list0"
@@ -62,31 +62,6 @@
             </div>
           </scroll>
         </div>
-        <div class="container-item">
-          <scroll ref="scroll2"
-                  :data="list2"
-                  bcColor="#f6f6f6"
-                  :pullUpLoad="pullUpLoadObj2"
-                  @pullingUp="onPullingUp"
-                  :showNoMore="showNoMore2">
-            <div class="list-container">
-              <div class="list-item" v-for="(item, index) in list2" :key="tabIdx + '' + index">
-                <service-item :tabIdx="tabIdx"
-                              :item="item"
-                              :showEdit="item.showEdit"
-                              @showEdit="showEditor"
-                              @itemEditor="itemEditor"
-                              @itemDown="itemDown"
-                              @itemDelete="itemDelete">
-                </service-item>
-              </div>
-              <div class="nothing-box" v-if="nothing2">
-                <img src="./pic-empty_order@2x.png" class="nothing-img">
-                <div class="nothing-txt">暂无数据</div>
-              </div>
-            </div>
-          </scroll>
-        </div>
       </div>
     </div>
     <div class="footer-box">
@@ -104,11 +79,10 @@
   import { ActivityApi } from 'api'
   import {ease} from 'common/js/ease'
   const TABS = [
-    {txt: '未开始', id: 0},
-    {txt: '进行中', id: 1},
-    {txt: '已下架', id: 2}
+    {txt: '已上架', id: 0},
+    {txt: '已下架', id: 1}
   ]
-  const TABSNUM = ['wait_online_count', 'online_count', 'offline_count']
+  const TABSNUM = ['online_count', 'offline_count']
   export default {
     data() {
       return {
@@ -116,7 +90,6 @@
         tabIdx: 1,
         list0: [],
         list1: [],
-        list2: [],
         numObj: {},
         tabsNumArr: TABSNUM,
         pullUpLoad0: true,
@@ -129,18 +102,14 @@
         showNoMore1: false,
         page1: 1,
         nothing1: false,
-        pullUpLoad2: true,
-        pullUpLoadThreshold2: 0,
-        showNoMore2: false,
-        page2: 1,
-        nothing2: false,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
         scrollToEasing: 'bounce',
         scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
         temporaryItem: {}, // 缓存需要处理的item
         temporaryType: '',
-        timer: ''
+        timer: '',
+        timestamp: 'start_at_timestamp'
       }
     },
     created() {
@@ -223,7 +192,7 @@
           if (res.error === this.$ERR_OK) {
             this.$toast.show('操作成功')
             this.numObj[this.tabsNumArr[this.tabIdx]]--
-            this.numObj[this.tabsNumArr[2]]++
+            this.numObj[this.tabsNumArr[1]]++
             this['list' + this.tabIdx] = this['list' + this.tabIdx].filter((item1) => {
               return +item1.id !== +item.id
             })
@@ -261,7 +230,7 @@
         this.$router.push(url)
       },
       _initAll() {
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 2; i++) {
           this['list' + i] = this['list' + i].map((item1) => {
             item1.showEdit = false
             return item1
@@ -276,30 +245,19 @@
       _timeRun() {
         clearInterval(this.timer)
         this['list' + this.tabIdx] = this['list' + this.tabIdx].map((item) => {
-          let endTime
-          if (this.tabIdx) {
-            endTime = this._timeCheckout(item.end_at_timestamp)
-          } else {
-            endTime = this._timeCheckout(item.start_at_timestamp)
-          }
-          let endTimeStr = `${endTime.day ? endTime.day + '天' : ''}${endTime.hour}:${endTime.minute}:${endTime.second}`
-          return Object.assign({}, item, {endTime: endTimeStr})
+          item.endTime = this._timeCheckout(item[this.timestamp], item.current_timestamp)
+          return item
         })
         this.timer = setInterval(() => {
           this['list' + this.tabIdx] = this['list' + this.tabIdx].map((item) => {
-            let endTime
-            if (this.tabIdx) {
-              endTime = this._timeCheckout(item.end_at_timestamp)
-            } else {
-              endTime = this._timeCheckout(item.start_at_timestamp)
-            }
-            let endTimeStr = `${endTime.day ? endTime.day + '天' : ''}${endTime.hour}:${endTime.minute}:${endTime.second}`
-            return Object.assign({}, item, {endTime: endTimeStr})
+            item.current_timestamp++
+            item.endTime = this._timeCheckout(item[this.timestamp], item.current_timestamp)
+            return item
           })
         }, 1000)
       },
-      _timeCheckout(time) {
-        let nowSecond = parseInt(Date.now() / 1000)
+      _timeCheckout(time, nowTime) {
+        let nowSecond = new Date(nowTime)
         let differ = time * 1 - nowSecond
         let day = Math.floor(differ / (60 * 60 * 24))
         day = day >= 10 ? day : '0' + day
@@ -380,12 +338,6 @@
           txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
         } : false
       },
-      pullUpLoadObj2: function () {
-        return this.pullUpLoad2 ? {
-          threshold: parseInt(this.pullUpLoadThreshold2),
-          txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
-        } : false
-      },
       pullDownRefreshObj0: function () {
         return this.pullDownRefresh0 ? {
           threshold: parseInt(this.pullDownRefreshThreshold0),
@@ -396,13 +348,6 @@
       pullDownRefreshObj1: function () {
         return this.pullDownRefresh1 ? {
           threshold: parseInt(this.pullDownRefreshThreshold1),
-          stop: parseInt(this.pullDownRefreshStop),
-          txt: '没有更多了'
-        } : false
-      },
-      pullDownRefreshObj2: function () {
-        return this.pullDownRefresh2 ? {
-          threshold: parseInt(this.pullDownRefreshThreshold2),
           stop: parseInt(this.pullDownRefreshStop),
           txt: '没有更多了'
         } : false
@@ -462,7 +407,7 @@
         height: 3px
         position: absolute
         bottom: 0
-        width: 33.33%
+        width: 50%
         display: flex
         justify-content: center
         transform: translate(0, 0)
@@ -478,7 +423,7 @@
       height: 100vh
       overflow: hidden
       .big-container
-        width: 300vw
+        width: 200vw
         height: 100vh
         display: flex
         transition: all 0.3s
