@@ -1,16 +1,16 @@
 <template>
-  <ul class="prize-item">
+  <ul class="prize-item" @click="navTo(item)">
     <li class="item-wrapper top">
       <div class="left">{{name}}</div>
       <div class="middle">{{item.title}}</div>
-      <div class="right"></div>
+      <div class="right" @click="delHandle"></div>
     </li>
     <li class="item-wrapper">
       <div class="left store">可用库存{{item.stock}}</div>
       <section class="counter">
         <div class="btn declare" @click="subHandle">-</div>
         <div class="input-wrapper">
-          <input class="input-style" type="number" v-model="useStore">
+          <input class="input-style" :class="inputReg?'error':''" type="number" v-model="item.prize_stock" @input="inputHandle" @focus="focusHandle" @blur="blurHandle">
         </div>
         <div class="btn add" @click="addHandle">+</div>
       </section>
@@ -21,7 +21,7 @@
 <script type="text/ecmascript-6">
   import { mapGetters, mapActions } from 'vuex'
 
-  const NameArr = ['奖品一', '奖品二', '奖品三', '奖品四', '奖品五']
+  const NameArr = ['谢谢惠顾', '奖品一', '奖品二', '奖品三', '奖品四', '奖品五']
   export default {
     props: {
       item: {
@@ -31,37 +31,50 @@
     },
     data() {
       return {
-        useStore: this.item.prize_stock
+        currentStock: 0
       }
     },
     computed: {
       ...mapGetters(['prizeList']),
       name() {
-        return NameArr[this.item.index || 0]
-      }
-    },
-    watch: {
-      useStore(cur) {
-        this.updatePrizeStock({item: this.item, number: cur})
+        return NameArr[this.item.place]
+      },
+      inputReg() {
+        return this.item.stock < 0
       }
     },
     methods: {
-      ...mapActions(['updatePrizeStock']),
+      ...mapActions(['updatePrizeStorage']),
       subHandle() {
-        this.useStore--
+        this.item.prize_stock -= 1
+        this.updatePrizeStorage({prize_id: this.item.prize_id, number: -1})
+        this.$emit('updatePrizeStock')
       },
       addHandle() {
-        this.useStore++
+        this.item.prize_stock += 1
+        this.updatePrizeStorage({prize_id: this.item.prize_id, number: 1})
+        this.$emit('updatePrizeStock')
+      },
+      blurHandle() {
+        let stock = +this.item.prize_stock
+        this.item.prize_stock = stock || 0
+      },
+      focusHandle() {
+        this.currentStock = this.item.prize_stock
+      },
+      inputHandle(e) {
+        let value = +e.target.value
+        let number = value ? value - this.currentStock : -this.currentStock
+        this.currentStock = value || 0
+        this.updatePrizeStorage({prize_id: this.item.prize_id, number})
+        this.$emit('updatePrizeStock')
+      },
+      delHandle() {
+        this.$emit('delHandle', this.item)
+      },
+      navTo(item) {
+        this.$emit('navTo', item.place)
       }
-      // resetItem() {
-      //   let obj = {
-      //     stock: this.useStore,
-      //     total_stock: this.allowStore,
-      //     title: this.title,
-      //     index: this.index
-      //   }
-      //   return {...this.item, ...obj}
-      // }
     }
   }
 </script>
@@ -84,6 +97,8 @@
       color: $color-CCCCCC
     &::-moz-placeholder
       color: $color-CCCCCC
+    &.error
+      color: red !important
 
   .prize-item
     background: #FFFFFF;

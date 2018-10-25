@@ -14,7 +14,7 @@
       </scroll>
     </div>
     <section class="btn-wrapper border-top-1px" v-if="dataArray.length">
-      <div class="btn" :class="saveIndex !== -1?'active':''" @click="saveBtn">保存</div>
+      <div class="btn" :class="saveIndex !== -1?'active':''" @click="saveBtn">确定</div>
     </section>
     <section class="blank-wrapper" v-else>
       <blank></blank>
@@ -26,8 +26,9 @@
   import Scroll from 'components/scroll/scroll'
   import CardItem from './card-item/card-item'
   import Blank from 'components/blank/blank'
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapGetters } from 'vuex'
 
+  const NameArr = ['谢谢惠顾', '奖品一', '奖品二', '奖品三', '奖品四', '奖品五']
   export default {
     components: {
       Scroll,
@@ -36,24 +37,26 @@
     },
     data() {
       return {
-        prizeFlag: -1,
+        place: 0,
+        currentIndex: -1,
         dataArray: []
       }
     },
     created() {
-      this.prizeFlag = +this.$route.query.prizeFlag
+      this.place = +this.$route.query.place
+      this.currentIndex = +this.$route.query.currentIndex
       this._initList()
+      window.document.title += `(${NameArr[this.place]})`
     },
     methods: {
-      ...mapActions(['updatePrizePool']),
       _initList() {
-        console.log(this.prizeArray)
-        let arr = this.prizeArray.map((item) => {
-          item.isCheck = false
-          if (+item.index === +this.prizeFlag) {
-            item.isCheck = true
-          }
-          return item
+        let arr = []
+        this.prizeArray.forEach((item, index) => {
+          let node = {...item}
+          let stock = this.prizeStorage.find(it => it.prize_id === item.prize_id).stock
+          node.stock = stock
+          node.isCheck = index === this.currentIndex
+          arr.push(node)
         })
         this.dataArray = arr
       },
@@ -63,10 +66,10 @@
           return
         }
         let obj = {
-          prizeFlag: this.prizeFlag, // 奖品位置索引
-          saveIndex: this.saveIndex // 奖品在奖品列表中的索引
+          place: this.place, // 奖品位置索引
+          savePrize: this.dataArray[this.saveIndex] // 奖品在奖品列表中的索引
         }
-        this.updatePrizePool(obj)
+        this.$emit('refresh', obj)
         this.$router.back()
       },
       chooseHandle(item, idx) {
@@ -78,7 +81,7 @@
       }
     },
     computed: {
-      ...mapGetters(['prizeArray']),
+      ...mapGetters(['prizeArray', 'prizeStorage']),
       saveIndex() {
         return this.dataArray.findIndex(item => item.isCheck)
       }

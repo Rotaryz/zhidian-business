@@ -14,12 +14,17 @@ const mutations = {
   [TYPES.INIT_PRIZE_STORAGE](state, obj) {
     const {prizeList, prizePool} = obj
     let arr = []
-    prizeList.forEach(item => {
-      let node = prizePool.find(it => it.prize_id === item.prize_id)
+    prizePool.forEach(item => {
+      let itemStocks = 0
+      for (let i = 0; i < prizeList.length; i++) {
+        if (prizeList[i].prize_id === item.prize_id) {
+          itemStocks += +prizeList[i].prize_stock
+        }
+      }
       arr.push({
-        'prize_id': item.prize_id,
-        'totalStock': item.stock + (node && node.prize_stock),
-        'stock': item.stock
+        prize_id: item.prize_id,
+        totalStock: item.stock,
+        stock: item.stock - itemStocks
       })
     })
     state.prizeStorage = arr
@@ -28,37 +33,36 @@ const mutations = {
   [TYPES.INIT_PRIZE_ARRAY](state, obj) {
     state.prizeArray = obj
   },
-  // // 选择奖品
-  // [TYPES.CHOOSE_PRIZE](state, obj) {
-  //   let arr = []
-  //   state.prizeList.forEach(item => {
-  //     item.isCheck = false
-  //     if (item.prize_id === obj.prize_id) {
-  //       item.isCheck = true
-  //     }
-  //     arr.push(item)
-  //   })
-  //   state.prizeList = arr
-  // },
-  // 更新奖品库存
-  [TYPES.UPDATE_PRIZE_STOCK](state, obj) {
-    let index = state.prizeList.findIndex(item => item.prize_id === obj.item.prize_id)
-    obj.item.stock = obj.item.originStock - obj.number
-    state.prizeList.splice(index, 1, obj.item)
-  },
   // 更新奖品池
-  [TYPES.UPDATE_PRIZE_POOL](state, obj) {
-    // console.log(obj)
-    // const {prizeFlag, saveIndex} = obj
-    // // 还原之前选择
-    // const oldNode = state.prizeList.find(item => item.index === prizeFlag)
-    // const currentNode = state.prizeList[saveIndex]
-    // currentNode.prize_stock = 0
-    // console.log(saveIndex)
-    let item = state.prizeList[obj.saveIndex]
-    item.index = obj.prizeFlag
-    item.prize_stock = 0
-    state.prizeList.splice(obj.saveIndex, 1, item)
+  [TYPES.UPDATE_PRIZE_STORAGE](state, obj) {
+    let node
+    let index
+    state.prizeStorage.forEach((item, idx) => {
+      if (item.prize_id === obj.prize_id) {
+        item.stock -= +obj.number
+        index = idx
+        node = {...item}
+      }
+    })
+    state.prizeStorage.splice(index, 1, node)
+  },
+  // 删除奖品库存
+  [TYPES.DELETE_PRIZE_STORAGE](state, obj) {
+    let node
+    let index
+    state.prizeStorage.forEach((item, idx) => {
+      if (item.prize_id === obj.prize_id) {
+        item.stock += +obj.prize_stock
+        index = idx
+        node = {...item}
+      }
+    })
+    state.prizeStorage.splice(index, 1, node)
+  },
+  // 删除奖品库存
+  [TYPES.CLEAR_PRIZE_PAGE](state) {
+    state.prizeStorage = []
+    state.prizeArray = []
   }
 }
 

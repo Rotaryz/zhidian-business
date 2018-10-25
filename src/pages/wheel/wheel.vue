@@ -4,23 +4,23 @@
       <scroll
         :bcColor="'#F6F6F6'"
         ref="scroll"
-        :data="prizePool"
+        :data="prizeList"
       >
         <article class="container">
           <panel title="添加奖品" subHead="奖品数量越大中奖几率越高">
             <div class="wheel-wrapper">
               <div class="auto-wrapper">
                 <article class="box">
-                  <div class="prize" :class="'prize-' + idx" v-for="(item,idx) in [-1,0,1,2,3,4]" :key="idx" @click="navTo(item)"></div>
+                  <div class="prize" :class="'prize-' + idx" v-for="(item,idx) in [0,1,2,3,4,5]" :key="idx" @click="navTo(item)"></div>
                 </article>
               </div>
             </div>
           </panel>
           <div class="margin-box-10px"></div>
           <panel title="奖品池">
-            <ul class="prize-wrapper" v-if="prizePool.length">
-              <li class="prize-item-wrapper" v-for="(item, idx) in prizePool" :key="idx">
-                <prize-item :idx="idx" :item="item" @resetItem="restItem"></prize-item>
+            <ul class="prize-wrapper" v-if="prizeList.length">
+              <li class="prize-item-wrapper" v-for="(item, idx) in prizeList" :key="idx">
+                <prize-item :idx="idx" :item="item" @updatePrizeStock="updatePrizeStock" @delHandle="delHandle" @navTo="navTo"></prize-item>
               </li>
             </ul>
             <div class="prize-empty" v-else>
@@ -63,8 +63,9 @@
       </scroll>
     </div>
     <section class="btn-wrapper border-top-1px">
-      <div class="btn" @click="saveBtn">保存</div>
+      <div class="btn" :class="saveBtnReg?'active':''" @click="saveBtn">保存</div>
     </section>
+    <confirm-msg ref="confirm" @confirm="confirmHandle"></confirm-msg>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
@@ -73,20 +74,20 @@
   import Scroll from 'components/scroll/scroll'
   import Panel from './panel/panel'
   import PrizeItem from './prize-item/prize-item'
-  import { mapActions } from 'vuex'
+  import ConfirmMsg from 'components/confirm-msg/confirm-msg'
+  import { mapActions, mapGetters } from 'vuex'
   import { ActiveExtend } from 'api'
 
   export default {
     components: {
       Scroll,
       Panel,
-      PrizeItem
+      PrizeItem,
+      ConfirmMsg
     },
     data() {
       return {
-        explainTxt: '',
         maxLength: 30,
-        isOpen: false,
         prizeList: [],
         prizePool: [],
         prizeInfo: {
@@ -95,16 +96,94 @@
           joinTimes: 0,
           note: '',
           status: 0 // 1开启0关闭
-        }
+        },
+        delNode: null,
+        delList: []
       }
     },
     created() {
       this._getPrizeList(false)
     },
     methods: {
-      ...mapActions(['initPrizeStorage', 'initPrizeArray']),
-      refresh() {
-        // todo
+      ...mapActions(['initPrizeStorage', 'initPrizeArray', 'deletePrizeStorage', 'updatePrizeStorage']),
+      refresh(obj) {
+        this._updatePrizeList(obj)
+      },
+      updatePrizeStock() {
+        // 刷新每个位置的库存
+        this.prizeList.map(item => {
+          item.stock = this.prizeStorage.find(it => it.prize_id === item.prize_id).stock
+          return item
+        })
+      },
+      _updatePrizeList(obj) {
+        const defaultStock = 1
+        const {place, savePrize} = obj
+        // 1.判断是否为新位置
+        let idx = this.prizeList.findIndex(item => +item.place === +place)
+        if (idx === -1) {
+          // 新位置
+          this.updatePrizeStorage({prize_id: savePrize.prize_id, number: defaultStock})
+          let node = {
+            id: 0,
+            type: savePrize.type,
+            prize_id: savePrize.prize_id,
+            title: savePrize.title,
+            place: place,
+            prize_stock: defaultStock,
+            stock: this.prizeStorage.find(item => item.prize_id === savePrize.prize_id).stock
+          }
+          this.prizeList.push(node)
+          // 刷新每个位置的库存
+          this.prizeList.map(item => {
+            if (item.prize_id === savePrize.prize_id) {
+              item.stock = node.stock
+            }
+            return item
+          })
+        } else {
+          // 老位置
+          let node = this.prizeList[idx]
+          this.deletePrizeStorage(node)
+          this.updatePrizeStorage({prize_id: savePrize.prize_id, number: defaultStock})
+          let replaceNode = {
+            id: node.id,
+            type: savePrize.type,
+            prize_id: savePrize.prize_id,
+            title: savePrize.title,
+            place: place,
+            prize_stock: defaultStock,
+            stock: this.prizeStorage.find(item => item.prize_id === savePrize.prize_id).stock
+          }
+          this.prizeList.splice(idx, 1, replaceNode)
+          // 刷新每个位置的库存
+          this._renderPrizeList()
+        }
+        // 排序
+        this.prizeList.sort(function(a, b) {
+          return a.place - b.place
+        })
+      },
+      delHandle(node) {
+        this.delNode = node
+        this.$refs.confirm.show()
+      },
+      confirmHandle() {
+        let idx = this.prizeList.findIndex(item => item.prize_id === this.delNode.prize_id)
+        let node = this.prizeList[idx]
+        if (node.id !== 0) {
+          this.delList.push({activity_prize_id: node.id})
+        }
+        this.deletePrizeStorage(node)
+        this.prizeList.splice(idx, 1)
+        // 刷新每个位置的库存
+        this._renderPrizeList()
+      },
+      _renderPrizeList() {
+        this.prizeList.map(item => {
+          item.stock = this.prizeStorage.find(it => it.prize_id === item.prize_id).stock
+          return item
+        })
       },
       _getPrizeList(loading) {
         this.$loading.show()
@@ -113,7 +192,7 @@
             this.$toast.show(res.message)
             return
           }
-          this.prizeList = res.data
+          this.prizePool = res.data
           this._getPrizeInfo(false)
         })
       },
@@ -131,14 +210,13 @@
             note: res.data.note || '',
             status: res.data.status || 0 // 1开启0关闭
           }
-          res.data.activity_prizes[0].index = 0 // todo
-          this.prizePool = res.data.activity_prizes
+          this.prizeList = res.data.activity_prizes
           let obj = {
             prizePool: this.prizePool,
             prizeList: this.prizeList
           }
           this.initPrizeStorage(obj)
-          this.initPrizeArray(this.prizeList)
+          this.initPrizeArray(this.prizePool)
         })
       },
       _updateWheel(data, loading) {
@@ -153,8 +231,10 @@
         })
       },
       navTo(item) {
-        if (item < 0) return
-        this.$router.push(this.$route.path + `/wheel-add-prize?prizeFlag=${item}`)
+        if (item === 0) return
+        let node = this.prizeList.find(it => +it.place === +item)
+        let currentIndex = node ? this.prizePool.findIndex(it => it.prize_id === node.prize_id) : -1
+        this.$router.push(this.$route.path + `/wheel-add-prize?place=${item}&currentIndex=${currentIndex}`)
       },
       saveBtn() {
         this._checkForm(() => {
@@ -165,8 +245,8 @@
             note: this.prizeInfo.note,
             status: this.prizeInfo.status,
             percentage: this.prizeInfo.percentage,
-            activity_prizes: this.prizePool,
-            del_activty_prizes: []
+            activity_prizes: this.prizeList,
+            del_activty_prizes: [{activity_prize_id: 1}]
           }
           this._updateWheel(data)
         })
@@ -175,14 +255,12 @@
         let flag = !this.prizeInfo.status
         this.prizeInfo.status = flag ? 1 : 0
       },
-      restItem(item) {
-        this.prizePool[item.index] = item
-      },
       _checkForm(callback) {
         let arr = [
-          {value: this.prizePoolReg, txt: '请点击大转盘添加您的奖品'},
-          {value: this.percentageReg, txt: '请正确填写中奖率'},
-          {value: this.joinTimesReg, txt: '请正确填写中奖次数'}
+          {value: this.prizeListReg, txt: '请点击大转盘添加您的奖品'},
+          {value: this.prizeListInputReg, txt: '请输入正确的奖品数量'},
+          {value: this.percentageReg, txt: '请输入正确的中奖率'},
+          {value: this.joinTimesReg, txt: '请输入正确的中奖次数'}
         ]
         let res = this._testPropety(arr)
         if (res) {
@@ -204,9 +282,12 @@
       }
     },
     computed: {
-      // ...mapGetters(['prizeStorage']),
-      prizePoolReg() {
-        return this.prizePool.length
+      ...mapGetters(['prizeStorage']),
+      prizeListReg() {
+        return this.prizeList.length
+      },
+      prizeListInputReg() {
+        return this.prizeList.some(item => item.stock > 0)
       },
       percentageReg() {
         let percentage = this.prizeInfo.percentage
@@ -215,14 +296,10 @@
       joinTimesReg() {
         let joinTimes = this.prizeInfo.joinTimes + ''
         return /^[+]?(\d+)$/.test(joinTimes)
+      },
+      saveBtnReg() {
+        return this.prizeListReg && this.prizeListInputReg && this.percentageReg && this.joinTimesReg
       }
-      // prizePool() {
-      //   return this.prizeList.filter(item => {
-      //     if (item.prize_stock !== undefined) {
-      //       return item
-      //     }
-      //   })
-      // }
     }
   }
 </script>
@@ -429,4 +506,7 @@
       letter-spacing: 0.8px
       text-align: center
       line-height: 44px
+      opacity: 0.5
+      &.active
+        opacity: 1
 </style>

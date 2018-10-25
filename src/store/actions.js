@@ -18,15 +18,15 @@ export const initPrizeStorage = ({commit, state}, obj) => {
 export const initPrizeArray = ({commit, state}, obj) => {
   commit(TYPES.INIT_PRIZE_ARRAY, obj)
 }
-// // 选择奖品
-// export const choosePrize = ({commit, state}, obj) => {
-//   commit(TYPES.CHOOSE_PRIZE, obj)
-// }
 // 更新奖品库存
-export const updatePrizeStock = ({commit, state}, obj) => {
-  commit(TYPES.UPDATE_PRIZE_STOCK, obj)
+export const updatePrizeStorage = ({commit, state}, obj) => {
+  commit(TYPES.UPDATE_PRIZE_STORAGE, obj)
 }
-// 更新奖品池
-export const updatePrizePool = ({commit, state}, obj) => {
-  commit(TYPES.UPDATE_PRIZE_POOL, obj)
+// 更新奖品库存
+export const deletePrizeStorage = ({commit, state}, obj) => {
+  commit(TYPES.DELETE_PRIZE_STORAGE, obj)
+}
+// 更新奖品库存
+export const clearPrizePage = ({commit, state}) => {
+  commit(TYPES.CLEAR_PRIZE_PAGE)
 }
