@@ -3,10 +3,10 @@
     <div class="title-shadow" v-show="showTitle" @click="hide">
       <div class="title-box" @click.stop>
         <div class="title-top">
-          <div class="title">{{title}}</div>
+          <div class="title" v-if="title !== 'null'">{{title}}</div>
           <div class="data-bottom">
             <div class="textarea-number">{{note.length}}<span>/{{maxLength}}</span></div>
-            <textarea class="data-area" @touchmove.stop v-model="note" :maxlength="maxLength" :placeholder="placeholder"></textarea>
+            <textarea class="data-area" :class="{'long-text' : title === 'null'}" @touchmove.stop v-model="note" :maxlength="maxLength" :placeholder="placeholder"></textarea>
           </div>
         </div>
         <div class="title-btn border-top-1px" @click="submitTitle">确定</div>
@@ -123,4 +123,6 @@
       font-family: $font-family-regular
       color: $color-CCCCCC
       font-size: $font-size-12
+    .long-text
+      height: 145px
 </style>

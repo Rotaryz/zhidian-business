@@ -48,13 +48,14 @@
       }
     },
     created() {
-      this.id = this.$route.query.id
+      // this.id = this.$route.query.id
       this._getInviteQrcode()
       this._getShopInfo()
     },
     methods: {
       _getInviteQrcode() {
-        Mine.getInviteQrcode({shop_id: this.id}).then(res => {
+        // Mine.getInviteQrcode({shop_id: this.id})
+        Mine.getInviteQrcode().then(res => {
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)

@@ -1,5 +1,5 @@
 <template>
-  <div class="activity-item">
+  <div class="activity-item" :class="{'small-item' : !item.start_at_timestamp}">
     <div class="item-container">
       <div class="service-content">
         <div class="item-left" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
@@ -10,7 +10,7 @@
           <div class="right-down">
             <div class="down-left">
               <p class="down-txt"><span class="first-txt">库存{{item.stock}}</span></p>
-              <p class="down-txt second"><span class="first-txt"><i class="small">¥</i>{{item.platform_price}}</span></p>
+              <p class="down-txt second"><span class="first-txt"><i class="small">¥</i>{{item.platform_price}}</span><del class="original-price">{{item.original_price}}</del></p>
             </div>
             <div class="down-right">
               <div class="down-right-icon" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
@@ -123,8 +123,8 @@
       height: 10vw
       background-size: 100% 100%
       position: absolute
-      left: -3px
-      top: 13px
+      left: -2px
+      top: -1px
     .group
       bg-image(pic-label_pt)
       background-size: 100% 100%
@@ -190,6 +190,10 @@
               .small
                 font-style: normal
                 font-size: 14px
+              .original-price
+                color: $color-706B82
+                font-size: $font-size-12
+                margin-left: 4px
             .second
               margin-top: 8px
               color: #181700
@@ -263,4 +267,8 @@
         right: -100%
     .editor-box.hide
       width: 0
+  .small-item
+    padding-top: 30%
+    .service-content
+      height: 100%
 </style>

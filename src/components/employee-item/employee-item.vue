@@ -11,9 +11,13 @@
           <div class="item-left-icon" v-if="item.role_id * 1 === 2">店员</div>
           <div class="item-left-icon" v-if="item.role_id * 1 === 3">财务</div>
         </div>
-        <div class="item-box-right" v-if="item.role_id * 1 !== 1 && item.status * 1 === 0" @click="navTo(item)">
-          <div class="send-text">发送邀请</div>
-          <img src="./icon-press_right@2x.png" class="arrow-icon">
+        <!--<div class="item-box-right" v-if="item.role_id * 1 !== 1 && item.status * 1 === 0" @click="navTo(item)">-->
+          <!--<div class="send-text">发送邀请</div>-->
+          <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
+        <!--</div>-->
+        <div class="item-box-right">
+          <div class="edit" @click="editEmployee(item)"></div>
+          <div class="del" :class="{'not-del': (item.role_id * 1 === 1 || item.status * 1 !== 0)}" @click="delEmployee(item)"></div>
         </div>
       </div>
     </div>
@@ -29,14 +33,11 @@
       return {}
     },
     methods: {
-      navTo(item) {
-        this.$router.push(`${this.$route.path}/invitation?id=${item.shop_id}`)
-        if (this.ios) {
-          setTimeout(() => {
-            location.reload()
-            location.reload()
-          }, 300)
-        }
+      delEmployee(item) {
+        this.$emit('delEmployee', item)
+      },
+      editEmployee(item) {
+        this.$emit('editEmployee', item)
       }
     },
     computed: {
@@ -58,7 +59,7 @@
     flex: 1
     overflow :hidden
     justify-content: space-between
-    padding-right: 15px
+    padding-right: 30px
     .item-box-left
       layout(row)
       align-items: center
@@ -86,14 +87,18 @@
     .item-box-right
       layout(row)
       align-items: center
-      .send-text
-        font-family: $font-family-regular
-        color: $color-9B9B9B
-        font-size: $font-size-14
-      .arrow-icon
-        width: 7.5px
-        margin-left: 10px
-        height: 12.5px
-        display: block
-        padding-top: 1px
+      .edit
+        width: 18px
+        height: 18px
+        bg-image(icon-compile_dy)
+        background-size: 100% 100%
+        margin-right: 40px
+      .del
+        width: 18px
+        height: 18px
+        bg-image(icon-delete2_dy)
+        background-size: 100% 100%
+      .not-del
+        bg-image(icon-delete_dy)
+        background-size: 100% 100%
 </style>

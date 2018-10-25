@@ -9,10 +9,13 @@
         :pullUpLoad="pullUpLoadObj"
         @pullingUp="onPullingUp"
       >
-        <div class="employee-title">账号数量:{{dataArray.length}}</div>
+        <div class="employee-title border-bottom-1px">
+          <span class="count">店员人数({{dataArray.length}}个)</span>
+          <span class="title-right" @click="navTo()"><span>邀请开店</span><img src="./icon-press_right@2x.png" class="arrow-icon"></span>
+        </div>
         <ul class="employee-list border-bottom-1px">
           <li v-for="(item, index) in dataArray" :key="index">
-            <employee-item :item="item"></employee-item>
+            <employee-item :item="item" @delEmployee="delEmployee" @editEmployee="editEmployee"></employee-item>
           </li>
         </ul>
       </scroll>
@@ -24,6 +27,7 @@
     <div class="footer-box" @click="jumpNew">
       <div class="footer-btn">新建店员</div>
     </div>
+    <modal ref="modal" @confirm="modalConfirm"></modal>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
@@ -31,6 +35,7 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import EmployeeItem from 'components/employee-item/employee-item'
+  import Modal from 'components/confirm-msg/confirm-msg'
   import { Employee } from 'api'
 
   const LIMIT = 10
@@ -45,7 +50,8 @@
         pullUpLoadNoMoreTxt: '没有更多了',
         page: 1,
         hasMore: true,
-        isEmpty: false
+        isEmpty: false,
+        delItem: ''
       }
     },
     created() {
@@ -56,6 +62,29 @@
         this.page = 1
         this.hasMore = true
         this._getList()
+      },
+      navTo(item) {
+        this.$router.push(`${this.$route.path}/invitation`)
+        if (this.ios) {
+          setTimeout(() => {
+            location.reload()
+            location.reload()
+          }, 300)
+        }
+      },
+      delEmployee(item) {
+        if (item.role_id * 1 === 1 || item.status * 1 !== 0) {
+          return
+        }
+        this.$refs.modal.show({msg: '确定删除该店员？'})
+        this.delItem = item
+      },
+      modalConfirm() {
+        console.log(this.delItem.id)
+      },
+      editEmployee(item) {
+        this.$storage.set('employee', item)
+        this.jumpNew()
       },
       _getList(data = {page: 1}) {
         if (!this.hasMore) return
@@ -114,7 +143,8 @@
     },
     components: {
       Scroll,
-      EmployeeItem
+      EmployeeItem,
+      Modal
     }
   }
 </script>
@@ -175,8 +205,20 @@
   .employee-title
     height: 45px
     line-height: 45px
-    padding-left: 15px
+    padding: 0 15px
     font-family: $font-family-regular
     color: $color-363547
     font-size: $font-size-16
+    background: $color-white
+    display: flex
+    justify-content: space-between
+    align-items: center
+    .title-right
+      font-size: $font-size-14
+      display: flex
+      align-items: center
+    .arrow-icon
+      width: 7.5px
+      height: 12.5px
+      margin-left: 5px
 </style>

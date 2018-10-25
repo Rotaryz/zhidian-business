@@ -1,24 +1,60 @@
 <template>
   <div class="editor-service">
     <scroll :bcColor="'#ffffff'" ref="scroll">
+      <div class="editor-title border-bottom-1px border-top-1px">
+        <div class="title">基本信息</div>
+      </div>
       <div class="group-container">
         <div class="editor-item border-bottom-1px">
-          <div class="item-left">品类</div>
+          <div class="item-left">标题</div>
+          <div class="item-right input-right" @click="showTitleModal('title')">
+            <div class="right-txt" v-if="serviceDetail.title">{{serviceDetail.title}}</div>
+            <span class="right-txt-placeholder" v-if="!serviceDetail.title">请填写服务的标题</span>
+            <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
+          </div>
+        </div>
+        <div class="editor-item border-bottom-1px">
+          <div class="item-left need-no">副标题</div>
+          <div class="item-right input-right" @click="showTitleModal('subtitle')">
+            <div class="right-txt" v-if="serviceDetail.subtitle">{{serviceDetail.subtitle}}</div>
+            <span class="right-txt-placeholder" v-if="!serviceDetail.subtitle">请填写服务的副标题</span>
+            <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
+          </div>
+        </div>
+        <div class="editor-item border-bottom-1px">
+          <div class="item-left">门市价</div>
           <div class="item-right">
-            <span class="right-txt">{{serviceDetail.industry_name}}</span>
+            <input type="number" class="input-box" v-model="serviceDetail.original_price" placeholder="请填写">
+          </div>
+        </div>
+        <div class="editor-item border-bottom-1px">
+          <div class="item-left">售价</div>
+          <div class="item-right">
+            <input type="number" class="input-box" v-model="serviceDetail.platform_price" placeholder="请填写">
           </div>
         </div>
         <div class="editor-item">
-          <div class="item-left">类型</div>
+          <div class="item-left">库存</div>
           <div class="item-right">
-            <span class="right-txt">{{couponType[serviceDetail.promotion_type]}}</span>
+            <input type="number" class="input-box" v-model="serviceDetail.usable_stock" placeholder="请填写">
           </div>
         </div>
+        <!--<div class="editor-item border-bottom-1px">-->
+          <!--<div class="item-left">品类</div>-->
+          <!--<div class="item-right">-->
+            <!--<span class="right-txt">{{serviceDetail.industry_name}}</span>-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="editor-item">-->
+          <!--<div class="item-left">类型</div>-->
+          <!--<div class="item-right">-->
+            <!--<span class="right-txt">{{couponType[serviceDetail.promotion_type]}}</span>-->
+          <!--</div>-->
+        <!--</div>-->
       </div>
-      <div class="margin-box-10px"></div>
-      <div class="group-container">
-        <div class="service-img-item border-bottom-1px">
-          <div class="item-title">优惠券服务项目图片</div>
+      <div class="group-container no-padding">
+        <div class="service-img-item  border-top-1px">
+          <div class="item-title">服务图片 <span class="item-subtitle">建议尺寸600*480,大小10M以内，最多3张</span></div>
           <div class="img-container">
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in [1, 2, 3]" :key="index">
@@ -34,47 +70,45 @@
               </div>
             </div>
           </div>
-          <div class="item-subtitle">添加1-3张服务项目图片(尺寸:600*480,大小10M以下)</div>
-        </div>
-        <div class="editor-item border-bottom-1px">
-          <div class="item-left">标题</div>
-          <div class="item-right input-right" @click="showTitleModal('title')">
-            <div class="right-txt" v-if="serviceDetail.title">{{serviceDetail.title}}</div>
-            <span class="right-txt-placeholder" v-if="!serviceDetail.title">请输入</span>
-            <img src="./icon-press_right@2x.png" class="arrow-icon">
-          </div>
-        </div>
-        <div class="editor-item border-bottom-1px">
-          <div class="item-left">副标题</div>
-          <div class="item-right input-right" @click="showTitleModal('subtitle')">
-            <div class="right-txt" v-if="serviceDetail.subtitle">{{serviceDetail.subtitle}}</div>
-            <span class="right-txt-placeholder" v-if="!serviceDetail.subtitle">(选填)</span>
-            <img src="./icon-press_right@2x.png" class="arrow-icon">
-          </div>
-        </div>
-        <div class="editor-item border-bottom-1px">
-          <div class="item-left">平台价</div>
-          <div class="item-right">
-            <input type="number" class="input-box" v-model="serviceDetail.platform_price" placeholder="请输入">
-          </div>
-        </div>
-        <div class="editor-item border-bottom-1px">
-          <div class="item-left">门市价</div>
-          <div class="item-right">
-            <input type="number" class="input-box" v-model="serviceDetail.original_price" placeholder="请输入">
-          </div>
         </div>
       </div>
-      <div class="margin-box-10px"></div>
-      <div class="group-container">
-        <div class="editor-item border-bottom-1px">
-          <div class="item-left">服务详情</div>
-          <div class="item-right check-right" @click="checkService">
-            <img src="./icon-press_right@2x.png" class="arrow-icon">
+      <div class="editor-title border-bottom-1px border-top-1px">
+        <div class="title">
+          套餐服务
+          <span class="add-server" @click.stop="addItem"></span>
+        </div>
+      </div>
+      <div class="group-container no-padding">
+        <!--<div class="editor-item border-bottom-1px">-->
+          <!--<div class="item-left">服务详情</div>-->
+          <!--<div class="item-right check-right" @click="checkService">-->
+            <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
+          <!--</div>-->
+        <!--</div>-->
+        <div class="server-list border-bottom-1px" v-for="(item, index) in serviceDetail.detail_config">
+          <div class="editor-item border-bottom-1px">
+            <div class="item-left">服务{{index + 1}}</div>
+            <div class="item-right">
+              <input type="text" class="input-box" v-model="serviceDetail.detail_config[index].servie" placeholder="请填写服务名称">
+              <span v-if="index > 0" class="del-server" @click.stop="delItem(index)"></span>
+            </div>
+          </div>
+          <div class="editor-item border-bottom-1px">
+            <div class="item-left">数量</div>
+            <div class="item-right">
+              <input type="number" class="input-box" v-model="serviceDetail.detail_config[index].number" placeholder="请填写">
+            </div>
+          </div>
+          <div class="editor-item">
+            <div class="item-left">价格</div>
+            <div class="item-right">
+              <input type="number" class="input-box" v-model="serviceDetail.detail_config[index].price" placeholder="请填写">
+            </div>
           </div>
         </div>
-        <div class="service-img-item border-bottom-1px">
-          <div class="item-title">优惠券服务详情图片</div>
+
+        <div class="service-img-item">
+          <div class="item-title">详情图片 <span class="item-subtitle">建议大小10M以内，最多5张</span></div>
           <div class="img-container">
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in [1, 2, 3, 4, 5]" :key="index">
@@ -90,62 +124,63 @@
               </div>
             </div>
           </div>
-          <div class="item-subtitle">添加1-5张服务详情图片(大小10M以下)</div>
         </div>
       </div>
-      <div class="margin-box-10px"></div>
+      <div class="editor-title border-bottom-1px border-top-1px">
+        <div class="title">使用有效期</div>
+      </div>
       <div class="group-container">
         <div class="editor-item border-bottom-1px">
-          <div class="item-left">售卖时间</div>
-          <div class="item-right time-right">
-            <div class="time-right-first" @click="chioseTime('sale1')">
-              <div class="time-none" v-if="!serviceDetail.sale_start_at">
-                <div class="time-item">开始时间</div>
-                <img src="./icon-press_right@2x.png" class="time-icon">
-              </div>
-              <div class="time-txt" :class="type === 'editor' ? 'disabled' : ''" v-if="serviceDetail.sale_start_at">{{serviceDetail.sale_start_at}}</div>
-            </div>
-            <div class="meddle-time">至</div>
-            <div class="time-right-first" @click="chioseTime('sale2')">
-              <div class="time-none" v-if="!serviceDetail.sale_end_at">
-                <div class="time-item">结束时间</div>
-                <img src="./icon-press_right@2x.png" class="time-icon">
-              </div>
-              <div class="time-txt" v-if="serviceDetail.sale_end_at">{{serviceDetail.sale_end_at}}</div>
-            </div>
+          <div class="item-left">开始时间</div>
+          <div class="item-right">
+            <input type="text" class="input-box" @click="chioseTime('sale1')" v-model="serviceDetail.sale_start_at" readonly placeholder="请选择时间">
           </div>
         </div>
         <div class="editor-item border-bottom-1px">
-          <div class="item-left">券有效期</div>
-          <div class="item-right time-right">
-            <div class="time-right-first" @click="chioseTime('use1')">
-              <div class="time-none" v-if="!serviceDetail.start_at">
-                <div class="time-item">开始时间</div>
-                <img src="./icon-press_right@2x.png" class="time-icon">
-              </div>
-              <div class="time-txt" :class="type === 'editor' ? 'disabled' : ''" v-if="serviceDetail.start_at">{{serviceDetail.start_at}}</div>
-            </div>
-            <div class="meddle-time">至</div>
-            <div class="time-right-first" @click="chioseTime('use2')">
-              <div class="time-none" v-if="!serviceDetail.end_at">
-                <div class="time-item">结束时间</div>
-                <img src="./icon-press_right@2x.png" class="time-icon">
-              </div>
-              <div class="time-txt" v-if="serviceDetail.end_at">{{serviceDetail.end_at}}</div>
-            </div>
+          <div class="item-left">结束时间</div>
+          <div class="item-right">
+            <input type="text" class="input-box" @click="chioseTime('sale2')" v-model="serviceDetail.sale_end_at" readonly placeholder="请选择时间">
           </div>
         </div>
-        <div class="large-item">
-          <div class="item-left">最大可售数量</div>
-          <div class="item-right num-right">
-            <div class="right-num-box">
-              <input type="number" class="num-input" v-model="serviceDetail.usable_stock">
-            </div>
+        <div class="editor-item">
+          <div class="item-left">预约信息</div>
+          <div class="item-right">
+            <input type="number" class="input-box" v-model="serviceDetail.note.need_subscribe" placeholder="请填写">
+          </div>
+        </div>
+        <!--<div class="editor-item border-bottom-1px">-->
+          <!--<div class="item-left">券有效期</div>-->
+          <!--<div class="item-right time-right">-->
+            <!--<div class="time-right-first" @click="chioseTime('use1')">-->
+              <!--<div class="time-none" v-if="!serviceDetail.start_at">-->
+                <!--<div class="time-item">开始时间</div>-->
+                <!--<img src="./icon-press_right@2x.png" class="time-icon">-->
+              <!--</div>-->
+              <!--<div class="time-txt" :class="type === 'editor' ? 'disabled' : ''" v-if="serviceDetail.start_at">{{serviceDetail.start_at}}</div>-->
+            <!--</div>-->
+            <!--<div class="meddle-time">至</div>-->
+            <!--<div class="time-right-first" @click="chioseTime('use2')">-->
+              <!--<div class="time-none" v-if="!serviceDetail.end_at">-->
+                <!--<div class="time-item">结束时间</div>-->
+                <!--<img src="./icon-press_right@2x.png" class="time-icon">-->
+              <!--</div>-->
+              <!--<div class="time-txt" v-if="serviceDetail.end_at">{{serviceDetail.end_at}}</div>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      </div>
+      <div class="editor-title border-bottom-1px border-top-1px">
+        <div class="title">温馨提示</div>
+      </div>
+      <div class="group-container">
+        <div class="textarea-item">
+          <div class="textarea-box">
+            <textarea class="textarea-content" @touchmove.stop maxlength="20" placeholder="请输入" v-model="serviceDetail.note.remarks"></textarea>
+            <div class="count-box">{{serviceDetail.note.remarks.length}}/20</div>
           </div>
         </div>
       </div>
-      <div class="margin-box-10px"></div>
-      <div class="group-container">
+      <div class="group-container border-top-1px border-bottom-1px">
         <div class="royalty-item">
           <div class="item-left">商品提成</div>
           <div class="item-right">
@@ -153,36 +188,19 @@
               <input type="number" class="num-input" v-model="serviceDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" :disabled="type === 'editor'">
             </div>
             <div class="right-txt-14">%</div>
-            <div class="right-txt-12">按成交价计算</div>
           </div>
         </div>
+        <div class="right-txt-12">提成按售卖价格的百分比计算</div>
       </div>
-      <div class="margin-box-10px"></div>
-      <div class="group-container">
+      <div class="group-container border-bottom-1px">
         <div class="royalty-item">
-          <div class="item-left">全员上架</div>
+          <div class="item-left">统一上架</div>
           <div class="item-right end-right">
             <switch-box @switchChange="switchChange" :values="serviceDetail.is_sync * 1"></switch-box>
           </div>
         </div>
       </div>
-      <div class="margin-box-10px"></div>
-      <div class="group-container">
-        <div class="only-title border-bottom-1px">购买须知</div>
-        <div class="large-item border-bottom-1px">
-          <div class="item-left">需要预约时间</div>
-          <div class="item-right meddle-right">
-            <input type="text" class="input-box" placeholder="请输入" v-model="serviceDetail.note.need_subscribe">
-          </div>
-        </div>
-        <div class="textarea-item">
-          <div class="textarea-title">其他</div>
-          <div class="textarea-box">
-            <textarea class="textarea-content" @touchmove.stop maxlength="20" placeholder="请输入" v-model="serviceDetail.note.remarks"></textarea>
-            <div class="count-box">{{serviceDetail.note.remarks.length}}/20</div>
-          </div>
-        </div>
-      </div>
+      <div class="padding-bottom"></div>
     </scroll>
     <title-box ref="titleBox" @submitMsg="submitTile"></title-box>
     <div class="bottom-box border-top-1px">
@@ -223,7 +241,7 @@
         disabledCover: false, // 请求时禁止任何操作
         timeType: '',
         serviceDetail: {
-          promotion_type: 1, // 1=套餐券;2=代金券;3=满减券;4=折扣券
+          // promotion_type: 1, // 1=套餐券;2=代金券;3=满减券;4=折扣券
           goods_banner_images: [], // banner图片
           image_id: '', // banner图片第一张
           title: '', // 商品标题
@@ -233,8 +251,8 @@
           goods_images: [], // 商品详情图片
           sale_start_at: '', // 售卖开始
           sale_end_at: '', // 售卖结束
-          start_at: '', // 券使用开始
-          end_at: '', // 券结束时间
+          // start_at: '', // 券使用开始
+          // end_at: '', // 券结束时间
           commission_rate: '', // 佣金
           usable_stock: '', // 总库存
           note: {
@@ -248,7 +266,7 @@
               price: ''
             }
           ], // 服务详情
-          industry_name: '美业', // 品类
+          // industry_name: '美业', // 品类
           is_online: '1', // 是否上线
           is_sync: 0 // 是否全员上架
         }
@@ -360,7 +378,7 @@
             obj = {
               type,
               text: this.serviceDetail.title,
-              title: '标题',
+              title: 'null',
               placeholder: '请输入标题'
             }
             break
@@ -368,7 +386,7 @@
             obj = {
               type,
               text: this.serviceDetail.subtitle,
-              title: '副标题',
+              title: 'null',
               placeholder: '请输入副标题'
             }
             break
@@ -392,12 +410,6 @@
             break
           case 'sale2':
             this.serviceDetail.sale_end_at = res
-            break
-          case 'use1':
-            this.serviceDetail.start_at = res
-            break
-          case 'use2':
-            this.serviceDetail.end_at = res
             break
         }
       },
@@ -432,8 +444,8 @@
           {value: this.detailImgReg, txt: '请添加至少一张服务详情图片'},
           {value: this.sale1TimeReg, txt: '请选择售卖开始时间'},
           {value: this.sale2TimeReg, txt: '请选择售卖结束时间'},
-          {value: this.use1TimeReg, txt: '请选择券有效期开始时间'},
-          {value: this.use2TimeReg, txt: '请选择券有效期结束时间'},
+          // {value: this.use1TimeReg, txt: '请选择券有效期开始时间'},
+          // {value: this.use2TimeReg, txt: '请选择券有效期结束时间'},
           {value: this.stockReg, txt: '请输入合法的最大可售数量'},
           {value: this.rateReg, txt: '请输入正整数提成比例'},
           {value: this.serviceDetailReg, txt: '请至少添加一条服务详情信息'}
@@ -461,6 +473,16 @@
             return true
           }
         }
+      },
+      addItem() {
+        this.serviceDetail.detail_config.push({
+          service: '',
+          number: '',
+          price: ''
+        })
+      },
+      delItem(idx) {
+        this.serviceDetail.detail_config.splice(idx, 1)
       }
     },
     computed: {
@@ -509,7 +531,8 @@
     },
     watch: {
       'serviceDetail.goods_banner_images'(curVal) {
-        this.serviceDetail.image_id = curVal[0].image_id
+        console.log(curVal)
+        this.serviceDetail.image_id = (curVal[0] && curVal[0].image_id) || ''
       }
     },
     components: {
@@ -552,9 +575,37 @@
         color: $color-white
         background: $color-363537
         border-radius: 2px
+    .editor-title
+      height: 40px
+      background: $color-F6F6F6
+      font-size: 14px
+      line-height: 40px
+      padding: 0 15px
+      color: $color-9B9B9B
+      &:before
+        border-top-color: $color-E6E6E6
+      &:after
+        border-bottom-color: $color-E6E6E6
+      .title
+        display: flex
+        justify-content: space-between
+        align-items: center
+        .add-server
+          width: 20px
+          height: 20px
+          background: $color-F9F9F9
+          border-radius: 20px
+          bg-image(icon-addfw)
+          background-size: 100% 100%
     .group-container
       padding-left: 15px
       background: $color-white
+    .no-padding
+      padding-left: 0
+      transition: all 0.3s
+      .server-list
+        overflow: hidden
+        animation: show 0.6s
     .editor-item
       width: 100%
       height: 55px
@@ -564,10 +615,20 @@
         width: 80px
         height: 55px
         line-height: 55px
-        color: $color-9B9B9B
+        color: #2E0034
         font-family: $font-family-regular
         font-size: $font-size-14
         letter-spacing: 0.6px
+        position: relative
+        &:before
+          content: '*'
+          position: absolute
+          color: $color-EF705D
+          left: -7px
+          top: 2px
+          font-size: 14px
+      .need-no:before
+        content: ''
       .item-right
         flex: 1
         height: 55px
@@ -602,11 +663,11 @@
           font-size: $font-size-14
           color: $color-363537
         .input-box::-webkit-input-placeholder
-          color: $color-9B9B9B
+          color: $color-CCCCCC
         .input-box::-ms-input-placeholder
-          color: $color-9B9B9B
+          color: $color-CCCCCC
         .input-box::-moz-placeholder
-          color: $color-9B9B9B
+          color: $color-CCCCCC
         .time-right-first
           width: 90px
           .time-none
@@ -645,6 +706,23 @@
       .item-right.time-right
         display: flex
         align-items: center
+    .server-list
+      padding: 0 15px
+      .item-left
+        display: flex
+        justify-content: space-between
+        align-items: center
+      .item-right
+        display: flex
+        justify-content: space-between
+        align-items: center
+      .del-server
+        width: 20px
+        height: 20px
+        background: $color-F9F9F9
+        border-radius: 20px
+        bg-image(icon-delfw)
+        background-size: 100% 100%
     .large-item
       display: flex
       justify-content: space-between
@@ -716,12 +794,22 @@
         align-items: center
     .service-img-item
       padding-bottom: 20px
+      padding-left: 15px
       .item-title
         font-size: $font-size-14
         font-family: $font-family-regular
-        color: $color-9B9B9B
+        color: #2E0034
         padding-top: 20px
         padding-bottom: 17px
+        position: relative
+        &:before
+          content: '*'
+          color: $color-EF705D
+          font-size: 14px
+          margin-right: 2px
+          position: absolute
+          left: -7px
+          top: 22px
       .img-container
         position: relative
         height: 16vw
@@ -783,8 +871,9 @@
       color: $color-363537
       font-family: $font-family-regular
     .textarea-item
+      margin-top: 15px
       padding-right: 15px
-      padding-bottom: 112px
+      padding-bottom: 15px
       .textarea-title
         font-size: $font-size-14
         color: $color-9B9B9B
@@ -811,17 +900,22 @@
           font-family: $font-family-regular
           color: $color-363537
         .textarea-content::-webkit-input-placeholder
-          color: $color-9B9B9B
+          color: $color-CCCCCC
         .textarea-content::-ms-input-placeholder
-          color: $color-9B9B9B
+          color: $color-CCCCCC
         .textarea-content::-moz-placeholder
-          color: $color-9B9B9B
+          color: $color-CCCCCC
         .count-box
           position: absolute
           right: 10px
           bottom: 10px
           font-size: $font-size-14
-          color: $color-9B9B9B
+          color: $color-CCCCCC
+    .right-txt-12
+      font-size: $font-size-12
+      color: $color-9B9B9B
+      padding-left: 80px
+      padding-bottom: 15px
     .royalty-item
       display: flex
       height: 55px
@@ -874,11 +968,14 @@
           font-size: $font-size-14
           color: $color-9B9B9B
           margin: 0 10px 0 5px
-        .right-txt-12
-          font-size: $font-size-12
-          color: $color-9B9B9B
 
       .end-right.item-right
         justify-content: flex-end
         padding-right: 15px
+  @keyframes show{
+    0% { height: 0}
+    100% { height: 160px}
+  }
+  .padding-bottom
+    padding-bottom: 130px
 </style>
