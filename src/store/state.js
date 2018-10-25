@@ -6,11 +6,10 @@ const state = {
   platform, // 平台信息
   employee: {},
   contentText: {txt: '', index: 0},
-  // 奖品集合
-  prizeCollection: {
-    prizePool: [],
-    prizeList: []
-  }
+  // 奖品库存列表
+  prizeStorage: [],
+  // 奖品列表
+  prizeArray: []
 }
 
 export default state

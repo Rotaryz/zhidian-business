@@ -7,14 +7,14 @@
               v-if="dataArray.length"
       >
         <ul class="card-wrapper">
-          <li class="card-item-wrapper" v-for="(item, idx) in dataArray" :key="idx">
-            <card-item :dataInfo="item" :prizeFlag="prizeFlag" @choose="chooseHandle"></card-item>
+          <li class="card-item-wrapper" v-for="(item, idx) in dataArray" :key="item.prize_id">
+            <card-item :dataInfo="item" :idx="idx" @choose="chooseHandle"></card-item>
           </li>
         </ul>
       </scroll>
     </div>
     <section class="btn-wrapper border-top-1px" v-if="dataArray.length">
-      <div class="btn" :class="saveReg?'active':''" @click="saveBtn">保存</div>
+      <div class="btn" :class="saveIndex !== -1?'active':''" @click="saveBtn">保存</div>
     </section>
     <section class="blank-wrapper" v-else>
       <blank></blank>
@@ -26,7 +26,7 @@
   import Scroll from 'components/scroll/scroll'
   import CardItem from './card-item/card-item'
   import Blank from 'components/blank/blank'
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapActions } from 'vuex'
 
   export default {
     components: {
@@ -34,37 +34,53 @@
       CardItem,
       Blank
     },
-    data () {
+    data() {
       return {
-        dataArray: [],
-        prizeFlag: -1
+        prizeFlag: -1,
+        dataArray: []
       }
     },
-    created () {
-      this.dataArray = [...this.prizeCollection.prizeList]
+    created() {
       this.prizeFlag = +this.$route.query.prizeFlag
-      console.log(this.dataArray)
+      this._initList()
     },
     methods: {
-      saveBtn () {
-        // todo
-      },
-      chooseHandle(obj) {
-        let arr = []
-        this.dataArray.map(item => {
-          item.checkArr[this.prizeFlag] = false
-          if (item.id === obj.id) {
-            item.checkArr[this.prizeFlag] = true
+      ...mapActions(['updatePrizePool']),
+      _initList() {
+        console.log(this.prizeArray)
+        let arr = this.prizeArray.map((item) => {
+          item.isCheck = false
+          if (+item.index === +this.prizeFlag) {
+            item.isCheck = true
           }
-          arr.push(item)
+          return item
+        })
+        this.dataArray = arr
+      },
+      saveBtn() {
+        if (this.saveIndex < 0) {
+          this.$toast.show('请选择奖品')
+          return
+        }
+        let obj = {
+          prizeFlag: this.prizeFlag, // 奖品位置索引
+          saveIndex: this.saveIndex // 奖品在奖品列表中的索引
+        }
+        this.updatePrizePool(obj)
+        this.$router.back()
+      },
+      chooseHandle(item, idx) {
+        let arr = []
+        this.dataArray.forEach((item, index) => {
+          arr.push({...item, ...{isCheck: index === idx}})
         })
         this.dataArray = arr
       }
     },
     computed: {
-      ...mapGetters(['prizeCollection']),
-      saveReg () {
-        return false
+      ...mapGetters(['prizeArray']),
+      saveIndex() {
+        return this.dataArray.findIndex(item => item.isCheck)
       }
     }
   }

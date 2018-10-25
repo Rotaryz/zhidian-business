@@ -8,5 +8,9 @@ export default {
   updateWheel(data, loading = true) {
     let url = '/api/merchant/lucky-draw'
     return request.post(url, data, loading)
+  },
+  getPrizeInfo(data, loading = true) {
+    let url = '/api/merchant/lucky-draw'
+    return request.get(url, data, loading)
   }
 }

@@ -2,40 +2,39 @@
   <div class="card-item" @click="choose(dataInfo)">
     <article class="container">
       <section class="left">
-        <div class="avatar-wrapper" :style="{backgroundImage: 'url(' + serverImg + ')'}"></div>
+        <div class="avatar-wrapper" :style="{backgroundImage: 'url(' + dataInfo.image_url + ')'}"></div>
       </section>
       <ul class="middle">
-        <li>{{title}}</li>
-        <li class="store">库存：{{store}}</li>
+        <li>{{dataInfo.title}}</li>
+        <li class="store">库存：{{dataInfo.stock}}</li>
       </ul>
-      <div class="right" :class="isCheck?'active':''"></div>
+      <div class="right" :class="dataInfo.isCheck?'active':''"></div>
     </article>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  // import { mapActions } from 'vuex'
+
   export default {
     props: {
       dataInfo: {
         type: Object,
         default: {}
       },
-      prizeFlag: {
+      idx: {
         type: Number,
-        default: 0
+        default: -1
       }
     },
     data() {
       return {
-        ...this.dataInfo,
-        isCheck: this.dataInfo.checkArr[this.prizeFlag]
+        isCheck: this.dataInfo.isCheck
       }
-    },
-    created() {
     },
     methods: {
       choose(item) {
-        this.$emit('choose', item)
+        this.$emit('choose', item, this.idx)
       }
     }
   }

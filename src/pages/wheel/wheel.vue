@@ -4,7 +4,7 @@
       <scroll
         :bcColor="'#F6F6F6'"
         ref="scroll"
-        :data="prizeCollection.prizePool"
+        :data="prizePool"
       >
         <article class="container">
           <panel title="添加奖品" subHead="奖品数量越大中奖几率越高">
@@ -18,9 +18,9 @@
           </panel>
           <div class="margin-box-10px"></div>
           <panel title="奖品池">
-            <ul class="prize-wrapper" v-if="prizeCollection.prizePool.length">
-              <li class="prize-item-wrapper" v-for="(item, idx) in prizeCollection.prizePool" :key="idx">
-                <prize-item :idx="idx"></prize-item>
+            <ul class="prize-wrapper" v-if="prizePool.length">
+              <li class="prize-item-wrapper" v-for="(item, idx) in prizePool" :key="idx">
+                <prize-item :idx="idx" :item="item" @resetItem="restItem"></prize-item>
               </li>
             </ul>
             <div class="prize-empty" v-else>
@@ -33,13 +33,13 @@
               <li class="setting-item-wrapper">
                 <div class="left">中奖机率</div>
                 <div class="middle">用户中奖率设置</div>
-                <div class="right"><input type="number"></div>
+                <div class="right"><input type="number" placeholder="请输入" v-model="prizeInfo.percentage"></div>
                 <div class="unit">%</div>
               </li>
               <li class="setting-item-wrapper border-top-1px">
                 <div class="left">抽奖次数</div>
                 <div class="middle">下单支付额外获得1次</div>
-                <div class="right"><input type="number"></div>
+                <div class="right"><input type="number" placeholder="请输入" v-model="prizeInfo.joinTimes"></div>
                 <div class="unit">次</div>
               </li>
             </ul>
@@ -47,15 +47,15 @@
           <div class="margin-box-10px"></div>
           <panel title="兑换说明">
             <section class="texts-wrapper border-bottom-1px">
-              <div class="texts-number">{{explainTxt.length}}<span>/{{maxLength}}</span></div>
+              <div class="texts-number">{{prizeInfo.note.length}}<span>/{{maxLength}}</span></div>
               <div class="data-wrapper">
-                <textarea class="data-area" @touchmove.stop v-model="explainTxt" :maxlength="maxLength" placeholder="请填写"></textarea>
+                <textarea class="data-area" @touchmove.stop v-model="prizeInfo.note" :maxlength="maxLength" placeholder="请填写"></textarea>
               </div>
             </section>
           </panel>
           <section class="open-wrapper border-top-1px">
             <p>开启大转盘</p>
-            <div class="checkbox" :class="isOpen ? 'checked' : ''" @click.stop="checkSwitch">
+            <div class="checkbox" :class="prizeInfo.status ? 'checked' : ''" @click="checkSwitch">
               <div class="circle-btn"></div>
             </div>
           </section>
@@ -65,7 +65,7 @@
     <section class="btn-wrapper border-top-1px">
       <div class="btn" @click="saveBtn">保存</div>
     </section>
-    <router-view-common></router-view-common>
+    <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
 
@@ -73,7 +73,7 @@
   import Scroll from 'components/scroll/scroll'
   import Panel from './panel/panel'
   import PrizeItem from './prize-item/prize-item'
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapActions } from 'vuex'
   import { ActiveExtend } from 'api'
 
   export default {
@@ -82,51 +82,147 @@
       Panel,
       PrizeItem
     },
-    data () {
+    data() {
       return {
         explainTxt: '',
         maxLength: 30,
-        isOpen: false
+        isOpen: false,
+        prizeList: [],
+        prizePool: [],
+        prizeInfo: {
+          id: 0,
+          percentage: 0,
+          joinTimes: 0,
+          note: '',
+          status: 0 // 1开启0关闭
+        }
       }
     },
-    created () {
-      this._getPrizeList()
+    created() {
+      this._getPrizeList(false)
     },
     methods: {
-      ...mapActions(['getPrizeList']),
-      _getPrizeList () {
-        ActiveExtend.getPrizeList().then(res => {
+      ...mapActions(['initPrizeStorage', 'initPrizeArray']),
+      refresh() {
+        // todo
+      },
+      _getPrizeList(loading) {
+        this.$loading.show()
+        ActiveExtend.getPrizeList({}, loading).then(res => {
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.prizeList = res.data
+          this._getPrizeInfo(false)
+        })
+      },
+      _getPrizeInfo(loading) {
+        ActiveExtend.getPrizeInfo({}, loading).then(res => {
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)
             return
           }
-          this.getPrizeList(res.data)
+          this.prizeInfo = {
+            id: res.data.id || 0,
+            percentage: res.data.percentage || 0,
+            joinTimes: res.data.join_times || 0,
+            note: res.data.note || '',
+            status: res.data.status || 0 // 1开启0关闭
+          }
+          res.data.activity_prizes[0].index = 0 // todo
+          this.prizePool = res.data.activity_prizes
+          let obj = {
+            prizePool: this.prizePool,
+            prizeList: this.prizeList
+          }
+          this.initPrizeStorage(obj)
+          this.initPrizeArray(this.prizeList)
         })
       },
-      _updateWheel() {
-        ActiveExtend.updateWheel().then(res => {
+      _updateWheel(data, loading) {
+        ActiveExtend.updateWheel(data, loading).then(res => {
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)
             return
           }
-          console.log(res, '---')
+          this.$toast.show('保存成功')
+          this.$router.back()
         })
       },
-      navTo (item) {
+      navTo(item) {
         if (item < 0) return
         this.$router.push(this.$route.path + `/wheel-add-prize?prizeFlag=${item}`)
       },
-      saveBtn () {
-        // todo
+      saveBtn() {
+        this._checkForm(() => {
+          let data = {
+            type: 1,
+            id: this.prizeInfo.id,
+            join_times: this.prizeInfo.joinTimes,
+            note: this.prizeInfo.note,
+            status: this.prizeInfo.status,
+            percentage: this.prizeInfo.percentage,
+            activity_prizes: this.prizePool,
+            del_activty_prizes: []
+          }
+          this._updateWheel(data)
+        })
       },
-      checkSwitch () {
-        this.isOpen = !this.isOpen
+      checkSwitch() {
+        let flag = !this.prizeInfo.status
+        this.prizeInfo.status = flag ? 1 : 0
+      },
+      restItem(item) {
+        this.prizePool[item.index] = item
+      },
+      _checkForm(callback) {
+        let arr = [
+          {value: this.prizePoolReg, txt: '请点击大转盘添加您的奖品'},
+          {value: this.percentageReg, txt: '请正确填写中奖率'},
+          {value: this.joinTimesReg, txt: '请正确填写中奖次数'}
+        ]
+        let res = this._testPropety(arr)
+        if (res) {
+          callback && callback()
+        } else {
+          this.$loading.hide()
+        }
+      },
+      _testPropety(arr) {
+        for (let i = 0, j = arr.length; i < j; i++) {
+          if (!arr[i].value) {
+            this.$toast.show(arr[i].txt)
+            return false
+          }
+          if (i === j - 1 && arr[i].value) {
+            return true
+          }
+        }
       }
     },
     computed: {
-      ...mapGetters(['prizeCollection'])
+      // ...mapGetters(['prizeStorage']),
+      prizePoolReg() {
+        return this.prizePool.length
+      },
+      percentageReg() {
+        let percentage = this.prizeInfo.percentage
+        return percentage >= 0 && percentage <= 100
+      },
+      joinTimesReg() {
+        let joinTimes = this.prizeInfo.joinTimes + ''
+        return /^[+]?(\d+)$/.test(joinTimes)
+      }
+      // prizePool() {
+      //   return this.prizeList.filter(item => {
+      //     if (item.prize_stock !== undefined) {
+      //       return item
+      //     }
+      //   })
+      // }
     }
   }
 </script>

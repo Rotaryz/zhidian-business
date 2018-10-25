@@ -2,11 +2,11 @@
   <ul class="prize-item">
     <li class="item-wrapper top">
       <div class="left">{{name}}</div>
-      <div class="middle">{{title}}</div>
+      <div class="middle">{{item.title}}</div>
       <div class="right"></div>
     </li>
     <li class="item-wrapper">
-      <div class="left store">可用库存{{allowStore}}</div>
+      <div class="left store">可用库存{{item.stock}}</div>
       <section class="counter">
         <div class="btn declare" @click="subHandle">-</div>
         <div class="input-wrapper">
@@ -19,37 +19,49 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { mapGetters, mapActions } from 'vuex'
+
   const NameArr = ['奖品一', '奖品二', '奖品三', '奖品四', '奖品五']
   export default {
     props: {
-      idx: {
-        type: Number,
-        default: 0
+      item: {
+        type: Object,
+        default: {}
       }
     },
     data() {
       return {
-        useStore: 1,
-        store: 20,
-        title: '国颐堂养发SPA馆洗头护发养…',
-        index: this.idx
+        useStore: this.item.prize_stock
       }
     },
     computed: {
+      ...mapGetters(['prizeList']),
       name() {
-        return NameArr[this.index]
-      },
-      allowStore() {
-        return this.store - this.useStore
+        return NameArr[this.item.index || 0]
+      }
+    },
+    watch: {
+      useStore(cur) {
+        this.updatePrizeStock({item: this.item, number: cur})
       }
     },
     methods: {
+      ...mapActions(['updatePrizeStock']),
       subHandle() {
         this.useStore--
       },
       addHandle() {
         this.useStore++
       }
+      // resetItem() {
+      //   let obj = {
+      //     stock: this.useStore,
+      //     total_stock: this.allowStore,
+      //     title: this.title,
+      //     index: this.index
+      //   }
+      //   return {...this.item, ...obj}
+      // }
     }
   }
 </script>
