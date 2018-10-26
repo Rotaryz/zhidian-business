@@ -1,6 +1,6 @@
 <template>
   <div class="editor-service">
-    <scroll :bcColor="'#ffffff'" ref="scroll">
+    <scroll :data="serviceDetail.detail_config" :bcColor="'#ffffff'" ref="scroll">
       <div class="editor-title border-bottom-1px border-top-1px">
         <div class="title">基本信息</div>
       </div>
@@ -53,7 +53,7 @@
         <!--</div>-->
       </div>
       <div class="group-container no-padding">
-        <div class="service-img-item  border-top-1px">
+        <div class="service-img-item border-top-1px">
           <div class="item-title">服务图片 <span class="item-subtitle">建议尺寸600*480,大小10M以内，最多3张</span></div>
           <div class="img-container">
             <div class="container-item">
@@ -531,9 +531,13 @@
     },
     watch: {
       'serviceDetail.goods_banner_images'(curVal) {
-        console.log(curVal)
         this.serviceDetail.image_id = (curVal[0] && curVal[0].image_id) || ''
       }
+      // 'serviceDetail.detail_config'() {
+      //   setTimeout(() => {
+      //     this.$refs.scroll.refresh()
+      //   }, 20)
+      // }
     },
     components: {
       TitleBox,
@@ -552,6 +556,7 @@
   .editor-service
     fill-box()
     z-index: 70
+    bottom: 62px
     background: $color-white
     .disabled-cover
       fill-box()
@@ -615,7 +620,7 @@
         width: 80px
         height: 55px
         line-height: 55px
-        color: #2E0034
+        color: $color-2E0034
         font-family: $font-family-regular
         font-size: $font-size-14
         letter-spacing: 0.6px
@@ -798,7 +803,7 @@
       .item-title
         font-size: $font-size-14
         font-family: $font-family-regular
-        color: #2E0034
+        color: $color-2E0034
         padding-top: 20px
         padding-bottom: 17px
         position: relative
@@ -924,10 +929,18 @@
         width: 80px
         height: 55px
         line-height: 55px
-        color: $color-9B9B9B
+        color: $color-2E0034
         font-family: $font-family-regular
         font-size: $font-size-14
         letter-spacing: 0.6px
+        position: relative
+        &:before
+          content: '*'
+          position: absolute
+          color: $color-EF705D
+          left: -7px
+          top: 2px
+          font-size: 14px
       .item-right
         display: flex
         height: 55px
@@ -977,5 +990,5 @@
     100% { height: 160px}
   }
   .padding-bottom
-    padding-bottom: 130px
+    padding-bottom: 160px
 </style>

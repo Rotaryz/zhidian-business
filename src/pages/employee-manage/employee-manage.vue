@@ -76,7 +76,7 @@
         if (item.role_id * 1 === 1 || item.status * 1 !== 0) {
           return
         }
-        this.$refs.modal.show({msg: '确定删除该店员？'})
+        this.$refs.modal.show({msg: `是否删除${item.name}店员`})
         this.delItem = item
       },
       modalConfirm() {

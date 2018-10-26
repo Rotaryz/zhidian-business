@@ -6,7 +6,7 @@
           <div class="title" v-if="title !== 'null'">{{title}}</div>
           <div class="data-bottom">
             <div class="textarea-number">{{note.length}}<span>/{{maxLength}}</span></div>
-            <textarea class="data-area" :class="{'long-text' : title === 'null'}" @touchmove.stop v-model="note" :maxlength="maxLength" :placeholder="placeholder"></textarea>
+            <textarea class="data-area" ref="txt" :class="{'long-text' : title === 'null'}" @touchmove.stop v-model="note" :maxlength="maxLength" :placeholder="placeholder"></textarea>
           </div>
         </div>
         <div class="title-btn border-top-1px" @click="submitTitle">确定</div>
@@ -36,6 +36,9 @@
         this.type = obj.type || 'title'
         this.maxLength = obj.maxLength || 40
         this.showTitle = true
+        setTimeout(() => {
+          this.$refs.txt.focus()
+        }, 20)
       },
       submitTitle() {
         this.showTitle = false
