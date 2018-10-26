@@ -125,6 +125,8 @@
           // 新位置
           this.updatePrizeStorage({prize_id: savePrize.prize_id, number: defaultStock})
           let node = {
+            prize_pools_id: savePrize.prize_pools_id,
+            activity_prize_id: 0,
             id: 0,
             type: savePrize.type,
             prize_id: savePrize.prize_id,
@@ -150,6 +152,8 @@
           this.deletePrizeStorage(node)
           this.updatePrizeStorage({prize_id: savePrize.prize_id, number: defaultStock})
           let replaceNode = {
+            prize_pools_id: savePrize.prize_pools_id,
+            activity_prize_id: savePrize.activity_prize_id,
             id: node.id,
             type: savePrize.type,
             prize_id: savePrize.prize_id,
