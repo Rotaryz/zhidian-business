@@ -1,22 +1,26 @@
 <template>
   <div class="wheel">
     <div class="scroll-wrapper">
-      <scroll :bcColor="'#F6F6F6'" ref="scroll">
+      <scroll
+        :bcColor="'#F6F6F6'"
+        ref="scroll"
+        :data="prizeList"
+      >
         <article class="container">
           <panel title="添加奖品" subHead="奖品数量越大中奖几率越高">
             <div class="wheel-wrapper">
               <div class="auto-wrapper">
                 <article class="box">
-                  <div class="prize" :class="'prize-' + idx" v-for="(item,idx) in [-1,0,1,2,3,4]" :key="idx" @click="navTo(item)"></div>
+                  <div class="prize" :class="'prize-' + idx" v-for="(item,idx) in [0,1,2,3,4,5]" :key="idx" @click="navTo(item)"></div>
                 </article>
               </div>
             </div>
           </panel>
           <div class="margin-box-10px"></div>
           <panel title="奖品池">
-            <ul class="prize-wrapper" v-if="prizePool.length">
-              <li class="prize-item-wrapper" v-for="(item, idx) in prizePool" :key="idx">
-                <prize-item :idx="idx"></prize-item>
+            <ul class="prize-wrapper" v-if="prizeList.length">
+              <li class="prize-item-wrapper" v-for="(item, idx) in prizeList" :key="idx">
+                <prize-item :idx="idx" :item="item" @updatePrizeStock="updatePrizeStock" @delHandle="delHandle" @navTo="navTo"></prize-item>
               </li>
             </ul>
             <div class="prize-empty" v-else>
@@ -29,13 +33,13 @@
               <li class="setting-item-wrapper">
                 <div class="left">中奖机率</div>
                 <div class="middle">用户中奖率设置</div>
-                <div class="right"><input type="number"></div>
+                <div class="right"><input type="number" placeholder="请输入" v-model="prizeInfo.percentage"></div>
                 <div class="unit">%</div>
               </li>
               <li class="setting-item-wrapper border-top-1px">
                 <div class="left">抽奖次数</div>
                 <div class="middle">下单支付额外获得1次</div>
-                <div class="right"><input type="number"></div>
+                <div class="right"><input type="number" placeholder="请输入" v-model="prizeInfo.joinTimes"></div>
                 <div class="unit">次</div>
               </li>
             </ul>
@@ -43,13 +47,15 @@
           <div class="margin-box-10px"></div>
           <panel title="兑换说明">
             <section class="texts-wrapper border-bottom-1px">
-              <div class="texts-number">{{explainTxt.length}}<span>/{{maxLength}}</span></div>
-              <textarea class="data-area" @touchmove.stop v-model="explainTxt" :maxlength="maxLength" placeholder="请填写"></textarea>
+              <div class="texts-number">{{prizeInfo.note.length}}<span>/{{maxLength}}</span></div>
+              <div class="data-wrapper">
+                <textarea class="data-area" @touchmove.stop v-model="prizeInfo.note" :maxlength="maxLength" placeholder="请填写"></textarea>
+              </div>
             </section>
           </panel>
           <section class="open-wrapper border-top-1px">
             <p>开启大转盘</p>
-            <div class="checkbox" :class="isOpen ? 'checked' : ''" @click.stop="checkSwitch">
+            <div class="checkbox" :class="prizeInfo.status ? 'checked' : ''" @click="checkSwitch">
               <div class="circle-btn"></div>
             </div>
           </section>
@@ -57,9 +63,10 @@
       </scroll>
     </div>
     <section class="btn-wrapper border-top-1px">
-      <div class="btn" @click="saveBtn">保存</div>
+      <div class="btn" :class="saveBtnReg?'active':''" @click="saveBtn">保存</div>
     </section>
-    <router-view-common></router-view-common>
+    <confirm-msg ref="confirm" @confirm="confirmHandle"></confirm-msg>
+    <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
 
@@ -67,35 +74,241 @@
   import Scroll from 'components/scroll/scroll'
   import Panel from './panel/panel'
   import PrizeItem from './prize-item/prize-item'
-  import { mapGetters } from 'vuex'
+  import ConfirmMsg from 'components/confirm-msg/confirm-msg'
+  import { mapActions, mapGetters } from 'vuex'
+  import { ActiveExtend } from 'api'
 
   export default {
     components: {
       Scroll,
       Panel,
-      PrizeItem
+      PrizeItem,
+      ConfirmMsg
     },
     data() {
       return {
-        explainTxt: '',
         maxLength: 30,
-        isOpen: false
+        prizeList: [],
+        prizePool: [],
+        prizeInfo: {
+          id: 0,
+          percentage: 0,
+          joinTimes: 0,
+          note: '',
+          status: 0 // 1开启0关闭
+        },
+        delNode: null,
+        delList: []
       }
     },
+    created() {
+      this._getPrizePoolList(false)
+    },
     methods: {
+      ...mapActions(['initPrizeStorage', 'initPrizeArray', 'deletePrizeStorage', 'updatePrizeStorage']),
+      refresh(obj) {
+        this._updatePrizeList(obj)
+      },
+      updatePrizeStock() {
+        // 刷新每个位置的库存
+        this.prizeList.map(item => {
+          item.stock = this.prizeStorage.find(it => it.prize_id === item.prize_id).stock
+          return item
+        })
+      },
+      _updatePrizeList(obj) {
+        const defaultStock = 0
+        const {place, savePrize} = obj
+        // 1.判断是否为新位置
+        let idx = this.prizeList.findIndex(item => +item.place === +place)
+        if (idx === -1) {
+          // 新位置
+          this.updatePrizeStorage({prize_id: savePrize.prize_id, number: defaultStock})
+          let node = {
+            prize_pools_id: savePrize.prize_pools_id,
+            activity_prize_id: 0,
+            id: 0,
+            type: savePrize.type,
+            prize_id: savePrize.prize_id,
+            title: savePrize.title,
+            place: place,
+            prize_stock: defaultStock,
+            stock: this.prizeStorage.find(item => item.prize_id === savePrize.prize_id).stock
+          }
+          this.prizeList.push({...node})
+          // 刷新每个位置的库存
+          this.prizeList.map(item => {
+            if (item.prize_id === savePrize.prize_id) {
+              item.stock = node.stock
+            }
+            return item
+          })
+        } else {
+          // 老位置
+          let node = this.prizeList[idx]
+          if (node.prize_id === savePrize.prize_id) {
+            return
+          }
+          this.deletePrizeStorage(node)
+          this.updatePrizeStorage({prize_id: savePrize.prize_id, number: defaultStock})
+          let replaceNode = {
+            prize_pools_id: savePrize.prize_pools_id,
+            activity_prize_id: savePrize.activity_prize_id,
+            id: node.id,
+            type: savePrize.type,
+            prize_id: savePrize.prize_id,
+            title: savePrize.title,
+            place: place,
+            prize_stock: defaultStock,
+            stock: this.prizeStorage.find(item => item.prize_id === savePrize.prize_id).stock
+          }
+          this.prizeList.splice(idx, 1, replaceNode)
+          // 刷新每个位置的库存
+          this._renderPrizeList()
+        }
+        // 排序
+        this.prizeList.sort(function (a, b) {
+          return a.place - b.place
+        })
+      },
+      delHandle(node) {
+        this.delNode = node
+        this.$refs.confirm.show()
+      },
+      confirmHandle() {
+        let idx = this.prizeList.findIndex(item => item.place === this.delNode.place)
+        let node = this.prizeList[idx]
+        if (node.id !== 0) {
+          this.delList.push({activity_prize_id: node.activity_prize_id})
+        }
+        this.deletePrizeStorage(node)
+        this.prizeList.splice(idx, 1)
+        // 刷新每个位置的库存
+        this._renderPrizeList()
+      },
+      _renderPrizeList() {
+        this.prizeList.map(item => {
+          item.stock = this.prizeStorage.find(it => it.prize_id === item.prize_id).stock
+          return item
+        })
+      },
+      _getPrizePoolList(loading) {
+        this.$loading.show()
+        ActiveExtend.getPrizePoolList({}, loading).then(res => {
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.prizePool = res.data
+          this._getPrizeInfo(false)
+        })
+      },
+      _getPrizeInfo(loading) {
+        ActiveExtend.getPrizeInfo({}, loading).then(resp => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== resp.error) {
+            this.$toast.show(resp.message)
+            return
+          }
+          if (resp.data && !(resp.data instanceof Array)) {
+            this.prizeInfo = {
+              id: resp.data.id || 0,
+              percentage: resp.data.percentage || 0,
+              joinTimes: resp.data.join_times || 0,
+              note: resp.data.note || '',
+              status: resp.data.status || 0 // 1开启0关闭
+            }
+            this.prizeList = resp.data.activity_prizes
+          }
+          let obj = {
+            prizePool: [...this.prizePool],
+            prizeList: [...this.prizeList]
+          }
+          this.initPrizeStorage(obj)
+          this.initPrizeArray(this.prizePool)
+        })
+      },
+      _updateWheel(data, loading) {
+        ActiveExtend.updateWheel(data, loading).then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          this.$toast.show('保存成功')
+          this.$router.back()
+        })
+      },
       navTo(item) {
-        if (item < 0) return
-        this.$router.push(this.$route.path + `/wheel-add-prize?prizeType=${item}`)
+        if (item === 0) return
+        let node = this.prizeList.find(it => +it.place === +item)
+        let currentIndex = node ? this.prizePool.findIndex(it => it.prize_id === node.prize_id) : -1
+        this.$router.push(this.$route.path + `/wheel-add-prize?place=${item}&currentIndex=${currentIndex}`)
       },
       saveBtn() {
-        // todo
+        this._checkForm(() => {
+          let data = {
+            type: 1,
+            id: this.prizeInfo.id,
+            join_times: this.prizeInfo.joinTimes,
+            note: this.prizeInfo.note,
+            status: this.prizeInfo.status,
+            percentage: this.prizeInfo.percentage,
+            activity_prizes: this.prizeList,
+            del_activty_prizes: this.delList
+          }
+          this._updateWheel(data)
+        })
       },
       checkSwitch() {
-        this.isOpen = !this.isOpen
+        let flag = !this.prizeInfo.status
+        this.prizeInfo.status = flag ? 1 : 0
+      },
+      _checkForm(callback) {
+        let arr = [
+          {value: this.prizeListReg, txt: '请点击大转盘添加您的奖品'},
+          {value: this.prizeListInputReg, txt: '请输入正确的奖品数量'},
+          {value: this.percentageReg, txt: '请输入正确的中奖率'},
+          {value: this.joinTimesReg, txt: '请输入正确的中奖次数'}
+        ]
+        let res = this._testPropety(arr)
+        if (res) {
+          callback && callback()
+        } else {
+          this.$loading.hide()
+        }
+      },
+      _testPropety(arr) {
+        for (let i = 0, j = arr.length; i < j; i++) {
+          if (!arr[i].value) {
+            this.$toast.show(arr[i].txt)
+            return false
+          }
+          if (i === j - 1 && arr[i].value) {
+            return true
+          }
+        }
       }
     },
     computed: {
-      ...mapGetters(['prizePool'])
+      ...mapGetters(['prizeStorage']),
+      prizeListReg() {
+        return this.prizeList.length
+      },
+      prizeListInputReg() {
+        return this.prizeList.some(item => item.stock >= 0)
+      },
+      percentageReg() {
+        let percentage = this.prizeInfo.percentage
+        return percentage >= 0 && percentage <= 100
+      },
+      joinTimesReg() {
+        let joinTimes = this.prizeInfo.joinTimes + ''
+        return /^[+]?(\d+)$/.test(joinTimes)
+      },
+      saveBtnReg() {
+        return this.prizeListReg && this.prizeListInputReg && this.percentageReg && this.joinTimesReg
+      }
     }
   }
 </script>
@@ -217,26 +430,28 @@
     padding: 18px 0 20px
     position: relative
     border-bottom-1px(rgba(236, 237, 241, 1))
-    .data-area
-      resize: none
-      box-sizing: border-box
-      width: 100%
-      border-color: rgba(0, 0, 0, 0)
-      font-size: $font-size-14
-      color: $color-20202E
-      font-family: $font-family-regular
-      height: 75px
-      outline: none
-      word-break: break-all
-      background: $color-F9F9F9
-      padding: 10px 9px !important
-      line-height: 1.4
-      .&::-webkit-input-placeholder
-        color: $color-9B9B9B
-      .&::-ms-input-placeholder
-        color: $color-9B9B9B
-      .&::-moz-placeholder
-        color: $color-9B9B9B
+    .data-wrapper
+      border-1px(#F0EFF5, 2px)
+      .data-area
+        resize: none
+        box-sizing: border-box
+        width: 100%
+        border-color: rgba(0, 0, 0, 0)
+        font-size: $font-size-14
+        color: $color-20202E
+        font-family: $font-family-regular
+        height: 75px
+        outline: none
+        word-break: break-all
+        background: $color-F9F9F9
+        padding: 10px 9px !important
+        line-height: 1.4
+        .&::-webkit-input-placeholder
+          color: $color-9B9B9B
+        .&::-ms-input-placeholder
+          color: $color-9B9B9B
+        .&::-moz-placeholder
+          color: $color-9B9B9B
     .texts-number
       position: absolute
       bottom: 30px
@@ -300,4 +515,7 @@
       letter-spacing: 0.8px
       text-align: center
       line-height: 44px
+      opacity: 0.5
+      &.active
+        opacity: 1
 </style>

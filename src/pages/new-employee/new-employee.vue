@@ -8,7 +8,8 @@
       </div>
       <div class="list-item border-bottom-1px">
         <div class="item-left">手机号码</div>
-        <input type="number" placeholder="请输入员工的手机号" class="item-right" v-model="staffInfo.mobile">
+        <input type="number" v-if="!disabledCover" placeholder="请输入员工的手机号" oninput="if(value.length > 11)value = value.slice(0, 11)" class="item-right" v-model="staffInfo.mobile">
+        <input type="number" v-else :placeholder="staffInfo.mobile" readonly class="item-right">
       </div>
       <div class="list-item border-bottom-1px">
         <div class="item-left">公司职位</div>
@@ -35,23 +36,53 @@
           mobile: '',
           position: ''
         },
-        disabledCover: false
+        disabledCover: false,
+        id: ''
       }
     },
     created() {
+      if (this.$storage.get('employee')) {
+        let employee = this.$storage.get('employee')
+        this.disabledCover = true
+        this.id = employee.id
+        this.staffInfo = {
+          name: employee.name,
+          mobile: employee.mobile,
+          position: employee.position
+        }
+      }
+    },
+    beforeRouteLeave(to, from, next) {
+      this.$storage.remove('employee')
+      next(true)
     },
     methods: {
       _createEmployee() {
-        Employee.createNewEmployee(this.staffInfo).then(res => {
-          if (this.$ERR_OK !== res.error) {
-            this.$loading.hide()
-            this.$toast.show(res.message)
-            return
-          }
-          this.$toast.show('创建成功')
-          this.$emit('refresh')
-          this.$router.go(-1)
-        })
+        if (this.disabledCover) {
+          Employee.editEmployee(this.staffInfo, this.id)
+            .then(res => {
+              if (this.$ERR_OK !== res.error) {
+                this.$loading.hide()
+                this.$toast.show(res.message)
+                return
+              }
+              this.$toast.show('修改成功')
+              this.$emit('refresh')
+              this.$router.go(-1)
+            })
+        } else {
+          Employee.createNewEmployee(this.staffInfo)
+            .then(res => {
+              if (this.$ERR_OK !== res.error) {
+                this.$loading.hide()
+                this.$toast.show(res.message)
+                return
+              }
+              this.$toast.show('创建成功')
+              this.$emit('refresh')
+              this.$router.go(-1)
+            })
+        }
       },
       _fileChange(e) {
         let arr = Array.from(e.target.files)
@@ -118,9 +149,17 @@
         height: 75px
       .item-left
         font-size: $font-size-14
-        color: $color-9B9B9B
+        color: #2e0034
         font-family: $font-family-regular
         min-width: 21.33333vw
+        &:before
+          content: '*'
+          color: $color-EF705D
+          font-size: 14px
+          margin-right: 2px
+          position: absolute
+          left: -7px
+          top: 26px
       .item-img
         width: 50px
         height: @width

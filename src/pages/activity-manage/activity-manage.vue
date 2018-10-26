@@ -87,7 +87,7 @@
     data() {
       return {
         tabList: TABS,
-        tabIdx: 1,
+        tabIdx: 0,
         list0: [],
         list1: [],
         numObj: {},
@@ -119,7 +119,7 @@
       _getList(loading = true) {
         let data = {
           page: this[`page${this.tabIdx}`],
-          status: this.tabIdx
+          status: this.tabIdx + 1
         }
         ActivityApi.getActivityList(data, loading).then((res) => {
           this.$loading.hide()

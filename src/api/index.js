@@ -15,6 +15,9 @@ import order from './order'
 import echart from './echart'
 import global from './global'
 import content from './content'
+import activeExtend from './active-extend'
+
+export const ActiveExtend = activeExtend
 
 export const Content = content
 
