@@ -255,7 +255,7 @@
             status: this.prizeInfo.status,
             percentage: this.prizeInfo.percentage,
             activity_prizes: this.prizeList,
-            del_activty_prizes: this.delList
+            del_activity_prizes: this.delList
           }
           this._updateWheel(data)
         })
