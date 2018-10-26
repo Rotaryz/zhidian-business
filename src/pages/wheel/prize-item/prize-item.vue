@@ -3,16 +3,16 @@
     <li class="item-wrapper top">
       <div class="left">{{name}}</div>
       <div class="middle">{{item.title}}</div>
-      <div class="right" @click="delHandle"></div>
+      <div class="right" @click.stop="delHandle"></div>
     </li>
     <li class="item-wrapper">
       <div class="left store">可用库存{{item.stock}}</div>
-      <section class="counter">
-        <div class="btn declare" @click="subHandle">-</div>
+      <section class="counter" @click.stop>
+        <div class="btn declare" @click="subHandle"></div>
         <div class="input-wrapper">
           <input class="input-style" :class="inputReg?'error':''" type="number" v-model="item.prize_stock" @input="inputHandle" @focus="focusHandle" @blur="blurHandle">
         </div>
-        <div class="btn add" @click="addHandle">+</div>
+        <div class="btn add" @click="addHandle"></div>
       </section>
     </li>
   </ul>
@@ -40,18 +40,30 @@
         return NameArr[this.item.place]
       },
       inputReg() {
-        return this.item.stock < 0
+        return this.item.stock < 0 || this.item.prize_stock < 0
       }
     },
     methods: {
       ...mapActions(['updatePrizeStorage']),
       subHandle() {
-        this.item.prize_stock -= 1
+        this.item.prize_stock--
+        this.currentStock = this.item.prize_stock
+        if (this.item.prize_stock < 0) {
+          this.item.prize_stock++
+          this.currentStock = this.item.prize_stock
+          return
+        }
         this.updatePrizeStorage({prize_id: this.item.prize_id, number: -1})
         this.$emit('updatePrizeStock')
       },
       addHandle() {
-        this.item.prize_stock += 1
+        this.item.prize_stock++
+        this.currentStock = this.item.prize_stock
+        if (this.item.stock <= 0) {
+          this.item.prize_stock--
+          this.currentStock = this.item.prize_stock
+          return
+        }
         this.updatePrizeStorage({prize_id: this.item.prize_id, number: 1})
         this.$emit('updatePrizeStock')
       },
@@ -143,13 +155,10 @@
           text-align: center
           line-height: @width
           &.declare
-            background: #FFFFFF
-            border-1px(#F0EFF5, 2px)
-            color: #706B82
+            icon-image(icon-reduce_prize)
           &.add
-            background: #706B82
-            color: #ffffff
-            margin-right: 20px
+            icon-image(icon-plus_prize)
+            margin-right: 15px
         .input-wrapper
           height: 25px
           width 60px

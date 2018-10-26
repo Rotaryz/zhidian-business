@@ -14,17 +14,40 @@ const mutations = {
   [TYPES.INIT_PRIZE_STORAGE](state, obj) {
     const {prizeList, prizePool} = obj
     let arr = []
-    prizePool.forEach(item => {
-      let itemStocks = 0
-      for (let i = 0; i < prizeList.length; i++) {
-        if (prizeList[i].prize_id === item.prize_id) {
-          itemStocks += +prizeList[i].prize_stock
+    let itemStocksObj = {}
+    let idx = 0
+    while (prizeList.length > 0) {
+      let flag = prizeList[idx].prize_id === prizeList[prizeList.length - 1].prize_id
+      if (flag && idx !== prizeList.length - 1) {
+        let key = prizeList[idx].prize_id
+        let value = prizeList[idx].prize_stock + prizeList[prizeList.length - 1].prize_stock
+        if (itemStocksObj[key]) {
+          itemStocksObj[key] += value
+        } else {
+          itemStocksObj[key] = value
         }
+        prizeList[idx] && prizeList.splice(idx, 1)
+        prizeList[prizeList.length - 1] && prizeList.splice(prizeList.length - 1, 1)
+        idx = 0
+      } else if (idx === prizeList.length - 1) {
+        let key = prizeList[idx].prize_id
+        let value = prizeList[idx].prize_stock
+        if (itemStocksObj[key]) {
+          itemStocksObj[key] += value
+        } else {
+          itemStocksObj[key] = value
+        }
+        prizeList.pop()
+      } else {
+        idx++
       }
+    }
+    prizePool.forEach(item => {
+      let number = itemStocksObj[item.prize_id] || 0
       arr.push({
         prize_id: item.prize_id,
-        totalStock: item.stock,
-        stock: item.stock - itemStocks
+        totalStock: item.stock + number,
+        stock: item.stock
       })
     })
     state.prizeStorage = arr

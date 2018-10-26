@@ -102,7 +102,7 @@
       }
     },
     created() {
-      this._getPrizeList(false)
+      this._getPrizePoolList(false)
     },
     methods: {
       ...mapActions(['initPrizeStorage', 'initPrizeArray', 'deletePrizeStorage', 'updatePrizeStorage']),
@@ -117,7 +117,7 @@
         })
       },
       _updatePrizeList(obj) {
-        const defaultStock = 1
+        const defaultStock = 0
         const {place, savePrize} = obj
         // 1.判断是否为新位置
         let idx = this.prizeList.findIndex(item => +item.place === +place)
@@ -133,7 +133,7 @@
             prize_stock: defaultStock,
             stock: this.prizeStorage.find(item => item.prize_id === savePrize.prize_id).stock
           }
-          this.prizeList.push(node)
+          this.prizeList.push({...node})
           // 刷新每个位置的库存
           this.prizeList.map(item => {
             if (item.prize_id === savePrize.prize_id) {
@@ -144,6 +144,9 @@
         } else {
           // 老位置
           let node = this.prizeList[idx]
+          if (node.prize_id === savePrize.prize_id) {
+            return
+          }
           this.deletePrizeStorage(node)
           this.updatePrizeStorage({prize_id: savePrize.prize_id, number: defaultStock})
           let replaceNode = {
@@ -160,7 +163,7 @@
           this._renderPrizeList()
         }
         // 排序
-        this.prizeList.sort(function(a, b) {
+        this.prizeList.sort(function (a, b) {
           return a.place - b.place
         })
       },
@@ -169,10 +172,10 @@
         this.$refs.confirm.show()
       },
       confirmHandle() {
-        let idx = this.prizeList.findIndex(item => item.prize_id === this.delNode.prize_id)
+        let idx = this.prizeList.findIndex(item => item.place === this.delNode.place)
         let node = this.prizeList[idx]
         if (node.id !== 0) {
-          this.delList.push({activity_prize_id: node.id})
+          this.delList.push({activity_prize_id: node.activity_prize_id})
         }
         this.deletePrizeStorage(node)
         this.prizeList.splice(idx, 1)
@@ -185,9 +188,9 @@
           return item
         })
       },
-      _getPrizeList(loading) {
+      _getPrizePoolList(loading) {
         this.$loading.show()
-        ActiveExtend.getPrizeList({}, loading).then(res => {
+        ActiveExtend.getPrizePoolList({}, loading).then(res => {
           if (this.$ERR_OK !== res.error) {
             this.$toast.show(res.message)
             return
@@ -197,23 +200,25 @@
         })
       },
       _getPrizeInfo(loading) {
-        ActiveExtend.getPrizeInfo({}, loading).then(res => {
+        ActiveExtend.getPrizeInfo({}, loading).then(resp => {
           this.$loading.hide()
-          if (this.$ERR_OK !== res.error) {
-            this.$toast.show(res.message)
+          if (this.$ERR_OK !== resp.error) {
+            this.$toast.show(resp.message)
             return
           }
-          this.prizeInfo = {
-            id: res.data.id || 0,
-            percentage: res.data.percentage || 0,
-            joinTimes: res.data.join_times || 0,
-            note: res.data.note || '',
-            status: res.data.status || 0 // 1开启0关闭
+          if (resp.data && !(resp.data instanceof Array)) {
+            this.prizeInfo = {
+              id: resp.data.id || 0,
+              percentage: resp.data.percentage || 0,
+              joinTimes: resp.data.join_times || 0,
+              note: resp.data.note || '',
+              status: resp.data.status || 0 // 1开启0关闭
+            }
+            this.prizeList = resp.data.activity_prizes
           }
-          this.prizeList = res.data.activity_prizes
           let obj = {
-            prizePool: this.prizePool,
-            prizeList: this.prizeList
+            prizePool: [...this.prizePool],
+            prizeList: [...this.prizeList]
           }
           this.initPrizeStorage(obj)
           this.initPrizeArray(this.prizePool)
@@ -246,7 +251,7 @@
             status: this.prizeInfo.status,
             percentage: this.prizeInfo.percentage,
             activity_prizes: this.prizeList,
-            del_activty_prizes: [{activity_prize_id: 1}]
+            del_activty_prizes: this.delList
           }
           this._updateWheel(data)
         })
@@ -287,7 +292,7 @@
         return this.prizeList.length
       },
       prizeListInputReg() {
-        return this.prizeList.some(item => item.stock > 0)
+        return this.prizeList.some(item => item.stock >= 0)
       },
       percentageReg() {
         let percentage = this.prizeInfo.percentage
