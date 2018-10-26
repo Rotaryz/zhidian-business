@@ -92,7 +92,7 @@
       </div>
       <div class="group-container no-padding">
         <div class="editor-img-item border-top-1px">
-          <div class="item-title">活动封面 <span class="item-subtitle">建议尺寸600*480,大小10M以内，最多3张</span></div>
+          <div class="item-title need-no">活动封面 <span class="item-subtitle">建议尺寸600*480,大小10M以内，最多3张</span></div>
           <div class="img-container">
             <div class="container-item">
               <div class="img-box">
@@ -148,7 +148,7 @@
       </div>
       <div class="group-container no-padding border-bottom-1px">
         <div class="royalty-item">
-          <div class="item-left">统一上架</div>
+          <div class="item-left need-no">统一上架</div>
           <div class="item-right end-right">
             <switch-box @switchChange="switchChange" :values="activityDetail.is_sync * 1"></switch-box>
           </div>
@@ -436,22 +436,22 @@
           arr = [
             {value: this.goodsReg, txt: '请先选择好参与活动的商品'},
             {value: this.titleReg, txt: '请输入活动标题'},
+            {value: this.groupPrizeReg, txt: '请输入合法的拼团价'},
+            {value: this.groupNumReg, txt: '请选择拼团人数'},
             {value: this.stockReg, txt: '请选择或输入合法的库存数量'},
             {value: this.use1TimeReg, txt: '请选择活动开始时间'},
             {value: this.use2TimeReg, txt: '请选择活动结束时间'},
-            {value: this.groupPrizeReg, txt: '请输入合法的团购价'},
-            {value: this.groupNumReg, txt: '请选择拼团人数'},
             {value: this.rateReg, txt: '请输入正整数提成比例'}
           ]
         } else if (+this.ruleId === 3) {
           arr = [
             {value: this.goodsReg, txt: '请先选择好参与活动的商品'},
             {value: this.titleReg, txt: '请输入活动标题'},
+            {value: this.bottomReg, txt: '请输入合法的底价'},
+            {value: this.kanNumReg, txt: '请选择砍价次数'},
             {value: this.stockReg, txt: '请选择或输入合法的库存数量'},
             {value: this.use1TimeReg, txt: '请选择活动开始时间'},
             {value: this.use2TimeReg, txt: '请选择活动结束时间'},
-            {value: this.bottomReg, txt: '请输入合法的底价'},
-            {value: this.kanNumReg, txt: '请选择砍价人数'},
             {value: this.couponReg, txt: '请选择帮砍人兑换券'},
             {value: this.rateReg, txt: '请输入正整数提成比例'}
           ]
@@ -799,6 +799,8 @@
           position: absolute
           left: -7px
           top: 22px
+      .need-no:before
+        content: ''
       .img-container
         position: relative
         height: 16vw
@@ -1043,6 +1045,8 @@
           left: -7px
           top: 2px
           font-size: 14px
+      .need-no:before
+        content: ''
       .item-right
         display: flex
         height: 55px

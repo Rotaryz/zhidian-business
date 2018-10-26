@@ -3,17 +3,17 @@
     <div class="margin-box-10px"></div>
     <div class="main-box border-bottom-1px">
       <div class="list-item border-bottom-1px">
-        <div class="item-left">店员名称</div>
-        <input type="text" placeholder="请输入员工的名称" class="item-right" v-model="staffInfo.name" maxlength="30">
-      </div>
-      <div class="list-item border-bottom-1px">
         <div class="item-left">手机号码</div>
         <input type="number" v-if="!disabledCover" placeholder="请输入员工的手机号" oninput="if(value.length > 11)value = value.slice(0, 11)" class="item-right" v-model="staffInfo.mobile">
         <input type="number" v-else :placeholder="staffInfo.mobile" readonly class="item-right">
       </div>
       <div class="list-item border-bottom-1px">
-        <div class="item-left">公司职位</div>
-        <input type="text" placeholder="请输入员工职位" class="item-right" v-model="staffInfo.position" maxlength="30">
+        <div class="item-left">店员名称</div>
+        <input type="text" placeholder="请填写员工的姓名" class="item-right" v-model="staffInfo.name" maxlength="30">
+      </div>
+      <div class="list-item border-bottom-1px">
+        <div class="item-left">职位/职称</div>
+        <input type="text" placeholder="请输入" class="item-right" v-model="staffInfo.position" maxlength="30">
       </div>
     </div>
     <div class="footer-box">
@@ -93,8 +93,8 @@
       },
       _checkForm() {
         let arr = [
-          {value: this.nameReg, txt: '请输入店员的名称'},
           {value: this.mobileReg, txt: '请输入店员正确的手机号码'},
+          {value: this.nameReg, txt: '请输入店员的名称'},
           {value: this.positionReg, txt: '请输入店员的职位'}
         ]
         let res = this._testPropety(arr)

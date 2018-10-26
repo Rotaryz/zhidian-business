@@ -245,14 +245,16 @@
       _timeRun() {
         clearInterval(this.timer)
         this['list' + this.tabIdx] = this['list' + this.tabIdx].map((item) => {
-          item.endTime = this._timeCheckout(item[this.timestamp], item.current_timestamp)
-          return item
+          let endTime
+          endTime = this._timeCheckout(item.start_at_timestamp, item.current_timestamp)
+          return Object.assign({}, item, {endTime})
         })
         this.timer = setInterval(() => {
           this['list' + this.tabIdx] = this['list' + this.tabIdx].map((item) => {
             item.current_timestamp++
-            item.endTime = this._timeCheckout(item[this.timestamp], item.current_timestamp)
-            return item
+            let endTime
+            endTime = this._timeCheckout(item.start_at_timestamp, item.current_timestamp)
+            return Object.assign({}, item, {endTime})
           })
         }, 1000)
       },

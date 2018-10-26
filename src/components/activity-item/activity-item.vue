@@ -24,11 +24,11 @@
                 <div class="item-icon edit"></div>
                 <div class="item-txt">编辑</div>
               </div>
-              <div class="editor-item" v-if="tabIdx != 2" @click.stop="itemDown(item)">
+              <div class="editor-item" v-if="tabIdx != 1" @click.stop="itemDown(item)">
                 <div class="item-icon down"></div>
                 <div class="item-txt">下架</div>
               </div>
-              <div class="editor-item" v-if="tabIdx == 2" @click.stop="itemDelete(item)">
+              <div class="editor-item" v-if="tabIdx == 1" @click.stop="itemDelete(item)">
                 <div class="item-icon del"></div>
                 <div class="item-txt">删除</div>
               </div>

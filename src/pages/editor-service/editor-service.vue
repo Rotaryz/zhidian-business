@@ -85,24 +85,24 @@
             <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
           <!--</div>-->
         <!--</div>-->
-        <div class="server-list border-bottom-1px" v-for="(item, index) in serviceDetail.detail_config">
+        <div class="server-list border-bottom-1px" :class="item.hide ? 'hide-list': item.hasClass ? 'has-class show-list' : 'show-list'" v-for="(item, index) in serviceDetail.detail_config" :key="index">
           <div class="editor-item border-bottom-1px">
             <div class="item-left">服务{{index + 1}}</div>
             <div class="item-right">
-              <input type="text" class="input-box" v-model="serviceDetail.detail_config[index].servie" placeholder="请填写服务名称">
+              <input type="text" class="input-box" v-model="item.servie" placeholder="请填写服务名称">
               <span v-if="index > 0" class="del-server" @click.stop="delItem(index)"></span>
             </div>
           </div>
           <div class="editor-item border-bottom-1px">
             <div class="item-left">数量</div>
             <div class="item-right">
-              <input type="number" class="input-box" v-model="serviceDetail.detail_config[index].number" placeholder="请填写">
+              <input type="number" class="input-box" v-model="item.number" placeholder="请填写">
             </div>
           </div>
           <div class="editor-item">
             <div class="item-left">价格</div>
             <div class="item-right">
-              <input type="number" class="input-box" v-model="serviceDetail.detail_config[index].price" placeholder="请填写">
+              <input type="number" class="input-box" v-model="item.price" placeholder="请填写">
             </div>
           </div>
         </div>
@@ -194,7 +194,7 @@
       </div>
       <div class="group-container border-bottom-1px">
         <div class="royalty-item">
-          <div class="item-left">统一上架</div>
+          <div class="item-left  need-no">统一上架</div>
           <div class="item-right end-right">
             <switch-box @switchChange="switchChange" :values="serviceDetail.is_sync * 1"></switch-box>
           </div>
@@ -436,19 +436,20 @@
       },
       checkForm() {
         let arr = [
-          {value: this.bannerReg, txt: '请添加至少一张服务项目图片'},
           {value: this.titleReg, txt: '请输入服务标题'},
-          {value: this.platformPriceNotReg, txt: '请输入合法的平台价格'},
-          {value: this.platformPriceRangeReg, txt: '平台价格不得高于门市价'},
           {value: this.originalPriceNotReg, txt: '请输入合法的门市价格'},
+          {value: this.platformPriceNotReg, txt: '请输入合法的售价'},
+          {value: this.platformPriceRangeReg, txt: '平台价格不得高于门市价'},
+          {value: this.stockReg, txt: '请输入合法的最大库存数量'},
+          {value: this.bannerReg, txt: '请添加至少一张服务图片'},
+          {value: this.serviceDetailReg, txt: '请至少添加一条服务套餐'},
           {value: this.detailImgReg, txt: '请添加至少一张服务详情图片'},
-          {value: this.sale1TimeReg, txt: '请选择售卖开始时间'},
-          {value: this.sale2TimeReg, txt: '请选择售卖结束时间'},
           // {value: this.use1TimeReg, txt: '请选择券有效期开始时间'},
           // {value: this.use2TimeReg, txt: '请选择券有效期结束时间'},
-          {value: this.stockReg, txt: '请输入合法的最大可售数量'},
-          {value: this.rateReg, txt: '请输入正整数提成比例'},
-          {value: this.serviceDetailReg, txt: '请至少添加一条服务详情信息'}
+          {value: this.sale1TimeReg, txt: '请选择售卖开始时间'},
+          {value: this.sale2TimeReg, txt: '请选择售卖结束时间'},
+          {value: this.subscribeMsg, txt: '请输入预约信息'},
+          {value: this.rateReg, txt: '请输入正整数提成比例'}
         ]
         let res = this._testPropety(arr)
         if (res) {
@@ -478,11 +479,37 @@
         this.serviceDetail.detail_config.push({
           service: '',
           number: '',
-          price: ''
+          price: '',
+          hide: true,
+          hasClass: true
         })
+        setTimeout(() => {
+          this.serviceDetail.detail_config = this.serviceDetail.detail_config.map((item, index) => {
+            if (index === (this.serviceDetail.detail_config.length - 1)) {
+              item.hide = false
+            }
+            return item
+          })
+        }, 20)
+        setTimeout(() => {
+          this.serviceDetail.detail_config = this.serviceDetail.detail_config.map((item, index) => {
+            if (index === (this.serviceDetail.detail_config.length - 1)) {
+              item.hasClass = false
+            }
+            return item
+          })
+        }, 300)
       },
       delItem(idx) {
-        this.serviceDetail.detail_config.splice(idx, 1)
+        this.serviceDetail.detail_config = this.serviceDetail.detail_config.map((item, index) => {
+          if (index === idx) {
+            item.hide = true
+          }
+          return item
+        })
+        setTimeout(() => {
+          this.serviceDetail.detail_config.splice(idx, 1)
+        }, 300)
       }
     },
     computed: {
@@ -515,6 +542,9 @@
       },
       use2TimeReg() {
         return this.serviceDetail.end_at
+      },
+      subscribeMsg() {
+        return this.serviceDetail.subscribeMsg
       },
       stockReg() {
         return this.serviceDetail.usable_stock && COUNTREG.test(this.serviceDetail.usable_stock)
@@ -610,7 +640,14 @@
       transition: all 0.3s
       .server-list
         overflow: hidden
-        animation: show 0.6s
+        height: 0
+      .has-class
+        transition: all 0.3s
+      .show-list
+        height: 160px
+      .hide-list
+        height: 0
+        transition: all 0.3s ease-in-out
     .editor-item
       width: 100%
       height: 55px
@@ -941,6 +978,8 @@
           left: -7px
           top: 2px
           font-size: 14px
+      .need-no:before
+        content: ''
       .item-right
         display: flex
         height: 55px
@@ -985,10 +1024,14 @@
       .end-right.item-right
         justify-content: flex-end
         padding-right: 15px
-  @keyframes show{
+  @keyframes show
     0% { height: 0}
     100% { height: 160px}
-  }
+
+  @keyframes hide
+    0% { height: 160px }
+    100%{ height: 0 }
+
   .padding-bottom
-    padding-bottom: 160px
+    padding-bottom: 30px
 </style>

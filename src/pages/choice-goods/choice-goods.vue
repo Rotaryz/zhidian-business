@@ -20,7 +20,7 @@
       </scroll>
     </div>
     <div class="bottom-box border-top-1px">
-      <div class="bottom-btn" @click="submitAll">完成</div>
+      <div class="bottom-btn" @click="submitAll">确定</div>
     </div>
   </div>
 </template>

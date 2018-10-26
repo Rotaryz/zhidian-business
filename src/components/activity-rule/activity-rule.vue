@@ -136,6 +136,7 @@
     margin: 20px 0
     font-size: 14px
     .item-title
+      font-family: $font-family-medium
       color: $color-363547
     .item-txt
       color: $color-696771
