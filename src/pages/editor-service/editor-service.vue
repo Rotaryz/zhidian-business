@@ -133,7 +133,7 @@
         <div class="editor-item border-bottom-1px">
           <div class="item-left">开始时间</div>
           <div class="item-right">
-            <input type="text" class="input-box" @click="chioseTime('sale1')" v-model="serviceDetail.sale_start_at" readonly placeholder="请选择时间">
+            <input type="text" class="input-box" :class="{'no-click': (type === 'editor')}" @click="chioseTime('sale1')" v-model="serviceDetail.sale_start_at" readonly placeholder="请选择时间">
           </div>
         </div>
         <div class="editor-item border-bottom-1px">
@@ -194,7 +194,7 @@
       </div>
       <div class="group-container border-bottom-1px">
         <div class="royalty-item">
-          <div class="item-left  need-no">统一上架</div>
+          <div class="item-left need-no">统一上架</div>
           <div class="item-right end-right">
             <switch-box @switchChange="switchChange" :values="serviceDetail.is_sync * 1"></switch-box>
           </div>
@@ -706,6 +706,8 @@
           border: 0 none
           font-size: $font-size-14
           color: $color-363537
+        .no-click
+          color: $color-CCCCCC
         .input-box::-webkit-input-placeholder
           color: $color-CCCCCC
         .input-box::-ms-input-placeholder

@@ -117,7 +117,7 @@
         <div class="editor-item">
           <div class="item-left">开始时间</div>
           <div class="item-right">
-            <input type="text" class="input-box" @click="chioseTime('sale1')" v-model="activityDetail.start_at" readonly placeholder="请选择时间">
+            <input type="text" class="input-box" :class="{'no-click': (type === 'editor')}" @click="chioseTime('sale1')" v-model="activityDetail.start_at" readonly placeholder="请选择时间">
           </div>
         </div>
         <div class="editor-item border-top-1px">
@@ -733,6 +733,8 @@
           border: 0 none
           font-size: $font-size-14
           color: $color-363537
+        .no-click
+          color: $color-CCCCCC
           &.disabled
             color: $color-CCCCCC
         .input-box::-webkit-input-placeholder
