@@ -145,7 +145,7 @@
         <div class="editor-item">
           <div class="item-left">预约信息</div>
           <div class="item-right">
-            <input type="number" class="input-box" v-model="serviceDetail.note.need_subscribe" placeholder="请填写">
+            <input type="text" class="input-box" v-model="serviceDetail.note.need_subscribe" placeholder="请填写">
           </div>
         </div>
         <!--<div class="editor-item border-bottom-1px">-->
@@ -241,7 +241,7 @@
         disabledCover: false, // 请求时禁止任何操作
         timeType: '',
         serviceDetail: {
-          // promotion_type: 1, // 1=套餐券;2=代金券;3=满减券;4=折扣券
+          promotion_type: 1, // 1=套餐券;2=代金券;3=满减券;4=折扣券
           goods_banner_images: [], // banner图片
           image_id: '', // banner图片第一张
           title: '', // 商品标题
@@ -266,7 +266,7 @@
               price: ''
             }
           ], // 服务详情
-          // industry_name: '美业', // 品类
+          industry_name: '美业', // 品类
           is_online: '1', // 是否上线
           is_sync: 0 // 是否全员上架
         }
@@ -278,6 +278,9 @@
       if (this.id) {
         this._getServiceDetail(this.id)
       }
+    },
+    mounted() {
+      this.$refs.scroll.refresh()
     },
     methods: {
       _getServiceDetail(id) {
@@ -544,7 +547,7 @@
         return this.serviceDetail.end_at
       },
       subscribeMsg() {
-        return this.serviceDetail.subscribeMsg
+        return this.serviceDetail.note.need_subscribe
       },
       stockReg() {
         return this.serviceDetail.usable_stock && COUNTREG.test(this.serviceDetail.usable_stock)
@@ -586,7 +589,6 @@
   .editor-service
     fill-box()
     z-index: 70
-    bottom: 62px
     background: $color-white
     .disabled-cover
       fill-box()
@@ -1033,5 +1035,5 @@
     100%{ height: 0 }
 
   .padding-bottom
-    padding-bottom: 30px
+    padding-bottom: 80px
 </style>
