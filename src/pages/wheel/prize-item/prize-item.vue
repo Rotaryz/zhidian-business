@@ -1,54 +1,91 @@
 <template>
-  <ul class="prize-item">
+  <ul class="prize-item" @click="navTo(item)">
     <li class="item-wrapper top">
       <div class="left">{{name}}</div>
-      <div class="middle">{{title}}</div>
-      <div class="right"></div>
+      <div class="middle">{{item.title}}</div>
+      <div class="right" @click.stop="delHandle"></div>
     </li>
     <li class="item-wrapper">
-      <div class="left store">可用库存{{allowStore}}</div>
-      <section class="counter">
-        <div class="btn declare" @click="subHandle">-</div>
+      <div class="left store">可用库存{{item.stock}}</div>
+      <section class="counter" @click.stop>
+        <div class="btn declare" @click="subHandle"></div>
         <div class="input-wrapper">
-          <input class="input-style" type="number" v-model="useStore">
+          <input class="input-style" :class="inputReg?'error':''" type="number" v-model="item.prize_stock" @input="inputHandle" @focus="focusHandle" @blur="blurHandle">
         </div>
-        <div class="btn add" @click="addHandle">+</div>
+        <div class="btn add" @click="addHandle"></div>
       </section>
     </li>
   </ul>
 </template>
 
 <script type="text/ecmascript-6">
-  const NameArr = ['奖品一', '奖品二', '奖品三', '奖品四', '奖品五']
+  import { mapGetters, mapActions } from 'vuex'
+
+  const NameArr = ['谢谢惠顾', '奖品一', '奖品二', '奖品三', '奖品四', '奖品五']
   export default {
     props: {
-      idx: {
-        type: Number,
-        default: 0
+      item: {
+        type: Object,
+        default: {}
       }
     },
     data() {
       return {
-        useStore: 1,
-        store: 20,
-        title: '国颐堂养发SPA馆洗头护发养…',
-        index: this.idx
+        currentStock: 0
       }
     },
     computed: {
+      ...mapGetters(['prizeList']),
       name() {
-        return NameArr[this.index]
+        return NameArr[this.item.place]
       },
-      allowStore() {
-        return this.store - this.useStore
+      inputReg() {
+        return this.item.stock < 0 || this.item.prize_stock < 0
       }
     },
     methods: {
+      ...mapActions(['updatePrizeStorage']),
       subHandle() {
-        this.useStore--
+        this.item.prize_stock--
+        this.currentStock = this.item.prize_stock
+        if (this.item.prize_stock < 0) {
+          this.item.prize_stock++
+          this.currentStock = this.item.prize_stock
+          return
+        }
+        this.updatePrizeStorage({prize_id: this.item.prize_id, number: -1})
+        this.$emit('updatePrizeStock')
       },
       addHandle() {
-        this.useStore++
+        this.item.prize_stock++
+        this.currentStock = this.item.prize_stock
+        if (this.item.stock <= 0) {
+          this.item.prize_stock--
+          this.currentStock = this.item.prize_stock
+          return
+        }
+        this.updatePrizeStorage({prize_id: this.item.prize_id, number: 1})
+        this.$emit('updatePrizeStock')
+      },
+      blurHandle() {
+        let stock = +this.item.prize_stock
+        this.item.prize_stock = stock || 0
+      },
+      focusHandle() {
+        this.currentStock = this.item.prize_stock
+      },
+      inputHandle(e) {
+        let value = +e.target.value
+        let number = value ? value - this.currentStock : -this.currentStock
+        this.currentStock = value || 0
+        this.updatePrizeStorage({prize_id: this.item.prize_id, number})
+        this.$emit('updatePrizeStock')
+      },
+      delHandle() {
+        this.$emit('delHandle', this.item)
+      },
+      navTo(item) {
+        this.$emit('navTo', item.place)
       }
     }
   }
@@ -72,6 +109,8 @@
       color: $color-CCCCCC
     &::-moz-placeholder
       color: $color-CCCCCC
+    &.error
+      color: red !important
 
   .prize-item
     background: #FFFFFF;
@@ -116,13 +155,10 @@
           text-align: center
           line-height: @width
           &.declare
-            background: #FFFFFF
-            border-1px(#F0EFF5, 2px)
-            color: #706B82
+            icon-image(icon-reduce_prize)
           &.add
-            background: #706B82
-            color: #ffffff
-            margin-right: 20px
+            icon-image(icon-plus_prize)
+            margin-right: 15px
         .input-wrapper
           height: 25px
           width 60px

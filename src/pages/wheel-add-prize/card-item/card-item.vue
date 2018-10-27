@@ -1,31 +1,40 @@
 <template>
-  <div class="card-item" @click="choose">
+  <div class="card-item" @click="choose(dataInfo)">
     <article class="container">
       <section class="left">
-        <div class="avatar-wrapper" :style="{backgroundImage: 'url(' + serverImg + ')'}"></div>
+        <div class="avatar-wrapper" :style="{backgroundImage: 'url(' + dataInfo.image_url + ')'}"></div>
       </section>
       <ul class="middle">
-        <li>{{title}}</li>
-        <li class="store">库存：{{store}}</li>
+        <li>{{dataInfo.title}}</li>
+        <li class="store">库存：{{dataInfo.stock}}</li>
       </ul>
-      <div class="right" :class="isCheck?'active':''"></div>
+      <div class="right" :class="dataInfo.isCheck?'active':''"></div>
     </article>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  // import { mapActions } from 'vuex'
+
   export default {
+    props: {
+      dataInfo: {
+        type: Object,
+        default: {}
+      },
+      idx: {
+        type: Number,
+        default: -1
+      }
+    },
     data() {
       return {
-        isCheck: false,
-        serverImg: 'https://zhidian-img.jkweixin.com/10/2018/10/12/153933233549115.png',
-        title: '超值双人套餐超值双人套餐…',
-        store: 50
+        isCheck: this.dataInfo.isCheck
       }
     },
     methods: {
-      choose() {
-        this.isCheck = !this.isCheck
+      choose(item) {
+        this.$emit('choose', item, this.idx)
       }
     }
   }
