@@ -8,7 +8,7 @@ export default {
    * @returns {Promise.<*>}
    */
   getUploadSign() {
-    const url = `${baseURL.upload}/post_vod_sign`
+    const url = `${baseURL.upload}/api/post_vod_sign`
     return request.post(url, {}, false)
   },
   // /**
