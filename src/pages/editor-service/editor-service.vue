@@ -133,13 +133,13 @@
         <div class="editor-item border-bottom-1px">
           <div class="item-left">开始时间</div>
           <div class="item-right">
-            <input type="text" class="input-box" :class="{'no-click': (type === 'editor')}" @click="chioseTime('sale1')" v-model="serviceDetail.sale_start_at" readonly placeholder="请选择时间">
+            <input type="text" class="input-box" :class="{'no-click': (type === 'editor')}" @click="chioseTime('use1')" v-model="serviceDetail.start_at" readonly placeholder="请选择时间">
           </div>
         </div>
         <div class="editor-item border-bottom-1px">
           <div class="item-left">结束时间</div>
           <div class="item-right">
-            <input type="text" class="input-box" @click="chioseTime('sale2')" v-model="serviceDetail.sale_end_at" readonly placeholder="请选择时间">
+            <input type="text" class="input-box" @click="chioseTime('use2')" v-model="serviceDetail.end_at" readonly placeholder="请选择时间">
           </div>
         </div>
         <div class="editor-item">
@@ -148,26 +148,6 @@
             <input type="text" class="input-box" v-model="serviceDetail.note.need_subscribe" placeholder="请填写">
           </div>
         </div>
-        <!--<div class="editor-item border-bottom-1px">-->
-          <!--<div class="item-left">券有效期</div>-->
-          <!--<div class="item-right time-right">-->
-            <!--<div class="time-right-first" @click="chioseTime('use1')">-->
-              <!--<div class="time-none" v-if="!serviceDetail.start_at">-->
-                <!--<div class="time-item">开始时间</div>-->
-                <!--<img src="./icon-press_right@2x.png" class="time-icon">-->
-              <!--</div>-->
-              <!--<div class="time-txt" :class="type === 'editor' ? 'disabled' : ''" v-if="serviceDetail.start_at">{{serviceDetail.start_at}}</div>-->
-            <!--</div>-->
-            <!--<div class="meddle-time">至</div>-->
-            <!--<div class="time-right-first" @click="chioseTime('use2')">-->
-              <!--<div class="time-none" v-if="!serviceDetail.end_at">-->
-                <!--<div class="time-item">结束时间</div>-->
-                <!--<img src="./icon-press_right@2x.png" class="time-icon">-->
-              <!--</div>-->
-              <!--<div class="time-txt" v-if="serviceDetail.end_at">{{serviceDetail.end_at}}</div>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
       </div>
       <div class="editor-title border-bottom-1px border-top-1px">
         <div class="title">温馨提示</div>
@@ -249,10 +229,8 @@
           platform_price: '', // 平台价
           original_price: '', // 门市价
           goods_images: [], // 商品详情图片
-          sale_start_at: '', // 售卖开始
-          sale_end_at: '', // 售卖结束
-          // start_at: '', // 券使用开始
-          // end_at: '', // 券结束时间
+          start_at: '', // 售卖开始
+          end_at: '', // 售卖结束
           commission_rate: '', // 佣金
           usable_stock: '', // 总库存
           note: {
@@ -310,6 +288,7 @@
         })
       },
       _setService() {
+        console.log('setService', this.serviceDetail)
         this.serviceDetail.is_online = 1
         ServiceApi.setServiceMsg(this.id, this.serviceDetail).then((res) => {
           this.$loading.hide()
@@ -408,16 +387,16 @@
         })
         let res = arr.join('-')
         switch (this.timeType) {
-          case 'sale1':
-            this.serviceDetail.sale_start_at = res
+          case 'use1':
+            this.serviceDetail.start_at = res
             break
-          case 'sale2':
-            this.serviceDetail.sale_end_at = res
+          case 'use2':
+            this.serviceDetail.end_at = res
             break
         }
       },
       chioseTime(type) {
-        if (this.type === 'editor' && (type === 'sale1' || type === 'use1')) return
+        if (this.type === 'editor' && type === 'use1') return
         this.timeType = type
         this.$refs.picker.show()
       },
@@ -447,10 +426,8 @@
           {value: this.bannerReg, txt: '请添加至少一张服务图片'},
           {value: this.serviceDetailReg, txt: '请至少添加一条服务套餐'},
           {value: this.detailImgReg, txt: '请添加至少一张服务详情图片'},
-          // {value: this.use1TimeReg, txt: '请选择券有效期开始时间'},
-          // {value: this.use2TimeReg, txt: '请选择券有效期结束时间'},
-          {value: this.sale1TimeReg, txt: '请选择售卖开始时间'},
-          {value: this.sale2TimeReg, txt: '请选择售卖结束时间'},
+          {value: this.use1TimeReg, txt: '请选择售卖开始时间'},
+          {value: this.use2TimeReg, txt: '请选择售卖结束时间'},
           {value: this.subscribeMsg, txt: '请输入预约信息'},
           {value: this.rateReg, txt: '请输入正整数提成比例'}
         ]
@@ -480,7 +457,7 @@
       },
       addItem() {
         this.serviceDetail.detail_config.push({
-          service: '',
+          servie: '',
           number: '',
           price: '',
           hide: true,
@@ -533,12 +510,6 @@
       },
       detailImgReg() {
         return this.serviceDetail.goods_images.length
-      },
-      sale1TimeReg() {
-        return this.serviceDetail.sale_start_at
-      },
-      sale2TimeReg() {
-        return this.serviceDetail.sale_end_at
       },
       use1TimeReg() {
         return this.serviceDetail.start_at

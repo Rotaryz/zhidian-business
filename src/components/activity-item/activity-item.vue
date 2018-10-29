@@ -40,7 +40,7 @@
       <p class="activity-type" :class="{'group' : item.rule_id * 1 === 1}"></p>
       <div class="item-header border-top-1px" v-if="item.start_at_timestamp">
         <p class="activity-time">距开始
-          <span v-if="item.endTime && item.endTime.day" class="date">{{item.endTime.day}}</span>:
+          <span v-if="item.endTime && item.endTime.day && item.endTime.day>0" class="date">{{item.endTime.day}}</span><span v-if="item.endTime && item.endTime.day>0">:</span>
           <span v-if="item.endTime && item.endTime.hour" class="date">{{item.endTime.hour}}</span>:
           <span v-if="item.endTime && item.endTime.minute" class="date">{{item.endTime.minute}}</span>:
           <span v-if="item.endTime && item.endTime.second" class="date">{{item.endTime.second}}</span>
@@ -199,7 +199,7 @@
               color: #181700
               font-size: $font-size-18
               display: flex
-              align-items: center
+              align-items: baseline
           .down-right
             width: 10.6vw
             height: 5.3vw
