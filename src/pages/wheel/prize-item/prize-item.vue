@@ -40,7 +40,8 @@
         return NameArr[this.item.place]
       },
       inputReg() {
-        return this.item.stock < 0 || this.item.prize_stock < 0
+        let flag = this.item.stock < 0 || this.item.prize_stock < 0
+        return flag
       }
     },
     methods: {
