@@ -12,13 +12,18 @@ const mutations = {
   },
   // 初始化奖品池共有库存
   [TYPES.INIT_PRIZE_STORAGE](state, obj) {
-    const {prizeList, prizePool} = obj
-    let arr = []
+    let {prizeList, prizePool} = obj
+    // let arr = []
     let itemStocksObj = {}
     let idx = 0
-    while (prizeList.length > 0) {
-      let flag = prizeList[idx].prize_id === prizeList[prizeList.length - 1].prize_id
-      if (flag && idx !== prizeList.length - 1) {
+    prizeList = [...prizeList]
+    prizePool = [...prizePool]
+    let len = prizeList.length
+    while (idx < len) {
+      let length = prizeList.length
+      let flag = prizeList[idx].prize_id === prizeList[length - 1].prize_id
+      console.log(prizeList[idx].prize_id, prizeList[length - 1].prize_id)
+      if (flag && idx !== length - 1) {
         let key = prizeList[idx].prize_id
         let value = prizeList[idx].prize_stock + prizeList[prizeList.length - 1].prize_stock
         if (itemStocksObj[key]) {
@@ -26,10 +31,10 @@ const mutations = {
         } else {
           itemStocksObj[key] = value
         }
-        prizeList[idx] && prizeList.splice(idx, 1)
-        prizeList[prizeList.length - 1] && prizeList.splice(prizeList.length - 1, 1)
-        idx = 0
-      } else if (idx === prizeList.length - 1) {
+        prizeList.shift()
+        prizeList.pop()
+        // idx = 0
+      } else if (idx === length - 1) {
         let key = prizeList[idx].prize_id
         let value = prizeList[idx].prize_stock
         if (itemStocksObj[key]) {
@@ -42,15 +47,15 @@ const mutations = {
         idx++
       }
     }
-    prizePool.forEach(item => {
-      let number = itemStocksObj[item.prize_id] || 0
-      arr.push({
-        prize_id: item.prize_id,
-        totalStock: item.stock + number,
-        stock: item.stock
-      })
-    })
-    state.prizeStorage = arr
+    // prizePool.forEach(item => {
+    //   let number = itemStocksObj[item.prize_id] || 0
+    //   arr.push({
+    //     prize_id: item.prize_id,
+    //     totalStock: item.stock + number,
+    //     stock: item.stock
+    //   })
+    // })
+    state.prizeStorage = prizePool
   },
   // 初始化奖品列表
   [TYPES.INIT_PRIZE_ARRAY](state, obj) {

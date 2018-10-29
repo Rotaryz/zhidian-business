@@ -221,11 +221,13 @@
             this.prizeList = resp.data.activity_prizes
           }
           let obj = {
-            prizePool: [...this.prizePool],
-            prizeList: [...this.prizeList]
+            prizePool: [].concat(this.prizePool),
+            prizeList: [].concat(this.prizeList)
           }
           this.initPrizeStorage(obj)
-          this.initPrizeArray(this.prizePool)
+          console.log(22)
+          this.initPrizeArray(this.prizeList)
+          console.log(obj, '--0-0')
         })
       },
       _updateWheel(data, loading) {
@@ -419,7 +421,8 @@
         layout()
         justify-content: center
         align-items: center
-        border-1px(#F0EFF5, 2px)
+        border: 1px solid #F0EFF5
+        border-radius :2px
       .unit
         font-family: PingFangSC-Light;
         font-size: 12px;
@@ -431,7 +434,6 @@
     position: relative
     border-bottom-1px(rgba(236, 237, 241, 1))
     .data-wrapper
-      border-1px(#F0EFF5, 2px)
       .data-area
         resize: none
         box-sizing: border-box

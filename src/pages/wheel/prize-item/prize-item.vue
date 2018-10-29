@@ -167,5 +167,6 @@
           layout()
           justify-content: center
           align-items: center
-          border-1px(#F0EFF5, 2px)
+          border: 1px solid #F0EFF5
+          border-radius : 2px
 </style>
