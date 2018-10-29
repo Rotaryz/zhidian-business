@@ -40,7 +40,6 @@
         this.checked = boolean
       },
       toggleSwitch() {
-        console.log(22)
         this.checked = !this.checked
       }
     }
