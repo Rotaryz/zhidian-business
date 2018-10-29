@@ -266,7 +266,7 @@
       },
       _checkForm(callback) {
         let arr = [
-          {value: this.prizeListReg, txt: '请点击大转盘添加您的奖品'},
+          {value: this.prizeListReg, txt: '请点击大转盘添加五个奖品'},
           {value: this.prizeListInputReg, txt: '请输入正确的奖品数量'},
           {value: this.percentageReg, txt: '请输入正确的中奖率'},
           {value: this.joinTimesReg, txt: '请输入正确的中奖次数'}
@@ -293,7 +293,7 @@
     computed: {
       ...mapGetters(['prizeStorage']),
       prizeListReg() {
-        return this.prizeList.length
+        return this.prizeList.length === 5
       },
       prizeListInputReg() {
         return this.prizeList.some(item => item.stock >= 0 && item.prize_stock >= 0)
