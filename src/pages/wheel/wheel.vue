@@ -221,13 +221,11 @@
             this.prizeList = resp.data.activity_prizes
           }
           let obj = {
-            prizePool: [].concat(this.prizePool),
-            prizeList: [].concat(this.prizeList)
+            prizePool: this.prizePool,
+            prizeList: this.prizeList
           }
           this.initPrizeStorage(obj)
-          console.log(22)
-          this.initPrizeArray(this.prizeList)
-          console.log(obj, '--0-0')
+          this.initPrizeArray(this.prizePool)
         })
       },
       _updateWheel(data, loading) {

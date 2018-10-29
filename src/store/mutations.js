@@ -13,49 +13,21 @@ const mutations = {
   // 初始化奖品池共有库存
   [TYPES.INIT_PRIZE_STORAGE](state, obj) {
     let {prizeList, prizePool} = obj
-    // let arr = []
-    let itemStocksObj = {}
-    let idx = 0
-    prizeList = [...prizeList]
-    prizePool = [...prizePool]
-    let len = prizeList.length
-    while (idx < len) {
-      let length = prizeList.length
-      let flag = prizeList[idx].prize_id === prizeList[length - 1].prize_id
-      console.log(prizeList[idx].prize_id, prizeList[length - 1].prize_id)
-      if (flag && idx !== length - 1) {
-        let key = prizeList[idx].prize_id
-        let value = prizeList[idx].prize_stock + prizeList[prizeList.length - 1].prize_stock
-        if (itemStocksObj[key]) {
-          itemStocksObj[key] += value
-        } else {
-          itemStocksObj[key] = value
+    let arr = []
+    prizePool.forEach(item => {
+      let number = 0
+      prizeList.forEach((curVal) => {
+        if (curVal.prize_id === item.prize_id) {
+          number += curVal.prize_stock
         }
-        prizeList.shift()
-        prizeList.pop()
-        // idx = 0
-      } else if (idx === length - 1) {
-        let key = prizeList[idx].prize_id
-        let value = prizeList[idx].prize_stock
-        if (itemStocksObj[key]) {
-          itemStocksObj[key] += value
-        } else {
-          itemStocksObj[key] = value
-        }
-        prizeList.pop()
-      } else {
-        idx++
-      }
-    }
-    // prizePool.forEach(item => {
-    //   let number = itemStocksObj[item.prize_id] || 0
-    //   arr.push({
-    //     prize_id: item.prize_id,
-    //     totalStock: item.stock + number,
-    //     stock: item.stock
-    //   })
-    // })
-    state.prizeStorage = prizePool
+      })
+      arr.push({
+        prize_id: item.prize_id,
+        totalStock: item.stock + number,
+        stock: item.stock
+      })
+    })
+    state.prizeStorage = arr
   },
   // 初始化奖品列表
   [TYPES.INIT_PRIZE_ARRAY](state, obj) {

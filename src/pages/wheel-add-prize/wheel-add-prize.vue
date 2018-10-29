@@ -7,7 +7,7 @@
               v-if="dataArray.length"
       >
         <ul class="card-wrapper">
-          <li class="card-item-wrapper" v-for="(item, idx) in dataArray" :key="item.prize_id" v-if="item.stock >=0 ">
+          <li class="card-item-wrapper" v-for="(item, idx) in dataArray" :key="idx " v-if="item.stock >=0 ">
             <card-item :dataInfo="item" :idx="idx" @choose="chooseHandle"></card-item>
           </li>
         </ul>
