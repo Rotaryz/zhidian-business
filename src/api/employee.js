@@ -15,5 +15,10 @@ export default {
   editEmployee(data, id, loading) {
     const url = `api/merchant/employees/${id}`
     return request.put(url, data, loading)
+  },
+  // 删除店员
+  delEmployee(id, loading) {
+    const url = `api/merchant/employees/${id}`
+    return request.delete(url, loading)
   }
 }

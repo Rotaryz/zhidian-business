@@ -74,6 +74,7 @@
         font-family: $font-family-regular
         color: $color-363547
         font-size: $font-size-16
+        line-height: $font-size-24
         margin-right: 10px
         max-width: 40vw
         no-wrap()

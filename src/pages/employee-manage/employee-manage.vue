@@ -80,7 +80,18 @@
         this.delItem = item
       },
       modalConfirm() {
-        console.log(this.delItem.id)
+        Employee.delEmployee(this.delItem.id)
+          .then((res) => {
+            this.$loading.hide()
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            this.$toast.show('删除成功')
+            this.dataArray = this.dataArray.filter((item) => {
+              return this.delItem.id !== item.id
+            })
+          })
       },
       editEmployee(item) {
         this.$storage.set('employee', item)
