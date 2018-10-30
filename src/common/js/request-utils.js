@@ -28,8 +28,8 @@ function _handleLoseEfficacy() {
     storage.set('beforeLoginRoute', currentRoute)
   }
   storage.remove('token')
-  // _this.$router.replace('/oauth')
-  _this.$login.show()
+  _this.$router.replace('/login')
+  // _this.$login.show()
 }
 
 export function showLoading(loading) {

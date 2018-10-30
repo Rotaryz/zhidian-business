@@ -1,7 +1,7 @@
 <template>
   <transition>
-    <div class="login" v-if="isShow">
-      <div class="logo" @click="test"></div>
+    <div class="login">
+      <div class="logo"></div>
       <section class="warn" v-if="phoneNumber.length >= 11 && codeStyle">
         <div class="icon-warn"></div>
         <div>手机号码格式错误</div>
@@ -31,6 +31,7 @@
 <script type="text/ecmascript-6">
   import { checkIsPhoneNumber } from 'common/js/utils'
   import { Jwt } from 'api'
+  import storage from 'storage-controller'
 
   export default {
     name: 'LOGIN',
@@ -49,17 +50,14 @@
     },
     created() {
       this.$loading.hide()
+      this._hide()
     },
     methods: {
-      test() {
-        console.log(window.location.replace(window.location.host + '/#/shop'))
-      },
-      show() {
-        this.$loading.hide()
-        this.isShow = true
-      },
-      hide() {
-        this.isShow = false
+      _hide() {
+        let token = storage.get('token')
+        if (token) {
+          this.$router.replace('/')
+        }
       },
       delHandle() {
         this.phoneNumber = ''
@@ -81,9 +79,7 @@
           const merchantInfo = res.data.merchant_info
           this.$storage.set('token', token)
           this.$storage.set('info', merchantInfo)
-          window.location.href = window.location.host + '/#/shop?f=' + Date.now()
-          console.log(this, '-------------------------')
-          this.hide()
+          this.$router.replace('/')
         }).catch(e => {
           console.error(e)
         })
