@@ -11,7 +11,7 @@ import * as cos from './cos/cos'
 import RouterViewCommon from 'components/router-view-common'
 import * as vod from './vod/vod'
 
-const {Toast, Loading, Login} = components
+const {Toast, Loading} = components
 // 定义插件
 const AppPlugin = {
   install: function () {
@@ -30,5 +30,5 @@ Vue.use(AppPlugin)
 Vue.use(AwesomePicker)
 Vue.use(Toast)
 Vue.use(Loading)
-Vue.use(Login)
+// Vue.use(Login)
 Vue.use(RouterViewCommon)

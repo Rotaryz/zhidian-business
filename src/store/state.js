@@ -9,7 +9,8 @@ const state = {
   // 奖品库存列表
   prizeStorage: [],
   // 奖品列表
-  prizeArray: []
+  prizeArray: [],
+  refreshShopPage: false
 }
 
 export default state

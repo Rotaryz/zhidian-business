@@ -2,8 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import storage from 'storage-controller'
 
-const _this = () => import('@/main')
+// const _this = () => import('@/main')
 // const Demo = () => import('pages/Z-DEMO/z-demo')
+const Login = () => import('pages/login/login')
 const ServiceManage = () => import('pages/service-manage/service-manage')
 const EditorService = () => import('pages/editor-service/editor-service')
 const Mine = () => import('pages/mine/mine')
@@ -312,6 +313,13 @@ const route = new Router({
       ]
     },
     {
+      path: '/login',
+      component: Login,
+      meta: {
+        title: '登陆'
+      }
+    },
+    {
       path: '/capacity-model',
       component: CapacityModel,
       meta: {
@@ -337,7 +345,7 @@ const route = new Router({
 
 const DEFAULT_TITLE = '商户助手'
 const DEFAULT_ROUTE = '/shop'
-const OAUTH_ROUTE = '/shop' // todo
+const OAUTH_ROUTE = '/login' // 授权页面
 
 // route.beforeEach(async (to, from, next) => {
 //   const vue = await _this()
@@ -353,8 +361,6 @@ const OAUTH_ROUTE = '/shop' // todo
 //   next()
 // })
 route.beforeEach(async (to, from, next) => {
-  const vue = await _this()
-  const self = vue.default
   document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
   if (to.path === '/') {
     const token = storage.get('token', '')
@@ -362,7 +368,6 @@ route.beforeEach(async (to, from, next) => {
       next({path: DEFAULT_ROUTE, replace: true})
     } else {
       next({path: OAUTH_ROUTE, replace: true})
-      self.$login.show()
     }
   }
   if (to.path === '/radar') {

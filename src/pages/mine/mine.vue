@@ -80,7 +80,7 @@
       },
       exitApp() {
         this.$storage.clear()
-        this.$login.show()
+        this.$router.replace('/login')
       }
     }
   }
