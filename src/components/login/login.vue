@@ -1,7 +1,7 @@
 <template>
   <transition>
     <div class="login" v-if="isShow">
-      <div class="logo"></div>
+      <div class="logo" @click="test"></div>
       <section class="warn" v-if="phoneNumber.length >= 11 && codeStyle">
         <div class="icon-warn"></div>
         <div>手机号码格式错误</div>
@@ -51,6 +51,9 @@
       this.$loading.hide()
     },
     methods: {
+      test() {
+        console.log(window.location.replace(window.location.host + '/#/shop'))
+      },
       show() {
         this.$loading.hide()
         this.isShow = true
@@ -78,8 +81,9 @@
           const merchantInfo = res.data.merchant_info
           this.$storage.set('token', token)
           this.$storage.set('info', merchantInfo)
+          window.location.href = window.location.host + '/#/shop?f=' + Date.now()
+          console.log(this, '-------------------------')
           this.hide()
-          window.location.replace(window.location.href)
         }).catch(e => {
           console.error(e)
         })
