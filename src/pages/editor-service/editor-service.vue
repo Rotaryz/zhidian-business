@@ -285,7 +285,6 @@
         })
       },
       _setService() {
-        console.log('setService', this.serviceDetail)
         this.serviceDetail.is_online = 1
         ServiceApi.setServiceMsg(this.id, this.serviceDetail).then((res) => {
           this.$loading.hide()
@@ -307,7 +306,9 @@
       },
       _fileImage(e) {
         let arr = Array.from(e.target.files)
-        this.$refs.cropper.show(arr[0])
+        if (arr.length > 0) {
+          this.$refs.cropper.show(arr[0])
+        }
       },
       _fileDetail(e) {
         let arr = Array.from(e.target.files)

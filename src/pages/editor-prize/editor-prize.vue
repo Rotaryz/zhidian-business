@@ -152,7 +152,9 @@
       },
       _fileImage(e) {
         let arr = Array.from(e.target.files)
-        this.$refs.cropper.show(arr[0])
+        if (arr.length > 0) {
+          this.$refs.cropper.show(arr[0])
+        }
       },
       delBanner() {
         this.prizeDetail.image_url = ''

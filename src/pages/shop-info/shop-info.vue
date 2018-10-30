@@ -254,6 +254,7 @@
       },
       _fileChange(e, flag) {
         let arr = Array.from(e.target.files)
+        if (arr.length < 1) return
         flag === 'images' && this.$refs['cropper-shop_images'].show(arr[0])
         flag === 'logo' && this.$refs['cropper-shop_logo'].show(arr[0])
         if (flag === 'video') {

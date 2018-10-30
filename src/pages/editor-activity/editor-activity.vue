@@ -314,7 +314,9 @@
       },
       _fileImage(e) {
         let arr = Array.from(e.target.files)
-        this.$refs.cropper.show(arr[0])
+        if (arr.length > 0) {
+          this.$refs.cropper.show(arr[0])
+        }
       },
       async cropperConfirm(e) {
         this.$loading.show()
