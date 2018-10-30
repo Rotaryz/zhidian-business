@@ -422,6 +422,7 @@
           {value: this.stockReg, txt: '请输入合法的最大库存数量'},
           {value: this.bannerReg, txt: '请添加至少一张服务图片'},
           {value: this.serviceDetailReg, txt: '请至少添加一条服务套餐'},
+          {value: this.serviceDetailMsg, txt: '请完整填写服务套餐信息'},
           {value: this.detailImgReg, txt: '请添加至少一张服务详情图片'},
           {value: this.use1TimeReg, txt: '请选择售卖开始时间'},
           {value: this.use2TimeReg, txt: '请选择售卖结束时间'},
@@ -528,6 +529,12 @@
           return item.servie || item.number || item.price
         })
         return arr.length
+      },
+      serviceDetailMsg() {
+        let handle = this.serviceDetail.detail_config.every((item) => {
+          return item.servie && item.number && item.price
+        })
+        return handle
       }
     },
     watch: {

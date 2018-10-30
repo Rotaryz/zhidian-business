@@ -198,6 +198,8 @@
             setTimeout(() => {
               this.$refs[`scroll${this.tabIdx}`].forceUpdate()
             }, 20)
+          } else {
+            this.$toast.show(res.message)
           }
         })
       },
