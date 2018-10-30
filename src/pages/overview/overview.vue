@@ -90,7 +90,6 @@
       </div>
     </scroll>
     <toast ref="toast"></toast>
-    <router-view></router-view>
   </article>
 </template>
 

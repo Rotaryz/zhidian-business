@@ -160,17 +160,14 @@
           </div>
         </div>
       </div>
-      <div class="group-container border-top-1px border-bottom-1px">
-        <div class="royalty-item">
-          <div class="item-left">商品提成</div>
-          <div class="item-right">
-            <div class="right-num-box">
-              <input type="number" class="num-input" v-model="serviceDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" :disabled="type === 'editor'">
-            </div>
-            <div class="right-txt-14">%</div>
+      <div class="royalty-item border-top-1px border-bottom-1px deducte">
+        <div class="item-left">商品提成 <div class="right-txt-12">提成按售卖价格的百分比计算</div></div>
+        <div class="item-right">
+          <div class="right-num-box">
+            <input type="number" class="num-input" v-model="serviceDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" :disabled="type === 'editor'">
           </div>
+          <div class="right-txt-14">%</div>
         </div>
-        <div class="right-txt-12">提成按售卖价格的百分比计算</div>
       </div>
       <div class="group-container border-bottom-1px">
         <div class="royalty-item">
@@ -928,14 +925,10 @@
           bottom: 10px
           font-size: $font-size-14
           color: $color-CCCCCC
-    .right-txt-12
-      font-size: $font-size-12
-      color: $color-9B9B9B
-      padding-left: 80px
-      padding-bottom: 15px
     .royalty-item
       display: flex
       height: 55px
+      padding-left: 15px
       align-items: center
       .item-left
         width: 80px
@@ -995,18 +988,29 @@
           font-size: $font-size-14
           color: $color-9B9B9B
           margin: 0 10px 0 5px
-
-      .end-right.item-right
+        .right-txt-12
+          font-size: $font-size-12
+          color: $color-9B9B9B
+          padding-left: 80px
+          padding-bottom: 15px
+    .deducte
+      display: flex
+      height: 75px
+      justify-content: space-between
+      align-items: center
+      padding-right: 10px
+      .item-right
+        flex: inherit
+      .item-left
+        height: 40px
+        flex: 1
+        line-height: 20px
+        .right-txt-12
+          font-size: $font-size-12
+          color: $color-CCCCCC
+  .end-right.item-right
         justify-content: flex-end
         padding-right: 15px
-  @keyframes show
-    0% { height: 0}
-    100% { height: 160px}
-
-  @keyframes hide
-    0% { height: 160px }
-    100%{ height: 0 }
-
   .padding-bottom
     padding-bottom: 80px
 </style>

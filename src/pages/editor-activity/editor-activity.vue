@@ -1105,7 +1105,7 @@
       .item-right
         flex: inherit
       .item-left
-        height: 30px
+        height: 40px
         flex: 1
         line-height: 20px
         .right-txt-12

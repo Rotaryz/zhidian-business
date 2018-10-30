@@ -168,7 +168,7 @@
         transition: all 0.3s
         .editor-content
           background: rgba(0, 0, 0, 0.8)
-          box-shadow: 0 1px 10px 0 rgba(54,53,71,0.50)
+          box-shadow: 0 1px 5px 0 rgba(54,53,71,0.50)
           border-radius: 2px
           height: 100%
           padding: 0 10px
