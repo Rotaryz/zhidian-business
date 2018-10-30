@@ -296,7 +296,7 @@
         return this.prizeList.length === 5
       },
       prizeListInputReg() {
-        return this.prizeList.some(item => item.stock >= 0 && item.prize_stock >= 0)
+        return this.prizeList.every(item => item.stock >= 0 && item.prize_stock >= 0)
       },
       percentageReg() {
         let percentage = this.prizeInfo.percentage
