@@ -217,7 +217,8 @@
             ctx.shopInfo.province = data.province
             ctx.shopInfo.city = data.city
             ctx.shopInfo.area = data.district
-            ctx.shopInfo.address = address.split(data.province + data.city + data.district)[1]
+            let newAddress = /我的位置/.test(address) ? address.split('我的位置')[0] : address.split(data.province + data.city + data.district)[1]
+            ctx.shopInfo.address = newAddress
           })
         }
       },
