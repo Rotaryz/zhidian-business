@@ -41,7 +41,7 @@
               <div class="middle-address active" v-else>
                 <p class="detail">{{shopInfo.address}}</p>
               </div>
-              <div v-if="shopInfo.address.length>0" class="right right-del" @click.stop="delAddress"></div>
+              <div v-if="shopInfo.address && shopInfo.address.length>0" class="right right-del" @click.stop="delAddress"></div>
             </article>
             <article class="base-item">
               <div class="left">营业时间</div>
@@ -96,7 +96,7 @@
                 >
                   <div class="img-show" v-if="shopInfo.images[index]" :style="{backgroundImage: 'url(' + shopInfo.images[index].url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                   <div class="del-icon" v-if="shopInfo.images[index]" @click.stop="delDetail(index)"></div>
-                  <input v-if="shopInfo.images.length == index" type="file" style="display: none" @change="_fileChange($event, 'images')"
+                  <input v-if="shopInfo.images && shopInfo.images.length == index" type="file" style="display: none" @change="_fileChange($event, 'images')"
                          accept="image/*">
                 </label>
                 <div class="explain one">点击图片预览实际展示效果</div>
