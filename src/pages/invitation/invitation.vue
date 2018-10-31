@@ -63,6 +63,7 @@
           }
           QrCodeUtil.createQrCodePng(res.data.link_url, url => {
             this.qrCode = url
+            this.qrCode = `https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1540978347525&di=8440d907aad9f5e96b29f427d0db9c1c&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F0125ec58a88075a801219c77ad0c0f.jpg%401280w_1l_2o_100sh.jpg`
           })
           this.linkUrl = res.data.link_url
         })
