@@ -169,7 +169,7 @@
           <div class="right-txt-14">%</div>
         </div>
       </div>
-      <div class="group-container border-bottom-1px">
+      <div class="group-container no-padding border-bottom-1px">
         <div class="royalty-item">
           <div class="item-left need-no">统一上架</div>
           <div class="item-right end-right">
