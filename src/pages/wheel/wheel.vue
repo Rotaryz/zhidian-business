@@ -7,6 +7,12 @@
         :data="prizeList"
       >
         <article class="container">
+          <section class="open-wrapper border-bottom-1px">
+            <p>开启大转盘</p>
+            <div class="checkbox" :class="prizeInfo.status ? 'checked' : ''" @click="checkSwitch">
+              <div class="circle-btn"></div>
+            </div>
+          </section>
           <panel title="添加奖品" subHead="奖品数量越大中奖几率越高">
             <div class="wheel-wrapper">
               <div class="auto-wrapper">
@@ -53,12 +59,6 @@
               </div>
             </section>
           </panel>
-          <section class="open-wrapper border-top-1px">
-            <p>开启大转盘</p>
-            <div class="checkbox" :class="prizeInfo.status ? 'checked' : ''" @click="checkSwitch">
-              <div class="circle-btn"></div>
-            </div>
-          </section>
         </article>
       </scroll>
     </div>
