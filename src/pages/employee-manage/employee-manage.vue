@@ -64,7 +64,8 @@
         this._getList()
       },
       navTo(item) {
-        this.$router.push(`${this.$route.path}/invitation`)
+        // this.$router.push(`${this.$route.path}/invitation`)
+        this.$router.push(`/invitation`)
         if (this.ios) {
           setTimeout(() => {
             location.reload()

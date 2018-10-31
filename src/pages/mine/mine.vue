@@ -1,13 +1,13 @@
 <template>
   <div class="mine">
     <div class="bg"></div>
-    <section class="header" @click="navTo({path: '/shop-qr-code'})">
+    <router-link tag="div" class="header" to="/shop-qr-code">
       <div class="logo" v-if="shopInfo.logo && shopInfo.logo.url" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
       <img class="logo" src="./pic-default_people@2x.png" v-else/>
       <div class="title">{{shopInfo.name || '店铺名称'}}</div>
       <div class="qr-code"></div>
       <div class="right-arrow"></div>
-    </section>
+    </router-link>
     <ul class="option-wrapper">
       <li class="option-item border-bottom-1px" v-for="(item,index) in optionsArr" :key="index" @click="navTo(item)">
         <div class="logo" :class="item.logo"></div>

@@ -1,6 +1,6 @@
 <template>
   <div class="shop-qr-code">
-    <scroll ref="scroll" bcColor="#363547" >
+    <!--<scroll ref="scroll" bcColor="#363547" >-->
       <div class="pad">
         <section class="bg">
           <div class="wrapper">
@@ -17,7 +17,7 @@
           </div>
         </section>
       </div>
-    </scroll>
+    <!--</scroll>-->
   </div>
 </template>
 
@@ -75,7 +75,7 @@
 
   .shop-qr-code
     overflow: hidden
-    fill-box()
+    height :100vh
     z-index: 50
     background: $color-363547
     .pad
