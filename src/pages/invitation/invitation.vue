@@ -28,9 +28,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+  // import wx from 'weixin-js-sdk'
   import Vue from 'vue'
   import { Mine } from 'api'
-  // import wx from 'weixin-js-sdk'
   import VueClipboard from 'vue-clipboard2'
   import Scroll from 'components/scroll/scroll'
   import QrCodeUtil from 'common/js/util-qr-code'
@@ -61,8 +61,9 @@
             this.$toast.show(res.message)
             return
           }
-          let qrCodeUrl = QrCodeUtil.createQrCodeSvg(res.data.link_url)
-          this.qrCode = qrCodeUrl
+          QrCodeUtil.createQrCodePng(res.data.link_url, url => {
+            this.qrCode = url
+          })
           this.linkUrl = res.data.link_url
         })
       },
@@ -152,7 +153,6 @@
         overflow: hidden
         .qr-img
           box-sizing border-box
-          padding: 15px
           width: 100%
           height: 100%
       .explain
