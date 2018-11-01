@@ -87,22 +87,8 @@ const route = new Router({
                   meta: {
                     title: '新建店员'
                   }
-                },
-                {
-                  path: 'invitation',
-                  component: Invitation,
-                  meta: {
-                    title: '发送邀请'
-                  }
                 }
               ]
-            },
-            {
-              path: 'shop-qr-code',
-              component: ShopQrCode,
-              meta: {
-                title: '店铺二维码'
-              }
             }
           ]
         },
@@ -313,6 +299,20 @@ const route = new Router({
       ]
     },
     {
+      path: '/invitation',
+      component: Invitation,
+      meta: {
+        title: '发送邀请'
+      }
+    },
+    {
+      path: '/shop-qr-code',
+      component: ShopQrCode,
+      meta: {
+        title: '店铺二维码'
+      }
+    },
+    {
       path: '/login',
       component: Login,
       meta: {
@@ -347,19 +347,6 @@ const DEFAULT_TITLE = '商户助手'
 const DEFAULT_ROUTE = '/shop'
 const OAUTH_ROUTE = '/login' // 授权页面
 
-// route.beforeEach(async (to, from, next) => {
-//   const vue = await _this()
-//   const self = vue.default
-//   document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
-//   const token = self.$storage.get('token', '')
-//   if (token) {
-//     // next({path: DEFAULT_ROUTE, replace: true})
-//   } else {
-//     // next({path: OAUTH_ROUTE, replace: true})
-//     self.$login.show()
-//   }
-//   next()
-// })
 route.beforeEach(async (to, from, next) => {
   document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
   if (to.path === '/') {

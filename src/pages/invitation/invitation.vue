@@ -1,36 +1,36 @@
 <template>
   <div class="invitation">
-    <scroll ref="scroll" bcColor="#fff">
-      <div class="scroll-main">
-        <article class="top">
-          <div class="title">欢迎加入{{shopName}}</div>
-          <div class="qr-code">
-            <img class="qr-img" v-if="qrCode" :src="qrCode" alt="">
-          </div>
-          <div class="explain">请长按二维码保存或者发送给店员</div>
-        </article>
-        <!--<ul class="btn-group">-->
-        <!--<li class="btn-item" @click="saveImage">-->
-        <!--<div class="icon save"></div>-->
-        <!--<div class="txt">保存</div>-->
-        <!--</li>-->
-        <!--<li class="btn-item" @click="copyUrl">-->
-        <!--<div class="icon copy"></div>-->
-        <!--<div class="txt">复制链接</div>-->
-        <!--</li>-->
-        <!--</ul>-->
-        <div class="btn-item">
-          <div class="txt" v-clipboard:copy="linkUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</div>
+    <!--<scroll ref="scroll" bcColor="#fff">-->
+    <div class="scroll-main">
+      <article class="top">
+        <div class="title">欢迎加入{{shopName}}</div>
+        <div class="qr-code">
+          <img class="qr-img" v-if="qrCode" :src="qrCode" alt="">
         </div>
+        <div class="explain">请长按二维码保存或者发送给店员</div>
+      </article>
+      <!--<ul class="btn-group">-->
+      <!--<li class="btn-item" @click="saveImage">-->
+      <!--<div class="icon save"></div>-->
+      <!--<div class="txt">保存</div>-->
+      <!--</li>-->
+      <!--<li class="btn-item" @click="copyUrl">-->
+      <!--<div class="icon copy"></div>-->
+      <!--<div class="txt">复制链接</div>-->
+      <!--</li>-->
+      <!--</ul>-->
+      <div class="btn-item">
+        <div class="txt" v-clipboard:copy="linkUrl" v-clipboard:success="onCopy" v-clipboard:error="onError">复制链接</div>
       </div>
-    </scroll>
+    </div>
+    <!--</scroll>-->
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  // import wx from 'weixin-js-sdk'
   import Vue from 'vue'
   import { Mine } from 'api'
-  // import wx from 'weixin-js-sdk'
   import VueClipboard from 'vue-clipboard2'
   import Scroll from 'components/scroll/scroll'
   import QrCodeUtil from 'common/js/util-qr-code'
@@ -61,8 +61,10 @@
             this.$toast.show(res.message)
             return
           }
-          let qrCodeUrl = QrCodeUtil.createQrCodeSvg(res.data.link_url)
-          this.qrCode = qrCodeUrl
+          QrCodeUtil.createQrCodePng(res.data.link_url, url => {
+            this.qrCode = url
+            // this.qrCode = `https://zhidian-img.jkweixin.com/100001/2018/10/31/1540958496657-9@1x.png`
+          })
           this.linkUrl = res.data.link_url
         })
       },
@@ -125,10 +127,10 @@
 
   .invitation
     overflow: hidden
-    fill-box()
     z-index: 71
     background: #fff
     padding: 30px 35px 0
+    min-height: 100vh
     .scroll-main
       padding-bottom: 10px
     .top
@@ -152,7 +154,6 @@
         overflow: hidden
         .qr-img
           box-sizing border-box
-          padding: 15px
           width: 100%
           height: 100%
       .explain

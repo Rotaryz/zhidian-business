@@ -177,14 +177,29 @@ function base64decode(str) {
 }
 
 function createQrCodeSvg(str) {
-  let svg = QrImage.imageSync(str, { type: 'svg' })
+  let svg = QrImage.imageSync(str, {type: 'svg'})
   let base64 = base64encode(svg)
   return `data:image/svg+xml;base64,${base64}`
+}
+
+function createQrCodePng(str, cb) {
+  let unit8 = QrImage.imageSync(str)
+  let blob = new Blob([unit8], {type: 'png'})
+  _fileOrBlobToDataURL(blob, cb)
+}
+
+function _fileOrBlobToDataURL(obj, cb) {
+  let a = new FileReader()
+  a.readAsDataURL(obj)
+  a.onload = function (e) {
+    cb(e.target.result)
+  }
 }
 
 export default {
   utf16to8,
   base64decode,
   base64encode,
-  createQrCodeSvg
+  createQrCodeSvg,
+  createQrCodePng
 }
