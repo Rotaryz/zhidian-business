@@ -38,7 +38,7 @@
         this.showTitle = true
         setTimeout(() => {
           this.$refs.txt.focus()
-        }, 20)
+        }, 150)
       },
       submitTitle() {
         this.showTitle = false
