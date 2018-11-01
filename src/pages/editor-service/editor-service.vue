@@ -129,7 +129,7 @@
       <div class="editor-title border-bottom-1px border-top-1px">
         <div class="title">使用有效期</div>
       </div>
-      <div class="group-container">
+      <div class="group-container padding-right">
         <div class="editor-item border-bottom-1px">
           <div class="item-left">开始时间</div>
           <div class="item-right">
@@ -424,6 +424,9 @@
           {value: this.bannerReg, txt: '请添加至少一张服务图片'},
           {value: this.serviceDetailReg, txt: '请至少添加一条服务套餐'},
           {value: this.serviceDetailMsg, txt: '请完整填写服务套餐信息'},
+          {value: this.serviceCount, txt: '请输入合法的套餐数量'},
+          {value: this.servicePirceNum, txt: '请正确输入套餐价格'},
+          {value: this.servicePrice, txt: '套餐价格请保留两位小数'},
           {value: this.detailImgReg, txt: '请添加至少一张服务详情图片'},
           {value: this.use1TimeReg, txt: '请选择售卖开始时间'},
           {value: this.use2TimeReg, txt: '请选择售卖结束时间'},
@@ -536,17 +539,30 @@
           return item.servie && item.number && item.price
         })
         return handle
+      },
+      serviceCount() {
+        let count = this.serviceDetail.detail_config.every((item) => {
+          return item.number && COUNTREG.test(item.number)
+        })
+        return count
+      },
+      servicePirceNum() {
+        let num = this.serviceDetail.detail_config.every((item) => {
+          return item.price && MONEYREG.test(item.price)
+        })
+        return num
+      },
+      servicePrice() {
+        let price = this.serviceDetail.detail_config.every((item) => {
+          return !(/\d+\.\d{3}/.test(item.price))
+        })
+        return price
       }
     },
     watch: {
       'serviceDetail.goods_banner_images'(curVal) {
         this.serviceDetail.image_id = (curVal[0] && curVal[0].image_id) || ''
       }
-      // 'serviceDetail.detail_config'() {
-      //   setTimeout(() => {
-      //     this.$refs.scroll.refresh()
-      //   }, 20)
-      // }
     },
     components: {
       TitleBox,
@@ -613,6 +629,12 @@
     .group-container
       padding-left: 15px
       background: $color-white
+    .padding-right
+      padding-right: 15px
+      .input-box
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
     .no-padding
       padding-left: 0
       transition: all 0.3s
