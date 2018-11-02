@@ -45,12 +45,14 @@
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
         scrollToEasing: 'bounce',
-        scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce']
+        scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
+        goodsId: ''
       }
     },
     created() {
       this.type = this.$route.query.type
       this.ruleId = this.$route.query.ruleId
+      this.goodsId = this.$route.query.goodsId
       if (this.type === 'prize') {
         document.title = '选择兑换券'
         this._getPrizeList()
@@ -68,6 +70,15 @@
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
             this.list = res.data
+            this.list = this.list.map((item) => {
+              if (+item.id === +this.goodsId) {
+                item.checked = true
+              } else {
+                item.checked = false
+              }
+              this.checkItem = item
+              return Object.assign({}, item)
+            })
             if (!res.data.length) {
               this.nothing = true
             }

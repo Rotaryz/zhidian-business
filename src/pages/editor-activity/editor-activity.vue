@@ -264,7 +264,7 @@
           return
         }
         if (this.type === 'editor') return
-        let url = `${this.$route.path}/choice-goods?type=${type}&ruleId=${this.ruleId}`
+        let url = `${this.$route.path}/choice-goods?type=${type}&ruleId=${this.ruleId}&goodsId=${this.activityDetail.goods_id}`
         this.$router.push(url)
       },
       showTitleModal() {
