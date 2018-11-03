@@ -99,7 +99,7 @@
         return this.bankInfo.bank
       },
       getMoneyReg() {
-        return (typeof +this.getMoney === 'number') && +this.getMoney > 0 && this.getMoney <= this.bankInfo.remaining
+        return (typeof +this.getMoney === 'number') && +this.getMoney > 0 && +this.getMoney <= this.bankInfo.remaining
       }
     }
   }
