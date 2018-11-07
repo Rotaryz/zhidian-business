@@ -10,6 +10,7 @@ const ERR_OK = 0
 const ERR_NO = -404
 const TIME_OUT = 10000
 const COMMON_HEADER = {}
+const DEFAULTAPI = 'api'
 
 const http = axios.create({
   baseURL: baseUrl.api,
@@ -19,6 +20,7 @@ const http = axios.create({
 
 http.interceptors.request.use(config => {
   // 请求数据前的拦截
+  config.baseURL = baseUrl[config.apiType]
   config.headers['Authorization'] = storage.get('token', '')
   return config
 }, error => {
@@ -72,11 +74,12 @@ function requestException(res) {
 }
 
 export default {
-  post(url, data, loading = true) {
+  post(url, data, loading = true, apiType = DEFAULTAPI) {
     Utils.showLoading(loading)
     return http({
       method: 'post',
       url,
+      apiType, // baseURL 配置
       data // post 请求时带的参数
     }).then((response) => {
       return checkStatus(response)
@@ -84,11 +87,12 @@ export default {
       return checkCode(res)
     })
   },
-  get(url, params, loading = true) {
+  get(url, params, loading = true, apiType = DEFAULTAPI) {
     Utils.showLoading(loading)
     return http({
       method: 'get',
       url,
+      apiType, // baseURL 配置
       params // get 请求时带的参数
     }).then((response) => {
       return checkStatus(response)
@@ -96,11 +100,12 @@ export default {
       return checkCode(res)
     })
   },
-  put(url, data, loading = true) {
+  put(url, data, loading = true, apiType = DEFAULTAPI) {
     Utils.showLoading(loading)
     return http({
       method: 'put',
       url,
+      apiType, // baseURL 配置
       data // put 请求时带的参数
     }).then((response) => {
       return checkStatus(response)
@@ -108,11 +113,12 @@ export default {
       return checkCode(res)
     })
   },
-  delete(url, data, loading = true) {
+  delete(url, data, loading = true, apiType = DEFAULTAPI) {
     Utils.showLoading(loading)
     return http({
       method: 'delete',
       url,
+      apiType, // baseURL 配置
       data // put 请求时带的参数
     }).then((response) => {
       return checkStatus(response)
