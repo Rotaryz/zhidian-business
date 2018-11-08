@@ -113,8 +113,8 @@
             this.dataArray = arr
           }
           if (res.meta) {
-            this.hasMore = res.meta.current_page !== res.meta.last_page
-            this.pullUpLoad = !this.hasMore
+            this.hasMore = (res.meta.current_page !== res.meta.last_page)
+            this.pullUpLoad = this.hasMore
           } else {
             this.pullUpLoad = false
           }

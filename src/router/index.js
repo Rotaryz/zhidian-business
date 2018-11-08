@@ -269,6 +269,7 @@ const route = new Router({
         {
           path: 'radar',
           component: Radar,
+          redirect: 'radar/overview',
           meta: {
             title: 'BOSS-AI'
           },

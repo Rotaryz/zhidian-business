@@ -21,14 +21,14 @@
                   :showNoMore="showNoMore0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in list0" :key="tabIdx + '' + index">
-                <service-item :tabIdx="tabIdx"
+                <activity-item :tabIdx="tabIdx"
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemEditor="itemEditor"
                               @itemDown="itemDown"
                               @itemDelete="itemDelete">
-                </service-item>
+                </activity-item>
               </div>
               <div class="nothing-box" v-if="nothing0">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
@@ -46,14 +46,14 @@
                   :showNoMore="showNoMore1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in list1" :key="tabIdx + '' + index">
-                <service-item :tabIdx="tabIdx"
+                <activity-item :tabIdx="tabIdx"
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemEditor="itemEditor"
                               @itemDown="itemDown"
                               @itemDelete="itemDelete">
-                </service-item>
+                </activity-item>
               </div>
               <div class="nothing-box" v-if="nothing1">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
@@ -73,7 +73,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import ServiceItem from 'components/activity-item/activity-item'
+  import ActivityItem from 'components/activity-item/activity-item'
   import Modal from 'components/confirm-msg/confirm-msg'
   import Scroll from 'components/scroll/scroll'
   import { ActivityApi } from 'api'
@@ -129,7 +129,6 @@
             if (!res.data.length) {
               this[`nothing${this.tabIdx}`] = true
             }
-            this._timeRun()
             setTimeout(() => {
               this.$refs[`scroll${this.tabIdx}`].forceUpdate()
               this.$refs[`scroll${this.tabIdx}`].scrollTo(0, 0, 0, ease[this.scrollToEasing])
@@ -242,51 +241,6 @@
         this[`showNoMore${this.tabIdx}`] = false
         this[`nothing${this.tabIdx}`] = false
       },
-      _timeRun() {
-        clearInterval(this.timer)
-        this['list' + this.tabIdx] = this['list' + this.tabIdx].map((item) => {
-          let endTime
-          endTime = this._timeCheckout(item.start_at_timestamp, item.current_timestamp)
-          return Object.assign({}, item, {endTime})
-        })
-        this.timer = setInterval(() => {
-          this['list' + this.tabIdx] = this['list' + this.tabIdx].map((item) => {
-            item.current_timestamp++
-            let endTime
-            endTime = this._timeCheckout(item.start_at_timestamp, item.current_timestamp)
-            return Object.assign({}, item, {endTime})
-          })
-        }, 1000)
-      },
-      _timeCheckout(time, nowTime) {
-        let nowSecond = new Date(nowTime)
-        let differ = time * 1 - nowSecond
-        let day = Math.floor(differ / (60 * 60 * 24))
-        day = day >= 10 ? day : '0' + day
-        let hour = Math.floor(differ / (60 * 60)) - (day * 24)
-        hour = hour >= 10 ? hour : '0' + hour
-        let minute = Math.floor(differ / 60) - (day * 24 * 60) - (hour * 60)
-        minute = minute >= 10 ? minute : '0' + minute
-        let second = Math.floor(differ) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60)
-        second = second >= 10 ? second : '0' + second
-        let times
-        if (differ > 0) {
-          times = {
-            day,
-            hour,
-            minute,
-            second
-          }
-        } else {
-          times = {
-            day: '00',
-            hour: '00',
-            minute: '00',
-            second: '00'
-          }
-        }
-        return times
-      },
       onPullingUp() {
         if (this[`showNoMore${this.tabIdx}`]) {
           this.$refs[`scroll${this.tabIdx}`].forceUpdate()
@@ -323,7 +277,7 @@
       }
     },
     components: {
-      ServiceItem,
+      ActivityItem,
       Scroll,
       Modal
     },
