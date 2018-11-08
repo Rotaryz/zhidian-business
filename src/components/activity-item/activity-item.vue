@@ -64,11 +64,11 @@
     methods: {
       _timeRun() {
         clearInterval(this.timer)
+        this.item.current_timestamp++
+        this.endTime = this._timeCheckout(this.item.start_at_timestamp, this.item.current_timestamp)
         this.timer = setInterval(() => {
           this.item.current_timestamp++
-          let endTime
-          endTime = this._timeCheckout(this.item.start_at_timestamp, this.item.current_timestamp)
-          this.endTime = endTime
+          this.endTime = this._timeCheckout(this.item.start_at_timestamp, this.item.current_timestamp)
         }, 1000)
       },
       _timeCheckout(time, nowTime) {
