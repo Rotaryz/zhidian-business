@@ -15,7 +15,6 @@
 
 <script>
   import {Business} from 'api'
-  import {mapGetters} from 'vuex'
 
   export default {
     name: 'share-card',
@@ -45,10 +44,6 @@
       }
     },
     computed: {
-      ...mapGetters(['ios']),
-      slide() {
-        return this.ios ? '' : 'slide'
-      }
     }
   }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <transition :name="slide">
+  <transition name="slide">
     <div class="client-detail">
       <scroll ref="scroll"
               :data="actionList"
@@ -241,7 +241,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {mapActions, mapGetters} from 'vuex'
+  import {mapActions} from 'vuex'
   import {ClientDetail, Echart} from 'api'
   import Scroll from 'components/scroll/scroll'
   import Exception from 'components/exception/exception'
@@ -846,10 +846,6 @@
       Exception
     },
     computed: {
-      ...mapGetters(['ios']),
-      slide () {
-        return this.ios ? '' : 'slide'
-      },
       pullUpLoadObj: function () {
         return this.pullUpLoad ? {
           threshold: parseInt(this.pullUpLoadThreshold),

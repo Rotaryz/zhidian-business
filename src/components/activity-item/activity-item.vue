@@ -55,7 +55,8 @@
     props: ['tabIdx', 'item', 'showEdit'],
     data() {
       return {
-        endTime: {}
+        endTime: {},
+        current_timestamp: 0
       }
     },
     created() {
@@ -64,11 +65,12 @@
     methods: {
       _timeRun() {
         clearInterval(this.timer)
-        this.item.current_timestamp++
-        this.endTime = this._timeCheckout(this.item.start_at_timestamp, this.item.current_timestamp)
+        this.current_timestamp = this.item.current_timestamp
+        this.current_timestamp++
+        this.endTime = this._timeCheckout(this.item.start_at_timestamp, this.current_timestamp)
         this.timer = setInterval(() => {
-          this.item.current_timestamp++
-          this.endTime = this._timeCheckout(this.item.start_at_timestamp, this.item.current_timestamp)
+          this.current_timestamp++
+          this.endTime = this._timeCheckout(this.item.start_at_timestamp, this.current_timestamp)
         }, 1000)
       },
       _timeCheckout(time, nowTime) {
