@@ -15,6 +15,15 @@ function getSignature(callback) {
 
 export function uploadFiles(file, callback) {
   return new Promise((resolve, reject) => {
+    if (!file || !file.type) {
+      reject()
+      return
+    }
+    if (!/mp4/.test(file.type)) {
+      let res = {error: 10, message: '请上传mp4格式的视频' }
+      resolve(res)
+      return
+    }
     qcVideo.ugcUploader.start({
       videoFile: file, // 视频，类型为 File
       getSignature: getSignature, // 前文中所述的获取上传签名的函数
