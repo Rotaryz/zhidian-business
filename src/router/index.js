@@ -350,8 +350,9 @@ const OAUTH_ROUTE = '/login' // 授权页面
 
 route.beforeEach(async (to, from, next) => {
   document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
+  console.log(to)
   if (to.path === '/') {
-    const token = storage.get('token', '')
+    const token = storage.get('token')
     if (token) {
       next({path: DEFAULT_ROUTE, replace: true})
     } else {
