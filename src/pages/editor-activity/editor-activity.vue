@@ -341,7 +341,7 @@
       pickerConfirm(e) {
         let reg = /[\u4E00-\u9FA5]/g
         let arr = e.map(item => {
-          return item.value.replace(reg, '')
+          return item.value.replace(reg, '').replace(/\b\d\b/g, '0$&')
         })
         let res = arr.join('-')
         switch (this.timeType) {

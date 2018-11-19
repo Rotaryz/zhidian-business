@@ -40,10 +40,10 @@
       <p class="activity-type" :class="{'group' : item.rule_id * 1 === 1}"></p>
       <div class="item-header border-top-1px" v-if="item.start_at_timestamp">
         <p class="activity-time">距开始
-          <span v-if="item.endTime && item.endTime.day && item.endTime.day>0" class="date">{{item.endTime.day}}</span><span v-if="item.endTime && item.endTime.day>0">:</span>
-          <span v-if="item.endTime && item.endTime.hour" class="date">{{item.endTime.hour}}</span>:
-          <span v-if="item.endTime && item.endTime.minute" class="date">{{item.endTime.minute}}</span>:
-          <span v-if="item.endTime && item.endTime.second" class="date">{{item.endTime.second}}</span>
+          <span v-if="endTime && endTime.day && endTime.day>0" class="date">{{endTime.day}}</span><span v-if="endTime && endTime.day>0">:</span>
+          <span v-if="endTime && endTime.hour" class="date">{{endTime.hour}}</span>:
+          <span v-if="endTime && endTime.minute" class="date">{{endTime.minute}}</span>:
+          <span v-if="endTime && endTime.second" class="date">{{endTime.second}}</span>
         </p>
       </div>
     </div>
@@ -55,9 +55,53 @@
     props: ['tabIdx', 'item', 'showEdit'],
     data() {
       return {
+        endTime: {},
+        current_timestamp: 0
       }
     },
+    created() {
+      this._timeRun()
+    },
     methods: {
+      _timeRun() {
+        clearInterval(this.timer)
+        this.current_timestamp = this.item.current_timestamp
+        this.current_timestamp++
+        this.endTime = this._timeCheckout(this.item.start_at_timestamp, this.current_timestamp)
+        this.timer = setInterval(() => {
+          this.current_timestamp++
+          this.endTime = this._timeCheckout(this.item.start_at_timestamp, this.current_timestamp)
+        }, 1000)
+      },
+      _timeCheckout(time, nowTime) {
+        let nowSecond = new Date(nowTime)
+        let differ = time * 1 - nowSecond
+        let day = Math.floor(differ / (60 * 60 * 24))
+        day = day >= 10 ? day : '0' + day
+        let hour = Math.floor(differ / (60 * 60)) - (day * 24)
+        hour = hour >= 10 ? hour : '0' + hour
+        let minute = Math.floor(differ / 60) - (day * 24 * 60) - (hour * 60)
+        minute = minute >= 10 ? minute : '0' + minute
+        let second = Math.floor(differ) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60)
+        second = second >= 10 ? second : '0' + second
+        let times
+        if (differ > 0) {
+          times = {
+            day,
+            hour,
+            minute,
+            second
+          }
+        } else {
+          times = {
+            day: '00',
+            hour: '00',
+            minute: '00',
+            second: '00'
+          }
+        }
+        return times
+      },
       showEditCover(item) {
         this.$emit('showEdit', item)
       },
@@ -70,6 +114,9 @@
       itemDelete(item) {
         this.$emit('itemDelete', item)
       }
+    },
+    beforeDestroy() {
+      clearInterval(this.timer)
     }
   }
 </script>

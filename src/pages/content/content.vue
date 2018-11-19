@@ -186,6 +186,7 @@
       },
       _fileChange(e, flag, item) {
         let arr = Array.from(e.target.files)
+        if (arr.length < 1) return
         if (flag === 'header-video') {
           this.$loading.show('视频上传中...')
           this.$vod.uploadFiles(arr[0], (curr) => {
