@@ -21,7 +21,7 @@
           <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
         <!--</div>-->
         <div class="item-box-right">
-          <div class="status-txt" :class="{'red-text' : item.switch}">{{+item.switch ? '已开启' : '已关闭'}}</div>
+          <div class="status-txt" :class="{'red-text' : !item.switch}">{{+item.switch ? '已开启' : '已关闭'}}</div>
           <img src="./icon-press_right@2x.png" class="arrow">
         </div>
       </div>
