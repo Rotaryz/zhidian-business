@@ -119,9 +119,6 @@
           threshold: parseInt(this.pullUpLoadThreshold),
           txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
         } : false
-      },
-      userInfo() {
-        return this.$storage.get('info')
       }
     },
     components: {

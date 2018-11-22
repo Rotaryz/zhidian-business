@@ -10,12 +10,12 @@
         @pullingUp="onPullingUp"
       >
         <div class="employee-title border-bottom-1px">
-          <span class="count">店员人数({{dataArray.length}}个)</span>
-          <span class="title-right" @click="navTo()"><span>邀请开店</span><img src="./icon-press_right@2x.png" class="arrow-icon"></span>
+          <span class="count">店员帐号({{hasUseNum}}/{{allNum}})</span>
+          <span class="title-right" @click="navTo()"><span>邀请店员</span><img src="./icon-press_right@2x.png" class="arrow-icon"></span>
         </div>
         <ul class="employee-list border-bottom-1px">
-          <li v-for="(item, index) in dataArray" :key="index">
-            <employee-item :item="item" @delEmployee="delEmployee" @editEmployee="editEmployee"></employee-item>
+          <li v-for="(item, index) in dataArray" :key="index" class="employee-li">
+            <employee-item :item="item" @editEmployee="editEmployee"></employee-item>
           </li>
         </ul>
       </scroll>
@@ -24,10 +24,9 @@
         <div class="nothing-txt">暂无数据</div>
       </div>
     </div>
-    <div class="footer-box" @click="jumpNew">
+    <div class="footer-box" @click="jumpNew('')">
       <div class="footer-btn">新建店员</div>
     </div>
-    <modal ref="modal" @confirm="modalConfirm"></modal>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
@@ -35,7 +34,6 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import EmployeeItem from 'components/employee-item/employee-item'
-  import Modal from 'components/confirm-msg/confirm-msg'
   import { Employee } from 'api'
 
   const LIMIT = 10
@@ -51,6 +49,8 @@
         page: 1,
         hasMore: true,
         isEmpty: false,
+        allNum: 0,
+        hasUseNum: 0,
         delItem: ''
       }
     },
@@ -73,39 +73,19 @@
           }, 300)
         }
       },
-      delEmployee(item) {
-        if (item.role_id * 1 === 1 || item.status * 1 !== 0) {
-          return
-        }
-        this.$refs.modal.show({msg: `是否删除${item.name}店员`})
-        this.delItem = item
-      },
-      modalConfirm() {
-        Employee.delEmployee(this.delItem.id)
-          .then((res) => {
-            this.$loading.hide()
-            if (res.error !== this.$ERR_OK) {
-              this.$toast.show(res.message)
-              return
-            }
-            this.$toast.show('删除成功')
-            this.dataArray = this.dataArray.filter((item) => {
-              return this.delItem.id !== item.id
-            })
-          })
-      },
       editEmployee(item) {
-        this.$storage.set('employee', item)
-        this.jumpNew()
+        this.jumpNew(item.employee.shop_id)
       },
       _getList(data = {page: 1}) {
         if (!this.hasMore) return
-        Employee.getEmployeeList({...data, limit: LIMIT}).then((res) => {
+        Employee.getShopList({...data, limit: LIMIT}).then((res) => {
           this.$loading.hide()
           if (res.error !== this.$ERR_OK) {
             this.$toast.show(res.message)
             return
           }
+          this.allNum = res.usabled_shops || 0
+          this.hasUseNum = res.used_shops || 0
           if (!res.meta || res.meta.current_page === 1) {
             this.dataArray = res.data
           } else {
@@ -120,8 +100,8 @@
           }
         })
       },
-      jumpNew() {
-        let path = `employee-manage/new-employee`
+      jumpNew(id) {
+        let path = `employee-manage/new-employee?id=${id}`
         this.$router.push(path)
       },
       onPullingUp() {
@@ -155,8 +135,7 @@
     },
     components: {
       Scroll,
-      EmployeeItem,
-      Modal
+      EmployeeItem
     }
   }
 </script>
@@ -179,6 +158,11 @@
       font-size: $font-size-12
       color: $color-CCCCCC
       font-family: $font-family-regular
+  .employee-li
+    padding: 0 15px
+    margin-bottom: 10px
+    &:first-child
+      margin-top: 15px
 
   .employee-box
     fill-box()

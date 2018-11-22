@@ -9,7 +9,6 @@ export function handleErrorType(code) {
       break
     }
     case 10000: {
-      alert('error 10000')
       _handleLoseEfficacy()
       break
     }

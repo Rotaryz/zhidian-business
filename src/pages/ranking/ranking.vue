@@ -288,9 +288,6 @@
         let arr = this.groupList.data
         let idx = this.groupList.idx
         return arr[idx]
-      },
-      userInfo() {
-        return this.$storage.get('info')
       }
     },
     components: {

@@ -15,7 +15,7 @@
   import SData from './s-data/s-data'
   import SRouter from './s-router/s-router'
   import wx from 'weixin-js-sdk'
-  import { Global } from 'api'
+  import { Global, Mine } from 'api'
 
   export default {
     components: {
@@ -27,6 +27,7 @@
     created() {
       this._getWxSdk()
       this._getShopDashboard()
+      this._getStoreInfo()
     },
     data() {
       return {
@@ -37,6 +38,20 @@
     methods: {
       refresh() {
         this._getShopDashboard()
+      },
+      _getStoreInfo() {
+        Mine.getUserInfo().then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            return
+          }
+          let info = res.data
+          if (info.merchant.expired && !this.$storage.get('hasShowExpire')) {
+            this.$emit('showExpire')
+            this.$storage.set('hasShowExpire', true)
+          }
+          this.$storage.set('info', info)
+        })
       },
       _getWxSdk() {
         let url = window.location.href

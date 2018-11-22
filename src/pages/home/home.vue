@@ -1,19 +1,30 @@
 <template>
   <div class="home" @touchmove.prevent>
-    <router-view class="home-view"/>
+    <router-view class="home-view" @showExpire="showExpire"/>
+    <expire-modal ref="expireModal"></expire-modal>
     <tab></tab>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Tab from 'components/tab/tab'
+  import ExpireModal from 'components/expire-modal/expire-modal'
 
   const COMPONENT_NAME = 'home'
 
   export default {
     name: COMPONENT_NAME,
     components: {
-      Tab
+      Tab,
+      ExpireModal
+    },
+    created() {
+      this.$storage.set('hasShowExpire', false)
+    },
+    methods: {
+      showExpire() {
+        this.$refs.expireModal.show()
+      }
     }
   }
 </script>
