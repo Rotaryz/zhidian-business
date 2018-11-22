@@ -4,7 +4,15 @@
     <router-link tag="div" class="header" to="/shop-qr-code">
       <div class="logo" v-if="shopInfo.logo && shopInfo.logo.url" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
       <img class="logo" src="./pic-default_people@2x.png" v-else/>
-      <div class="title">{{shopInfo.name || '店铺名称'}}</div>
+      <div class="msg-box">
+        <div class="title">{{shopInfo.name || '店铺名称'}}</div>
+        <div class="use-time">
+          <span class="time">使用期限:{{userInfo.merchant.expire_time | formatTime}}</span>
+          <span class="big-box" @click.stop="showExpire" v-if="userInfo.merchant && userInfo.merchant.expired">
+            <span class="red-box">续费</span>
+          </span>
+        </div>
+      </div>
       <div class="qr-code"></div>
       <div class="right-arrow"></div>
     </router-link>
@@ -23,6 +31,7 @@
 <script type="text/ecmascript-6">
   import Modal from 'components/confirm-msg/confirm-msg'
   import { Mine } from 'api'
+  import {formatDateTime} from 'common/js/utils'
 
   const optionsArr = [
     {
@@ -56,6 +65,9 @@
       this._getShopInfo()
     },
     methods: {
+      showExpire() {
+        this.$emit('showExpire')
+      },
       refresh() {
         this._getShopInfo()
       },
@@ -81,6 +93,17 @@
       exitApp() {
         this.$storage.clear()
         this.$router.replace('/login')
+      }
+    },
+    computed: {
+      userInfo() {
+        return this.$storage.get('info')
+      }
+    },
+    filters: {
+      formatTime(val) {
+        if (!val) return ''
+        return formatDateTime(val * 1000, '-')
       }
     }
   }
@@ -113,15 +136,36 @@
         height: @width
         background: #ccc
         margin-left: 12.9px
-      .title
+      .msg-box
         flex: 1
         padding: 0 6px
-        font-family: PingFangSC-Regular
-        font-size: 18px
-        color: #363547
-        letter-spacing: 0.8px
-        text-align: justify
-        word-break: break-all
+        .title
+          font-family: PingFangSC-Regular
+          font-size: $font-size-16
+          color: #363547
+          letter-spacing: 0.8px
+          text-align: justify
+          word-break: break-all
+          margin-bottom: 10px
+        .use-time
+          display: flex
+          align-items: center
+          .time
+            font-size: $font-size-14
+            color: $color-9B9B9B
+            font-family: $font-family-regular
+          .big-box
+            padding: 5px
+          .red-box
+            width: 36px
+            height: 18px
+            line-height: 18px
+            text-align: center
+            border-1px($color-EF705D)
+            font-size: $font-size-12
+            font-family: $font-family-medium
+            color: $color-EF705D
+            display: block
       .qr-code
         width: 20px
         height: 20px

@@ -76,7 +76,7 @@
             return
           }
           const token = res.data.access_token
-          const merchantInfo = res.data.merchant_info
+          const merchantInfo = res.data.employee_info
           this.$storage.set('token', token)
           this.$storage.set('info', merchantInfo)
           this.$router.replace('/')
