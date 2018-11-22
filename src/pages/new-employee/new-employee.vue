@@ -6,7 +6,7 @@
         <input type="number" v-if="!disabledCover" placeholder="请输入员工的手机号" oninput="if(value.length > 11)value = value.slice(0, 11)" class="item-right" v-model="staffInfo.mobile">
         <div class="phone-right" v-else>
           <span class="phone-num">{{staffInfo.mobile}}</span>
-          <div class="unbind" @click="unBindPhone">解绑</div>
+          <div class="unbind" @click="unBindPhone" v-if="+staffInfo.roleId !== 1">解绑</div>
         </div>
       </div>
       <div class="list-item border-bottom-1px">
@@ -100,7 +100,7 @@
               deleted: employee.deleted
             }
             this.employeeId = employee.id
-            if ((employee.deleted || !employee.is_bind) && +employee.role_id !== 1) {
+            if ((employee.deleted || !employee.is_bind) || employee.role_id !== 1) {
               this.staffInfo.mobile = employee.deleted ? '' : employee.mobile
               this.disabledCover = false
             } else {
