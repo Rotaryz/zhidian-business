@@ -100,7 +100,7 @@
               deleted: employee.deleted
             }
             this.employeeId = employee.id
-            if ((employee.deleted || !employee.is_bind) && employee.role_id !== 1) {
+            if (employee.deleted || !employee.is_bind) {
               this.staffInfo.mobile = employee.deleted ? '' : employee.mobile
               this.disabledCover = false
             } else {
