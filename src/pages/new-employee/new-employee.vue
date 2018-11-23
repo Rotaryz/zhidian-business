@@ -24,7 +24,7 @@
     </div>
     <div class="submit-box">
       <div class="footer-btn btn-item" @click="saveBtn">保存</div>
-      <div class="del-btn btn-item" :class="(!staffInfo.deleted && staffInfo.isBind) || +staffInfo.roleId === 1? 'disabled' : ''" @click="delEmployee">删除</div>
+      <div class="del-btn btn-item" :class="staffInfo.deleted || staffInfo.isBind || +staffInfo.roleId === 1? 'disabled' : ''" @click="delEmployee">删除</div>
     </div>
     <div class="disabled-cover" @click.stop="" v-if="disabledCover"></div>
     <modal ref="modal" @confirm="modalConfirm"></modal>
@@ -110,7 +110,7 @@
         })
       },
       delEmployee() {
-        if ((!this.staffInfo.deleted && this.staffInfo.isBind) || +this.staffInfo.roleId === 1) { // 是店长，已绑定，不能删除
+        if (this.staffInfo.isBind || +this.staffInfo.roleId === 1 || this.staffInfo.deleted) { // 是店长，已绑定，不能删除
           return
         }
         this.$refs.modal.show({msg: `是否删除${this.staffInfo.name}店员`})
