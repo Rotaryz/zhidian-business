@@ -134,7 +134,6 @@
       .logo
         width: 17vw
         height: @width
-        background: #ccc
         margin-left: 12.9px
       .msg-box
         flex: 1
