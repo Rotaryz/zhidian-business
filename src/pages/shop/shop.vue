@@ -46,7 +46,7 @@
             return
           }
           let info = res.data
-          if (info.merchant.expired && !this.$storage.get('hasShowExpire')) {
+          if (info.merchant && info.merchant.expired && !this.$storage.get('hasShowExpire')) {
             this.$emit('showExpire')
             this.$storage.set('hasShowExpire', true)
           }
