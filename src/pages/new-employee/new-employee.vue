@@ -197,6 +197,8 @@
           this.$loading.hide()
           if (res.error === ERR_OK) {
             this._getDetail(this.id)
+            this.$toast.show('解绑成功')
+            this.$emit('refresh')
           } else {
             this.$toast.show(res.message)
           }
