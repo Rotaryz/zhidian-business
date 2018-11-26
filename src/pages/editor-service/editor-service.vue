@@ -5,40 +5,46 @@
         <div class="title">基本信息</div>
       </div>
       <div class="group-container">
-        <div class="editor-item border-bottom-1px">
+        <div class="editor-item border-bottom-1px" @click="showTitleModal('title')">
           <div class="item-left">标题</div>
-          <div class="item-right input-right" @click="showTitleModal('title')">
+          <div class="item-right input-right" >
             <div class="right-txt" v-if="serviceDetail.title">{{serviceDetail.title}}</div>
             <span class="right-txt-placeholder" v-if="!serviceDetail.title">请填写服务的标题</span>
             <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
           </div>
         </div>
-        <div class="editor-item border-bottom-1px">
+        <div class="editor-item border-bottom-1px" @click="showTitleModal('subtitle')">
           <div class="item-left need-no">副标题</div>
-          <div class="item-right input-right" @click="showTitleModal('subtitle')">
+          <div class="item-right input-right" >
             <div class="right-txt" v-if="serviceDetail.subtitle">{{serviceDetail.subtitle}}</div>
             <span class="right-txt-placeholder" v-if="!serviceDetail.subtitle">请填写服务的副标题</span>
             <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
           </div>
         </div>
-        <div class="editor-item border-bottom-1px">
-          <div class="item-left">门市价</div>
-          <div class="item-right">
-            <input type="number" class="input-box" v-model="serviceDetail.original_price" placeholder="请填写">
+        <label>
+          <div class="editor-item border-bottom-1px">
+            <div class="item-left">门市价</div>
+            <div class="item-right">
+              <input type="number" class="input-box" v-model="serviceDetail.original_price" placeholder="请填写">
+            </div>
           </div>
-        </div>
-        <div class="editor-item border-bottom-1px">
-          <div class="item-left">售价</div>
-          <div class="item-right">
-            <input type="number" class="input-box" v-model="serviceDetail.platform_price" placeholder="请填写">
+        </label>
+        <label>
+          <div class="editor-item border-bottom-1px">
+            <div class="item-left">售价</div>
+            <div class="item-right">
+              <input type="number" class="input-box" v-model="serviceDetail.platform_price" placeholder="请填写">
+            </div>
           </div>
-        </div>
-        <div class="editor-item">
-          <div class="item-left">库存</div>
-          <div class="item-right">
-            <input type="number" class="input-box" v-model="serviceDetail.usable_stock" placeholder="请填写">
+        </label>
+        <label>
+          <div class="editor-item">
+            <div class="item-left">库存</div>
+            <div class="item-right">
+              <input type="number" class="input-box" v-model="serviceDetail.usable_stock" placeholder="请填写">
+            </div>
           </div>
-        </div>
+        </label>
         <!--<div class="editor-item border-bottom-1px">-->
           <!--<div class="item-left">品类</div>-->
           <!--<div class="item-right">-->
@@ -86,25 +92,31 @@
           <!--</div>-->
         <!--</div>-->
         <div class="server-list border-bottom-1px" :class="item.hide ? 'hide-list': item.hasClass ? 'has-class show-list' : 'show-list'" v-for="(item, index) in serviceDetail.detail_config" :key="index">
-          <div class="editor-item border-bottom-1px">
-            <div class="item-left">服务{{index + 1}}</div>
-            <div class="item-right">
-              <input type="text" class="input-box" v-model="item.servie" placeholder="请填写服务名称">
-              <span v-if="index > 0" class="del-server" @click.stop="delItem(index)"></span>
+          <label>
+            <div class="editor-item border-bottom-1px">
+              <div class="item-left">服务{{index + 1}}</div>
+              <div class="item-right">
+                <input type="text" class="input-box" v-model="item.servie" placeholder="请填写服务名称">
+                <span v-if="index > 0" class="del-server" @click.stop="delItem(index)"></span>
+              </div>
             </div>
-          </div>
-          <div class="editor-item border-bottom-1px">
-            <div class="item-left">数量</div>
-            <div class="item-right">
-              <input type="number" class="input-box" v-model="item.number" placeholder="请填写">
+          </label>
+          <label>
+            <div class="editor-item border-bottom-1px">
+              <div class="item-left">数量</div>
+              <div class="item-right">
+                <input type="number" class="input-box" v-model="item.number" placeholder="请填写">
+              </div>
             </div>
-          </div>
-          <div class="editor-item">
-            <div class="item-left">价格</div>
-            <div class="item-right">
-              <input type="number" class="input-box" v-model="item.price" placeholder="请填写">
+          </label>
+          <label>
+            <div class="editor-item">
+              <div class="item-left">价格</div>
+              <div class="item-right">
+                <input type="number" class="input-box" v-model="item.price" placeholder="请填写">
+              </div>
             </div>
-          </div>
+          </label>
         </div>
 
         <div class="service-img-item">
@@ -130,24 +142,30 @@
         <div class="title">使用有效期</div>
       </div>
       <div class="group-container padding-right">
-        <div class="editor-item border-bottom-1px">
-          <div class="item-left">开始时间</div>
-          <div class="item-right">
-            <input type="text" class="input-box" :class="{'no-click': (type === 'editor')}" @click="chioseTime('use1')" v-model="serviceDetail.start_at" readonly placeholder="请选择时间">
+        <label>
+          <div class="editor-item border-bottom-1px">
+            <div class="item-left">开始时间</div>
+            <div class="item-right">
+              <input type="text" class="input-box" :class="{'no-click': (type === 'editor')}" @click="chioseTime('use1')" v-model="serviceDetail.start_at" readonly placeholder="请选择时间">
+            </div>
           </div>
-        </div>
-        <div class="editor-item border-bottom-1px">
-          <div class="item-left">结束时间</div>
-          <div class="item-right">
-            <input type="text" class="input-box" @click="chioseTime('use2')" v-model="serviceDetail.end_at" readonly placeholder="请选择时间">
+        </label>
+        <label>
+          <div class="editor-item border-bottom-1px">
+            <div class="item-left">结束时间</div>
+            <div class="item-right">
+              <input type="text" class="input-box" @click="chioseTime('use2')" v-model="serviceDetail.end_at" readonly placeholder="请选择时间">
+            </div>
           </div>
-        </div>
-        <div class="editor-item">
-          <div class="item-left">预约信息</div>
-          <div class="item-right">
-            <input type="text" class="input-box" v-model="serviceDetail.note.need_subscribe" placeholder="请填写">
+        </label>
+        <label>
+          <div class="editor-item">
+            <div class="item-left">预约信息</div>
+            <div class="item-right">
+              <input type="text" class="input-box" v-model="serviceDetail.note.need_subscribe" placeholder="请填写">
+            </div>
           </div>
-        </div>
+        </label>
       </div>
       <div class="editor-title border-bottom-1px border-top-1px">
         <div class="title">温馨提示</div>

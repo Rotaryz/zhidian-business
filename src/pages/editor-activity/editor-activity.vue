@@ -13,7 +13,7 @@
           <div class="item-right check-right">
             <span class="right-txt" :class="ruleId && type !== 'editor' ? '' : 'gray'">{{activityType[ruleId]}}</span>
             <img src="./icon-press_right@2x.png" class="arrow-icon">
-            <select v-model='ruleId' class="right-selected" v-if="type !== 'editor'">
+            <select id="ruleId" v-model='ruleId' class="right-selected" v-if="type !== 'editor'">
               <option v-for="(option, index) in showSelectType" :value="option.id">
                 {{ option.value }}
               </option>
@@ -28,67 +28,81 @@
             <img src="./icon-press_right@2x.png" class="arrow-icon">
           </div>
         </div>
-        <div class="editor-item border-top-1px">
-          <div class="item-left">标题</div>
-          <div class="item-right input-right" @click="showTitleModal">
-            <div class="right-txt" v-if="activityDetail.activity_name">{{activityDetail.activity_name}}</div>
-            <span class="right-txt-placeholder" v-if="!activityDetail.activity_name">请填写</span>
+        <label>
+          <div class="editor-item border-top-1px">
+            <div class="item-left">标题</div>
+            <div class="item-right input-right" @click="showTitleModal">
+              <div class="right-txt" v-if="activityDetail.activity_name">{{activityDetail.activity_name}}</div>
+              <span class="right-txt-placeholder" v-if="!activityDetail.activity_name">请填写</span>
+            </div>
           </div>
-        </div>
-        <div class="editor-item border-top-1px" v-if="ruleId == 3">
-          <div class="item-left">底价</div>
-          <div class="item-right">
-            <input type="number" class="input-box" :class="type === 'editor' ? 'disabled' : ''" v-model="activityDetail.config.bottom_price" placeholder="请填写" :disabled="type === 'editor'">
+        </label>
+        <label>
+          <div class="editor-item border-top-1px" v-if="ruleId == 3">
+            <div class="item-left">底价</div>
+            <div class="item-right">
+              <input type="number" class="input-box" :class="type === 'editor' ? 'disabled' : ''" v-model="activityDetail.config.bottom_price" placeholder="请填写" :disabled="type === 'editor'">
+            </div>
           </div>
-        </div>
-        <div class="editor-item border-top-1px" v-if="ruleId == 3">
-          <div class="item-left">砍价次数</div>
-          <div class="item-right check-right">
-            <span class="right-txt" :class="type !== 'editor' ? activityDetail.config.max_cut_num ? '' : 'gray' : 'gray'">{{activityDetail.config.max_cut_num ? activityDetail.config.max_cut_num : '请选择'}}</span>
-            <img src="./icon-press_right@2x.png" class="arrow-icon">
-            <select v-model='activityDetail.config.max_cut_num' class="right-selected" v-if="type !== 'editor'">
-              <option v-for="(option, index) in showBraginCount" :value="option">
-                {{ option }}
-              </option>
-            </select>
+        </label>
+        <label>
+          <div class="editor-item border-top-1px" v-if="ruleId == 3">
+            <div class="item-left">砍价次数</div>
+            <div class="item-right check-right">
+              <span class="right-txt" :class="type !== 'editor' ? activityDetail.config.max_cut_num ? '' : 'gray' : 'gray'">{{activityDetail.config.max_cut_num ? activityDetail.config.max_cut_num : '请选择'}}</span>
+              <img src="./icon-press_right@2x.png" class="arrow-icon">
+              <select v-model='activityDetail.config.max_cut_num' class="right-selected" v-if="type !== 'editor'">
+                <option v-for="(option, index) in showBraginCount" :value="option">
+                  {{ option }}
+                </option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="editor-item border-top-1px" v-if="ruleId == 1">
-          <div class="item-left">拼团价</div>
-          <div class="item-right">
-            <input type="number" class="input-box" :class="type === 'editor' ? 'disabled' : ''" v-model="activityDetail.config.group_price" placeholder="请填写" :disabled="type === 'editor'">
+        </label>
+        <label>
+          <div class="editor-item border-top-1px" v-if="ruleId == 1">
+            <div class="item-left">拼团价</div>
+            <div class="item-right">
+              <input type="number" class="input-box" :class="type === 'editor' ? 'disabled' : ''" v-model="activityDetail.config.group_price" placeholder="请填写" :disabled="type === 'editor'">
+            </div>
           </div>
-        </div>
-        <div class="editor-item border-top-1px" v-if="ruleId == 1">
-          <div class="item-left">拼团人数</div>
-          <div class="item-right check-right">
-            <span class="right-txt" :class="type !== 'editor' ? activityDetail.config.group_number ? '' : 'gray' : 'gray'">{{activityDetail.config.group_number ? activityDetail.config.group_number : '请选择'}}</span>
-            <img src="./icon-press_right@2x.png" class="arrow-icon">
-            <select v-model='activityDetail.config.group_number' class="right-selected" v-if="type !== 'editor'">
-              <option v-for="(option, index) in showGroupCount" :value="option">
-                {{ option }}
-              </option>
-            </select>
+        </label>
+        <label>
+          <div class="editor-item border-top-1px" v-if="ruleId == 1">
+            <div class="item-left">拼团人数</div>
+            <div class="item-right check-right">
+              <span class="right-txt" :class="type !== 'editor' ? activityDetail.config.group_number ? '' : 'gray' : 'gray'">{{activityDetail.config.group_number ? activityDetail.config.group_number : '请选择'}}</span>
+              <img src="./icon-press_right@2x.png" class="arrow-icon">
+              <select v-model='activityDetail.config.group_number' class="right-selected" v-if="type !== 'editor'">
+                <option v-for="(option, index) in showGroupCount" :value="option">
+                  {{ option }}
+                </option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="editor-item border-top-1px" v-if="ruleId == 3">
-          <div class="item-left">库存</div>
-          <div class="item-right check-right">
-            <span class="right-txt" :class="activityDetail.goods_id ? activityDetail.stock ? '' : 'gray' : 'gray'">{{activityDetail.goods_id ? activityDetail.stock ? activityDetail.stock : '请选择' : '请先选择商品'}}</span>
-            <img src="./icon-press_right@2x.png" class="arrow-icon">
-            <select v-model='activityDetail.stock' class="right-selected" :disabled="!activityDetail.goods_id">
-              <option v-for="(option, index) in showBraginStock" :value="option">
-                {{ option }}
-              </option>
-            </select>
+        </label>
+        <label>
+          <div class="editor-item border-top-1px" v-if="ruleId == 3">
+            <div class="item-left">库存</div>
+            <div class="item-right check-right">
+              <span class="right-txt" :class="activityDetail.goods_id ? activityDetail.stock ? '' : 'gray' : 'gray'">{{activityDetail.goods_id ? activityDetail.stock ? activityDetail.stock : '请选择' : '请先选择商品'}}</span>
+              <img src="./icon-press_right@2x.png" class="arrow-icon">
+              <select v-model='activityDetail.stock' class="right-selected" :disabled="!activityDetail.goods_id">
+                <option v-for="(option, index) in showBraginStock" :value="option">
+                  {{ option }}
+                </option>
+              </select>
+            </div>
           </div>
-        </div>
-        <div class="editor-item border-top-1px" v-if="ruleId == 1">
-          <div class="item-left">库存</div>
-          <div class="item-right">
-            <input type="number" class="input-box" v-model="activityDetail.stock" :placeholder="activityDetail.goods_id ? '请填写' : '请先选择商品'" :disabled="!activityDetail.goods_id">
+        </label>
+        <label>
+          <div class="editor-item border-top-1px" v-if="ruleId == 1">
+            <div class="item-left">库存</div>
+            <div class="item-right">
+              <input type="number" class="input-box" v-model="activityDetail.stock" :placeholder="activityDetail.goods_id ? '请填写' : '请先选择商品'" :disabled="!activityDetail.goods_id">
+            </div>
           </div>
-        </div>
+        </label>
       </div>
       <div class="group-container no-padding">
         <div class="editor-img-item border-top-1px">
@@ -114,23 +128,27 @@
         <div class="title">活动时间</div>
       </div>
       <div class="group-container">
-        <div class="editor-item">
-          <div class="item-left">开始时间</div>
-          <div class="item-right">
-            <input type="text" class="input-box" :class="{'no-click': (type === 'editor')}" @click="chioseTime('sale1')" v-model="activityDetail.start_at" readonly placeholder="请选择时间">
+        <label>
+          <div class="editor-item">
+            <div class="item-left">开始时间</div>
+            <div class="item-right">
+              <input type="text" class="input-box" :class="{'no-click': (type === 'editor')}" @click="chioseTime('sale1')" v-model="activityDetail.start_at" readonly placeholder="请选择时间">
+            </div>
           </div>
-        </div>
-        <div class="editor-item border-top-1px">
-          <div class="item-left">结束时间</div>
-          <div class="item-right">
-            <input type="text" class="input-box" @click="chioseTime('sale2')" v-model="activityDetail.end_at" readonly placeholder="请选择时间">
+        </label>
+        <label>
+          <div class="editor-item border-top-1px">
+            <div class="item-left">结束时间</div>
+            <div class="item-right">
+              <input type="text" class="input-box" @click="chioseTime('sale2')" v-model="activityDetail.end_at" readonly placeholder="请选择时间">
+            </div>
           </div>
-        </div>
+        </label>
       </div>
       <div class="group-container border-top-1px" v-if="ruleId == 3">
-        <div class="editor-item">
+        <div class="editor-item"  @click="selectAny('prize')">
           <div class="item-left large">设置兑换券</div>
-          <div class="item-right input-right" @click="selectAny('prize')">
+          <div class="item-right input-right">
             <div class="right-txt" :class="type !== 'editor' ? '' : 'gray'" v-if="activityDetail.coupon_title">{{activityDetail.coupon_title}}</div>
             <span class="right-txt-placeholder" v-if="!activityDetail.coupon_title">成功砍价可领取</span>
             <img src="./icon-press_right@2x.png" class="arrow-icon">
