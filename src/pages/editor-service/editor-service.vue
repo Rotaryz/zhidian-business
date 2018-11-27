@@ -596,6 +596,8 @@
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 
+  label
+    display: block
   .editor-service
     fill-box()
     z-index: 70
