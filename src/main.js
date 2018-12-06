@@ -7,6 +7,7 @@ import 'common/stylus/index.styl'
 import store from './store'
 import './utils/app-plugins'
 import './utils/env-clear'
+import './utils/compatible'
 
 /* eslint-disable no-new */
 export default new Vue({
