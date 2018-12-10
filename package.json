@@ -12,7 +12,7 @@
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "e2e": "node test/e2e/runner.js",
     "test-e2e": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs && elint --fix --ext .js,.vue src test/unit test/e2e/specs",
+    "lint": "eslint --fix --ext .js,.vue src test/unit test/e2e/specs && eslint --ext .js,.vue src test/unit test/e2e/specs",
     "build": "node build/build.js",
     "new": "hygen new"
   },
