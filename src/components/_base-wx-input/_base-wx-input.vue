@@ -26,17 +26,15 @@
           Promise.all(data.map(imageId => {
             return this._getLocalImgData(imageId)
           })).then((base64Arr) => {
-            alert(JSON.stringify(base64Arr))
             base64Arr.forEach((b64) => {
               let file = this.dataURLtoFile(b64)
               arr.push(file)
             })
-            alert(JSON.stringify(obj))
             obj.target.files = arr
             this.$emit('change', obj)
           })
         } catch (e) {
-          alert(JSON.stringify(e) + '%error%')
+          console.error(JSON.stringify(e) + '%error%')
         }
       },
       _chooseImage() {

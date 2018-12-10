@@ -254,7 +254,6 @@
         })
       },
       _fileChange(e, flag) {
-        alert(JSON.stringify(e))
         let arr = Array.from(e.target.files)
         if (arr.length < 1) return
         flag === 'images' && this.$refs['cropper-shop_images'].show(arr[0])
