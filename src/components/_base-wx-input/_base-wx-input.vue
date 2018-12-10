@@ -22,9 +22,10 @@
     methods: {
       async clickHandle() {
         try {
-          let data = this._chooseImage()
-          let base64 = this._getLocalImgData(data[0])
-          alert(base64)
+          let data = await this._chooseImage()
+          let base64 = await this._getLocalImgData(data[0])
+          alert(JSON.stringify(data))
+          alert(JSON.stringify(base64))
         } catch (e) {
           console.error(e)
         }
