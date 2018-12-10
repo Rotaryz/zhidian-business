@@ -96,8 +96,8 @@
                 >
                   <div class="img-show" v-if="shopInfo.images[index]" :style="{backgroundImage: 'url(' + shopInfo.images[index].url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                   <div class="del-icon" v-if="shopInfo.images[index]" @click.stop="delDetail(index)"></div>
-                  <input v-if="shopInfo.images && shopInfo.images.length == index" type="file" style="display: none" @change="_fileChange($event, 'images')"
-                         accept="image/*">
+                  <base-wx-input v-if="shopInfo.images && shopInfo.images.length == index" type="file" style="display: none" @change="_fileChange($event, 'images')"
+                                 accept="image/*"></base-wx-input>
                 </label>
                 <div class="explain one">点击图片预览实际展示效果</div>
                 <div class="explain">添加1-10 张图片（尺寸400*300，大小10M以下）</div>

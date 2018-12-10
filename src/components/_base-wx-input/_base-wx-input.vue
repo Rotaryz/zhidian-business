@@ -1,6 +1,5 @@
 <template>
   <div class="base-wx-input" @click="clickHandle">
-    base-wx-input
   </div>
 </template>
 
@@ -21,11 +20,18 @@
     },
     methods: {
       async clickHandle() {
+        let arr = []
         try {
           let data = await this._chooseImage()
-          let base64 = await this._getLocalImgData(data[0])
-          alert(JSON.stringify(data))
-          alert(JSON.stringify(base64))
+          Promise.all(data.map(imageId => {
+            return this._getLocalImgData(imageId)
+          })).then((base64Arr) => {
+            base64Arr.forEach((b64) => {
+              let file = this.dataURLtoFile(b64)
+              arr.push(file)
+            })
+            this.$emit('change', arr)
+          })
         } catch (e) {
           alert(JSON.stringify(e) + '%error%')
         }
@@ -54,6 +60,16 @@
           })
         })
       },
+      dataURLtoFile(base64, filename, fileType = 'image/jpeg') {
+        let bstr = atob(base64)
+        let n = bstr.length
+        let u8arr = new Uint8Array(n)
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n)
+        }
+        filename = Date.now() + Math.random() + '.jpeg'
+        return new File([u8arr], filename, {type: fileType})
+      },
       _getWxSdk() {
         let url = window.location.href
         Global.jssdkConfig({url}).then((res) => {
@@ -78,7 +94,7 @@
   @import '~common/stylus/mixin'
 
   .base-wx-input
-    width: 50px
-    height :50px
+    fill-box(absolute)
+    display :block !important
     background :rebeccapurple
 </style>
