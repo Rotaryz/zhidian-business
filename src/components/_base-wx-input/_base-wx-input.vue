@@ -16,7 +16,7 @@
 
       }
     },
-    beforeCreate() {
+    created() {
       this._getWxSdk()
     },
     methods: {
@@ -27,7 +27,7 @@
           alert(JSON.stringify(data))
           alert(JSON.stringify(base64))
         } catch (e) {
-          console.error(e)
+          alert(JSON.stringify(e) + '%error%')
         }
       },
       _chooseImage() {
