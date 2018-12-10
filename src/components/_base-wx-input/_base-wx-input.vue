@@ -21,6 +21,7 @@
     methods: {
       async clickHandle() {
         let arr = []
+        let obj = {target: null}
         try {
           let data = await this._chooseImage()
           Promise.all(data.map(imageId => {
@@ -30,7 +31,8 @@
               let file = this.dataURLtoFile(b64)
               arr.push(file)
             })
-            this.$emit('change', arr)
+            obj.target.files = arr
+            this.$emit('change', obj)
           })
         } catch (e) {
           alert(JSON.stringify(e) + '%error%')
