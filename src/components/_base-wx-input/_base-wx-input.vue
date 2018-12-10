@@ -21,7 +21,7 @@
     methods: {
       async clickHandle() {
         let arr = []
-        let obj = {target: null}
+        let obj = {target: {files: null}}
         try {
           let data = await this._chooseImage()
           Promise.all(data.map(imageId => {
