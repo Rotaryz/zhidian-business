@@ -64,13 +64,21 @@
         })
       },
       dataURLtoFile(base64, filename, fileType = 'image/jpeg') {
-        let bstr = atob(base64)
+        let bstr
+        if (/base64/.test(base64)) {
+          let arr = []
+          arr = base64.split(',')
+          fileType = arr[0].match(/:(.*?);/)[1]
+          bstr = atob(arr[1])
+        } else {
+          bstr = atob(base64)
+        }
         let n = bstr.length
         let u8arr = new Uint8Array(n)
         while (n--) {
           u8arr[n] = bstr.charCodeAt(n)
         }
-        filename = Date.now() + Math.random() + '.jpeg'
+        filename = Date.now() + '-' + Math.random() + (fileType || '.jpeg')
         return new File([u8arr], filename, {type: fileType})
       },
       _getWxSdk() {
