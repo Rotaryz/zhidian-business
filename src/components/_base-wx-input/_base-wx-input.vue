@@ -1,6 +1,5 @@
 <template>
-  <div class="base-wx-input" @click="clickHandle">
-  </div>
+  <input type="button" class="base-wx-input" @click="clickHandle">
 </template>
 
 <script type="text/ecmascript-6">
@@ -95,8 +94,4 @@
   @import "~common/stylus/variable"
   @import '~common/stylus/mixin'
 
-  .base-wx-input
-    fill-box(absolute)
-    display :block !important
-    background :rebeccapurple
 </style>
