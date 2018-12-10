@@ -8,6 +8,7 @@ import store from './store'
 import './utils/app-plugins'
 import './utils/env-clear'
 import 'components/_globals'
+import './utils/compatible'
 
 /* eslint-disable no-new */
 export default new Vue({
