@@ -126,7 +126,7 @@
               <div class="img-box" v-for="(item, index) in [1, 2, 3, 4, 5]" :key="index">
                 <div class="img-bc un-up"></div>
                 <div class="img-bc up" v-if="serviceDetail.goods_images.length == index"></div>
-                <input type="file" class="img-bc image-file" @change="_fileDetail($event)" accept="image/*" v-if="serviceDetail.goods_images.length == index" multiple>
+                <base-wx-input class="img-bc image-file" @change="_fileDetail($event)" accept="image/*" v-if="serviceDetail.goods_images.length == index" :multiple="5"></base-wx-input>
               </div>
             </div>
             <div class="container-item">
