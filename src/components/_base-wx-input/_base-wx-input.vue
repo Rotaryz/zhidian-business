@@ -22,6 +22,10 @@
       debugModel: { // debug模式
         type: Boolean,
         default: false
+      },
+      loading: {
+        type: Boolean,
+        default: true
       }
     },
     computed: {
@@ -32,12 +36,16 @@
     },
     methods: {
       ...mapActions('wxApiRegister', ['updateRegister']),
+      _showLoading() {
+        this.loading && this.$loading.show()
+      },
       // event
       async clickHandle() {
         let arr = []
         let obj = {target: {files: null}}
         try {
           let data = await this._chooseImage()
+          this._showLoading()
           Promise.all(data.map(imageId => {
             return this._getLocalImgData(imageId)
           })).then((base64Arr) => {
