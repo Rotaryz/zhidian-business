@@ -142,7 +142,7 @@
 
   .exchange-record
     fill-box()
-    z-index: 50
+    z-index: 40
     background: #fff
     .header
       height: 50px

@@ -354,7 +354,7 @@
 
   .service-manage
     fill-box()
-    z-index: 50
+    z-index: 20
     background: $color-F6F6F6
     .search-box
       position: fixed

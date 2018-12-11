@@ -59,22 +59,6 @@ const route = new Router({
           },
           children: [
             {
-              path: 'shop-info',
-              component: ShopInfo,
-              meta: {
-                title: '门店信息'
-              },
-              children: [
-                {
-                  path: 'map-picker',
-                  component: MapPicker,
-                  meta: {
-                    title: '门店地区'
-                  }
-                }
-              ]
-            },
-            {
               path: 'employee-manage',
               component: EmployeeManage,
               meta: {
@@ -216,14 +200,16 @@ const route = new Router({
               component: ExchangeCode,
               meta: {
                 title: '输码核销'
-              }
-            },
-            {
-              path: 'exchange-record',
-              component: ExchangeRecord,
-              meta: {
-                title: '核销记录'
-              }
+              },
+              children: [
+                {
+                  path: 'exchange-record',
+                  component: ExchangeRecord,
+                  meta: {
+                    title: '核销记录'
+                  }
+                }
+              ]
             },
             {
               path: 'property',
@@ -263,6 +249,29 @@ const route = new Router({
                   ]
                 }
               ]
+            },
+            {
+              path: 'shop-info',
+              component: ShopInfo,
+              meta: {
+                title: '门店信息'
+              },
+              children: [
+                {
+                  path: 'map-picker',
+                  component: MapPicker,
+                  meta: {
+                    title: '门店地区'
+                  }
+                }
+              ]
+            },
+            {
+              path: '/shop-qr-code',
+              component: ShopQrCode,
+              meta: {
+                title: '店铺二维码'
+              }
             }
           ]
         },
@@ -304,13 +313,6 @@ const route = new Router({
       component: Invitation,
       meta: {
         title: '发送邀请'
-      }
-    },
-    {
-      path: '/shop-qr-code',
-      component: ShopQrCode,
-      meta: {
-        title: '店铺二维码'
       }
     },
     {

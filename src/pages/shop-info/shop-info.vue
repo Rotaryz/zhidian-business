@@ -516,7 +516,7 @@
 
   .shop-info
     fill-box()
-    z-index: 70
+    z-index: 20
     height: 100vh
     .scroll-wrapper
       position: fixed

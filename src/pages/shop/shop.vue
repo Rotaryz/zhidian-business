@@ -89,5 +89,4 @@
 
   .shop
     fill-box()
-    bottom: $tab-height
 </style>

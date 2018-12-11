@@ -193,7 +193,7 @@
 
   .git-out
     fill-box()
-    z-index: 70
+    z-index: 40
     background: $color-F6F6F6
     .header
       background: #fff

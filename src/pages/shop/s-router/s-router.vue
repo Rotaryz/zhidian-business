@@ -50,8 +50,8 @@
     },
     {
       icon: 'three-2',
-      title: '',
-      path: ''
+      title: '门店信息',
+      path: '/shop-info'
     },
     {
       icon: 'three-3',
@@ -120,6 +120,8 @@
             &.two-3
               icon-image(icon-coupon)
             &.three-1
+              icon-image(icon-turntable)
+            &.three-2
               icon-image(icon-turntable)
 
 </style>

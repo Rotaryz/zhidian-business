@@ -141,7 +141,7 @@
 
   .add-bank-card
     fill-box()
-    z-index: 91
+    z-index: 60
     background: $color-F6F6F6
     .wrapper
       padding-left: 15px

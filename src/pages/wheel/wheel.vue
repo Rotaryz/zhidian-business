@@ -333,7 +333,7 @@
 
   .wheel
     fill-box()
-    z-index: 70
+    z-index: 20
     height: 100vh
     .scroll-wrapper
       position: fixed
@@ -501,7 +501,7 @@
     align-items: center
     justify-content: center
     padding: 0 15px
-    z-index: 80
+    z-index: 40
     background: $color-F6F6F6
     .btn
       height: 44px

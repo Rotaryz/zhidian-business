@@ -129,7 +129,7 @@
 
   .deposit-records
     fill-box()
-    z-index: 70
+    z-index: 40
     background: #fff
     .recode-wrapper
       padding-left: 15px

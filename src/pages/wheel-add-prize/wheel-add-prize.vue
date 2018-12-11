@@ -107,7 +107,7 @@
 
   .wheel-add-prize
     fill-box()
-    z-index: 90
+    z-index: 40
     height: 100vh
     background: #ffffff
     .scroll-wrapper

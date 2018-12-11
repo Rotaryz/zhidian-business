@@ -1,6 +1,7 @@
 <template>
   <div class="exchange-code">
     <section class="code-area">
+      <router-link style="color: #fff" to="/shop/exchange-code/exchange-record">点击这里</router-link>
       <ul class="code-container">
         <li class="code-item" v-for="(item,index) in '1234567890'" :key="index">{{inputCode[index]}}</li>
       </ul>
@@ -10,6 +11,7 @@
         <li class="input-item" :class="[inputCode.length >=10 ? 'active' : '',inputCode.length > 0 ? 'del':'']" v-for="(item,index) in dataArray" :key="index" @click="inputHandle(item)">{{item.txt}}</li>
       </ul>
     </section>
+    <router-view-common></router-view-common>
   </div>
 </template>
 
@@ -114,7 +116,7 @@
 
   .exchange-code
     fill-box()
-    z-index: 50
+    z-index: 20
     background: $color-F6F6F6
     .code-area
       height: 32.27vw

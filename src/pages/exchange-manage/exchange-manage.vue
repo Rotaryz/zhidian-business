@@ -329,7 +329,7 @@
 
   .service-manage
     fill-box()
-    z-index: 50
+    z-index: 20
     background: $color-F6F6F6
     .header-tab
       position: fixed
@@ -337,7 +337,7 @@
       height: 45px
       top: 0
       left: 0
-      z-index: 60
+      z-index: 40
       background: $color-white
       .tab-box
         width: 100%

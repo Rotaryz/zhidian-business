@@ -115,7 +115,7 @@
 
   .deposit
     fill-box()
-    z-index: 71
+    z-index: 40
     background: $color-F6F6F6
     .card-wrapper
       height: 55px

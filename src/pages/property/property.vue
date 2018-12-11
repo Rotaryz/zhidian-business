@@ -211,7 +211,7 @@
 
   .property
     fill-box()
-    z-index: 50
+    z-index: 20
     background: $color-F6F6F6
     .tab-box
       width: 100%
