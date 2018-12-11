@@ -1,5 +1,5 @@
-import world from './world'
+import wxApiRegister from './wx-api-register'
 
 export default {
-  world
+  wxApiRegister
 }

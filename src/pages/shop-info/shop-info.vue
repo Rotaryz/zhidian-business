@@ -64,8 +64,8 @@
                 <label class="add">
                   <div class="img-show" v-if="shopInfo.logo.url" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                   <div class="del-icon" v-if="shopInfo.logo.url" @click.stop="delDetail('logo')"></div>
-                  <input v-if="!shopInfo.logo.url" type="file" style="display: none" @change="_fileChange($event, 'logo')"
-                         accept="image/*">
+                  <base-wx-input v-if="!shopInfo.logo.url"  style="display: none" @change="_fileChange($event, 'logo')"
+                                 accept="image/*"></base-wx-input>
                 </label>
                 <div class="explain one">点击图片预览实际展示效果</div>
                 <div class="explain">添加1张图片（尺寸200*200，大小2M以下）</div>

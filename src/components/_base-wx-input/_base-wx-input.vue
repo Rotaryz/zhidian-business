@@ -5,19 +5,34 @@
 <script type="text/ecmascript-6">
   import wx from 'weixin-js-sdk'
   import { Global } from 'api'
+  import {mapActions, mapGetters} from 'vuex'
   const COMPONENT_NAME = 'BASE_WX_INPUT'
 
   export default {
     name: COMPONENT_NAME,
-    data() {
-      return {
-
+    props: {
+      multiple: { // 照片张数
+        type: Number,
+        default: 1
+      },
+      outFileType: { // 输出类型
+        type: String,
+        default: 'file'
+      },
+      debugModel: { // debug模式
+        type: Boolean,
+        default: false
       }
+    },
+    computed: {
+      ...mapGetters('wxApiRegister', ['register'])
     },
     created() {
       this._getWxSdk()
     },
     methods: {
+      ...mapActions('wxApiRegister', ['updateRegister']),
+      // event
       async clickHandle() {
         let arr = []
         let obj = {target: {files: null}}
@@ -26,21 +41,30 @@
           Promise.all(data.map(imageId => {
             return this._getLocalImgData(imageId)
           })).then((base64Arr) => {
-            base64Arr.forEach((b64) => {
-              let file = this.dataURLtoFile(b64)
-              arr.push(file)
-            })
+            // file类型
+            if (this.outFileType === 'file') {
+              base64Arr.forEach((b64) => {
+                let file = this.dataURLtoFile(b64)
+                arr.push(file)
+              })
+            } else {
+              // base64类型
+              arr = base64Arr
+            }
             obj.target.files = arr
             this.$emit('change', obj)
           })
         } catch (e) {
-          console.error(JSON.stringify(e) + '%error%')
+          if (this.debugModel) {
+            alert(JSON.stringify(e) + '%error%')
+          }
         }
       },
+      // 选择照片
       _chooseImage() {
         return new Promise((resolve, reject) => {
           wx.chooseImage({
-            count: 1, // 默认9
+            count: this.multiple, // 默认9
             sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
             sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
             success: function (res) {
@@ -50,6 +74,7 @@
           })
         })
       },
+      // 获取本地图片信息
       _getLocalImgData(id) {
         return new Promise((resolve, reject) => {
           wx.getLocalImgData({
@@ -61,6 +86,7 @@
           })
         })
       },
+      // base64转file类型
       dataURLtoFile(base64, filename, fileType = 'image/jpeg') {
         let bstr
         if (/base64/.test(base64)) {
@@ -79,13 +105,17 @@
         filename = Date.now() + '-' + Math.random() + (fileType || '.jpeg')
         return new File([u8arr], filename, {type: fileType})
       },
+      // 注册api
       _getWxSdk() {
         let url = window.location.href
+        // 防止重复注册
+        if (this.register.some(val => val.url === url)) return
+        this.updateRegister({url})
         Global.jssdkConfig({url}).then((res) => {
           if (res.error !== this.$ERR_OK) return
           res = res.data
           wx.config({
-            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            debug: this.debugModel, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
             appId: '' + res.appId, // 必填，企业号的唯一标识，此处填写企业号corpid
             timestamp: '' + res.timestamp, // 必填，生成签名的时间戳
             nonceStr: '' + res.nonceStr, // 必填，生成签名的随机串
