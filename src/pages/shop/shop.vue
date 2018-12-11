@@ -1,7 +1,6 @@
 <template>
   <div class="shop">
     <scroll>
-      <base-wx-input></base-wx-input>
       <s-header></s-header>
       <s-data :info="ShopDashboard"></s-data>
       <s-router></s-router>
