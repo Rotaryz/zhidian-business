@@ -112,7 +112,7 @@
               <div class="img-box">
                 <div class="img-bc un-up"></div>
                 <div class="img-bc up" v-if="!activityDetail.image_url"></div>
-                <input type="file" class="img-bc image-file" @change="_fileImage($event)" accept="image/*" v-if="!activityDetail.image_url">
+                <base-wx-input class="img-bc image-file" @change="_fileImage($event)" accept="image/*" v-if="!activityDetail.image_url"></base-wx-input>
               </div>
             </div>
             <div class="container-item" v-if="activityDetail.image_url">

@@ -80,8 +80,8 @@
                   <div class="video-mask" v-if="shopInfo.video.url">
                     <div class="icon-btn"/>
                   </div>
-                  <input v-if="!shopInfo.video || !shopInfo.video.url" type="file" style="display: none" @change="_fileChange($event, 'video')"
-                         accept="video/*">
+                  <input type="file" v-if="!shopInfo.video || !shopInfo.video.url" style="display: none" @change="_fileChange($event, 'video')"
+                                 accept="video/*">
                 </label>
                 <div class="explain one">点击视频预览实际展示效果</div>
                 <div class="explain">添加30S左右视频</div>
