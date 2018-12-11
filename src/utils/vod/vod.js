@@ -19,7 +19,7 @@ export function uploadFiles(file, callback) {
       reject()
       return
     }
-    if (!/mp4/.test(file.type)) {
+    if (!/mp4/.test(file.type.toLowerCase())) {
       let res = {error: 10, message: '请上传mp4格式的视频' }
       resolve(res)
       return
