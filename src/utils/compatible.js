@@ -19,8 +19,7 @@ function isWeiXinAndIos() {
   // window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
   let ua = '' + window.navigator.userAgent.toLowerCase()
   // 通过正则表达式匹配ua中是否含有MicroMessenger字符串且是IOS系统
-  alert(ua)
-  alert(/MicroMessenger/i.test(ua))
-  alert(/\(i[^;]+;( U;)? CPU.+Mac OS X/i.test(ua))
-  return /MicroMessenger/i.test(ua) && /\(i[^;]+;( U;)? CPU.+Mac OS X/i.test(ua)
+  let isWeixin = /MicroMessenger/i.test(ua) // 是在微信浏览器
+  let isIos = /\(i[^;]+;( U;)? CPU.+Mac OS X/i.test(ua) // 是IOS系统
+  return isWeixin && isIos
 }
