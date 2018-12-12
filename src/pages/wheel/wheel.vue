@@ -25,7 +25,7 @@
           <div class="margin-box-10px"></div>
           <panel title="奖品池">
             <ul class="prize-wrapper" v-if="prizeList.length">
-              <li class="prize-item-wrapper" v-for="(item, idx) in prizeList" :key="idx">
+              <li class="prize-item-wrapper" v-for="(item, idx) in prizeList2" :key="idx">
                 <prize-item :idx="idx" :item="item" @updatePrizeStock="updatePrizeStock" @delHandle="delHandle" @navTo="navTo"></prize-item>
               </li>
             </ul>
@@ -89,6 +89,73 @@
       return {
         maxLength: 30,
         prizeList: [],
+        prizeList2: [
+          {
+            id: 11,
+            prize_id: 20,
+            prize_pools_id: 7,
+            type: 1,
+            place: 1,
+            activity_prize_id: 11,
+            title: '\u6d4b\u8bd5\u5151\u6362\u5238',
+            stock: 947,
+            prize_stock: 10,
+            time_status: 1,
+            image_url: 'https://zhidian-img.jkweixin.com/100005/2018/10/31/1540966513167-90CF1F1B-9B98-460C-AA79-AB58B9C35302.jpeg'
+          },
+          {
+            id: 12,
+            prize_id: 20,
+            prize_pools_id: 7,
+            type: 1,
+            place: 2,
+            activity_prize_id: 12,
+            title: '\u6d4b\u8bd5\u5151\u6362\u5238',
+            stock: 947,
+            prize_stock: 10,
+            time_status: 1,
+            image_url: 'https://zhidian-img.jkweixin.com/100005/2018/10/31/1540966513167-90CF1F1B-9B98-460C-AA79-AB58B9C35302.jpeg'
+          },
+          {
+            id: 13,
+            prize_id: 20,
+            prize_pools_id: 7,
+            type: 1,
+            place: 3,
+            activity_prize_id: 13,
+            title: '\u6d4b\u8bd5\u5151\u6362\u5238',
+            stock: 947,
+            prize_stock: 13,
+            time_status: 1,
+            image_url: 'https://zhidian-img.jkweixin.com/100005/2018/10/31/1540966513167-90CF1F1B-9B98-460C-AA79-AB58B9C35302.jpeg'
+          },
+          {
+            id: 14,
+            prize_id: 20,
+            prize_pools_id: 7,
+            type: 1,
+            place: 4,
+            activity_prize_id: 14,
+            title: '\u6d4b\u8bd5\u5151\u6362\u5238',
+            stock: 947,
+            prize_stock: 12,
+            time_status: 1,
+            image_url: 'https://zhidian-img.jkweixin.com/100005/2018/10/31/1540966513167-90CF1F1B-9B98-460C-AA79-AB58B9C35302.jpeg'
+          },
+          {
+            id: 15,
+            prize_id: 20,
+            prize_pools_id: 7,
+            type: 1,
+            place: 5,
+            activity_prize_id: 15,
+            title: '\u6d4b\u8bd5\u5151\u6362\u5238',
+            stock: 947,
+            prize_stock: 7,
+            time_status: 1,
+            image_url: 'https://zhidian-img.jkweixin.com/100005/2018/10/31/1540966513167-90CF1F1B-9B98-460C-AA79-AB58B9C35302.jpeg'
+          }
+        ],
         prizePool: [],
         prizeInfo: {
           id: 0,

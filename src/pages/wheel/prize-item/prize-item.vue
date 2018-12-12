@@ -14,6 +14,7 @@
         </div>
         <div class="btn add" @click="addHandle"></div>
       </section>
+      <div class="shade" v-if="item.time_status === 1" @click.stop></div>
     </li>
   </ul>
 </template>
@@ -121,17 +122,18 @@
     .item-wrapper
       layout(row, block, nowrap)
       align-items: center
-      font-family: PingFangSC-Medium;
-      font-size: 14px;
-      color: #363547;
+      font-family: PingFangSC-Medium
+      font-size: 14px
+      color: #363547
+      position: relative
       &.top
         padding-bottom: 22px
       .left
         padding: 0
         .store
-          font-family: PingFangSC-Regular;
-          font-size: 14px;
-          color: #363547;
+          font-family: PingFangSC-Regular
+          font-size: 14px
+          color: #363547
       .middle
         flex: 1
         overflow: hidden
@@ -169,4 +171,10 @@
           align-items: center
           border: 1px solid #F0EFF5
           border-radius : 2px
+      .shade
+        width: 55%
+        height: 100%
+        position: absolute
+        right: 0
+        bottom: 0
 </style>
