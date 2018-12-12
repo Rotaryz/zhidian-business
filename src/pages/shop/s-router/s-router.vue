@@ -55,8 +55,8 @@
     },
     {
       icon: 'three-3',
-      title: '',
-      path: ''
+      title: '品牌模板',
+      path: '/brand-templet'
     }
   ]
   export default {
@@ -122,6 +122,8 @@
             &.three-1
               icon-image(icon-turntable)
             &.three-2
+              icon-image(icon-turntable)
+            &.three-3
               icon-image(icon-turntable)
 
 </style>
