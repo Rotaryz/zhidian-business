@@ -1,10 +1,8 @@
 // 兼容部分ios手机input失焦后页面上移问题
 (function() {
-  let u = navigator.userAgent
-  let isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) // 这个判断 是不是ios手机
   let myFunction
-  let isWeixin = isWeiXin()
-  if (isWeixin && isiOS) { // 既是微信浏览器 又是ios============（因为查到只有在微信环境下，ios手机上才会出现input失去焦点的时候页面被顶起）
+  let isWXAndIos = isWeiXinAndIos()
+  if (isWXAndIos) { // 既是微信浏览器 又是ios============（因为查到只有在微信环境下，ios手机上才会出现input失去焦点的时候页面被顶起）
     document.body.addEventListener('focusin', () => { // 软键盘弹起事件
       clearTimeout(myFunction)
     })
@@ -17,9 +15,12 @@
   }
 })()
 
-function isWeiXin() {
+function isWeiXinAndIos() {
   // window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
   let ua = '' + window.navigator.userAgent.toLowerCase()
-  // 通过正则表达式匹配ua中是否含有MicroMessenger字符串
-  return /MicroMessenger/i.test(ua)
+  // 通过正则表达式匹配ua中是否含有MicroMessenger字符串且是IOS系统
+  alert(ua)
+  alert(/MicroMessenger/i.test(ua))
+  alert(/\(i[^;]+;( U;)? CPU.+Mac OS X/i.test(ua))
+  return /MicroMessenger/i.test(ua) && /\(i[^;]+;( U;)? CPU.+Mac OS X/i.test(ua)
 }
