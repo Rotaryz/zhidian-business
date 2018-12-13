@@ -42,6 +42,7 @@ const MapPicker = () => import('pages/map-picker/map-picker')
 const Wheel = () => import('pages/wheel/wheel')
 const WheelAddPrize = () => import('pages/wheel-add-prize/wheel-add-prize')
 const BrandTemplet = () => import('pages/brand-templet/brand-templet')
+const AccountDetail = () => import('pages/account-detail/account-detail')
 
 Vue.use(Router)
 
@@ -275,10 +276,17 @@ const route = new Router({
               }
             },
             {
-              path: '/brand-templet',
+              path: 'brand-templet',
               component: BrandTemplet,
               meta: {
                 title: '品牌模板'
+              }
+            },
+            {
+              path: 'account-detail',
+              component: AccountDetail,
+              meta: {
+                title: '帐号信息'
               }
             }
           ]

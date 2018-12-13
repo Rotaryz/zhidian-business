@@ -189,7 +189,7 @@
     .footer-btn
       width: 100%
       height: 100%
-      background: $color-363537
+      background: $color-27273E
       border-radius: 2px
       line-height: 44px
       text-align: center
@@ -203,7 +203,7 @@
     line-height: 45px
     padding: 0 15px
     font-family: $font-family-regular
-    color: $color-363547
+    color: $color-27273E
     font-size: $font-size-16
     background: $color-white
     display: flex

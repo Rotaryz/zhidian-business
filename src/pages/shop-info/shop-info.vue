@@ -538,7 +538,7 @@
           height: 100%
           align-items: center
           .time
-            color: $color-363547
+            color: $color-27273E
             margin-right: 5px
             &:first-child
               margin-left: 24px
@@ -555,14 +555,14 @@
           overflow: hidden
           no-wrap()
           &.active
-            color: $color-363547
+            color: $color-27273E
         .middle-address
           flex: 1
           color: $color-CCCCCC
           padding: 10px 14px 10px 24px
           line-height: 1.2
           &.active
-            color: $color-363547
+            color: $color-27273E
         .right
           color: $color-CCCCCC
           font-size: 12px
@@ -650,7 +650,7 @@
         height: 44px
         width: 100%
         box-sizing: border-box
-        background: #363547
+        background: #27273E
         border-radius: 4px
         font-family: PingFangSC-Regular
         font-size: 16px

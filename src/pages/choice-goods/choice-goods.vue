@@ -223,7 +223,7 @@
         .page-title
           line-height: 40px
           font-family: $font-family-regular
-          color: $color-363537
+          color: $color-27273E
         .list-item
           padding-bottom: 10px
         .nothing-box
@@ -257,7 +257,7 @@
         text-align: center
         font-size: $font-size-16
         color: $color-white
-        background: $color-363537
+        background: $color-27273E
         border-radius: 2px
 
 </style>

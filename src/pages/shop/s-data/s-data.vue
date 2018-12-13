@@ -1,33 +1,41 @@
 <template>
-  <router-link tag="div" class="s-data" :to="'/radar/overview'">
-    <div class="title">
-      <div class="icon"></div>
-      <div>门店信息概览</div>
-    </div>
+  <div class="s-data">
     <ul class="content">
       <li class="item-wrapper" v-for="(item, index) in dataArray" :key="index">
-        <div class="number" v-if="index===0">{{info.customer_total || 0}}</div>
-        <div class="number" v-if="index===1">{{info.order_total || 0}}</div>
-        <div class="number" v-if="index===2">{{info.success_order_total || 0}}</div>
-        <div class="title">{{item.title}}</div>
+        <p class="title">{{item.title}}</p>
+        <p class="number">{{item.number}}</p>
+        <p class="analyse">
+          <span>较昨日</span>
+          <span v-if="item.type === 'up'" class="color green">{{item.num}}</span>
+          <span v-else class="color red">{{item.num}}</span>
+          <span v-if="item.type === 'up'" class="icon up"></span>
+          <span v-else class="icon down"></span>
+        </p>
+        <div class="line border-right-1px"></div>
       </li>
     </ul>
-  </router-link>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
   const dataArray = [
     {
-      number: '800',
-      title: '客户总数'
+      number: '200',
+      title: '营业额',
+      num: '200',
+      type: 'up'
     },
     {
-      number: '400',
-      title: '订单总数'
+      number: '200',
+      title: '订单',
+      num: '200',
+      type: 'up'
     },
     {
-      number: '1200',
-      title: '成交总数'
+      number: '200',
+      title: '客户',
+      num: '200',
+      type: 'down'
     }
   ]
   export default {
@@ -50,42 +58,60 @@
   @import '~common/stylus/mixin'
 
   .s-data
-    margin: 5px
+    margin: 0 12px
+    margin-top: -50px
     border-1px($color-E6E6E6, 4px)
-    height: 120px
+    height: 100px
     font-family: $font-family-regular
     background-color: #fff
     border-radius: 4px
     overflow: hidden
     layout(column, block, nowrap)
-    .title
-      font-size: $font-size-16
-      color: $color-363537
-      line-height: 14px
-      padding: 14px 0 27px
-      layout(row)
-      align-items: center
-      .icon
-        width: 5px
-        height: 13px
-        background: $color-EF705D
-        margin-right: 5px
     .content
-      flex: 1
-      layout(row, block, nowrap)
-      .item-wrapper
-        flex: 1
-        height: 100%
-        layout(column, block, nowrap)
+      width: 100%
+      height: 100%
+      padding: 15px 20px
+      display: flex
+      box-sizing: border-box
+      padding-right: 0
+      padding-left: 0
+    .item-wrapper
+      width: 33.333%
+      position: relative
+      padding-left: 20px
+      box-sizing: border-box
+      .title
+        font-size: 13px
+        line-height: 1.4
+        color: $color-27273E
+      .number
+        font-family: $font-family-bold
+        font-size: $font-size-20
+        color: $color-27273E
+        line-height: 1.5
+      .analyse
+        font-size: $font-size-10
+        color: $color-9B9B9B
+        line-height: 22px
+        display: flex
         align-items: center
-        .number
-          font-family: $font-family-bold
-          font-size: 26px
-          color: $color-FF4E00
-          line-height: 18px
-          margin-bottom: 10px
-        .title
-          font-size: $font-size-12
-          color: $color-696771
-          line-height: 12px
+        .color
+          font-family: $font-family-medium
+          color: #1AC521
+        .red
+          color: #ED2B2B
+        .icon
+          icon-image(icon-up)
+          width: 10px
+          height: 9px
+        .down
+          icon-image(icon-down)
+      .line
+        height: 20px
+        right: 20px
+        col-center()
+        border-right-1px(#E6E6E6)
+      .line:last-child:after
+        border: 0
+
 </style>

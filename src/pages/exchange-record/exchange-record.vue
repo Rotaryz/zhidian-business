@@ -179,7 +179,7 @@
           justify-content: space-between
           font-family: PingFangSC-Regular
           font-size: 14px
-          color: #363547
+          color: #27273E
           &:nth-child(2n)
             background: #F6F6F6
           .left

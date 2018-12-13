@@ -147,7 +147,7 @@
             margin-bottom: 10px
           .left
             font-size: 16px;
-            color: #363547;
+            color: #27273E;
             letter-spacing: 0.34px;
             &.small
               font-size: 12px;

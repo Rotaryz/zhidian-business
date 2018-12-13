@@ -138,7 +138,7 @@
       height: 44px
       width: 100%
       box-sizing: border-box
-      background: #363547
+      background: #27273E
       border-radius: 4px
       font-family: PingFangSC-Regular
       font-size: 16px

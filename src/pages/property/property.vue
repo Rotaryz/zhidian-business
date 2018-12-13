@@ -1,72 +1,37 @@
 <template>
   <div class="property">
-    <section class="header-tab border-bottom-1px">
-      <div class="tab-box">
-        <div class="tab-item" :class="tabIdx == index ? 'active' : ''" v-for="(item, index) in tabList" :key="index" @click="changeTab(index, item)">
-          {{item.txt}}
+    <section class="top-msg">
+      <p class="txt">店铺总资产</p>
+      <p class="money">{{remaining}}</p>
+    </section>
+    <section class="option">
+      <div class="box">
+        <div class="content">
+          <div class="money left">
+            <p class="txt">待结算金额</p>
+            <p class="number">6000</p>
+            <span class="line border-right-1px"></span>
+          </div>
+          <div class="money right" @click="toDeposit">
+            <p class="txt">可提现金额<span class="icon"></span></p>
+            <p class="number">900</p>
+          </div>
         </div>
-      </div>
-      <div class="underline-box" :style="'transform: translate(' + tabIdx*100 + '%,0)'">
-        <div class="underline"></div>
       </div>
     </section>
     <section class="container">
-      <div class="big-container" :style="'transform: translate(-' + tabIdx*50 + '%,0)'">
-        <article class="container-item income">
-          <section class="top">
-            <div class="title" @click="showMsg">可提现(元)</div>
-            <div class="money">{{remaining}}</div>
-            <router-link tag="div" class="btn" :to="$route.path + '/deposit'">提现</router-link>
-            <div class="explain">每天可提现一次，每笔限额1万元</div>
-          </section>
-          <div class="margin-box-10px"></div>
-          <router-link tag="div" class="bottom border-bottom-1px" :to="$route.path + '/deposit-records'">
-            <div class="name">提现记录</div>
-            <div class="arrow-right"></div>
-          </router-link>
-        </article>
-        <article class="container-item staff-income">
-          <scroll
-            bcColor="#fff"
-            v-if="dataArray.length"
-            ref="scroll"
-            :data="dataArray"
-            :pullUpLoad="pullUpLoadObj"
-            @pullingUp="onPullingUp"
-          >
-            <ul class="staff-list-wrapper border-bottom-1px">
-              <li class="staff-item-wrapper border-bottom-1px" v-for="(item, index) in dataArray" :key="index" @click="navToGive(item)">
-                <section class="left">
-                  <div class="avatar" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-                  <div class="avatar" v-else></div>
-                  <article class="info-wrapper">
-                    <div class="name">{{item.name}}</div>
-                    <div class="position">{{item.role}}</div>
-                  </article>
-                </section>
-                <section class="middle">
-                  <div class="title">获得佣金</div>
-                  <div class="money">{{item.commission}}</div>
-                </section>
-                <section class="right">发放</section>
-              </li>
-            </ul>
-          </scroll>
-          <div class="nothing-box" v-if="isEmpty">
-            <img src="./pic-empty_order@2x.png" class="nothing-img">
-            <div class="nothing-txt">暂无数据</div>
-          </div>
-        </article>
-      </div>
-      <confirm-msg ref="confirm" :isShowCancel="false"></confirm-msg>
+      <article class="container-item income">
+        <router-link tag="div" class="bottom border-bottom-1px" :to="$route.path + '/deposit-records'">
+          <div class="name">提现记录</div>
+          <div class="arrow-right"></div>
+        </router-link>
+      </article>
       <router-view-common @refresh="refresh"></router-view-common>
     </section>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import Scroll from 'components/scroll/scroll'
-  import ConfirmMsg from 'components/confirm-msg/confirm-msg'
   import { Property } from 'api'
   import { mapActions } from 'vuex'
 
@@ -77,8 +42,6 @@
   const LIMIT = 10
   export default {
     components: {
-      Scroll,
-      ConfirmMsg
     },
     data() {
       return {
@@ -114,18 +77,8 @@
           this.$loading.hide()
         })
       },
-      navToGive(item) {
-        this.saveEmployee(item)
-        this.$router.push(this.$route.path + '/give-out?id=' + item.id)
-      },
-      changeTab(idx) {
-        this.tabIdx = idx * 1
-      },
-      showMsg() {
-        let msg = '当顾客使用优惠券\n' +
-          '或优惠券过期，相关订单资金\n' +
-          '即转入可提现账户。'
-        this.$refs.confirm.show({msg})
+      toDeposit() {
+        this.$router.push(this.$route.path + '/deposit')
       },
       _getShopIncome(data, loading) {
         Property.getShopIncome(data, loading).then(res => {
@@ -157,35 +110,11 @@
             this.pullUpLoad = false
           }
         })
-      },
-      onPullingUp() {
-        // 更新数据
-        if (!this.pullUpLoad) return this.$refs.scroll.forceUpdate()
-        this._getStaffsIncome({page: ++this.page})
-      },
-      rebuildScroll() {
-        this.$nextTick(() => {
-          this.$refs.scroll.destroy()
-          this.$refs.scroll.initScroll()
-        })
       }
     },
     watch: {
-      pullUpLoadObj: {
-        handler() {
-          if (!this.pullUpLoad) return // 防止下拉报错
-          this.rebuildScroll()
-        },
-        deep: true
-      }
     },
     computed: {
-      pullUpLoadObj: function () {
-        return this.pullUpLoad ? {
-          threshold: parseInt(this.pullUpLoadThreshold),
-          txt: {more: this.pullUpLoadMoreTxt, noMore: this.pullUpLoadNoMoreTxt}
-        } : false
-      }
     }
   }
 </script>
@@ -213,6 +142,67 @@
     fill-box()
     z-index: 20
     background: $color-F6F6F6
+    .top-msg
+      height: 200px
+      bg-image(bg-money)
+      background-size: 100% 100%
+      font-size: 13px
+      color: $color-white
+      font-family: $font-family-regular
+      padding: 0 12px
+      overflow: hidden
+      .txt
+        margin-top: 45px
+        text-align: center
+        position: relative
+      .money
+        margin-top: 10px
+        font-size: 41px
+        font-family: $font-family-bold
+        color: $color-white
+        text-align: center
+
+    .option
+      height: 35px
+      background: $color-F6F6F6
+      position: relative
+      .box
+        width: 100%
+        position: absolute
+        bottom: 10px
+        padding: 0 12px
+        box-sizing: border-box
+      .content
+        height: 70px
+        width: 100%
+        border-1px($color-row-line, 4px)
+        border-radius: 4px
+        background: $color-white
+        display: flex
+        align-items: center
+        .money
+          width: 50%
+          box-sizing: border-box
+          display: flex
+          align-items: center
+          justify-content: center
+          flex-direction: column
+          position: relative
+        .txt
+          position: relative
+        .icon
+          width: 7px
+          height: 12px
+          right: -14px
+          icon-image(icon-press_right)
+          col-center()
+        .number
+          margin-top: 8px
+        .line
+          height: 33px
+          col-center()
+          right: 0
+          border-right-1px(#CCC)
     .tab-box
       width: 100%
       height: 45px
@@ -224,7 +214,7 @@
         line-height: 44px
         text-align: center
         font-size: $font-size-16
-        color: $color-363537
+        color: $color-27273E
         font-family: $font-family-regular
         letter-spacing: 0.8px
       .tab-item.active
@@ -241,133 +231,65 @@
       .underline
         width: 30px
         height: 3px
-        background: $color-EF705D
+        background: $color-D32F2F
         border-radius: 3px
 
     .container
       width: 100vw
       height: 100vh
       overflow hidden
-      .big-container
-        width: 200vw
+      .container-item
+        width: 100vw
         height: 100vh
-        display: flex
-        transition: all 0.3s
-        .container-item
-          width: 100vw
-          height: 100vh
-        .income
-          .top
-            layout()
-            background: #fff
-            align-items: center
-            .title
-              font-size: 14px
-              color: #363547
-              margin: 56.5px 0 15px
-              position: relative
-              &:after
-                content: ''
-                width: 16px
-                height: 16px
-                icon-image(icon-finance_help)
-                position: absolute
-                right: -21px
-                top: -8px
-            .money
-              font-family: DINAlternate-Bold
-              font-size: 40px
-              color: #FF4E00
-              padding-bottom: 45px
-            .btn
-              width: 230px
-              height: 40px
-              text-align: center
-              line-height: @height
-              background: #363547
-              border-radius: 4px
-              font-size: 14px
-              color: #FFFFFF
-              letter-spacing: 0.56px
-            .explain
-              font-size: 12px
-              color: #9B9B9B
-              padding: 9px 0 34px
-          .bottom
-            layout(row)
-            background: #fff
-            height: 55px
-            padding: 0 15px
-            align-items: center
-            justify-content: space-between
-            font-size: 16px
-            color: #363547
-            letter-spacing: 0.34px
-            .arrow-right
-              width: 7px
-              height: 12px
-              icon-image(icon-press_right)
-        .staff-income
-          .staff-list-wrapper
-            padding-left: 15px
-            .staff-item-wrapper
-              layout(row, block, nowrap)
-              height: 74.5px
-              align-items: center
-              &:last-child:after
-                display: none
-              .left
-                flex: 1
-                overflow: hidden
-                layout(row, inline, nowrap)
-                .avatar
-                  opacity: 0.8;
-                  border-radius: 50%
-                  width: 40px
-                  height: @width
-                  background: #ccc
-                  margin-right: 10px
-                .info-wrapper
-                  flex: 1
-                  overflow: hidden
-                  .name
-                    font-size: 14px;
-                    color: #363547;
-                    letter-spacing: 0.6px;
-                    margin-bottom: 6px
-                    no-wrap()
-                  .position
-                    font-size: 12px;
-                    color: #EF705D;
-                    padding: 3px 0
-                    width: 34px
-                    border: 1px solid #EF705D;
-                    text-align: center
-                    border-radius: 4px;
-              .middle
-                flex: 1
-                overflow: hidden
-                padding-right: 10px
-                layout()
-                justify-content: center
-                .title
-                  font-size: 14px;
-                  color: #363547;
-                  letter-spacing: 0.6px;
-                  margin-bottom: 9px
-                .money
-                  font-size: 16px;
-                  color: #363547;
-                  letter-spacing: 0;
-                  no-wrap()
-              .right
-                width: 60px
-                height: 30px
-                text-align: center
-                line-height: @height
-                font-size: 14px;
-                color: #FFFFFF;
-                background: #EF705D;
-                border-radius: 4px;
-                margin-right: 15px
+      .income
+        .top
+          layout()
+          background: #fff
+          align-items: center
+          .title
+            font-size: 14px
+            color: #27273E
+            margin: 56.5px 0 15px
+            position: relative
+            &:after
+              content: ''
+              width: 16px
+              height: 16px
+              icon-image(icon-finance_help)
+              position: absolute
+              right: -21px
+              top: -8px
+          .money
+            font-family: DINAlternate-Bold
+            font-size: 40px
+            color: #FF4E00
+            padding-bottom: 45px
+          .btn
+            width: 230px
+            height: 40px
+            text-align: center
+            line-height: @height
+            background: #27273E
+            border-radius: 4px
+            font-size: 14px
+            color: #FFFFFF
+            letter-spacing: 0.56px
+          .explain
+            font-size: 12px
+            color: #9B9B9B
+            padding: 9px 0 34px
+        .bottom
+          layout(row)
+          background: #fff
+          height: 55px
+          padding: 0 15px
+          align-items: center
+          justify-content: space-between
+          font-size: 16px
+          color: #27273E
+          letter-spacing: 0.34px
+          .arrow-right
+            width: 7px
+            height: 12px
+            icon-image(icon-press_right)
 </style>

@@ -73,7 +73,7 @@
 
   .s-header
     height: 121px
-    background-color: $color-363537
+    background-color: $color-27273E
     layout(row, block, nowrap)
     .item-wrapper
       flex: 1

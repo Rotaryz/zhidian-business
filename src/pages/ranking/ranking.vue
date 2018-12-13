@@ -338,7 +338,7 @@
           background-color: $color-white
           &.active
             color: $color-white
-            background-color: $color-363547
+            background-color: $color-27273E
       .tab-two-container
         border-bottom: 0.5px solid $color-col-line
         .tab-two-box
@@ -372,7 +372,7 @@
             .tab-line
               height: 3px
               width: 30px
-              background-color: $color-EF705D
+              background-color: $color-D32F2F
     .content
       position: absolute
       top: 113px

@@ -134,7 +134,7 @@
     .scroll-main
       padding-bottom: 10px
     .top
-      background: $color-363537
+      background: $color-27273E
       border-radius: 4px
       padding-bottom: 20px
       .title
@@ -189,11 +189,11 @@
     line-height: 32px
     font-size: $font-size-14
     border-radius: 20px
-    color: $color-EF705D
+    color: $color-D32F2F
     text-align: center
     margin: 0 auto
     margin-top: 30px
-    border: 1px solid $color-EF705D
+    border: 1px solid $color-D32F2F
 
   #copyTxt, #copyIos
     position: fixed

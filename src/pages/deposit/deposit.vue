@@ -130,14 +130,14 @@
         color: #9B9B9B;
         letter-spacing: 0.6px;
         &.active
-          color: #363547;
+          color: #27273E;
       .right
         layout(row, block, nowrap)
         align-items: center
         .name
           font-family: PingFangSC-Regular;
           font-size: 14px;
-          color: #363547;
+          color: #27273E;
           letter-spacing: 0.6px;
           margin-right: 5px
     .money-wrapper
@@ -145,7 +145,7 @@
       background: #fff
       .title
         font-size: 14px;
-        color: #363547;
+        color: #27273E;
         letter-spacing: 0.6px;
         padding: 18px 0 8px
       .input-wrapper
@@ -155,7 +155,7 @@
         .unit
           font-family: PingFangSC-Medium;
           font-size: 40px;
-          color: #363547;
+          color: #27273E;
           letter-spacing: 1.54px;
           line-height: 1
         .input-content
@@ -165,7 +165,7 @@
           height: 40px
           font-family: DINAlternate-Bold;
           font-size: 40px;
-          color: #363547;
+          color: #27273E;
           letter-spacing: 1.54px;
       .explain
         font-size: 14px;
@@ -180,7 +180,7 @@
     .btn
       margin: 0 15px
       height: 45px
-      background: #363547;
+      background: #27273E;
       border-radius: 4px;
       font-size: 14px;
       color: #FFFFFF;

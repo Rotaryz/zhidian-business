@@ -302,7 +302,7 @@
         text-align: center
         font-size: $font-size-16
         color: $color-white
-        background: $color-363537
+        background: $color-27273E
         border-radius: 2px
     .container
       padding-left: 15px
@@ -339,7 +339,7 @@
             line-height: 20px
             border: 0 none
             font-size: $font-size-14
-            color: $color-363537
+            color: $color-27273E
           .input-box::-webkit-input-placeholder
             color: $color-9B9B9B
           .input-box::-ms-input-placeholder
@@ -373,7 +373,7 @@
                 padding: 0
                 margin: 0
                 font-size: $font-size-14
-                color: $color-363537
+                color: $color-27273E
           .time-right-first
             width: 90px
             .time-none
@@ -381,7 +381,7 @@
               align-items: center
               .time-item
                 font-family: $font-family-regular
-                color: $color-363537
+                color: $color-27273E
                 font-size: $font-size-14
                 margin-right: 5px
               .time-icon
@@ -389,7 +389,7 @@
                 height: 12.5px
             .time-txt
               font-family: $font-family-regular
-              color: $color-363537
+              color: $color-27273E
               font-size: $font-size-14
               &.disabled
                 color: $color-9B9B9B
@@ -492,7 +492,7 @@
             margin: 0
             outline: none
             font-family: $font-family-regular
-            color: $color-363537
+            color: $color-27273E
           .textarea-content::-webkit-input-placeholder
             color: $color-CCCCCC
           .textarea-content::-ms-input-placeholder

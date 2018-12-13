@@ -25,7 +25,7 @@
           <div class="margin-box-10px"></div>
           <panel title="奖品池">
             <ul class="prize-wrapper" v-if="prizeList.length">
-              <li class="prize-item-wrapper" v-for="(item, idx) in prizeList" :key="idx">
+              <li class="prize-item-wrapper" v-for="(item, idx) in prizeList2" :key="idx">
                 <prize-item :idx="idx" :item="item" @updatePrizeStock="updatePrizeStock" @delHandle="delHandle" @navTo="navTo"></prize-item>
               </li>
             </ul>
@@ -100,6 +100,7 @@
             title: '\u6d4b\u8bd5\u5151\u6362\u5238',
             stock: 947,
             prize_stock: 10,
+            valid_period: '2018-12-14',
             time_status: 1,
             image_url: 'https://zhidian-img.jkweixin.com/100005/2018/10/31/1540966513167-90CF1F1B-9B98-460C-AA79-AB58B9C35302.jpeg'
           },
@@ -113,6 +114,7 @@
             title: '\u6d4b\u8bd5\u5151\u6362\u5238',
             stock: 947,
             prize_stock: 10,
+            valid_period: '2018-12-14',
             time_status: 1,
             image_url: 'https://zhidian-img.jkweixin.com/100005/2018/10/31/1540966513167-90CF1F1B-9B98-460C-AA79-AB58B9C35302.jpeg'
           },
@@ -126,6 +128,7 @@
             title: '\u6d4b\u8bd5\u5151\u6362\u5238',
             stock: 947,
             prize_stock: 13,
+            valid_period: '2018-12-14',
             time_status: 1,
             image_url: 'https://zhidian-img.jkweixin.com/100005/2018/10/31/1540966513167-90CF1F1B-9B98-460C-AA79-AB58B9C35302.jpeg'
           },
@@ -152,6 +155,7 @@
             title: '\u6d4b\u8bd5\u5151\u6362\u5238',
             stock: 947,
             prize_stock: 7,
+            valid_period: '2018-12-14',
             time_status: 1,
             image_url: 'https://zhidian-img.jkweixin.com/100005/2018/10/31/1540966513167-90CF1F1B-9B98-460C-AA79-AB58B9C35302.jpeg'
           }
@@ -390,7 +394,7 @@
     line-height: 1
     font-family: PingFangSC-Light;
     font-size: 12px;
-    color: #363547;
+    color: #27273E;
     &::-webkit-input-placeholder
       color: $color-CCCCCC
     &::-ms-input-placeholder
@@ -458,7 +462,7 @@
     padding: 35px 0 40px
     font-family: PingFangSC-Regular;
     font-size: 14px;
-    color: #363547;
+    color: #27273E;
     text-align: center
 
   .setting-wrapper
@@ -491,7 +495,7 @@
       .unit
         font-family: PingFangSC-Light;
         font-size: 12px;
-        color: #363547;
+        color: #27273E;
         padding-right: 15px
 
   .texts-wrapper
@@ -574,7 +578,7 @@
       height: 44px
       width: 100%
       box-sizing: border-box
-      background: #363547
+      background: #27273E
       border-radius: 4px
       font-family: PingFangSC-Regular
       font-size: 16px

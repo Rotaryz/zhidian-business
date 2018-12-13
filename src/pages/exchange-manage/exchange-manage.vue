@@ -349,7 +349,7 @@
           line-height: 44px
           text-align: center
           font-size: $font-size-16
-          color: $color-363537
+          color: $color-27273E
           font-family: $font-family-regular
           letter-spacing: 0.8px
         .tab-item.active
@@ -366,7 +366,7 @@
         .underline
           width: 30px
           height: 3px
-          background: $color-EF705D
+          background: $color-D32F2F
           border-radius: 3px
 
     .container
@@ -414,7 +414,7 @@
       .footer-btn
         width: 100%
         height: 100%
-        background: $color-363537
+        background: $color-27273E
         border-radius: 2px
         line-height: 44px
         text-align: center

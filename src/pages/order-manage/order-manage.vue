@@ -405,7 +405,7 @@
         text-align: center
         line-height: 45px
         font-size: $font-size-14
-        coloe: $color-363537
+        coloe: $color-27273E
         font-family: $font-family-regular
     .header-tab
       width: 100vw
@@ -430,7 +430,7 @@
             line-height: 44px
             text-align: center
             font-size: $font-size-14
-            color: $color-363537
+            color: $color-27273E
             font-family: $font-family-regular
             letter-spacing: 0.8px
           .tab-item.active
@@ -447,7 +447,7 @@
           .underline
             width: 30px
             height: 3px
-            background: $color-EF705D
+            background: $color-D32F2F
             border-radius: 3px
       .right-box
         width: 65px
@@ -456,7 +456,7 @@
         align-items: center
         justify-content: center
         font-size: $font-size-14
-        color: $color-363537
+        color: $color-27273E
         position: relative
         &::before
           content: ""
@@ -473,7 +473,7 @@
           margin-left: 2px
           display: block
         .right-name.active
-          color: $color-EF705D
+          color: $color-D32F2F
 
     .container
       width: 100vw
@@ -520,7 +520,7 @@
       .footer-btn
         width: 100%
         height: 100%
-        background: $color-363537
+        background: $color-27273E
         border-radius: 2px
         line-height: 44px
         text-align: center

@@ -212,19 +212,19 @@
         align-items: center
         .name
           font-size: 18px;
-          color: #363547;
+          color: #27273E;
           letter-spacing: 0.8px;
           margin-right: 2.5px
         .position
           font-size: 12px;
-          color: #EF705D;
+          color: #D32F2F;
           line-height: 1
           padding: 2px 3px
-          border: 1px solid #EF705D;
+          border: 1px solid #D32F2F;
           border-radius: 4px;
       .title
         font-size: 14px;
-        color: #363547;
+        color: #27273E;
         letter-spacing: 0.6px;
         padding-left: 15px
         padding-bottom: 12px
@@ -236,7 +236,7 @@
         .unit
           font-family: PingFangSC-Medium;
           font-size: 30px;
-          color: #363547;
+          color: #27273E;
           position: relative
           bottom: -4px
         .input-content
@@ -245,7 +245,7 @@
           padding: 0 15px 0 3px
           font-family: DINAlternate-Bold;
           font-size: 46px;
-          color: #363547;
+          color: #27273E;
           letter-spacing: 1.77px;
           line-height: 1
           height: 46px
@@ -258,7 +258,7 @@
       .btn
         margin: 0 15px 0
         height: 45px
-        background: #363547;
+        background: #27273E;
         border-radius: 4px;
         font-size: 14px;
         color: #FFFFFF;
@@ -274,7 +274,7 @@
       .top
         .title
           font-size: 16px;
-          color: #363547;
+          color: #27273E;
           text-align: center;
         .line
           height: 4px
@@ -289,6 +289,6 @@
           align-items: center
           justify-content: space-between
           font-size: 14px;
-          color: #363547;
+          color: #27273E;
           letter-spacing: 0.42px;
 </style>

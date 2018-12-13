@@ -98,7 +98,7 @@
       line-height: $btn-height
       .btn
         display: inline-block
-        background: #363547;
+        background: #27273E;
         border-radius: 4px;
         width: 100%
         height: 45px
