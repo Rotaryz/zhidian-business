@@ -1,6 +1,20 @@
 <template>
   <div class="shop">
     <scroll>
+      <router-link tag="div" class="header" to="">
+        <div class="logo" v-if="shopInfo.logo && shopInfo.logo.url" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+        <img class="logo" src="./pic-default_people@2x.png" v-else/>
+        <div class="msg-box">
+          <div class="title">{{shopInfo.name || '店铺名称'}}</div>
+          <div class="use-time">
+            <span class="time">使用期限:{{userInfo.merchant.expire_time | formatTime}}</span>
+            <span class="big-box" @click.stop="showExpire" v-if="userInfo.merchant && userInfo.merchant.expired">
+            <span class="red-box">续费</span>
+          </span>
+          </div>
+        </div>
+        <div class="right-arrow"></div>
+      </router-link>
       <s-header></s-header>
       <s-data :info="ShopDashboard"></s-data>
       <s-router></s-router>
@@ -15,25 +29,21 @@
   import SData from './s-data/s-data'
   import SRouter from './s-router/s-router'
   import wx from 'weixin-js-sdk'
+  import {formatDateTime} from 'common/js/utils'
   import { Global, Mine } from 'api'
 
   export default {
-    components: {
-      Scroll,
-      SHeader,
-      SData,
-      SRouter
+    data() {
+      return {
+        isTabHide: false,
+        ShopDashboard: {},
+        shopInfo: {}
+      }
     },
     created() {
       this._getWxSdk()
       this._getShopDashboard()
       this._getStoreInfo()
-    },
-    data() {
-      return {
-        isTabHide: false,
-        ShopDashboard: {}
-      }
     },
     methods: {
       refresh() {
@@ -79,6 +89,23 @@
           this.ShopDashboard = res.data || {}
         })
       }
+    },
+    computed: {
+      userInfo() {
+        return this.$storage.get('info')
+      }
+    },
+    filters: {
+      formatTime(val) {
+        if (!val) return ''
+        return formatDateTime(val * 1000, '-')
+      }
+    },
+    components: {
+      Scroll,
+      SHeader,
+      SData,
+      SRouter
     }
   }
 </script>
@@ -89,4 +116,49 @@
 
   .shop
     fill-box()
+  .header
+    height: 24vw
+    border-1px($color-E6E6E6)
+    background: #fff
+    layout(row)
+    align-items: center
+    .logo
+      width: 17vw
+      height: @width
+      margin-left: 12.9px
+    .msg-box
+      flex: 1
+      padding: 0 6px
+      .title
+        font-family: PingFangSC-Regular
+        font-size: $font-size-16
+        color: #363547
+        letter-spacing: 0.8px
+        text-align: justify
+        word-break: break-all
+        margin-bottom: 10px
+      .use-time
+        display: flex
+        align-items: center
+        .time
+          font-size: $font-size-14
+          color: $color-9B9B9B
+          font-family: $font-family-regular
+        .big-box
+          padding: 5px
+        .red-box
+          width: 36px
+          height: 18px
+          line-height: 18px
+          text-align: center
+          border-1px($color-EF705D)
+          font-size: $font-size-12
+          font-family: $font-family-medium
+          color: $color-EF705D
+          display: block
+    .right-arrow
+      width: 7px
+      height: 12px
+      icon-image(icon-press_right)
+      margin: 0 15px 0 12px
 </style>

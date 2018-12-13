@@ -25,7 +25,7 @@
           <div class="margin-box-10px"></div>
           <panel title="奖品池">
             <ul class="prize-wrapper" v-if="prizeList.length">
-              <li class="prize-item-wrapper" v-for="(item, idx) in prizeList2" :key="idx">
+              <li class="prize-item-wrapper" v-for="(item, idx) in prizeList" :key="idx">
                 <prize-item :idx="idx" :item="item" @updatePrizeStock="updatePrizeStock" @delHandle="delHandle" @navTo="navTo"></prize-item>
               </li>
             </ul>

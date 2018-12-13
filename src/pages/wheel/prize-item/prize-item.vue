@@ -8,11 +8,11 @@
     <li class="item-wrapper">
       <div class="left store">可用库存{{item.stock}}</div>
       <section class="counter" @click.stop>
-        <div class="btn declare" @click="subHandle"></div>
+        <div class="btn declare" :class="{'grey':item.time_status === 1}" @click="subHandle"></div>
         <div class="input-wrapper">
           <input class="input-style" :class="inputReg?'error':''" type="number" v-model="item.prize_stock" @input="inputHandle" @focus="focusHandle" @blur="blurHandle">
         </div>
-        <div class="btn add" @click="addHandle"></div>
+        <div class="btn add" :class="{'grey':item.time_status === 1}" @click="addHandle"></div>
       </section>
       <div class="shade" v-if="item.time_status === 1" @click.stop></div>
     </li>

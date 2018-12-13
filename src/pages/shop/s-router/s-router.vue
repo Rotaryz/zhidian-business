@@ -13,6 +13,16 @@
 
 <script type="text/ecmascript-6">
   const dataArray = [
+    // {
+    //   icon: 'add-1',
+    //   title: '扫码核销',
+    //   path: '/service-manage'
+    // },
+    // {
+    //   icon: 'add-2',
+    //   title: '输码核销',
+    //   path: '/service-manage'
+    // },
     {
       icon: 'one-1',
       title: '服务',
@@ -107,6 +117,10 @@
             width: 8.533vw
             height: 8.533vw
             margin-bottom: 9px
+            &.add-1
+              icon-image(icon-service)
+            &.add-2
+              icon-image(icon-content)
             &.one-1
               icon-image(icon-service)
             &.one-2

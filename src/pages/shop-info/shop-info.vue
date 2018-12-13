@@ -18,7 +18,7 @@
             </article>
             <article class="base-item border-bottom-1px">
               <div class="left">联系电话</div>
-              <input class="middle active" type="number" v-model="shopInfo.telephone" placeholder="请输入您的联系电话">
+              <input class="middle active" type="tel" v-model="shopInfo.telephone" maxlength="11" placeholder="请输入您的联系电话">
             </article>
             <article class="base-item" @click="choosePicker('industry')">
               <div class="left">行业类型</div>
