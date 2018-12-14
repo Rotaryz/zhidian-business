@@ -17,6 +17,7 @@
 
 <script type="text/ecmascript-6">
   import Confirm from 'components/confirm-msg/confirm-msg'
+  import { Mine } from 'api'
   export default {
     data() {
       return {
@@ -25,6 +26,12 @@
     created() {
     },
     methods: {
+      getShopInfo() {
+        Mine.getShopInfo()
+          .then(res => {
+            console.log(res)
+          })
+      },
       logOff() {
         this.$refs.confirm.show({msg: '确定要退出吗？'})
       },

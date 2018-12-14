@@ -7,6 +7,9 @@
         <div class="title">{{shopInfo.name || '店铺名称'}}</div>
         <div class="use-time">
           <span class="time">使用期限:{{userInfo.merchant.expire_time | formatTime}}</span>
+          <span class="big-box" @click.stop="showExpire" v-if="userInfo.merchant && userInfo.merchant.expired">
+            <span class="red-box">续费</span>
+          </span>
         </div>
       </div>
       <div class="right-arrow"></div>
@@ -29,6 +32,9 @@
       }
     },
     methods: {
+      showExpire() {
+        this.$emit('showExpire')
+      }
     },
     computed: {
       userInfo() {
@@ -81,6 +87,18 @@
             color: $color-white
             font-family: $font-family-regular
             opacity: 0.7
+          .big-box
+            padding: 5px
+            .red-box
+              width: 36px
+              height: 18px
+              line-height: 18px
+              text-align: center
+              border-1px($color-D32F2F)
+              font-size: $font-size-12
+              font-family: $font-family-medium
+              color: $color-D32F2F
+              display: block
       .right-arrow
         width: 7px
         height: 12px

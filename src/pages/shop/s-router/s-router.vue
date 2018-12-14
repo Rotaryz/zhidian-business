@@ -68,7 +68,7 @@
     {
       icon: 'eight',
       title: '品牌模板',
-      path: '/brand-templet'
+      path: '/brand-template'
     }
   ]
 

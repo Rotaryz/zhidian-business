@@ -20,6 +20,10 @@
               <div class="left">联系电话</div>
               <input class="middle active" type="tel" v-model="shopInfo.telephone" maxlength="11" placeholder="请输入您的联系电话">
             </article>
+            <article class="base-item border-bottom-1px">
+              <div class="left">微信号</div>
+              <input class="middle active" type="" v-model="shopInfo.weixin"  placeholder="请输入您的微信号">
+            </article>
             <article class="base-item" @click="choosePicker('industry')">
               <div class="left">行业类型</div>
               <div class="middle" v-if="!shopInfo.industry_name">请选择门店的行业类型</div>
@@ -160,6 +164,7 @@
           name: '',
           intro: '', // 介绍
           telephone: '',
+          weixin: '',
           industry_name: DEFAULT_INDUSTRY, // 行业名称
           area: '',
           city: '',
@@ -470,6 +475,12 @@
       openHoursReg() {
         return this.shopInfo.opening_hours.start && this.shopInfo.opening_hours.end
       }
+    },
+    watch: {
+      'shopInfo.weixin'(val, oldVal) {
+        val = val.match(/[^\u4e00-\u9fa5]+/) ? val.match(/[^\u4e00-\u9fa5]+/) : ''
+        this.shopInfo.weixin = val[0] ? val[0].replace(/^\s+|\s+$/g, '') : val
+      }
     }
   }
 </script>
@@ -546,6 +557,7 @@
           color: $color-9B9B9B
           margin: 0 6px 0 15px
         .left
+          width: 60px
           color: $color-9B9B9B
         .middle
           flex: 1

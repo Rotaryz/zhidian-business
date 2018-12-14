@@ -80,7 +80,7 @@
       </div>
       <div class="editor-title border-bottom-1px border-top-1px">
         <div class="title">
-          套餐服务
+          套餐
           <span class="add-server" @click.stop="addItem"></span>
         </div>
       </div>
@@ -94,7 +94,7 @@
         <div class="server-list border-bottom-1px" :class="item.hide ? 'hide-list': item.hasClass ? 'has-class show-list' : 'show-list'" v-for="(item, index) in serviceDetail.detail_config" :key="index">
           <label>
             <div class="editor-item border-bottom-1px">
-              <div class="item-left">服务{{index + 1}}</div>
+              <div class="item-left">名称</div>
               <div class="item-right">
                 <input type="text" class="input-box" v-model="item.servie" placeholder="请填写服务名称">
                 <span v-if="index > 0" class="del-server" @click.stop="delItem(index)"></span>

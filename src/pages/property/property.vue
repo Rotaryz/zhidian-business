@@ -9,19 +9,19 @@
     >
       <section class="top-msg">
         <p class="txt">店铺总资产</p>
-        <p class="money">{{remaining}}</p>
+        <p class="money">{{assets}}</p>
       </section>
       <section class="option">
         <div class="box">
           <div class="content">
             <div class="money left">
               <p class="txt">待结算金额</p>
-              <p class="number">6000</p>
+              <p class="number">{{unsettlement}}</p>
               <span class="line border-right-1px"></span>
             </div>
             <div class="money right" @click="toDeposit">
               <p class="txt">可提现金额<span class="icon"></span></p>
-              <p class="number">900</p>
+              <p class="number">{{remaining}}</p>
             </div>
           </div>
         </div>
@@ -62,7 +62,9 @@
     },
     data() {
       return {
-        remaining: '0.00',
+        remaining: '0.00', // 可提现金额
+        unsettlement: '0.00', // 待结算金额
+        assets: '0.00', // 总资产
         dataArray: [],
         pullUpLoad: true,
         pullUpLoadThreshold: 0,
@@ -133,6 +135,8 @@
             return
           }
           this.remaining = res.data.remaining
+          this.unsettlement = res.data.unsettlement
+          this.assets = res.data.assets
         })
       },
       onPullingUp() {

@@ -41,7 +41,7 @@ const ContentText = () => import('pages/content-text/content-text')
 const MapPicker = () => import('pages/map-picker/map-picker')
 const Wheel = () => import('pages/wheel/wheel')
 const WheelAddPrize = () => import('pages/wheel-add-prize/wheel-add-prize')
-const BrandTemplet = () => import('pages/brand-templet/brand-templet')
+const BrandTemplate = () => import('pages/brand-template/brand-template')
 const AccountDetail = () => import('pages/account-detail/account-detail')
 
 Vue.use(Router)
@@ -276,8 +276,8 @@ const route = new Router({
               }
             },
             {
-              path: 'brand-templet',
-              component: BrandTemplet,
+              path: 'brand-template',
+              component: BrandTemplate,
               meta: {
                 title: '品牌模板'
               }

@@ -95,6 +95,7 @@
         line-height: 22px
         display: flex
         align-items: center
+        line-hegiht: 1.3
         .color
           font-family: $font-family-medium
           color: #1AC521
@@ -104,7 +105,7 @@
         .icon
           icon-image(icon-up)
           width: 10px
-          height: 9px
+          height: 10px
           margin-left: 2px
         .down
           icon-image(icon-down)

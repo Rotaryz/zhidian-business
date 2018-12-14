@@ -1,7 +1,7 @@
 <template>
   <div class="shop">
     <scroll bcColor="#f6f6f6">
-      <s-header :shopInfo="shopInfo"></s-header>
+      <s-header :shopInfo="shopInfo" @showExpire="showExpire"></s-header>
       <s-data :info="ShopDashboard"></s-data>
       <s-router></s-router>
       <div class="padding"></div>
@@ -32,6 +32,9 @@
       this._getStoreInfo()
     },
     methods: {
+      showExpire() {
+        this.$emit('showExpire')
+      },
       refresh() {
         this._getShopDashboard()
       },

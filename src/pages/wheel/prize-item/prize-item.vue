@@ -1,7 +1,7 @@
 <template>
   <ul class="prize-item" @click="navTo(item)">
     <li class="item-wrapper top border-bottom-1px">
-      <div v-if="!item.image_url" class="img" :style="{backgroundImage: 'url(' + item.image_url + ')'}"></div>
+      <div v-if="item.image_url" class="img" :style="{backgroundImage: 'url(' + item.image_url + ')'}"></div>
       <div v-else class="img"></div>
       <div class="content">
         <div class="title">
@@ -9,19 +9,20 @@
           <div class="right" @click.stop="delHandle"></div>
         </div>
         <div class="stock">库存{{item.stock}}</div>
-        <div class="valid">{{item.valid_period}}</div>
+        <div v-if="+item.status === 1" class="valid">有效期:{{item.end_at}}</div>
+        <div v-else class="valid">已过期</div>
       </div>
     </li>
     <li class="item-wrapper">
       <div class="left store">{{name}}</div>
       <section class="counter" @click.stop>
-        <div class="btn declare" :class="{'grey':item.time_status === 1}" @click="subHandle"></div>
+        <div class="btn declare" :class="{'grey':item.status === 0}" @click="subHandle"></div>
         <div class="input-wrapper">
           <input class="input-style" :class="inputReg?'error':''" type="number" v-model="item.prize_stock" @input="inputHandle" @focus="focusHandle" @blur="blurHandle">
         </div>
-        <div class="btn add" :class="{'grey':item.time_status === 1}" @click="addHandle"></div>
+        <div class="btn add" :class="{'grey':item.status === 0}" @click="addHandle"></div>
       </section>
-      <div class="shade" v-if="item.time_status === 1" @click.stop></div>
+      <div class="shade" v-if="item.status === 0" @click.stop></div>
     </li>
   </ul>
 </template>
@@ -192,6 +193,10 @@
             icon-image(icon-reduce_prize)
           &.add
             icon-image(icon-plus_prize)
+          &.grey.declare
+            icon-image(icon-reduce_bkd)
+          &.grey.add
+            icon-image(icon-plus_bkd)
         .input-wrapper
           height: 25px
           width 60px
