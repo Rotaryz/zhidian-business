@@ -22,7 +22,7 @@
             </article>
             <article class="base-item border-bottom-1px">
               <div class="left">微信号</div>
-              <input class="middle active" type="" v-model="shopInfo.weixin"  placeholder="请输入您的微信号">
+              <input class="middle active" type="" v-model="shopInfo.employee.weixin_no"  placeholder="请输入您的微信号">
             </article>
             <article class="base-item" @click="choosePicker('industry')">
               <div class="left">行业类型</div>
@@ -175,7 +175,10 @@
           opening_hours: {}, // 营业时间
           logo: {}, // 门店logo
           video: {}, // 门店视频
-          images: [] // 门店图片
+          images: [], // 门店图片
+          employee: {
+            weixin_no: ''
+          }
         },
         start: '9:00',
         end: '21:00',

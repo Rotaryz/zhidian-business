@@ -30,7 +30,7 @@
     },
     methods: {
       _getUserInfo() {
-        Mine.getUserInfo()
+        Mine.getUserInfo(false)
           .then(res => {
             if (res.error !== this.$ERR_OK) {
               this.$toast.show(res.message)

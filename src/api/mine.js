@@ -17,8 +17,16 @@ export default {
     let url = '/api/merchant/create-invite-qrcode'
     return request.post(url, data, loading)
   },
-  getUserInfo() {
+  getUserInfo(loading = true) {
     let url = '/api/merchant/profile'
-    return request.get(url)
+    return request.get(url, {}, loading)
+  },
+  /**
+   * 获取营业数据
+   * @returns {*}
+   */
+  getBusinessDetail(loading = false) {
+    let url = '/api/merchant/order-overview'
+    return request.get(url, {}, loading)
   }
 }

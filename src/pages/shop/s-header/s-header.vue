@@ -32,9 +32,6 @@
       }
     },
     methods: {
-      showExpire() {
-        this.$emit('showExpire')
-      }
     },
     computed: {
       userInfo() {

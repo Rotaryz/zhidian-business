@@ -1,15 +1,17 @@
 <template>
   <div class="s-data">
     <ul class="content">
-      <li class="item-wrapper" v-for="(item, index) in dataArray" :key="index">
-        <p class="title">{{item.title}}</p>
-        <p class="number">{{item.number}}</p>
+      <li class="item-wrapper" v-for="(item, index) in info" :key="index">
+        <p class="title">{{item.name}}</p>
+        <p class="number">{{values[item.number]}}</p>
         <p class="analyse">
           <span>较昨日</span>
-          <span v-if="item.type === 'up'" class="color green">{{item.num}}</span>
-          <span v-else class="color red">{{item.num}}</span>
-          <span v-if="item.type === 'up'" class="icon up"></span>
-          <span v-else class="icon down"></span>
+          <span v-if="values[item.type] === 'up'" class="color green">{{values[item.num]}}</span>
+          <span v-else-if="values[item.type] === 'down'" class="color red">{{values[item.num]}}</span>
+
+          <span v-if="values[item.type] === 'up'" class="icon up"></span>
+          <span v-else-if="values[item.type] === 'down'" class="icon down"></span>
+          <span v-else class="icon constant"></span>
         </p>
         <div class="line border-right-1px"></div>
       </li>
@@ -18,36 +20,50 @@
 </template>
 
 <script type="text/ecmascript-6">
-  const dataArray = [
-    {
-      number: '200',
-      title: '营业额',
-      num: '200',
-      type: 'up'
-    },
-    {
-      number: '200',
-      title: '订单',
-      num: '200',
-      type: 'up'
-    },
-    {
-      number: '200',
-      title: '客户',
-      num: '200',
-      type: 'down'
-    }
-  ]
   export default {
     props: {
       info: {
+        type: Array,
+        default: () => {
+          return [
+            {
+              name: '营业额',
+              number: 'today_turnover',
+              num: 'difference_turnover',
+              type: 'compare_turnover'
+            }, {
+              name: '订单',
+              number: 'today_order_count',
+              num: 'difference_order_count',
+              type: 'compare_order_count'
+            }, {
+              name: '客户',
+              number: 'today_customer_count',
+              num: 'difference_customer_count',
+              type: 'yesterday_customer_count'
+            }
+          ]
+        }
+      },
+      values: {
         type: Object,
-        default: {}
+        default: () => {
+          return {
+            today_turnover: 0,
+            difference_turnover: 0,
+            compare_turnover: 'up',
+            today_order_count: 0,
+            difference_order_count: 0,
+            compare_order_count: 'down',
+            today_customer_count: 0,
+            difference_customer_count: 0,
+            yesterday_customer_count: 'up'
+          }
+        }
       }
     },
     data() {
       return {
-        dataArray
       }
     }
   }
@@ -109,6 +125,8 @@
           margin-left: 2px
         .down
           icon-image(icon-down)
+        .constant
+          icon-image(icon-ping)
       .line
         height: 20px
         right: 0

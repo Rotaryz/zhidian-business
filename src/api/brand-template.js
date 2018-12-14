@@ -13,13 +13,13 @@ export default {
    */
   leadingIn(templateId, loading = false) {
     let url = `/api/merchant/brand-template/${templateId}`
-    return request.post(url, {}, loading)
+    return request.put(url, {}, loading)
   },
   /**
    * 一键生成/更新模板
    */
   makeTemplate(data, loading = false) {
     let url = '/api/merchant/brand-template'
-    return request.get(url, data, loading)
+    return request.post(url, data, loading)
   }
 }
