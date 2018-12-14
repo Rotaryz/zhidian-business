@@ -46,6 +46,7 @@
         <div class="nothing-txt">暂无数据</div>
       </div>
     </scroll>
+    <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
 

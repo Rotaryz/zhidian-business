@@ -21,8 +21,6 @@
       <div class="declare">微信按提现金额0.7%收取手续费，最低1元。</div>
       <div class="btn" :class="getMoneyReg?'active':''" @click="_checkForm">提现</div>
       <router-view-common @refresh="refresh"></router-view-common>
-
-
   </div>
 </template>
 
@@ -30,6 +28,7 @@
   import { Property } from 'api'
 
   export default {
+    name: 'deposit',
     data() {
       return {
         bankInfo: {
@@ -105,13 +104,6 @@
       }
     },
     watch: {
-      pullUpLoadObj: {
-        handler() {
-          if (!this.pullUpLoad) return // 防止下拉报错
-          this.rebuildScroll()
-        },
-        deep: true
-      }
     }
   }
 </script>
@@ -201,19 +193,5 @@
       opacity: 0.5
       &.active
         opacity: 1
-  .nothing-box
-    display: flex
-    flex-direction: column
-    align-items: center
-    font-size: 0
-    padding-top: 100px
-    .nothing-img
-      width: 100px
-      height: 80px
-      margin-bottom: 5px
-    .nothing-txt
-      font-size: $font-size-12
-      color: $color-CCCCCC
-      font-family: $font-family-regular
 
 </style>
