@@ -51,13 +51,13 @@
           return {
             today_turnover: 0,
             difference_turnover: 0,
-            compare_turnover: 'up',
+            compare_turnover: '',
             today_order_count: 0,
             difference_order_count: 0,
-            compare_order_count: 'down',
+            compare_order_count: '',
             today_customer_count: 0,
             difference_customer_count: 0,
-            yesterday_customer_count: 'up'
+            yesterday_customer_count: ''
           }
         }
       }
@@ -119,10 +119,11 @@
         .red
           color: #ED2B2B
         .icon
-          icon-image(icon-up)
           width: 10px
           height: 10px
           margin-left: 2px
+        .up
+          icon-image(icon-up)
         .down
           icon-image(icon-down)
         .constant

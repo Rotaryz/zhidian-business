@@ -40,17 +40,7 @@
             type: 'yesterday_customer_count'
           }
         ],
-        values: {
-          today_turnover: 0,
-          difference_turnover: 0,
-          compare_turnover: 'up',
-          today_order_count: 0,
-          difference_order_count: 0,
-          compare_order_count: 'down',
-          today_customer_count: 0,
-          difference_customer_count: 0,
-          yesterday_customer_count: 'up'
-        },
+        values: {},
         shopInfo: {}
       }
     },
@@ -65,6 +55,7 @@
         this.$emit('showExpire')
       },
       refresh() {
+        this._getShopInfo()
         this._getBusinessDetail()
       },
       _getShopInfo() {
