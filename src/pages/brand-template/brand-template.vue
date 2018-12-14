@@ -67,7 +67,8 @@
               this.$toast.show(res.message)
               return
             }
-            console.log(res)
+            this.$toast.show('导入成功')
+            this._getTemplateList()
           })
       },
       _makeTemplate(id) { // 一键生成模板/更新模板
@@ -77,7 +78,7 @@
               this.$toast.show(res.message)
               return
             }
-            console.log(res)
+            this.$toast.show(id ? '更新模版成功' : '生成模板成功')
           })
       },
       makeTemplate() {

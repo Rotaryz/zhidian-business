@@ -3,11 +3,11 @@
     <div class="list border-bottom-1px">
       <div class="item border-bottom-1px">
         <span class="label">姓名</span>
-        <div class="name">某某</div>
+        <div class="name">{{nickname}}</div>
       </div>
       <div class="item">
         <span class="label">手机号</span>
-        <div class="phone">13584260103</div>
+        <div class="phone">{{mobile}}</div>
       </div>
     </div>
     <div class="btn" @click="logOff">退出登录</div>
@@ -21,15 +21,23 @@
   export default {
     data() {
       return {
+        nickname: '',
+        mobile: ''
       }
     },
     created() {
+      this._getUserInfo()
     },
     methods: {
-      getShopInfo() {
-        Mine.getShopInfo()
+      _getUserInfo() {
+        Mine.getUserInfo()
           .then(res => {
-            console.log(res)
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            this.nickname = res.data.nickname
+            this.mobile = res.data.mobile
           })
       },
       logOff() {

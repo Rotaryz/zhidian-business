@@ -30,6 +30,7 @@
       this._getWxSdk()
       this._getShopDashboard()
       this._getStoreInfo()
+      this._getShopInfo()
     },
     methods: {
       showExpire() {
@@ -37,6 +38,17 @@
       },
       refresh() {
         this._getShopDashboard()
+      },
+      _getShopInfo() {
+        Mine.getShopInfo().then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          res.data.logo = res.data.logo ? res.data.logo : {}
+          this.shopInfo = res.data
+        })
       },
       _getStoreInfo() {
         Mine.getUserInfo().then(res => {
