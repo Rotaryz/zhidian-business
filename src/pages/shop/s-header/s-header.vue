@@ -1,67 +1,44 @@
 <template>
-  <ul class="s-header">
-    <li class="item-wrapper" v-for="(item, index) in dataArray" :key="index" @click="navHandle(item)">
-      <div class="logo" :class="item.icon"></div>
-      <div class="txt">{{item.title}}</div>
-    </li>
-  </ul>
+  <div class="s-header">
+    <router-link tag="div" class="msg" to="/shop/account-detail">
+      <div class="logo" v-if="shopInfo.logo && shopInfo.logo.url" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+      <img class="logo" src="./pic-default_people@2x.png" v-else/>
+      <div class="msg-box">
+        <div class="title">{{shopInfo.name || '店铺名称'}}</div>
+        <div class="use-time">
+          <span class="time">使用期限:{{userInfo.merchant.expire_time | formatTime}}</span>
+        </div>
+      </div>
+      <div class="right-arrow"></div>
+    </router-link>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import wx from 'weixin-js-sdk'
-  import {Exchange} from 'api'
-
-  const dataArray = [
-    {
-      icon: 'key',
-      title: '输码核销',
-      path: '/exchange-code'
-    },
-    {
-      icon: 'scanner',
-      title: '扫码核销',
-      path: ''
-    },
-    {
-      icon: 'record',
-      title: '核销记录',
-      path: '/exchange-record'
-    }
-  ]
+  import {formatDateTime} from 'common/js/utils'
   export default {
     name: 's-header',
+    props: {
+      shopInfo: {
+        type: Object,
+        default: {}
+      }
+    },
     data() {
       return {
-        dataArray
       }
     },
     methods: {
-      navHandle(item) {
-        if (item.icon === 'scanner') {
-          this._getScanner()
-          return
-        }
-        this.$router.push(this.$route.path + item.path)
-      },
-      _getScanner(callback) {
-        let that = this
-        wx.scanQRCode({
-          needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-          scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
-          success: function (res) {
-            let result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
-            let obj = JSON.parse(result)
-            Exchange.verification(obj).then((res) => {
-              that.$loading.hide()
-              if (res.error === that.$ERR_OK) {
-                that.$toast.show('核销成功')
-              } else {
-                that.$toast.show(res.message)
-              }
-            })
-            callback && callback()
-          }
-        })
+    },
+    computed: {
+      userInfo() {
+        return this.$storage.get('info')
+      }
+    },
+    filters: {
+      formatTime(val) {
+        if (!val) return ''
+        return formatDateTime(val * 1000, '-')
       }
     }
   }
@@ -72,28 +49,41 @@
   @import '~common/stylus/mixin'
 
   .s-header
-    height: 121px
-    background-color: $color-27273E
-    layout(row, block, nowrap)
-    .item-wrapper
-      flex: 1
-      height: 100%
-      layout()
-      justify-content: center
+    height: 147px
+    bg-image(bg-my)
+    background-size: 100% 100%
+    position: relative
+    padding: 15px
+    box-sizing: border-box
+    .msg
+      layout(row)
       align-items: center
-      font-family: PingFangSC-Regular
-      font-size: 14px
-      color: #FFFFFF
-      z-index: 22
       .logo
-        width: 32px
-        height: 32px
-        margin-bottom: 15px
-        &.key
-          icon-image(icon-inputcode)
-        &.scanner
-          icon-image(icon-scancode)
-        &.record
-          icon-image(icon-record)
+        width: 15vw
+        height: @width
+        margin-right: 12px
+        border-radius: 50%
+      .msg-box
+        flex: 1
+        .title
+          font-family: $font-family-medium
+          font-size: $font-size-16
+          color: $color-white
+          letter-spacing: 0.8px
+          text-align: justify
+          word-break: break-all
+          margin-bottom: 10px
+        .use-time
+          display: flex
+          align-items: center
+          .time
+            font-size: $font-size-14
+            color: $color-white
+            font-family: $font-family-regular
+            opacity: 0.7
+      .right-arrow
+        width: 7px
+        height: 12px
+        icon-image(icon-press_right)
 
 </style>

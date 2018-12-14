@@ -1,26 +1,28 @@
 <template>
   <div class="deposit">
-    <div class="margin-box-10px"></div>
-    <section class="card-wrapper" @click="navToBankCard">
-      <div class="title" v-if="!bankInfo.bank">添加银行卡</div>
-      <div class="title active" v-else>{{bankInfo.bank}}({{bankInfo.withdrawal_card.substring(bankInfo.withdrawal_card.length-4)}})</div>
-      <div class="right">
-        <div class="name">{{bankInfo.name}}</div>
-        <div class="right-arrow"></div>
-      </div>
-    </section>
-    <div class="margin-box-10px"></div>
-    <section class="money-wrapper">
-      <div class="title">提现金额</div>
-      <div class="input-wrapper border-bottom-1px">
-        <div class="unit">¥</div>
-        <input type="number" class="input-content" v-model="getMoney">
-      </div>
-      <div class="explain">可提现金额 ¥{{bankInfo.remaining}}</div>
-    </section>
-    <div class="declare">微信按提现金额0.7%收取手续费，最低1元。</div>
-    <div class="btn" :class="getMoneyReg?'active':''" @click="_checkForm">提现</div>
-    <router-view-common @refresh="refresh"></router-view-common>
+      <div class="margin-box-10px"></div>
+      <section class="card-wrapper" @click="navToBankCard">
+        <div class="title" v-if="!bankInfo.bank">添加银行卡</div>
+        <div class="title active" v-else>{{bankInfo.bank}}({{bankInfo.withdrawal_card.substring(bankInfo.withdrawal_card.length-4)}})</div>
+        <div class="right">
+          <div class="name">{{bankInfo.name}}</div>
+          <div class="right-arrow"></div>
+        </div>
+      </section>
+      <div class="margin-box-10px"></div>
+      <section class="money-wrapper">
+        <div class="title">提现金额</div>
+        <div class="input-wrapper border-bottom-1px">
+          <div class="unit">¥</div>
+          <input type="number" class="input-content" v-model="getMoney">
+        </div>
+        <div class="explain">可提现金额 ¥{{bankInfo.remaining}}</div>
+      </section>
+      <div class="declare">微信按提现金额0.7%收取手续费，最低1元。</div>
+      <div class="btn" :class="getMoneyReg?'active':''" @click="_checkForm">提现</div>
+      <router-view-common @refresh="refresh"></router-view-common>
+
+
   </div>
 </template>
 
@@ -100,6 +102,15 @@
       },
       getMoneyReg() {
         return (typeof +this.getMoney === 'number') && +this.getMoney > 0 && +this.getMoney <= this.bankInfo.remaining
+      }
+    },
+    watch: {
+      pullUpLoadObj: {
+        handler() {
+          if (!this.pullUpLoad) return // 防止下拉报错
+          this.rebuildScroll()
+        },
+        deep: true
       }
     }
   }
@@ -190,4 +201,19 @@
       opacity: 0.5
       &.active
         opacity: 1
+  .nothing-box
+    display: flex
+    flex-direction: column
+    align-items: center
+    font-size: 0
+    padding-top: 100px
+    .nothing-img
+      width: 100px
+      height: 80px
+      margin-bottom: 5px
+    .nothing-txt
+      font-size: $font-size-12
+      color: $color-CCCCCC
+      font-family: $font-family-regular
+
 </style>

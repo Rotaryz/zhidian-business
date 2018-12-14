@@ -158,14 +158,20 @@
         display: flex
         align-items: center
         justify-content: space-between
+        margin-bottom: 2px
         .left
           padding: 0
           line-height: 1.4
           font-family: $font-family-medium
           font-size: 14px
           color: $color-27273E
+          overflow: hidden
+          text-overflow: ellipsis
+          white-space: nowrap
+          flex: 1
         .right
-          margin-right: 14px
+          margin-right: 5px
+          margin-left: 8vw
           width: 20px
           height: @width
           icon-image(icon-delpic)
@@ -186,7 +192,6 @@
             icon-image(icon-reduce_prize)
           &.add
             icon-image(icon-plus_prize)
-            margin-right: 15px
         .input-wrapper
           height: 25px
           width 60px

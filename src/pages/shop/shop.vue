@@ -1,21 +1,8 @@
 <template>
   <div class="shop">
     <scroll bcColor="#f6f6f6">
-      <div class="header">
-        <router-link tag="div" class="msg" to="/shop/account-detail">
-          <div class="logo" v-if="shopInfo.logo && shopInfo.logo.url" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-          <img class="logo" src="./pic-default_people@2x.png" v-else/>
-          <div class="msg-box">
-            <div class="title">{{shopInfo.name || '店铺名称'}}</div>
-            <div class="use-time">
-              <span class="time">使用期限:{{userInfo.merchant.expire_time | formatTime}}</span>
-            </div>
-          </div>
-        <div class="right-arrow"></div>
-        </router-link>
-      </div>
+      <s-header :shopInfo="shopInfo"></s-header>
       <s-data :info="ShopDashboard"></s-data>
-      <!--<s-header></s-header>-->
       <s-router></s-router>
       <div class="padding"></div>
     </scroll>
@@ -29,7 +16,6 @@
   import SData from './s-data/s-data'
   import SRouter from './s-router/s-router'
   import wx from 'weixin-js-sdk'
-  import {formatDateTime} from 'common/js/utils'
   import { Global, Mine } from 'api'
 
   export default {
@@ -91,15 +77,8 @@
       }
     },
     computed: {
-      userInfo() {
-        return this.$storage.get('info')
-      }
     },
     filters: {
-      formatTime(val) {
-        if (!val) return ''
-        return formatDateTime(val * 1000, '-')
-      }
     },
     components: {
       Scroll,
@@ -116,43 +95,6 @@
 
   .shop
     fill-box()
-  .header
-    height: 147px
-    bg-image(bg-my)
-    background-size: 100% 100%
-    position: relative
-    padding: 15px
-    box-sizing: border-box
-    .msg
-      layout(row)
-      align-items: center
-      .logo
-        width: 15vw
-        height: @width
-        margin-right: 12px
-        border-radius: 50%
-      .msg-box
-        flex: 1
-        .title
-          font-family: $font-family-medium
-          font-size: $font-size-16
-          color: $color-white
-          letter-spacing: 0.8px
-          text-align: justify
-          word-break: break-all
-          margin-bottom: 10px
-        .use-time
-          display: flex
-          align-items: center
-          .time
-            font-size: $font-size-14
-            color: $color-white
-            font-family: $font-family-regular
-            opacity: 0.7
-      .right-arrow
-        width: 7px
-        height: 12px
-        icon-image(icon-press_right)
   .padding
     height: 20px
 </style>

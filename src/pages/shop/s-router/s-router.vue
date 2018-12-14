@@ -12,7 +12,7 @@
       </ul>
     </div>
     <div class="activity">
-      <h3 class="title">店铺管理</h3>
+      <h3 class="title">营销活动</h3>
       <ul class="s-ul border-bottom-1px border-right-1px">
         <li class="item-wrapper" v-for="(item, index) in activityArray" :key="index" @click="navHandle(item)">
           <div class="logo">
@@ -157,8 +157,8 @@
           layout()
           justify-content: center
           align-items: center
-          font-size: $font-size-14
-          color: $color-696771
+          font-size: 13px
+          color: $color-27273E
           line-height: 14px
           margin-bottom: 25px
           z-index: 22

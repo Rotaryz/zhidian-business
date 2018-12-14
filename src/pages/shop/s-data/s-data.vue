@@ -90,7 +90,7 @@
         color: $color-27273E
         line-height: 1.5
       .analyse
-        font-size: $font-size-10
+        font-size: 11px
         color: $color-9B9B9B
         line-height: 22px
         display: flex
@@ -98,20 +98,22 @@
         .color
           font-family: $font-family-medium
           color: #1AC521
+          margin-left: 4px
         .red
           color: #ED2B2B
         .icon
           icon-image(icon-up)
           width: 10px
           height: 9px
+          margin-left: 2px
         .down
           icon-image(icon-down)
       .line
         height: 20px
-        right: 20px
+        right: 0
         col-center()
         border-right-1px(#E6E6E6)
-      .line:last-child:after
-        border: 0
+    .analyse.line:last-child:after
+      border: 0
 
 </style>

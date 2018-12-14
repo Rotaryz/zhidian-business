@@ -2,14 +2,14 @@
   <div class="deposit-records">
     <scroll
       bcColor="#fff"
-      v-if="dataArray.length"
+      v-if="dataArray2.length"
       ref="scroll"
       :data="dataArray"
       :pullUpLoad="pullUpLoadObj"
       @pullingUp="onPullingUp"
     >
       <ul class="recode-wrapper border-top-1px">
-        <li class="item-wrapper border-bottom-1px" v-for="(item, index) in dataArray" :key="index">
+        <li class="item-wrapper border-bottom-1px" v-for="(item, index) in dataArray2" :key="index">
           <div class="item-container">
             <div class="left">{{item.title}}</div>
             <div class="right">{{item.total}}</div>
@@ -40,6 +40,14 @@
     data() {
       return {
         dataArray: [],
+        dataArray2: [
+          {
+            title: 'dfsdf士大夫撒旦',
+            total: '10.00',
+            created_at: '2018-12-12',
+            status_str: '水电费'
+          }
+        ],
         pullUpLoad: true,
         pullUpLoadThreshold: 0,
         pullUpLoadMoreTxt: '加载更多',

@@ -189,7 +189,7 @@
             margin-left: 10vw
             margin-right: 10vw
           &:nth-child(11)
-            font-size: 4.8vw
+            font-size: 18px
             color: #9B9B9B
           &:nth-child(11).active
             background: #FF9500

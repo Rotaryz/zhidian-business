@@ -1,17 +1,18 @@
 <template>
   <div class="brand-templet">
-    <div class="templet-list">
+    <div class="templet-list" v-for="item in list">
       <div class="left">
         <p class="title">国颐堂品牌-总店模板</p>
         <p class="time">2018-12-12</p>
       </div>
-      <div class="right">一键导入</div>
+      <div class="right" v-if="item === 1"  @click="showConfirm('in')">一键导入</div>
+      <div class="right" v-else @click="showConfirm('update')">更新</div>
     </div>
     <div class="null">
       <p class="txt">你还没有保存模板信息</p>
-      <div class="btn" @click="showConfirm">一键生成模板</div>
+      <div class="btn">一键生成模板</div>
     </div>
-    <confirm ref="confirm" @confirm="exitApp"></confirm>
+    <confirm ref="confirm" @confirm="confirm"></confirm>
   </div>
 </template>
 
@@ -20,19 +21,27 @@
   export default {
     data() {
       return {
+        list: [1, 2]
       }
     },
     created() {
     },
     methods: {
-      showConfirm() {
-        this.$refs.confirm.show({msg: '确定一键导入？'})
+      showConfirm(type) {
+        if (type === 'in') {
+          this.$refs.confirm.show({msg: '确定一键导入？'})
+        } else {
+          this.$refs.confirm.show({msg: '确定更新？'})
+        }
+      },
+      confirm() {
+        console.log('success')
       }
     },
     components: {
+      Confirm
     },
     computed: {
-      Confirm
     }
   }
 </script>
