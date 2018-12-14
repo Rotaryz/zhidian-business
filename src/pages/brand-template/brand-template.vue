@@ -8,7 +8,7 @@
       <div class="right" v-if="+branch === 1"  @click="showConfirm('in', item)">一键导入</div>
       <div class="right" v-else @click="showConfirm('update', item)">更新</div>
     </div>
-    <div class="null" v-if="+branch === 1">
+    <div class="null" v-if="+branch === 0 && nothing">
       <p class="txt">你还没有保存模板信息</p>
       <div class="btn" @click="makeTemplate">一键生成模板</div>
     </div>
@@ -22,7 +22,7 @@
 
 <script type="text/ecmascript-6">
   import Confirm from 'components/confirm-msg/confirm-msg'
-  import { Template } from 'api'
+  import { Template, Mine } from 'api'
   export default {
     name: 'templet',
     data() {
@@ -35,8 +35,18 @@
     },
     created() {
       this._getTemplateList()
+      // 本地info信息如未更新，从新更新一次
+      if (!this.$storage.get('info').store) {
+        this._getUserInfo()
+      }
     },
     methods: {
+      _getUserInfo() {
+        Mine.getUserInfo()
+          .then(res => {
+            this.$storage.set('info', res.data)
+          })
+      },
       _getTemplateList() { // 获取模板列表
         this.$loading.hide()
         Template.getTemplateList()
