@@ -24,7 +24,10 @@ const mutations = {
       arr.push({
         prize_id: item.prize_id,
         totalStock: item.stock + number,
-        stock: item.stock
+        stock: item.stock,
+        image_url: item.image_url,
+        end_at: item.end_at,
+        status: item.status
       })
     })
     state.prizeStorage = arr
