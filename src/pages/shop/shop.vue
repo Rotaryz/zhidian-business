@@ -86,7 +86,7 @@
             return
           }
           let info = res.data
-          // info.merchant.type = 0
+          // info.store.is_branch = 1
           if (info.merchant && info.merchant.expired && !this.$storage.get('hasShowExpire')) {
             this.$emit('showExpire')
             this.$storage.set('hasShowExpire', true)
