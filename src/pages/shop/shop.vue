@@ -1,6 +1,6 @@
 <template>
   <div class="shop">
-    <scroll bcColor="#f6f6f6">
+    <scroll bcColor="#f6f6f6" ref="scroll">
       <s-header :shopInfo="shopInfo" @showExpire="showExpire"></s-header>
       <s-data :info="businessData" :values="values"></s-data>
       <s-router></s-router>
@@ -67,6 +67,7 @@
           }
           res.data.logo = res.data.logo ? res.data.logo : {}
           this.shopInfo = res.data
+          this.$refs.scroll.forceUpdate()
         })
       },
       _getBusinessDetail() {
