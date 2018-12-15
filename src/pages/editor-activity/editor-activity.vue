@@ -127,7 +127,7 @@
       <div class="editor-title border-bottom-1px border-top-1px">
         <div class="title">活动时间</div>
       </div>
-      <div class="group-container">
+      <div class="group-container border-bottom-1px">
         <label>
           <div class="editor-item">
             <div class="item-left">开始时间</div>
@@ -145,30 +145,13 @@
           </div>
         </label>
       </div>
-      <div class="group-container border-top-1px" v-if="ruleId == 3">
+      <div class="group-container border-bottom-1px" v-if="ruleId == 3">
         <div class="editor-item"  @click="selectAny('prize')">
           <div class="item-left large">设置兑换券</div>
           <div class="item-right input-right">
             <div class="right-txt" :class="type !== 'editor' ? '' : 'gray'" v-if="activityDetail.coupon_title">{{activityDetail.coupon_title}}</div>
             <span class="right-txt-placeholder" v-if="!activityDetail.coupon_title">成功砍价可领取</span>
             <img src="./icon-press_right@2x.png" class="arrow-icon">
-          </div>
-        </div>
-      </div>
-      <div class="royalty-item deducte border-top-1px border-bottom-1px">
-        <div class="item-left">活动提成 <div class="right-txt-12">提成按售卖价格的百分比计算</div></div>
-        <div class="item-right">
-          <div class="right-num-box">
-            <input type="number" class="num-input" v-model="activityDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" :disabled="type === 'editor'">
-          </div>
-          <div class="right-txt-14">%</div>
-        </div>
-      </div>
-      <div class="group-container no-padding border-bottom-1px">
-        <div class="royalty-item">
-          <div class="item-left need-no">统一上架</div>
-          <div class="item-right end-right">
-            <switch-box @switchChange="switchChange" :values="activityDetail.is_sync * 1"></switch-box>
           </div>
         </div>
       </div>
@@ -207,7 +190,6 @@
   }
   const MONEYREG = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
   const COUNTREG = /^[1-9]\d*$/
-  const RATEREG = /^[0-9]\d*$/
   export default {
     data() {
       return {
@@ -239,8 +221,8 @@
             group_price: ''
           },
           stock: '',
-          is_sync: 0,
-          commission_rate: '',
+          is_sync: 1,
+          commission_rate: '0',
           start_at: '',
           end_at: '',
           image_id: '',
@@ -264,7 +246,6 @@
           case 'goods':
             this.activityDetail.goods_id = item.id
             this.activityDetail.goods_title = item.title
-            // this.activityDetail.goods_price = item.platform_price
             this.activityDetail.config.original_price = item.platform_price
             break
           case 'prize':
@@ -460,8 +441,7 @@
             {value: this.groupNumReg, txt: '请选择拼团人数'},
             {value: this.stockReg, txt: '请选择或输入合法的库存数量'},
             {value: this.use1TimeReg, txt: '请选择活动开始时间'},
-            {value: this.use2TimeReg, txt: '请选择活动结束时间'},
-            {value: this.rateReg, txt: '请输入正整数提成比例'}
+            {value: this.use2TimeReg, txt: '请选择活动结束时间'}
           ]
         } else if (+this.ruleId === 3) {
           arr = [
@@ -472,8 +452,7 @@
             {value: this.stockReg, txt: '请选择或输入合法的库存数量'},
             {value: this.use1TimeReg, txt: '请选择活动开始时间'},
             {value: this.use2TimeReg, txt: '请选择活动结束时间'},
-            {value: this.couponReg, txt: '请选择帮砍人兑换券'},
-            {value: this.rateReg, txt: '请输入正整数提成比例'}
+            {value: this.couponReg, txt: '请选择帮砍人兑换券'}
           ]
         }
         let res = this._testPropety(arr)
@@ -539,9 +518,6 @@
       },
       couponReg() {
         return this.activityDetail.coupon_id
-      },
-      rateReg() {
-        return RATEREG.test(this.activityDetail.commission_rate) && +this.activityDetail.commission_rate <= 100
       },
       showSelectType() {
         if (this.ruleId) {
