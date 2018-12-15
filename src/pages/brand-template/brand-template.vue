@@ -1,6 +1,6 @@
 <template>
   <div class="brand-template">
-    <div class="template-list" v-for="item in list">
+    <div class="template-list" v-for="(item, index) in list" :key="index">
       <div class="left">
         <p class="title">{{item.title}}</p>
         <p class="time">{{item.updated_at}}</p>
@@ -12,7 +12,7 @@
       <p class="txt">你还没有保存模板信息</p>
       <div class="btn" @click="makeTemplate">一键生成模板</div>
     </div>
-    <div class="nothing-box" v-if="nothing">
+    <div class="nothing-box" v-if="+branch === 1 && nothing">
       <img src="./pic-empty_order@2x.png" class="nothing-img">
       <div class="nothing-txt">暂无数据</div>
     </div>
@@ -57,7 +57,7 @@
               return
             }
             this.list = res.data
-            this.nothing = (+this.branch === 1 && res.data.length === 0)
+            this.nothing = res.data.length === 0
           })
       },
       _leadingIn() { // 导入模板
