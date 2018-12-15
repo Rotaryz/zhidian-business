@@ -234,7 +234,7 @@
           flex-direction: column
           position: relative
         .txt
-          font-size: 13px
+          font-size: 14px
           font-family: $font-family-regular
           color: $color-27273E
           position: relative
