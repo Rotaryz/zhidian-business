@@ -94,10 +94,10 @@
               height: 18px
               line-height: 18px
               text-align: center
-              border-1px($color-D32F2F)
+              border-1px($color-white)
               font-size: $font-size-12
               font-family: $font-family-medium
-              color: $color-D32F2F
+              color: $color-white
               display: block
       .right-arrow
         width: 7px

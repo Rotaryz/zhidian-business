@@ -44,7 +44,7 @@
         this.$refs.confirm.show({msg: '确定要退出吗？'})
       },
       exitApp() {
-        this.$storage.clear()
+        this.$storage.remove('token')
         this.$router.replace('/login')
       }
     },
