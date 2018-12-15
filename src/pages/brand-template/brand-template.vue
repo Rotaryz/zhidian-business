@@ -135,9 +135,15 @@
       display: flex
       align-items: center
       justify-content: space-between
+      .left
+        flex: 1
+        overflow: hidden
       .title
         font-size: $font-size-16
         color: #4A4657
+        white-space: nowrap
+        text-overflow: ellipsis
+        overflow: hidden
       .time
         color: #9B9B9B
         font-size: 14px

@@ -5,7 +5,7 @@
         <p class="title">{{item.name}}</p>
         <p class="number">{{values[item.number]}}</p>
         <p class="analyse">
-          <span>较昨日</span>
+          <span class="label">较昨日</span>
           <span v-if="values[item.type] === 'up'" class="color green">{{values[item.num]}}</span>
           <span v-else-if="values[item.type] === 'down'" class="color red">{{values[item.num]}}</span>
 
@@ -96,6 +96,7 @@
       position: relative
       padding-left: 20px
       box-sizing: border-box
+      overflow: hidden
       .title
         font-size: 13px
         line-height: 1.4
@@ -105,6 +106,9 @@
         font-size: $font-size-20
         color: $color-27273E
         line-height: 1.5
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
       .analyse
         font-size: 11px
         color: $color-9B9B9B
@@ -112,6 +116,8 @@
         display: flex
         align-items: center
         line-height: 1.3
+        .label
+          white-space: nowrap
         .color
           font-family: $font-family-medium
           color: #1AC521

@@ -127,7 +127,7 @@
     },
     computed: {
       merchant() {
-        return this.$storage.get('info').merchant
+        return this.$storage.get('info') && this.$storage.get('info').merchant
       }
     }
   }

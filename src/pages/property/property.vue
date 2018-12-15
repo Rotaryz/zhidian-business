@@ -206,7 +206,9 @@
         font-family: $font-family-bold
         color: $color-white
         text-align: center
-
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
     .option
       height: 35px
       background: $color-F6F6F6
@@ -249,6 +251,11 @@
           font-family: $font-family-bold
           color: $color-27273E
           margin-top: 8px
+          overflow: hidden
+          text-overflow: ellipsis
+          white-space: nowrap
+          width: 80%
+          text-align: center
         .line
           height: 33px
           col-center()
