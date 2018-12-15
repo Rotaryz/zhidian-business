@@ -5,7 +5,7 @@
         <p class="title">{{item.name}}</p>
         <p class="number">{{values[item.number]}}</p>
         <p class="analyse">
-          <span>较昨日</span>
+          <span class="label">较昨日</span>
           <span v-if="values[item.type] === 'up'" class="color green">{{values[item.num]}}</span>
           <span v-else-if="values[item.type] === 'down'" class="color red">{{values[item.num]}}</span>
 
@@ -51,10 +51,10 @@
           return {
             today_turnover: 0,
             difference_turnover: 0,
-            compare_turnover: '',
+            compare_turnover: 'up',
             today_order_count: 0,
             difference_order_count: 0,
-            compare_order_count: '',
+            compare_order_count: 'up',
             today_customer_count: 0,
             difference_customer_count: 0,
             yesterday_customer_count: ''
@@ -96,6 +96,7 @@
       position: relative
       padding-left: 20px
       box-sizing: border-box
+      overflow: hidden
       .title
         font-size: 13px
         line-height: 1.4
@@ -105,13 +106,18 @@
         font-size: $font-size-20
         color: $color-27273E
         line-height: 1.5
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
       .analyse
         font-size: 11px
         color: $color-9B9B9B
         line-height: 22px
         display: flex
         align-items: center
-        line-hegiht: 1.3
+        line-height: 1.3
+        .label
+          white-space: nowrap
         .color
           font-family: $font-family-medium
           color: #1AC521

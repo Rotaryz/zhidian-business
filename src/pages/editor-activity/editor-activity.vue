@@ -221,8 +221,8 @@
             group_price: ''
           },
           stock: '',
-          is_sync: 1,
-          commission_rate: '0',
+          is_sync: 1, // 已无用保留默认值为1
+          commission_rate: '0', // 已无用保留默认值为0
           start_at: '',
           end_at: '',
           image_id: '',

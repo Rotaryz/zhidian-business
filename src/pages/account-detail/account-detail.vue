@@ -76,6 +76,11 @@
         .label
           width: 100px
           color: #706B82
+        .name
+          flex: 1
+          white-space: nowrap
+          overflow: hidden
+          text-overflow: ellipsis
     .btn
       margin: 30px 12px
       height: 44px

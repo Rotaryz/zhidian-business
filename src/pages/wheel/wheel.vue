@@ -181,14 +181,17 @@
         if (node.id !== 0) {
           this.delList.push({activity_prize_id: node.activity_prize_id})
         }
-        this.deletePrizeStorage(node)
         this.prizeList.splice(idx, 1)
-        // 刷新每个位置的库存
-        this._renderPrizeList()
+        // 删除产品在有效期内，调用下面方法
+        if (+node.status === 1) {
+          // 刷新每个位置的库存
+          this.deletePrizeStorage(node)
+          this._renderPrizeList()
+        }
       },
       _renderPrizeList() {
         this.prizeList.map(item => {
-          item.stock = this.prizeStorage.find(it => it.prize_id === item.prize_id).stock
+          item.stock = this.prizeStorage.find(it => it && it.prize_id === item.prize_id).stock
           return item
         })
       },
