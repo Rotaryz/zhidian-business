@@ -107,7 +107,7 @@
 
   .wheel-add-prize
     fill-box()
-    z-index: 90
+    z-index: 40
     height: 100vh
     background: #ffffff
     .scroll-wrapper
@@ -138,7 +138,7 @@
       height: 44px
       width: 100%
       box-sizing: border-box
-      background: #363547
+      background: #27273E
       border-radius: 4px
       font-family: PingFangSC-Regular
       font-size: 16px

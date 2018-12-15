@@ -1,19 +1,28 @@
 <template>
   <ul class="prize-item" @click="navTo(item)">
-    <li class="item-wrapper top">
-      <div class="left">{{name}}</div>
-      <div class="middle">{{item.title}}</div>
-      <div class="right" @click.stop="delHandle"></div>
+    <li class="item-wrapper top border-bottom-1px">
+      <div v-if="item.image_url" class="img" :style="{backgroundImage: 'url(' + item.image_url + ')'}"></div>
+      <div v-else class="img"></div>
+      <div class="content">
+        <div class="title">
+          <div class="left">{{item.title}}</div>
+          <div class="right" @click.stop="delHandle"></div>
+        </div>
+        <div class="stock">库存{{item.stock}}</div>
+        <div v-if="+item.status === 1" class="valid">有效期:{{item.end_at}}</div>
+        <div v-else class="valid">已过期</div>
+      </div>
     </li>
     <li class="item-wrapper">
-      <div class="left store">可用库存{{item.stock}}</div>
+      <div class="left store">{{name}}</div>
       <section class="counter" @click.stop>
-        <div class="btn declare" @click="subHandle"></div>
+        <div class="btn declare" :class="{'grey':item.status === 0}" @click="subHandle"></div>
         <div class="input-wrapper">
           <input class="input-style" :class="inputReg?'error':''" type="number" v-model="item.prize_stock" @input="inputHandle" @focus="focusHandle" @blur="blurHandle">
         </div>
-        <div class="btn add" @click="addHandle"></div>
+        <div class="btn add" :class="{'grey':item.status === 0}" @click="addHandle"></div>
       </section>
+      <div class="shade" v-if="item.status === 0" @click.stop></div>
     </li>
   </ul>
 </template>
@@ -103,7 +112,7 @@
     line-height: 1
     font-family: PingFangSC-Medium;
     font-size: 14px;
-    color: #363547;
+    color: #27273E;
     &::-webkit-input-placeholder
       color: $color-CCCCCC
     &::-ms-input-placeholder
@@ -117,31 +126,56 @@
     background: #FFFFFF;
     border-1px($color-E6E6E6, 4px)
     box-shadow: 0 6px 18px 0 rgba(54, 53, 71, 0.10)
-    padding: 18px 0 15px 15px
+    padding: 3px 10px 0
     .item-wrapper
       layout(row, block, nowrap)
       align-items: center
-      font-family: PingFangSC-Medium;
-      font-size: 14px;
-      color: #363547;
+      font-family: PingFangSC-Medium
+      font-size: 14px
+      color: #27273E
+      position: relative
+      padding: 10px 0
       &.top
-        padding-bottom: 22px
-      .left
-        padding: 0
-        .store
-          font-family: PingFangSC-Regular;
-          font-size: 14px;
-          color: #363547;
-      .middle
+        padding-bottom: 12px
+        border-bottom-1px($color-row-line)
+      .img
+        width: 57px
+        height: @width
+        background-image: url("./img.jpg")
+        background-size: cover
+        background-position: center
+        border-radius: 2px
+        overflow: hidden
+        margin-right: 8px
+      .content
         flex: 1
         overflow: hidden
-        padding: 0 46px 0 16px
-        no-wrap()
-      .right
-        margin-right: 14px
-        width: 20px
-        height: @width
-        icon-image(icon-delfw)
+      .stock,.valid
+        font-size: 13px
+        color: $color-9B9B9B
+        font-family: $font-family-regular
+        line-height: 1.4
+      .title
+        display: flex
+        align-items: center
+        justify-content: space-between
+        margin-bottom: 2px
+        .left
+          padding: 0
+          line-height: 1.4
+          font-family: $font-family-medium
+          font-size: 14px
+          color: $color-27273E
+          overflow: hidden
+          text-overflow: ellipsis
+          white-space: nowrap
+          flex: 1
+        .right
+          margin-right: 5px
+          margin-left: 8vw
+          width: 20px
+          height: @width
+          icon-image(icon-delpic)
       .counter
         flex: 1
         overflow: hidden
@@ -159,7 +193,10 @@
             icon-image(icon-reduce_prize)
           &.add
             icon-image(icon-plus_prize)
-            margin-right: 15px
+          &.grey.declare
+            icon-image(icon-reduce_bkd)
+          &.grey.add
+            icon-image(icon-plus_bkd)
         .input-wrapper
           height: 25px
           width 60px
@@ -169,4 +206,10 @@
           align-items: center
           border: 1px solid #F0EFF5
           border-radius : 2px
+      .shade
+        width: 55%
+        height: 100%
+        position: absolute
+        right: 0
+        bottom: 0
 </style>

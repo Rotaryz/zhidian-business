@@ -1,45 +1,69 @@
 <template>
-  <router-link tag="div" class="s-data" :to="'/radar/overview'">
-    <div class="title">
-      <div class="icon"></div>
-      <div>门店信息概览</div>
-    </div>
+  <div class="s-data">
     <ul class="content">
-      <li class="item-wrapper" v-for="(item, index) in dataArray" :key="index">
-        <div class="number" v-if="index===0">{{info.customer_total || 0}}</div>
-        <div class="number" v-if="index===1">{{info.order_total || 0}}</div>
-        <div class="number" v-if="index===2">{{info.success_order_total || 0}}</div>
-        <div class="title">{{item.title}}</div>
+      <li class="item-wrapper" v-for="(item, index) in info" :key="index">
+        <p class="title">{{item.name}}</p>
+        <p class="number">{{values[item.number]}}</p>
+        <p class="analyse">
+          <span>较昨日</span>
+          <span v-if="values[item.type] === 'up'" class="color green">{{values[item.num]}}</span>
+          <span v-else-if="values[item.type] === 'down'" class="color red">{{values[item.num]}}</span>
+
+          <span v-if="values[item.type] === 'up'" class="icon up"></span>
+          <span v-else-if="values[item.type] === 'down'" class="icon down"></span>
+          <span v-else class="icon constant"></span>
+        </p>
+        <div class="line border-right-1px"></div>
       </li>
     </ul>
-  </router-link>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
-  const dataArray = [
-    {
-      number: '800',
-      title: '客户总数'
-    },
-    {
-      number: '400',
-      title: '订单总数'
-    },
-    {
-      number: '1200',
-      title: '成交总数'
-    }
-  ]
   export default {
     props: {
       info: {
+        type: Array,
+        default: () => {
+          return [
+            {
+              name: '营业额',
+              number: 'today_turnover',
+              num: 'difference_turnover',
+              type: 'compare_turnover'
+            }, {
+              name: '订单',
+              number: 'today_order_count',
+              num: 'difference_order_count',
+              type: 'compare_order_count'
+            }, {
+              name: '客户',
+              number: 'today_customer_count',
+              num: 'difference_customer_count',
+              type: 'yesterday_customer_count'
+            }
+          ]
+        }
+      },
+      values: {
         type: Object,
-        default: {}
+        default: () => {
+          return {
+            today_turnover: 0,
+            difference_turnover: 0,
+            compare_turnover: '',
+            today_order_count: 0,
+            difference_order_count: 0,
+            compare_order_count: '',
+            today_customer_count: 0,
+            difference_customer_count: 0,
+            yesterday_customer_count: ''
+          }
+        }
       }
     },
     data() {
       return {
-        dataArray
       }
     }
   }
@@ -50,42 +74,66 @@
   @import '~common/stylus/mixin'
 
   .s-data
-    margin: 5px
+    margin: 0 12px
+    margin-top: -50px
     border-1px($color-E6E6E6, 4px)
-    height: 120px
+    height: 100px
     font-family: $font-family-regular
     background-color: #fff
     border-radius: 4px
     overflow: hidden
     layout(column, block, nowrap)
-    .title
-      font-size: $font-size-16
-      color: $color-363537
-      line-height: 14px
-      padding: 14px 0 27px
-      layout(row)
-      align-items: center
-      .icon
-        width: 5px
-        height: 13px
-        background: $color-EF705D
-        margin-right: 5px
     .content
-      flex: 1
-      layout(row, block, nowrap)
-      .item-wrapper
-        flex: 1
-        height: 100%
-        layout(column, block, nowrap)
+      width: 100%
+      height: 100%
+      padding: 15px 20px
+      display: flex
+      box-sizing: border-box
+      padding-right: 0
+      padding-left: 0
+    .item-wrapper
+      width: 33.333%
+      position: relative
+      padding-left: 20px
+      box-sizing: border-box
+      .title
+        font-size: 13px
+        line-height: 1.4
+        color: $color-27273E
+      .number
+        font-family: $font-family-bold
+        font-size: $font-size-20
+        color: $color-27273E
+        line-height: 1.5
+      .analyse
+        font-size: 11px
+        color: $color-9B9B9B
+        line-height: 22px
+        display: flex
         align-items: center
-        .number
-          font-family: $font-family-bold
-          font-size: 26px
-          color: $color-FF4E00
-          line-height: 18px
-          margin-bottom: 10px
-        .title
-          font-size: $font-size-12
-          color: $color-696771
-          line-height: 12px
+        line-hegiht: 1.3
+        .color
+          font-family: $font-family-medium
+          color: #1AC521
+          margin-left: 4px
+        .red
+          color: #ED2B2B
+        .icon
+          width: 10px
+          height: 10px
+          margin-left: 2px
+        .up
+          icon-image(icon-up)
+        .down
+          icon-image(icon-down)
+        .constant
+          icon-image(icon-ping)
+      .line
+        height: 20px
+        right: 0
+        col-center()
+        border-right-1px(#E6E6E6)
+    .analyse.line:last-child:after
+      border: 0
+
 </style>

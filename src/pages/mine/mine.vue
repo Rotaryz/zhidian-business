@@ -141,7 +141,7 @@
         .title
           font-family: PingFangSC-Regular
           font-size: $font-size-16
-          color: #363547
+          color: #27273E
           letter-spacing: 0.8px
           text-align: justify
           word-break: break-all
@@ -160,10 +160,10 @@
             height: 18px
             line-height: 18px
             text-align: center
-            border-1px($color-EF705D)
+            border-1px($color-D32F2F)
             font-size: $font-size-12
             font-family: $font-family-medium
-            color: $color-EF705D
+            color: $color-D32F2F
             display: block
       .qr-code
         width: 20px
@@ -199,7 +199,7 @@
           padding: 0 8px
           font-family: PingFangSC-Regular
           font-size: 16px
-          color: #363547
+          color: #27273E
         .right-arrow
           width: 7px
           height: 12px

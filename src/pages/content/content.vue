@@ -425,7 +425,7 @@
       line-height: $btn-height
       .btn
         display: inline-block
-        background: #363547;
+        background: #27273E;
         border-radius: 4px;
         width: 100%
         height: 45px
@@ -445,7 +445,7 @@
       bottom: $btn-height
       .header-video
         height: 56.26vw
-        background: #363547;
+        background: #27273E;
         position: relative
         .img-style
           width: 100%
@@ -485,7 +485,7 @@
           padding-right: 10px
           font-family: PingFangSC-Medium;
           font-size: 16px;
-          color: #363547;
+          color: #27273E;
       .item-wrapper
         padding: 0 15px
         layout()
@@ -536,7 +536,7 @@
               padding: 0
             .box
               font-size: 14px;
-              color: #363547;
+              color: #27273E;
               text-align: justify;
               word-break: break-all
               line-height: 1.2

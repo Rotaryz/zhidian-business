@@ -1,6 +1,10 @@
 <template>
   <div class="exchange-code">
     <section class="code-area">
+      <div class="top">
+        <p class="tip">请输入10位数券码</p>
+        <router-link class="btn" tag="div" to="/shop/exchange-code/exchange-record">核销记录 <div class="right-icon"></div></router-link>
+      </div>
       <ul class="code-container">
         <li class="code-item" v-for="(item,index) in '1234567890'" :key="index">{{inputCode[index]}}</li>
       </ul>
@@ -10,6 +14,7 @@
         <li class="input-item" :class="[inputCode.length >=10 ? 'active' : '',inputCode.length > 0 ? 'del':'']" v-for="(item,index) in dataArray" :key="index" @click="inputHandle(item)">{{item.txt}}</li>
       </ul>
     </section>
+    <router-view-common></router-view-common>
   </div>
 </template>
 
@@ -114,21 +119,39 @@
 
   .exchange-code
     fill-box()
-    z-index: 50
+    z-index: 20
     background: $color-F6F6F6
     .code-area
-      height: 32.27vw
-      background: $color-363537
-      padding: 0 12px
+      background: $color-27273E
       layout(column, block, nowrap)
       justify-content: center
       align-items: center
-      &:after
-        content: '请输入10位优惠券验证码'
-        font-family: PingFangSC-Light
-        font-size: 3.2vw
-        color: $color-9B9B9B
-        margin-top: 2.93vw
+      padding: 14px 12px 23px
+      .top
+        display: flex
+        justify-content: space-between
+        align-items: center
+        margin-bottom: 15px
+        width: 100%
+        .tip
+          font-family: $font-family-regular
+          font-size: 13px
+          color: $color-CCCCCC
+        .btn
+          font-size: $font-size-14
+          color: $color-CCCCCC
+          width: 90px
+          height: 24px
+          border-1px($color-CCCCCC, 24px)
+          display: flex
+          border-radius: 24px
+          align-items: center
+          justify-content: center
+        .right-icon
+          width: 7px
+          height: 12px
+          icon-image(icon-press_right)
+          margin-left: 5px
       .code-container
         layout(row, block, nowrap)
         justify-content: space-between
@@ -141,7 +164,7 @@
           border-radius: 2px
           font-family: PingFangSC-Medium
           font-size: 7.46vw
-          color: #363547
+          color: #27273E
           line-height: @height
           text-align: center
     .input-area
@@ -158,7 +181,7 @@
           background: #ECECEC
           font-family: PingFangSC-Medium
           font-size: 7.46vw
-          color: #363547
+          color: #27273E
           text-align: center
           line-height: @height
           z-index: 22
@@ -166,10 +189,10 @@
             margin-left: 10vw
             margin-right: 10vw
           &:nth-child(11)
-            font-size: 4.8vw
+            font-size: 18px
             color: #9B9B9B
           &:nth-child(11).active
-            background: #EF705D
+            background: #FF9500
             color: #FFFFFF
           &:last-child
             opacity: 0

@@ -619,7 +619,7 @@
         text-align: center
         font-size: $font-size-16
         color: $color-white
-        background: $color-363537
+        background: $color-27273E
         border-radius: 2px
     .last-box
       height: 82px
@@ -669,7 +669,7 @@
         line-height: 38px
         padding-top: 6px
         font-size: $font-size-14
-        color: $color-363537
+        color: $color-27273E
         font-family: $font-family-medium
       .item-txt
         font-family: $font-family-regular
@@ -693,7 +693,7 @@
         &:before
           content: '*'
           position: absolute
-          color: $color-EF705D
+          color: $color-D32F2F
           left: -7px
           top: 2px
           font-size: 14px
@@ -728,7 +728,7 @@
           font-family: $font-family-regular
           font-size: $font-size-14
           letter-spacing: 0.6px
-          color: $color-363537
+          color: $color-27273E
           width: 100%
           height: 55px
           flex: 1
@@ -752,7 +752,7 @@
           line-height: 20px
           border: 0 none
           font-size: $font-size-14
-          color: $color-363537
+          color: $color-27273E
         .no-click
           color: $color-CCCCCC
           &.disabled
@@ -772,7 +772,7 @@
             align-items: center
             .time-item
               font-family: $font-family-regular
-              color: $color-363537
+              color: $color-27273E
               font-size: $font-size-14
               margin-right: 5px
             .time-icon
@@ -780,7 +780,7 @@
               height: 12.5px
           .time-txt
             font-family: $font-family-regular
-            color: $color-363537
+            color: $color-27273E
             font-size: $font-size-14
             &.disabled
               color: $color-9B9B9B
@@ -815,7 +815,7 @@
         position: relative
         &:before
           content: '*'
-          color: $color-EF705D
+          color: $color-D32F2F
           font-size: 14px
           margin-right: 2px
           position: absolute
@@ -928,7 +928,7 @@
           line-height: 55px
           border: 0 none
           font-size: $font-size-14
-          color: $color-363537
+          color: $color-27273E
         .input-box::-webkit-input-placeholder
           color: $color-9B9B9B
         .input-box::-ms-input-placeholder
@@ -1005,7 +1005,7 @@
       height: 55px
       line-height: 55px
       font-size: $font-size-14
-      color: $color-363537
+      color: $color-27273E
       font-family: $font-family-regular
     .textarea-item
       padding-right: 15px
@@ -1033,7 +1033,7 @@
           margin: 0
           outline: none
           font-family: $font-family-regular
-          color: $color-363537
+          color: $color-27273E
         .textarea-content::-webkit-input-placeholder
           color: $color-9B9B9B
         .textarea-content::-ms-input-placeholder
@@ -1063,7 +1063,7 @@
         &:before
           content: '*'
           position: absolute
-          color: $color-EF705D
+          color: $color-D32F2F
           left: -7px
           top: 2px
           font-size: 14px

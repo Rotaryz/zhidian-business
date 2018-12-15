@@ -16,6 +16,7 @@ import echart from './echart'
 import global from './global'
 import content from './content'
 import activeExtend from './active-extend'
+import template from './brand-template'
 
 export const ActiveExtend = activeExtend
 
@@ -55,3 +56,5 @@ export const Business = business
 export const OrderApi = order
 
 export const Global = global
+
+export const Template = template

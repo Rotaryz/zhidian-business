@@ -76,7 +76,7 @@
       border-bottom-1px(rgba(32, 32, 46, 0.1))
       .title
         font-family: $font-family-regular
-        color: $color-363537
+        color: $color-27273E
         font-size: $font-size-16
         margin-bottom: 18px
       .data-area
@@ -89,7 +89,7 @@
       height: 45px
       width: 100%
       line-height: 45px
-      color: $color-EF705D
+      color: $color-D32F2F
       font-size: $font-size-14
       font-family: $font-family-medium
       text-align: center

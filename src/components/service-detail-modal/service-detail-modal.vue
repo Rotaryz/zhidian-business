@@ -122,7 +122,7 @@
         .title
           padding: 25px 0 10px 20px
           font-family: $font-family-regular
-          color: $color-363537
+          color: $color-27273E
           font-size: $font-size-16
           letter-spacing: 0.6px
         .scroll-container
@@ -156,7 +156,7 @@
                   width: 80px
                   font-family: $font-family-regular
                   font-size: $font-size-14
-                  color: $color-363537
+                  color: $color-27273E
                 .item-right
                   flex: 1
                   overflow: hidden
@@ -184,7 +184,7 @@
               border-radius: 12px
               border-1px($color-E6E6E6, 12px)
               font-size: $font-size-14
-              color: $color-363537
+              color: $color-27273E
       .btn-group
         height: 45px
         layout(row)
@@ -196,10 +196,10 @@
           line-height: 45px
           font-family: $font-family-regular
           font-size: $font-size-14
-          color: $color-363537
+          color: $color-27273E
           letter-spacing: 0.6px
           &.confirm
-            color: $color-EF705D
+            color: $color-D32F2F
 
 
 </style>

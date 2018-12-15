@@ -74,5 +74,5 @@
         .icon-mine
           bg-image('./icon-my_press')
         .icon-text
-          color: #363547
+          color: #27273E
 </style>

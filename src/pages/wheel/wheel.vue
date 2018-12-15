@@ -323,7 +323,7 @@
     line-height: 1
     font-family: PingFangSC-Light;
     font-size: 12px;
-    color: #363547;
+    color: #27273E;
     &::-webkit-input-placeholder
       color: $color-CCCCCC
     &::-ms-input-placeholder
@@ -333,7 +333,7 @@
 
   .wheel
     fill-box()
-    z-index: 70
+    z-index: 20
     height: 100vh
     .scroll-wrapper
       position: fixed
@@ -391,7 +391,7 @@
     padding: 35px 0 40px
     font-family: PingFangSC-Regular;
     font-size: 14px;
-    color: #363547;
+    color: #27273E;
     text-align: center
 
   .setting-wrapper
@@ -424,7 +424,7 @@
       .unit
         font-family: PingFangSC-Light;
         font-size: 12px;
-        color: #363547;
+        color: #27273E;
         padding-right: 15px
 
   .texts-wrapper
@@ -501,13 +501,13 @@
     align-items: center
     justify-content: center
     padding: 0 15px
-    z-index: 80
+    z-index: 40
     background: $color-F6F6F6
     .btn
       height: 44px
       width: 100%
       box-sizing: border-box
-      background: #363547
+      background: #27273E
       border-radius: 4px
       font-family: PingFangSC-Regular
       font-size: 16px

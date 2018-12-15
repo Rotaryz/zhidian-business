@@ -3,7 +3,7 @@
     <div class="main-box border-bottom-1px">
       <div class="list-item border-bottom-1px">
         <div class="item-left">手机号码</div>
-        <input type="number" v-if="!disabledCover" placeholder="请输入员工的手机号" oninput="if(value.length > 11)value = value.slice(0, 11)" class="item-right" v-model="staffInfo.mobile">
+        <input type="tel" v-if="!disabledCover" placeholder="请输入员工的手机号" maxlength="11" class="item-right" v-model="staffInfo.mobile">
         <div class="phone-right" v-else>
           <span class="phone-num">{{staffInfo.mobile}}</span>
           <div class="unbind" @click="unBindPhone" v-if="+staffInfo.roleId !== 1">解绑</div>
@@ -258,7 +258,7 @@
         min-width: 21.33333vw
         &:before
           content: '*'
-          color: $color-EF705D
+          color: $color-D32F2F
           font-size: 14px
           margin-right: 2px
           position: absolute
@@ -283,11 +283,11 @@
           line-height: 26px
           text-align: center
           box-sizing: border-box
-          border-1px($color-363537, 4px)
+          border-1px($color-27273E, 4px)
           font-size: $font-size-14
       .item-right
         font-size: $font-size-14
-        color: $color-363547
+        color: $color-27273E
         font-family: $font-family-regular
         flex: 1
         overflow: hidden
@@ -328,13 +328,13 @@
       letter-spacing: 0.8px
       box-sizing: border-box
     .footer-btn
-      background: $color-363537
+      background: $color-27273E
       color: $color-white
     .del-btn
       margin-top: 20px
       background: $color-white
-      border: 1px solid $color-363537
-      color: $color-363537
+      border: 1px solid $color-27273E
+      color: $color-27273E
       &.disabled
         border: 1px solid #9a9aa3
         color: #9a9aa3
@@ -344,6 +344,6 @@
     line-height: 45px
     padding-left: 15px
     font-family: $font-family-regular
-    color: $color-363547
+    color: $color-27273E
     font-size: $font-size-16
 </style>

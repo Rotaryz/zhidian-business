@@ -14,7 +14,7 @@
                 <img :src="item.avatar" class="avatar">
               </div>
               <div class="name">{{item.name}}</div>
-              <div class="role">{{item.position}}</div>
+              <div class="role">{{+item.role_id === 1 ? '店长' : '店员'}}</div>
             </div>
             <div class="right">
               <div class="select-circle" v-show="!item.checked"></div>
@@ -197,13 +197,13 @@
                 border-radius: 50%
             .name
               font-size: $font-size-16
-              color: $color-363537
+              color: $color-27273E
               letter-spacing: 0.34px
               margin-right: 5px
             .role
               width: 34px
               height: 18px
-              border: 1px solid $color-EF705D
+              border: 1px solid $color-D32F2F
               border-radius: 2px
               line-height: 18px
               text-align: center
@@ -243,7 +243,7 @@
         text-align: center
         font-size: $font-size-16
         color: $color-white
-        background: $color-363537
+        background: $color-27273E
         border-radius: 2px
 
 </style>

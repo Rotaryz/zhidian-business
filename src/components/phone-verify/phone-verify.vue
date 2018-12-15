@@ -109,7 +109,7 @@
       layout()
       .title
         font-family: $font-family-medium
-        color: $color-363537
+        color: $color-27273E
         fontsize: $font-size-16
         letter-spacing: 0.8px
         padding-bottom: 14px
@@ -150,8 +150,8 @@
             box-sizing: border-box
             font-size: $font-size-14
             font-family: $font-family-regular
-            color: $color-EF705D
-            border-1px($color-EF705D, 30px)
+            color: $color-D32F2F
+            border-1px($color-D32F2F, 30px)
             &.disabled
               border-1px($color-CCCCCC, 30px)
               color: $color-CCCCCC
@@ -163,7 +163,7 @@
         line-height: 40px
         font-size: $font-size-14
         color: $color-white
-        background: $color-363537
+        background: $color-27273E
         border-radius: 4px
         letter-spacing: 0.6px
         &.disabled

@@ -141,7 +141,7 @@
 
   .add-bank-card
     fill-box()
-    z-index: 91
+    z-index: 60
     background: $color-F6F6F6
     .wrapper
       padding-left: 15px
@@ -160,7 +160,7 @@
           overflow: hidden
           height: 40px
           font-size: 14px;
-          color: $color-363537
+          color: $color-27273E
           letter-spacing: 0;
           padding-right: 10px
           line-height: @height
@@ -170,7 +170,7 @@
     .btn
       margin: 20px 15px
       opacity: 0.5;
-      background: #363547;
+      background: #27273E;
       border-radius: 4px;
       height: 45px
       line-height: @height

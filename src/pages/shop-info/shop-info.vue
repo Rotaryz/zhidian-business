@@ -18,7 +18,11 @@
             </article>
             <article class="base-item border-bottom-1px">
               <div class="left">联系电话</div>
-              <input class="middle active" type="number" v-model="shopInfo.telephone" placeholder="请输入您的联系电话">
+              <input class="middle active" type="tel" v-model="shopInfo.telephone" maxlength="11" placeholder="请输入您的联系电话">
+            </article>
+            <article class="base-item border-bottom-1px">
+              <div class="left">微信号</div>
+              <input class="middle active" type="" v-model="shopInfo.employee.weixin_no"  placeholder="请输入您的微信号">
             </article>
             <article class="base-item" @click="choosePicker('industry')">
               <div class="left">行业类型</div>
@@ -160,6 +164,7 @@
           name: '',
           intro: '', // 介绍
           telephone: '',
+          weixin: '',
           industry_name: DEFAULT_INDUSTRY, // 行业名称
           area: '',
           city: '',
@@ -170,7 +175,10 @@
           opening_hours: {}, // 营业时间
           logo: {}, // 门店logo
           video: {}, // 门店视频
-          images: [] // 门店图片
+          images: [], // 门店图片
+          employee: {
+            weixin_no: ''
+          }
         },
         start: '9:00',
         end: '21:00',
@@ -470,6 +478,12 @@
       openHoursReg() {
         return this.shopInfo.opening_hours.start && this.shopInfo.opening_hours.end
       }
+    },
+    watch: {
+      'shopInfo.weixin'(val, oldVal) {
+        val = val.match(/[^\u4e00-\u9fa5]+/) ? val.match(/[^\u4e00-\u9fa5]+/) : ''
+        this.shopInfo.weixin = val[0] ? val[0].replace(/^\s+|\s+$/g, '') : val
+      }
     }
   }
 </script>
@@ -516,7 +530,7 @@
 
   .shop-info
     fill-box()
-    z-index: 70
+    z-index: 20
     height: 100vh
     .scroll-wrapper
       position: fixed
@@ -538,7 +552,7 @@
           height: 100%
           align-items: center
           .time
-            color: $color-363547
+            color: $color-27273E
             margin-right: 5px
             &:first-child
               margin-left: 24px
@@ -546,6 +560,7 @@
           color: $color-9B9B9B
           margin: 0 6px 0 15px
         .left
+          width: 60px
           color: $color-9B9B9B
         .middle
           flex: 1
@@ -555,14 +570,14 @@
           overflow: hidden
           no-wrap()
           &.active
-            color: $color-363547
+            color: $color-27273E
         .middle-address
           flex: 1
           color: $color-CCCCCC
           padding: 10px 14px 10px 24px
           line-height: 1.2
           &.active
-            color: $color-363547
+            color: $color-27273E
         .right
           color: $color-CCCCCC
           font-size: 12px
@@ -650,7 +665,7 @@
         height: 44px
         width: 100%
         box-sizing: border-box
-        background: #363547
+        background: #27273E
         border-radius: 4px
         font-family: PingFangSC-Regular
         font-size: 16px

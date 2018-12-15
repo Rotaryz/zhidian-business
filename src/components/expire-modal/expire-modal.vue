@@ -71,7 +71,7 @@
         icon-image("pic-shopexpire")
       .expire-txt1
         font-size: $font-size-18
-        color: $color-363537
+        color: $color-27273E
         font-family: $font-family-regular
         padding-top: 32px
         letter-spacing: 1px

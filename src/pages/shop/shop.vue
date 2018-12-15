@@ -1,9 +1,10 @@
 <template>
   <div class="shop">
-    <scroll>
-      <s-header></s-header>
-      <s-data :info="ShopDashboard"></s-data>
+    <scroll bcColor="#f6f6f6">
+      <s-header :shopInfo="shopInfo" @showExpire="showExpire"></s-header>
+      <s-data :info="businessData" :values="values"></s-data>
       <s-router></s-router>
+      <div class="padding"></div>
     </scroll>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
@@ -18,26 +19,65 @@
   import { Global, Mine } from 'api'
 
   export default {
-    components: {
-      Scroll,
-      SHeader,
-      SData,
-      SRouter
-    },
-    created() {
-      this._getWxSdk()
-      this._getShopDashboard()
-      this._getStoreInfo()
-    },
     data() {
       return {
         isTabHide: false,
-        ShopDashboard: {}
+        businessData: [
+          {
+            name: '营业额',
+            number: 'today_turnover',
+            num: 'difference_turnover',
+            type: 'compare_turnover'
+          }, {
+            name: '订单',
+            number: 'today_order_count',
+            num: 'difference_order_count',
+            type: 'compare_order_count'
+          }, {
+            name: '客户',
+            number: 'today_customer_count',
+            num: 'difference_customer_count',
+            type: 'yesterday_customer_count'
+          }
+        ],
+        values: {},
+        shopInfo: {}
       }
     },
+    created() {
+      this._getWxSdk()
+      this._getStoreInfo() // 获取商家个人信息
+      this._getShopInfo() // 获取店铺信息
+      this._getBusinessDetail() // 获取营业信息
+    },
     methods: {
+      showExpire() {
+        this.$emit('showExpire')
+      },
       refresh() {
-        this._getShopDashboard()
+        this._getShopInfo()
+        this._getBusinessDetail()
+      },
+      _getShopInfo() {
+        Mine.getShopInfo().then(res => {
+          this.$loading.hide()
+          if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
+            return
+          }
+          res.data.logo = res.data.logo ? res.data.logo : {}
+          this.shopInfo = res.data
+        })
+      },
+      _getBusinessDetail() {
+        Mine.getBusinessDetail()
+          .then(res => {
+            if (res.error !== this.$ERR_OK) {
+              this.$toast.show(res.message)
+              return
+            }
+            this.values = res.data
+          })
       },
       _getStoreInfo() {
         Mine.getUserInfo().then(res => {
@@ -68,17 +108,17 @@
             })
           }
         })
-      },
-      _getShopDashboard() {
-        Global.getShopDashboard().then((res) => {
-          this.$loading.hide()
-          if (res.error !== this.$ERR_OK) {
-            this.$toast.show(res.message)
-            return
-          }
-          this.ShopDashboard = res.data || {}
-        })
       }
+    },
+    computed: {
+    },
+    filters: {
+    },
+    components: {
+      Scroll,
+      SHeader,
+      SData,
+      SRouter
     }
   }
 </script>
@@ -89,5 +129,6 @@
 
   .shop
     fill-box()
-    bottom: $tab-height
+  .padding
+    height: 20px
 </style>
