@@ -2,7 +2,7 @@
   <div class="shop">
     <scroll bcColor="#f6f6f6">
       <s-header :shopInfo="shopInfo" @showExpire="showExpire"></s-header>
-      <s-data :info="businessData" :values="values"></s-data>
+      <s-data :info="businessData" :value="values"></s-data>
       <s-router></s-router>
       <div class="padding"></div>
     </scroll>

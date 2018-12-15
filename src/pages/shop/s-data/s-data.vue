@@ -51,10 +51,10 @@
           return {
             today_turnover: 0,
             difference_turnover: 0,
-            compare_turnover: '',
+            compare_turnover: 'up',
             today_order_count: 0,
             difference_order_count: 0,
-            compare_order_count: '',
+            compare_order_count: 'up',
             today_customer_count: 0,
             difference_customer_count: 0,
             yesterday_customer_count: ''
@@ -111,7 +111,7 @@
         line-height: 22px
         display: flex
         align-items: center
-        line-hegiht: 1.3
+        line-height: 1.3
         .color
           font-family: $font-family-medium
           color: #1AC521
