@@ -2,7 +2,7 @@
   <div class="shop">
     <scroll bcColor="#f6f6f6">
       <s-header :shopInfo="shopInfo" @showExpire="showExpire"></s-header>
-      <s-data :info="businessData" :value="values"></s-data>
+      <s-data :info="businessData" :values="values"></s-data>
       <s-router></s-router>
       <div class="padding"></div>
     </scroll>
@@ -86,7 +86,7 @@
             return
           }
           let info = res.data
-          // info.store.is_branch = 0
+          // info.merchant.type = 0
           if (info.merchant && info.merchant.expired && !this.$storage.get('hasShowExpire')) {
             this.$emit('showExpire')
             this.$storage.set('hasShowExpire', true)

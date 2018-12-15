@@ -6,7 +6,7 @@
       <div class="msg-box">
         <div class="title">{{shopInfo.name || '店铺名称'}}</div>
         <div class="use-time">
-          <span class="time">使用期限:{{userInfo.merchant.expire_time | formatTime}}</span>
+          <span class="time">使用期限:{{(userInfo.merchant && userInfo.merchant.expire_time) | formatTime}}</span>
           <span class="big-box" @click.stop="showExpire" v-if="userInfo.merchant && userInfo.merchant.expired">
             <span class="red-box">续费</span>
           </span>

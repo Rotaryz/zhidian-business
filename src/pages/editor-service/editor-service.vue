@@ -228,7 +228,7 @@
           goods_images: [], // 商品详情图片
           start_at: '', // 售卖开始
           end_at: '', // 售卖结束
-          commission_rate: '0', // 佣金
+          commission_rate: '0', // 佣金 已无用保留默认值为0
           usable_stock: '', // 总库存
           note: {
             need_subscribe: '', // 预约信息
@@ -243,7 +243,7 @@
           ], // 服务详情
           industry_name: '美业', // 品类
           is_online: '1', // 是否上线
-          is_sync: 1 // 是否全员上架
+          is_sync: 1 // 是否全员上架 已无用保留默认值为1
         }
       }
     },
