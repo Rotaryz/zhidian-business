@@ -208,7 +208,7 @@
               line-height: 18px
               text-align: center
               font-size: $font-size-12
-              color: $color-EF705D
+              color: $color-D32F2F
           .right
             height: 100%
             display: flex
