@@ -17,8 +17,8 @@
         <img src="./pic-empty_order@2x.png" class="nothing-img">
         <div class="nothing-txt">暂无数据</div>
       </div>
-      <confirm ref="confirm" @confirm="confirm"></confirm>
     </scroll>
+    <confirm ref="confirm" @confirm="confirm"></confirm>
   </div>
 </template>
 
