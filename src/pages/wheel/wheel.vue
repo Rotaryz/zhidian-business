@@ -106,8 +106,8 @@
     },
     methods: {
       ...mapActions(['initPrizeStorage', 'initPrizeArray', 'deletePrizeStorage', 'updatePrizeStorage']),
-      refresh(obj) {
-        this._updatePrizeList(obj)
+      refresh(obj, item) {
+        this._updatePrizeList(obj, item)
       },
       updatePrizeStock() {
         // 刷新每个位置的库存
@@ -133,6 +133,9 @@
             title: savePrize.title,
             place: place,
             prize_stock: defaultStock,
+            image_url: savePrize.image_url,
+            end_at: savePrize.end_at,
+            status: savePrize.status,
             stock: this.prizeStorage.find(item => item.prize_id === savePrize.prize_id).stock
           }
           this.prizeList.push({...node})
@@ -149,7 +152,9 @@
           if (node.prize_id === savePrize.prize_id) {
             return
           }
-          this.deletePrizeStorage(node)
+          if (+node.status === 1) {
+            this.deletePrizeStorage(node)
+          }
           this.updatePrizeStorage({prize_id: savePrize.prize_id, number: defaultStock})
           let replaceNode = {
             prize_pools_id: savePrize.prize_pools_id,
@@ -160,11 +165,16 @@
             title: savePrize.title,
             place: place,
             prize_stock: defaultStock,
+            image_url: savePrize.image_url,
+            end_at: savePrize.end_at,
+            status: savePrize.status,
             stock: this.prizeStorage.find(item => item.prize_id === savePrize.prize_id).stock
           }
           this.prizeList.splice(idx, 1, replaceNode)
           // 刷新每个位置的库存
-          this._renderPrizeList()
+          if (+this.prizeList[idx].status === 1) {
+            this._renderPrizeList()
+          }
         }
         // 排序
         this.prizeList.sort(function (a, b) {
