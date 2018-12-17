@@ -185,14 +185,14 @@ const route = new Router({
               path: 'exchange-manage',
               component: ExchangeManage,
               meta: {
-                title: '兑换券管理'
+                title: '奖品券管理'
               },
               children: [
                 {
                   path: 'editor-prize',
                   component: EditorPrize,
                   meta: {
-                    title: '新建兑换券'
+                    title: '新建奖品券'
                   }
                 }
               ]

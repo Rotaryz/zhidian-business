@@ -63,7 +63,7 @@
       </div>
     </div>
     <div class="footer-box">
-      <div class="footer-btn" @click="toDetail('new')">新建兑换券</div>
+      <div class="footer-btn" @click="toDetail('new')">新建奖品券</div>
     </div>
     <router-view-common @refresh="refresh"></router-view-common>
     <modal ref="modal" @confirm="modalConfirm"></modal>
