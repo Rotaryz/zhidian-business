@@ -1,27 +1,30 @@
 <template>
   <div class="brand-template">
-    <div class="template-list" v-for="(item, index) in list" :key="index">
-      <div class="left">
-        <p class="title">{{item.title}}</p>
-        <p class="time">{{item.updated_at}}</p>
+    <scroll ref="scroll">
+      <div class="template-list" v-for="(item, index) in list" :key="index">
+        <div class="left">
+          <p class="title">{{item.title}}</p>
+          <p class="time">{{item.updated_at}}</p>
+        </div>
+        <div class="right" v-if="+branch === 1"  @click="showConfirm('in', item)">一键导入</div>
+        <div class="right" v-else @click="_makeTemplate(item.id)">更新</div>
       </div>
-      <div class="right" v-if="+branch === 1"  @click="showConfirm('in', item)">一键导入</div>
-      <div class="right" v-else @click="showConfirm('update', item)">更新</div>
-    </div>
-    <div class="null" v-if="+branch === 0 && nothing">
-      <p class="txt">你还没有保存模板信息</p>
-      <div class="btn" @click="makeTemplate">一键生成模板</div>
-    </div>
-    <div class="nothing-box" v-if="+branch === 1 && nothing">
-      <img src="./pic-empty_order@2x.png" class="nothing-img">
-      <div class="nothing-txt">暂无数据</div>
-    </div>
-    <confirm ref="confirm" @confirm="confirm"></confirm>
+      <div class="null" v-if="+branch === 0 && nothing">
+        <p class="txt">你还没有保存模板信息</p>
+        <div class="btn" @click="_makeTemplate">一键生成模板</div>
+      </div>
+      <div class="nothing-box" v-if="+branch === 1 && nothing">
+        <img src="./pic-empty_order@2x.png" class="nothing-img">
+        <div class="nothing-txt">暂无数据</div>
+      </div>
+      <confirm ref="confirm" @confirm="confirm"></confirm>
+    </scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Confirm from 'components/confirm-msg/confirm-msg'
+  import Scroll from 'components/scroll/scroll'
   import { Template, Mine } from 'api'
   export default {
     name: 'templet',
@@ -29,7 +32,6 @@
       return {
         list: [],
         tempItem: {},
-        status: '',
         nothing: false
       }
     },
@@ -58,6 +60,9 @@
             }
             this.list = res.data
             this.nothing = res.data.length === 0
+            setTimeout(() => {
+              this.$refs.scroll.forceUpdate()
+            }, 20)
           })
       },
       _leadingIn() { // 导入模板
@@ -71,7 +76,7 @@
             this._getTemplateList()
           })
       },
-      _makeTemplate(id) { // 一键生成模板/更新模板
+      _makeTemplate(id = '') { // 一键生成模板/更新模板
         Template.makeTemplate({id})
           .then(res => {
             if (res.error !== this.$ERR_OK) {
@@ -81,30 +86,17 @@
             this.$toast.show(id ? '更新模版成功' : '生成模板成功')
           })
       },
-      makeTemplate() {
-        this._makeTemplate()
-      },
       showConfirm(type, item) {
-        if (type === 'in') {
-          this.status = 'in'
-          this.tempItem = item
-          this.$refs.confirm.show({msg: '确定一键导入？'})
-        } else {
-          this.status = 'update'
-          this.tempItem = item
-          this.$refs.confirm.show({msg: '确定更新模板？'})
-        }
+        this.tempItem = item
+        this.$refs.confirm.show({msg: '确定一键导入品牌模板？ 导入后不会覆盖已编辑过的信息，若缺少信息则增量导入'})
       },
       confirm() {
-        if (this.status === 'in') {
-          this._leadingIn()
-        } else {
-          this._makeTemplate(this.tempItem.id)
-        }
+        this._leadingIn()
       }
     },
     components: {
-      Confirm
+      Confirm,
+      Scroll
     },
     computed: {
       // 1分店，0总店

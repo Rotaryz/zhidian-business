@@ -98,7 +98,8 @@
           status: 0 // 1开启0关闭
         },
         delNode: null,
-        delList: []
+        delList: [],
+        prizeLength: 0
       }
     },
     created() {
@@ -139,13 +140,15 @@
             stock: this.prizeStorage.find(item => item.prize_id === savePrize.prize_id).stock
           }
           this.prizeList.push({...node})
-          // 刷新每个位置的库存
-          this.prizeList.map(item => {
-            if (item.prize_id === savePrize.prize_id) {
-              item.stock = node.stock
-            }
-            return item
-          })
+          if (savePrize.status === 1) {
+            // 刷新每个位置的库存
+            this.prizeList = this.prizeList.map(item => {
+              if (item.prize_id === savePrize.prize_id) {
+                item.stock = node.stock
+              }
+              return item
+            })
+          }
         } else {
           // 老位置
           let node = this.prizeList[idx]
@@ -170,10 +173,12 @@
             status: savePrize.status,
             stock: this.prizeStorage.find(item => item.prize_id === savePrize.prize_id).stock
           }
-          this.prizeList.splice(idx, 1, replaceNode)
           // 刷新每个位置的库存
           if (+this.prizeList[idx].status === 1) {
+            this.prizeList.splice(idx, 1, replaceNode)
             this._renderPrizeList()
+          } else {
+            this.prizeList.splice(idx, 1, replaceNode)
           }
         }
         // 排序
@@ -201,7 +206,8 @@
       },
       _renderPrizeList() {
         this.prizeList.map(item => {
-          item.stock = this.prizeStorage.find(it => it && it.prize_id === item.prize_id).stock
+          let tempItem = this.prizeStorage.find(it => it.prize_id === item.prize_id)
+          tempItem && (item.stock = tempItem.stock)
           return item
         })
       },
@@ -301,6 +307,11 @@
             return true
           }
         }
+      },
+      _scrollUpdate() {
+        setTimeout(() => {
+          this.$refs.scroll.forceUpdate()
+        }, 20)
       }
     },
     computed: {
@@ -321,6 +332,14 @@
       },
       saveBtnReg() {
         return this.prizeListReg && this.prizeListInputReg && this.percentageReg && this.joinTimesReg
+      }
+    },
+    watch: {
+      prizeList(data, oldData) {
+        if (this.prizeLength !== data.length) {
+          this.prizeLength = data.length
+          this._scrollUpdate()
+        }
       }
     }
   }
