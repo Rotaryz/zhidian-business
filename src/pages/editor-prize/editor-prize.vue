@@ -30,7 +30,7 @@
           </div>
         </div>
         <div class="editor-img-item border-bottom-1px">
-          <div class="item-title">兑换券图片</div>
+          <div class="item-title">奖品券图片</div>
           <div class="img-container">
             <div class="container-item">
               <div class="img-box">
@@ -49,7 +49,7 @@
           <div class="item-subtitle">添加1张服务详情图片(大小10M以下)</div>
         </div>
         <div class="editor-item border-bottom-1px">
-          <div class="item-left">兑换券数量</div>
+          <div class="item-left">奖品券数量</div>
           <div class="item-right flexEnd">
             <div class="right-num-container">
               <div class="num-item sub-item" @click="subNum"></div>
@@ -186,11 +186,11 @@
       },
       checkForm() {
         let arr = [
-          {value: this.titleReg, txt: '请输入兑换券标题'},
+          {value: this.titleReg, txt: '请输入奖品券标题'},
           {value: this.use1TimeReg, txt: '请选择券有效期开始时间'},
           {value: this.use2TimeReg, txt: '请选择券有效期结束时间'},
-          {value: this.bannerReg, txt: '请添加兑换券图片'},
-          {value: this.numReg, txt: '请输入合法的兑换券数量'}
+          {value: this.bannerReg, txt: '请添加奖品券图片'},
+          {value: this.numReg, txt: '请输入合法的奖品券数量'}
         ]
         let res = this._testPropety(arr)
         if (res) {
