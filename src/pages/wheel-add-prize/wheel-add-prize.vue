@@ -59,6 +59,9 @@
           arr.push(node)
         })
         this.dataArray = arr
+        setTimeout(() => {
+          this.$refs.scroll.forceUpdate()
+        }, 20)
       },
       saveBtn() {
         if (this.saveIndex < 0) {

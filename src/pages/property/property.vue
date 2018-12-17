@@ -123,6 +123,9 @@
           } else {
             this.pullUpLoad = false
           }
+          setTimeout(() => {
+            this.$refs.scroll.forceUpdate()
+          }, 20)
         })
       },
       toDeposit() {
