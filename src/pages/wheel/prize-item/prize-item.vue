@@ -123,7 +123,6 @@
       color: red !important
 
   .prize-item
-    background: #FFFFFF;
     border-1px($color-E6E6E6, 4px)
     box-shadow: 0 6px 18px 0 rgba(54, 53, 71, 0.10)
     padding: 3px 10px 0

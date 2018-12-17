@@ -112,7 +112,7 @@
       },
       updatePrizeStock() {
         // 刷新每个位置的库存
-        this.prizeList.map(item => {
+        this.prizeList = this.prizeList.map(item => {
           item.stock = this.prizeStorage.find(it => it.prize_id === item.prize_id).stock
           return item
         })
@@ -415,7 +415,7 @@
   .prize-wrapper
     padding-top: 15px
     .prize-item-wrapper
-      padding-bottom: 10px
+      margin-bottom: 10px
       &:last-child
         padding-bottom: 20px
 
