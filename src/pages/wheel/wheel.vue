@@ -311,7 +311,7 @@
       _scrollUpdate() {
         setTimeout(() => {
           this.$refs.scroll.forceUpdate()
-        }, 20)
+        }, 40)
       }
     },
     computed: {

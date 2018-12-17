@@ -265,7 +265,7 @@
         this[`page${this.tabIdx}`]++
         let data = {
           page: this[`page${this.tabIdx}`],
-          status: this.tabIdx
+          status: this.tabIdx + 1
         }
         ServiceApi.getServiceList(data).then((res) => {
           this.$loading.hide()
