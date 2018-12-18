@@ -93,6 +93,7 @@
         this.page = 1
         this.hasMore = true
         this._getBaseInfo()
+        this._getWithdrawalLog()
       },
       _getBaseInfo() {
         this.$loading.show()
