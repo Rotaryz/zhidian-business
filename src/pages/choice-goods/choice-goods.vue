@@ -140,7 +140,7 @@
                 this.showNoMore = true
                 this.page--
               } else {
-                this.list = [...this.list, res.data]
+                this.list = this.list.concat(res.data)
               }
               setTimeout(() => {
                 this.$refs.scroll.forceUpdate()
@@ -154,7 +154,6 @@
             page: this.page
           }
           ActivityApi.getPrizeList(data).then((res) => {
-            console.log(res)
             this.$loading.hide()
             if (res.error === this.$ERR_OK) {
               if (!res.data.length) {
