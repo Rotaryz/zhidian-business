@@ -1,6 +1,11 @@
 <template>
   <div class="shop">
-    <scroll bcColor="#f6f6f6" ref="scroll">
+    <scroll
+      bcColor="#f6f6f6"
+      ref="scroll"
+      :pullDownRefresh="pullDownRefreshObj"
+      @pullingDown="onPullingDown"
+    >
       <s-header :shopInfo="shopInfo" @showExpire="showExpire"></s-header>
       <s-data :info="businessData" :values="values"></s-data>
       <s-router></s-router>
@@ -22,6 +27,9 @@
     data() {
       return {
         isTabHide: false,
+        pullDownRefresh: true,
+        pullDownRefreshThreshold: 90,
+        pullDownRefreshStop: 40,
         businessData: [
           {
             name: '营业额',
@@ -57,6 +65,9 @@
       refresh() {
         this._getShopInfo()
         this._getBusinessDetail()
+      },
+      onPullingDown() {
+        this.refresh()
       },
       _getShopInfo() {
         Mine.getShopInfo().then(res => {
@@ -113,6 +124,20 @@
       }
     },
     computed: {
+      pullDownRefreshObj: function () {
+        return this.pullDownRefresh ? {
+          threshold: parseInt(this.pullDownRefreshThreshold),
+          stop: parseInt(this.pullDownRefreshStop)
+        } : false
+      }
+    },
+    watch: {
+      pullDownRefreshObj: {
+        handler() {
+          this.rebuildScroll()
+        },
+        deep: true
+      }
     },
     filters: {
     },

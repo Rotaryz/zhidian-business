@@ -32,7 +32,8 @@
       return {
         list: [],
         tempItem: {},
-        nothing: false
+        nothing: false,
+        noClick: false
       }
     },
     created() {
@@ -77,6 +78,8 @@
           })
       },
       _makeTemplate(id = '') { // 一键生成模板/更新模板
+        if (this.noClick) return
+        this.noClick = true
         Template.makeTemplate({id})
           .then(res => {
             if (res.error !== this.$ERR_OK) {
@@ -84,6 +87,10 @@
               return
             }
             this.$toast.show(id ? '更新模版成功' : '生成模板成功')
+            this._getTemplateList()
+            setTimeout(() => {
+              this.noClick = false
+            }, 500)
           })
       },
       showConfirm(type, item) {
