@@ -102,7 +102,7 @@
           this._getScanner()
           return
         }
-        this.$router.push(this.$route.path + item.path)
+        this.$router.push('/shop' + item.path)
       },
       _getScanner(callback) {
         let that = this
