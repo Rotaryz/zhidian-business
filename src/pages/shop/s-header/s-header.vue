@@ -2,7 +2,8 @@
   <div class="s-header">
     <router-link tag="div" class="msg" to="/shop/account-detail">
       <div class="logo" v-if="shopInfo.logo && shopInfo.logo.url" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
-      <img class="logo" src="./pic-default_people@2x.png" v-else/>
+      <div class="logo" v-else></div>
+      <!--<img class="logo" src="./icon-shop_drz@2x.png" v-else/>-->
       <div class="msg-box">
         <div class="title">{{shopInfo.name || '店铺名称'}}</div>
         <div class="use-time">
@@ -69,6 +70,11 @@
         height: @width
         margin-right: 12px
         border-radius: 50%
+        icon-image(icon-shop_drz)
+        background-color: #fff
+        background-size: 72%
+        background-repeat: no-repeat
+        background-position: center
       .msg-box
         flex: 1
         .title
