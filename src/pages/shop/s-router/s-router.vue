@@ -93,11 +93,18 @@
     data() {
       return {
         manageArray,
-        activityArray
+        activityArray,
+        noClick: false
       }
     },
     methods: {
       navHandle(item) {
+        // 防止重复触发
+        if (this.noClick) return
+        this.noClick = true
+        setTimeout(() => {
+          this.noClick = false
+        }, 300)
         if (item.icon === 'one') {
           this._getScanner()
           return
