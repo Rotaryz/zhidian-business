@@ -14,7 +14,8 @@
     "test-e2e": "npm run unit && npm run e2e",
     "lint": "eslint --fix --ext .js,.vue src test/unit test/e2e/specs && eslint --ext .js,.vue src test/unit test/e2e/specs",
     "build": "node build/build.js",
-    "new": "hygen new"
+    "new": "hygen new",
+    "init": "node _config/index.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
