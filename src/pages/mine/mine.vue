@@ -91,7 +91,7 @@
         this.$router.push(this.$route.path + item.path)
       },
       exitApp() {
-        this.$storage.clear()
+        this.$storage.remove('token')
         this.$router.replace('/login')
       }
     },
