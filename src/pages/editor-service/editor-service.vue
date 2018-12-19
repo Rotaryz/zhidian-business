@@ -60,7 +60,7 @@
       </div>
       <div class="group-container no-padding">
         <div class="service-img-item border-top-1px">
-          <div class="item-title">服务图片 <span class="item-subtitle">建议尺寸600*480,大小10M以内，最多3张</span></div>
+          <div class="item-title">服务图片 <span class="item-subtitle">建议尺寸比率为4:3,大小10M以内，最多3张</span></div>
           <div class="img-container">
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in [1, 2, 3]" :key="index">

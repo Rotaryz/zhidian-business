@@ -106,7 +106,7 @@
       </div>
       <div class="group-container no-padding">
         <div class="editor-img-item border-top-1px">
-          <div class="item-title need-no">活动封面 <span class="item-subtitle">建议尺寸600*480,大小10M以内，最多3张</span></div>
+          <div class="item-title need-no">活动封面 <span class="item-subtitle">建议尺寸比率为4:3,大小10M以内，最多3张</span></div>
           <div class="img-container">
             <div class="container-item">
               <div class="img-box">
