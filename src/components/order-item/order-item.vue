@@ -49,7 +49,7 @@
       font-family: $font-family-regular
       font-size: $font-size-14
       .shop-name
-        color: $color-363537
+        color: $color-27273E
       .status
         color: $color-706B82
     .down
@@ -76,10 +76,10 @@
           width: 65px
           height: 26px
           box-sizing: border-box
-          border-1px($color-EF705D, 2px)
+          border-1px($color-D32F2F, 2px)
           text-align: center
           line-height: 26px
           font-size: $font-size-12
-          color: $color-EF705D
+          color: $color-D32F2F
 
 </style>

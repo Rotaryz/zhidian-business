@@ -1013,7 +1013,7 @@
         content: ''
         width: 30px
         height: 3px
-        background: $color-EF705D
+        background: $color-D32F2F
   .select-client
     position: relative
 
@@ -1211,7 +1211,7 @@
           font-family: $font-family-medium
           font-size: $font-size-14
           .green
-            color: $color-EF705D
+            color: $color-D32F2F
       .msgs-rt
         width: 7.5px
         height: 11.5px
@@ -1301,7 +1301,7 @@
           .tab:last-child
             border-right: 0
           .active
-            background: $color-363547
+            background: $color-27273E
             color: #fff
         .data-list
           position: relative

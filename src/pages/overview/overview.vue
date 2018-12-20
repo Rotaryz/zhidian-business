@@ -639,7 +639,7 @@
       position: absolute
       z-index: 1
       height: 73px
-      background: $color-363547
+      background: $color-27273E
       width: 100%
       top: 0
       left: 0
@@ -680,7 +680,7 @@
           .tab:last-child
             border-right: 0
           .active
-            background: $color-363547
+            background: $color-27273E
             color: #fff
         .data-list
           position: relative

@@ -6,11 +6,11 @@
           <article class="header-video">
             <div class="img-style" v-if="info.cover_image" :style="{backgroundImage: 'url(' + info.cover_image + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
             <label class="video-mask">
-              <div class="icon-btn add" v-if="!info.video_url"/>
+              <div class="icon-btn add" v-if="!info.video_url"></div>
               <div class="add-txt" v-if="!info.video_url">上传视频</div>
-              <div class="icon-btn play" v-else/>
+              <div class="icon-btn play" v-else></div>
               <input type="file" style="display: none" @change="_fileChange($event, 'header-video')"
-                     accept="video/*">
+                             accept="video/*">
             </label>
           </article>
           <article class="header-title">
@@ -27,11 +27,11 @@
                     </label>
                     <label class="add-btn video">
                       <input type="file" style="display: none" @change="_fileChange($event, 'video', 'nothing')"
-                             accept="video/*">
+                                     accept="video/*">
                     </label>
                     <label class="add-btn image">
-                      <input type="file" style="display: none" @change="_fileChange($event, 'image', 'nothing')"
-                             accept="image/*">
+                      <base-wx-input style="display: none" @change="_fileChange($event, 'image', 'nothing')"
+                                    accept="image/*"></base-wx-input>
                     </label>
                   </nav>
                 </transition>
@@ -45,8 +45,8 @@
                     <!--<img class="img-style" v-if="item.image_url" :src="item.image_url" alt="">-->
                     <div class="img-style" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                     <label class="video-mask">
-                      <input type="file" style="display: none" @change="_fileChange($event, 'image', item)"
-                             accept="image/*">
+                      <base-wx-input style="display: none" @change="_fileChange($event, 'image', item)"
+                                     accept="image/*"></base-wx-input>
                     </label>
                   </div>
                   <div class="box video" v-if="+item.type === 2">
@@ -54,7 +54,7 @@
                     <label class="video-mask">
                       <div class="icon-btn play"/>
                       <input type="file" style="display: none" @change="_fileChange($event, 'video', item)"
-                             accept="video/*">
+                                     accept="video/*">
                     </label>
                   </div>
                 </div>
@@ -69,11 +69,11 @@
                     </label>
                     <label class="add-btn video">
                       <input type="file" style="display: none" @change="_fileChange($event, 'video', index)"
-                             accept="video/*">
+                                     accept="video/*">
                     </label>
                     <label class="add-btn image">
-                      <input type="file" style="display: none" @change="_fileChange($event, 'image', index)"
-                             accept="image/*">
+                      <base-wx-input style="display: none" @change="_fileChange($event, 'image', index)"
+                                    accept="image/*"></base-wx-input>
                     </label>
                   </nav>
                 </transition>
@@ -425,7 +425,7 @@
       line-height: $btn-height
       .btn
         display: inline-block
-        background: #363547;
+        background: #27273E;
         border-radius: 4px;
         width: 100%
         height: 45px
@@ -445,7 +445,7 @@
       bottom: $btn-height
       .header-video
         height: 56.26vw
-        background: #363547;
+        background: #27273E;
         position: relative
         .img-style
           width: 100%
@@ -485,7 +485,7 @@
           padding-right: 10px
           font-family: PingFangSC-Medium;
           font-size: 16px;
-          color: #363547;
+          color: #27273E;
       .item-wrapper
         padding: 0 15px
         layout()
@@ -536,14 +536,13 @@
               padding: 0
             .box
               font-size: 14px;
-              color: #363547;
+              color: #27273E;
               text-align: justify;
               word-break: break-all
               line-height: 1.2
               position: relative
               height: 90px
               overflow: hidden
-              white-space: pre
               .img-style
                 width: 100%
                 height: 100%

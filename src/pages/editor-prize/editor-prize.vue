@@ -30,13 +30,13 @@
           </div>
         </div>
         <div class="editor-img-item border-bottom-1px">
-          <div class="item-title">兑换券图片</div>
+          <div class="item-title">奖品券图片</div>
           <div class="img-container">
             <div class="container-item">
               <div class="img-box">
                 <div class="img-bc un-up"></div>
                 <div class="img-bc up" v-if="!prizeDetail.image_url"></div>
-                <input type="file" class="img-bc image-file" @change="_fileImage($event)" accept="image/*" v-if="!prizeDetail.image_url">
+                <base-wx-input class="img-bc image-file" @change="_fileImage($event)" accept="image/*" v-if="!prizeDetail.image_url"></base-wx-input>
               </div>
             </div>
             <div class="container-item" v-if="prizeDetail.image_url">
@@ -49,7 +49,7 @@
           <div class="item-subtitle">添加1张服务详情图片(大小10M以下)</div>
         </div>
         <div class="editor-item border-bottom-1px">
-          <div class="item-left">兑换券数量</div>
+          <div class="item-left">奖品券数量</div>
           <div class="item-right flexEnd">
             <div class="right-num-container">
               <div class="num-item sub-item" @click="subNum"></div>
@@ -186,11 +186,11 @@
       },
       checkForm() {
         let arr = [
-          {value: this.titleReg, txt: '请输入兑换券标题'},
+          {value: this.titleReg, txt: '请输入奖品券标题'},
           {value: this.use1TimeReg, txt: '请选择券有效期开始时间'},
           {value: this.use2TimeReg, txt: '请选择券有效期结束时间'},
-          {value: this.bannerReg, txt: '请添加兑换券图片'},
-          {value: this.numReg, txt: '请输入合法的兑换券数量'}
+          {value: this.bannerReg, txt: '请添加奖品券图片'},
+          {value: this.numReg, txt: '请输入合法的奖品券数量'}
         ]
         let res = this._testPropety(arr)
         if (res) {
@@ -302,7 +302,7 @@
         text-align: center
         font-size: $font-size-16
         color: $color-white
-        background: $color-363537
+        background: $color-27273E
         border-radius: 2px
     .container
       padding-left: 15px
@@ -339,7 +339,7 @@
             line-height: 20px
             border: 0 none
             font-size: $font-size-14
-            color: $color-363537
+            color: $color-27273E
           .input-box::-webkit-input-placeholder
             color: $color-9B9B9B
           .input-box::-ms-input-placeholder
@@ -373,7 +373,7 @@
                 padding: 0
                 margin: 0
                 font-size: $font-size-14
-                color: $color-363537
+                color: $color-27273E
           .time-right-first
             width: 90px
             .time-none
@@ -381,7 +381,7 @@
               align-items: center
               .time-item
                 font-family: $font-family-regular
-                color: $color-363537
+                color: $color-27273E
                 font-size: $font-size-14
                 margin-right: 5px
               .time-icon
@@ -389,7 +389,7 @@
                 height: 12.5px
             .time-txt
               font-family: $font-family-regular
-              color: $color-363537
+              color: $color-27273E
               font-size: $font-size-14
               &.disabled
                 color: $color-9B9B9B
@@ -492,7 +492,7 @@
             margin: 0
             outline: none
             font-family: $font-family-regular
-            color: $color-363537
+            color: $color-27273E
           .textarea-content::-webkit-input-placeholder
             color: $color-CCCCCC
           .textarea-content::-ms-input-placeholder

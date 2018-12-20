@@ -60,13 +60,13 @@
       </div>
       <div class="group-container no-padding">
         <div class="service-img-item border-top-1px">
-          <div class="item-title">服务图片 <span class="item-subtitle">建议尺寸600*480,大小10M以内，最多3张</span></div>
+          <div class="item-title">服务图片 <span class="item-subtitle">建议尺寸比率为4:3,大小10M以内，最多3张</span></div>
           <div class="img-container">
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in [1, 2, 3]" :key="index">
                 <div class="img-bc un-up"></div>
                 <div class="img-bc up" v-if="serviceDetail.goods_banner_images.length == index"></div>
-                <input type="file" class="img-bc image-file" @change="_fileImage($event)" accept="image/*" v-if="serviceDetail.goods_banner_images.length == index">
+                <base-wx-input class="img-bc image-file" @change="_fileImage($event)" accept="image/*" v-if="serviceDetail.goods_banner_images.length == index"></base-wx-input>
               </div>
             </div>
             <div class="container-item">
@@ -80,7 +80,7 @@
       </div>
       <div class="editor-title border-bottom-1px border-top-1px">
         <div class="title">
-          套餐服务
+          套餐
           <span class="add-server" @click.stop="addItem"></span>
         </div>
       </div>
@@ -94,7 +94,7 @@
         <div class="server-list border-bottom-1px" :class="item.hide ? 'hide-list': item.hasClass ? 'has-class show-list' : 'show-list'" v-for="(item, index) in serviceDetail.detail_config" :key="index">
           <label>
             <div class="editor-item border-bottom-1px">
-              <div class="item-left">服务{{index + 1}}</div>
+              <div class="item-left">名称</div>
               <div class="item-right">
                 <input type="text" class="input-box" v-model="item.servie" placeholder="请填写服务名称">
                 <span v-if="index > 0" class="del-server" @click.stop="delItem(index)"></span>
@@ -126,7 +126,7 @@
               <div class="img-box" v-for="(item, index) in [1, 2, 3, 4, 5]" :key="index">
                 <div class="img-bc un-up"></div>
                 <div class="img-bc up" v-if="serviceDetail.goods_images.length == index"></div>
-                <input type="file" class="img-bc image-file" @change="_fileDetail($event)" accept="image/*" v-if="serviceDetail.goods_images.length == index" multiple>
+                <base-wx-input class="img-bc image-file" @change="_fileDetail($event)" accept="image/*" v-if="serviceDetail.goods_images.length == index" :multiple="5"></base-wx-input>
               </div>
             </div>
             <div class="container-item">
@@ -178,23 +178,6 @@
           </div>
         </div>
       </div>
-      <div class="royalty-item border-top-1px border-bottom-1px deducte">
-        <div class="item-left">商品提成 <div class="right-txt-12">提成按售卖价格的百分比计算</div></div>
-        <div class="item-right">
-          <div class="right-num-box">
-            <input type="number" class="num-input" v-model="serviceDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" :disabled="type === 'editor'">
-          </div>
-          <div class="right-txt-14">%</div>
-        </div>
-      </div>
-      <div class="group-container no-padding border-bottom-1px">
-        <div class="royalty-item">
-          <div class="item-left need-no">统一上架</div>
-          <div class="item-right end-right">
-            <switch-box @switchChange="switchChange" :values="serviceDetail.is_sync * 1"></switch-box>
-          </div>
-        </div>
-      </div>
       <div class="padding-bottom"></div>
     </scroll>
     <title-box ref="titleBox" @submitMsg="submitTile"></title-box>
@@ -226,7 +209,6 @@
   }
   const MONEYREG = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
   const COUNTREG = /^[1-9]\d*$/
-  const RATEREG = /^[0-9]\d*$/
   export default {
     data() {
       return {
@@ -246,7 +228,7 @@
           goods_images: [], // 商品详情图片
           start_at: '', // 售卖开始
           end_at: '', // 售卖结束
-          commission_rate: '', // 佣金
+          commission_rate: '0', // 佣金 已无用保留默认值为0
           usable_stock: '', // 总库存
           note: {
             need_subscribe: '', // 预约信息
@@ -261,7 +243,7 @@
           ], // 服务详情
           industry_name: '美业', // 品类
           is_online: '1', // 是否上线
-          is_sync: 0 // 是否全员上架
+          is_sync: 1 // 是否全员上架 已无用保留默认值为1
         }
       }
     },
@@ -448,8 +430,7 @@
           {value: this.detailImgReg, txt: '请添加至少一张服务详情图片'},
           {value: this.use1TimeReg, txt: '请选择售卖开始时间'},
           {value: this.use2TimeReg, txt: '请选择售卖结束时间'},
-          {value: this.subscribeMsg, txt: '请输入预约信息'},
-          {value: this.rateReg, txt: '请输入正整数提成比例'}
+          {value: this.subscribeMsg, txt: '请输入预约信息'}
         ]
         let res = this._testPropety(arr)
         if (res) {
@@ -543,9 +524,6 @@
       stockReg() {
         return this.serviceDetail.usable_stock && COUNTREG.test(this.serviceDetail.usable_stock)
       },
-      rateReg() {
-        return RATEREG.test(this.serviceDetail.commission_rate) && +this.serviceDetail.commission_rate <= 100
-      },
       serviceDetailReg() {
         let arr = this.serviceDetail.detail_config.filter((item) => {
           return item.servie || item.number || item.price
@@ -624,7 +602,7 @@
         text-align: center
         font-size: $font-size-16
         color: $color-white
-        background: $color-363537
+        background: $color-27273E
         border-radius: 2px
     .editor-title
       height: 40px
@@ -687,7 +665,7 @@
         &:before
           content: '*'
           position: absolute
-          color: $color-EF705D
+          color: $color-D32F2F
           left: -7px
           top: 2px
           font-size: 14px
@@ -705,7 +683,7 @@
           font-family: $font-family-regular
           font-size: $font-size-14
           letter-spacing: 0.6px
-          color: $color-363537
+          color: $color-27273E
           width: 100%
           height: 55px
           no-wrap()
@@ -725,7 +703,7 @@
           line-height: 20px
           border: 0 none
           font-size: $font-size-14
-          color: $color-363537
+          color: $color-27273E
         .no-click
           color: $color-CCCCCC
         .input-box::-webkit-input-placeholder
@@ -741,7 +719,7 @@
             align-items: center
             .time-item
               font-family: $font-family-regular
-              color: $color-363537
+              color: $color-27273E
               font-size: $font-size-14
               margin-right: 5px
             .time-icon
@@ -749,7 +727,7 @@
               height: 12.5px
           .time-txt
             font-family: $font-family-regular
-            color: $color-363537
+            color: $color-27273E
             font-size: $font-size-14
             &.disabled
               color: $color-9B9B9B
@@ -842,7 +820,7 @@
           line-height: 20px
           border: 0 none
           font-size: $font-size-14
-          color: $color-363537
+          color: $color-27273E
         .input-box::-webkit-input-placeholder
           color: $color-9B9B9B
         .input-box::-ms-input-placeholder
@@ -870,7 +848,7 @@
         position: relative
         &:before
           content: '*'
-          color: $color-EF705D
+          color: $color-D32F2F
           font-size: 14px
           margin-right: 2px
           position: absolute
@@ -934,7 +912,7 @@
       height: 55px
       line-height: 55px
       font-size: $font-size-14
-      color: $color-363537
+      color: $color-27273E
       font-family: $font-family-regular
     .textarea-item
       margin-top: 15px
@@ -964,7 +942,7 @@
           margin: 0
           outline: none
           font-family: $font-family-regular
-          color: $color-363537
+          color: $color-27273E
         .textarea-content::-webkit-input-placeholder
           color: $color-CCCCCC
         .textarea-content::-ms-input-placeholder
@@ -994,7 +972,7 @@
         &:before
           content: '*'
           position: absolute
-          color: $color-EF705D
+          color: $color-D32F2F
           left: -7px
           top: 2px
           font-size: 14px

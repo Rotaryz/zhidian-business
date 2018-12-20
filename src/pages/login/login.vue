@@ -163,7 +163,7 @@
       justify-content: center
       font-family: $font-family-light
       font-size: 12px
-      color: $color-EF705D
+      color: $color-D32F2F
       letter-spacing: 0.08px
       .icon-warn
         margin-right: 5px
@@ -196,9 +196,9 @@
           height: 30px
           padding: 0 9.5px 0 10px
           background: #FFFFFF
-          border-1px($color-EF705D, 100px)
+          border-1px($color-D32F2F, 100px)
           font-size: 14px
-          color: $color-EF705D
+          color: $color-D32F2F
           text-align: center
           line-height: @height
           &.coding
@@ -207,7 +207,7 @@
       .btn
         margin-top: 50px
         height: 45px
-        background: $color-363537
+        background: $color-27273E
         border-radius: 4px
         layout(row, block, nowrap)
         align-items: center
@@ -227,7 +227,7 @@
     outline: none
     margin-right: 10px
     font-family: PingFangSC-Regular
-    color: $color-363537
+    color: $color-27273E
     letter-spacing: 1px
     &::-webkit-input-placeholder
       color: $color-C8C8C8

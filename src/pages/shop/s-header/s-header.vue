@@ -1,67 +1,51 @@
 <template>
-  <ul class="s-header">
-    <li class="item-wrapper" v-for="(item, index) in dataArray" :key="index" @click="navHandle(item)">
-      <div class="logo" :class="item.icon"></div>
-      <div class="txt">{{item.title}}</div>
-    </li>
-  </ul>
+  <div class="s-header">
+    <router-link tag="div" class="msg" to="/shop/account-detail">
+      <div class="logo" v-if="shopInfo.logo && shopInfo.logo.url" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+      <div class="logo" v-else></div>
+      <!--<img class="logo" src="./icon-shop_drz@2x.png" v-else/>-->
+      <div class="msg-box">
+        <div class="title">{{shopInfo.name || '店铺名称'}}</div>
+        <div class="use-time">
+          <span class="time">使用期限:{{(userInfo.merchant && userInfo.merchant.expire_time) | formatTime}}</span>
+          <span class="big-box" @click.stop="showExpire" v-if="userInfo.merchant && userInfo.merchant.expired">
+            <span class="red-box">续费</span>
+          </span>
+        </div>
+      </div>
+      <div class="right-arrow"></div>
+    </router-link>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import wx from 'weixin-js-sdk'
-  import {Exchange} from 'api'
-
-  const dataArray = [
-    {
-      icon: 'key',
-      title: '输码核销',
-      path: '/exchange-code'
-    },
-    {
-      icon: 'scanner',
-      title: '扫码核销',
-      path: ''
-    },
-    {
-      icon: 'record',
-      title: '核销记录',
-      path: '/exchange-record'
-    }
-  ]
+  import {formatDateTime} from 'common/js/utils'
   export default {
     name: 's-header',
+    props: {
+      shopInfo: {
+        type: Object,
+        default: {}
+      }
+    },
     data() {
       return {
-        dataArray
       }
     },
     methods: {
-      navHandle(item) {
-        if (item.icon === 'scanner') {
-          this._getScanner()
-          return
-        }
-        this.$router.push(this.$route.path + item.path)
-      },
-      _getScanner(callback) {
-        let that = this
-        wx.scanQRCode({
-          needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-          scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
-          success: function (res) {
-            let result = res.resultStr // 当needResult 为 1 时，扫码返回的结果
-            let obj = JSON.parse(result)
-            Exchange.verification(obj).then((res) => {
-              that.$loading.hide()
-              if (res.error === that.$ERR_OK) {
-                that.$toast.show('核销成功')
-              } else {
-                that.$toast.show(res.message)
-              }
-            })
-            callback && callback()
-          }
-        })
+      showExpire() {
+        this.$emit('showExpire')
+      }
+    },
+    computed: {
+      userInfo() {
+        return this.$storage.get('info')
+      }
+    },
+    filters: {
+      formatTime(val) {
+        if (!val) return ''
+        return formatDateTime(val * 1000, '-')
       }
     }
   }
@@ -72,28 +56,58 @@
   @import '~common/stylus/mixin'
 
   .s-header
-    height: 121px
-    background-color: $color-363537
-    layout(row, block, nowrap)
-    .item-wrapper
-      flex: 1
-      height: 100%
-      layout()
-      justify-content: center
+    height: 147px
+    bg-image(bg-my)
+    background-size: 100% 100%
+    position: relative
+    padding: 15px
+    box-sizing: border-box
+    .msg
+      layout(row)
       align-items: center
-      font-family: PingFangSC-Regular
-      font-size: 14px
-      color: #FFFFFF
-      z-index: 22
       .logo
-        width: 32px
-        height: 32px
-        margin-bottom: 15px
-        &.key
-          icon-image(icon-inputcode)
-        &.scanner
-          icon-image(icon-scancode)
-        &.record
-          icon-image(icon-record)
+        width: 15vw
+        height: @width
+        margin-right: 12px
+        border-radius: 50%
+        icon-image(icon-shop_drz)
+        background-color: #fff
+        background-size: 72%
+        background-repeat: no-repeat
+        background-position: center
+      .msg-box
+        flex: 1
+        .title
+          font-family: $font-family-medium
+          font-size: $font-size-16
+          color: $color-white
+          letter-spacing: 0.8px
+          text-align: justify
+          word-break: break-all
+          margin-bottom: 10px
+        .use-time
+          display: flex
+          align-items: center
+          .time
+            font-size: $font-size-14
+            color: $color-white
+            font-family: $font-family-regular
+            opacity: 0.7
+          .big-box
+            padding: 5px
+            .red-box
+              width: 36px
+              height: 18px
+              line-height: 18px
+              text-align: center
+              border-1px($color-white)
+              font-size: $font-size-12
+              font-family: $font-family-medium
+              color: $color-white
+              display: block
+      .right-arrow
+        width: 7px
+        height: 12px
+        icon-image(icon-press_right)
 
 </style>

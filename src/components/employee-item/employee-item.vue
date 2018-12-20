@@ -79,7 +79,7 @@
         justify-content: space-between
         .item-left-name
           font-family: $font-family-regular
-          color: $color-363547
+          color: $color-27273E
           font-size: $font-size-16
           margin-right: 10px
           max-width: 40vw
@@ -106,7 +106,7 @@
         color: $color-1AC521
         font-family: $font-family-regular
         &.red-text
-          color: $color-EF705D
+          color: $color-D32F2F
       .arrow
         width: 7px
         height: 12px

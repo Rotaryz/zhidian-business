@@ -107,7 +107,7 @@
         .title
           text-align: center
           font-family: $font-family-regular
-          color: $color-363537
+          color: $color-27273E
           font-size: $font-size-16
           letter-spacing: 0.6px
           margin: 18px auto
@@ -137,7 +137,7 @@
     font-size: 14px
     .item-title
       font-family: $font-family-medium
-      color: $color-363547
+      color: $color-27273E
     .item-txt
       color: $color-696771
       margin-top: 10px

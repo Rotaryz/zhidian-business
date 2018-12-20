@@ -1,26 +1,26 @@
 <template>
   <div class="deposit">
-    <div class="margin-box-10px"></div>
-    <section class="card-wrapper" @click="navToBankCard">
-      <div class="title" v-if="!bankInfo.bank">添加银行卡</div>
-      <div class="title active" v-else>{{bankInfo.bank}}({{bankInfo.withdrawal_card.substring(bankInfo.withdrawal_card.length-4)}})</div>
-      <div class="right">
-        <div class="name">{{bankInfo.name}}</div>
-        <div class="right-arrow"></div>
-      </div>
-    </section>
-    <div class="margin-box-10px"></div>
-    <section class="money-wrapper">
-      <div class="title">提现金额</div>
-      <div class="input-wrapper border-bottom-1px">
-        <div class="unit">¥</div>
-        <input type="number" class="input-content" v-model="getMoney">
-      </div>
-      <div class="explain">可提现金额 ¥{{bankInfo.remaining}}</div>
-    </section>
-    <div class="declare">微信按提现金额0.7%收取手续费，最低1元。</div>
-    <div class="btn" :class="getMoneyReg?'active':''" @click="_checkForm">提现</div>
-    <router-view-common @refresh="refresh"></router-view-common>
+      <div class="margin-box-10px"></div>
+      <section class="card-wrapper" @click="navToBankCard">
+        <div class="title" v-if="!bankInfo.bank">添加银行卡</div>
+        <div class="title active" v-else>{{bankInfo.bank}}({{bankInfo.withdrawal_card.substring(bankInfo.withdrawal_card.length-4)}})</div>
+        <div class="right">
+          <div class="name">{{bankInfo.name}}</div>
+          <div class="right-arrow"></div>
+        </div>
+      </section>
+      <div class="margin-box-10px"></div>
+      <section class="money-wrapper">
+        <div class="title">提现金额</div>
+        <div class="input-wrapper border-bottom-1px">
+          <div class="unit">¥</div>
+          <input type="number" class="input-content" v-model="getMoney">
+        </div>
+        <div class="explain">可提现金额 ¥{{bankInfo.remaining}}</div>
+      </section>
+      <div class="declare">微信按提现金额0.7%收取手续费，最低1元。</div>
+      <div class="btn" :class="getMoneyReg?'active':''" @click="_checkForm">提现</div>
+      <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
 
@@ -28,6 +28,7 @@
   import { Property } from 'api'
 
   export default {
+    name: 'deposit',
     data() {
       return {
         bankInfo: {
@@ -101,6 +102,8 @@
       getMoneyReg() {
         return (typeof +this.getMoney === 'number') && +this.getMoney > 0 && +this.getMoney <= this.bankInfo.remaining
       }
+    },
+    watch: {
     }
   }
 </script>
@@ -115,7 +118,7 @@
 
   .deposit
     fill-box()
-    z-index: 71
+    z-index: 40
     background: $color-F6F6F6
     .card-wrapper
       height: 55px
@@ -130,14 +133,14 @@
         color: #9B9B9B;
         letter-spacing: 0.6px;
         &.active
-          color: #363547;
+          color: #27273E;
       .right
         layout(row, block, nowrap)
         align-items: center
         .name
           font-family: PingFangSC-Regular;
           font-size: 14px;
-          color: #363547;
+          color: #27273E;
           letter-spacing: 0.6px;
           margin-right: 5px
     .money-wrapper
@@ -145,7 +148,7 @@
       background: #fff
       .title
         font-size: 14px;
-        color: #363547;
+        color: #27273E;
         letter-spacing: 0.6px;
         padding: 18px 0 8px
       .input-wrapper
@@ -155,7 +158,7 @@
         .unit
           font-family: PingFangSC-Medium;
           font-size: 40px;
-          color: #363547;
+          color: #27273E;
           letter-spacing: 1.54px;
           line-height: 1
         .input-content
@@ -165,7 +168,7 @@
           height: 40px
           font-family: DINAlternate-Bold;
           font-size: 40px;
-          color: #363547;
+          color: #27273E;
           letter-spacing: 1.54px;
       .explain
         font-size: 14px;
@@ -180,7 +183,7 @@
     .btn
       margin: 0 15px
       height: 45px
-      background: #363547;
+      background: #27273E;
       border-radius: 4px;
       font-size: 14px;
       color: #FFFFFF;
@@ -190,4 +193,5 @@
       opacity: 0.5
       &.active
         opacity: 1
+
 </style>

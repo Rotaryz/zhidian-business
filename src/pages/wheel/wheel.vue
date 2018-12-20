@@ -98,7 +98,8 @@
           status: 0 // 1开启0关闭
         },
         delNode: null,
-        delList: []
+        delList: [],
+        prizeLength: 0
       }
     },
     created() {
@@ -106,12 +107,12 @@
     },
     methods: {
       ...mapActions(['initPrizeStorage', 'initPrizeArray', 'deletePrizeStorage', 'updatePrizeStorage']),
-      refresh(obj) {
-        this._updatePrizeList(obj)
+      refresh(obj, item) {
+        this._updatePrizeList(obj, item)
       },
       updatePrizeStock() {
         // 刷新每个位置的库存
-        this.prizeList.map(item => {
+        this.prizeList = this.prizeList.map(item => {
           item.stock = this.prizeStorage.find(it => it.prize_id === item.prize_id).stock
           return item
         })
@@ -133,23 +134,30 @@
             title: savePrize.title,
             place: place,
             prize_stock: defaultStock,
+            image_url: savePrize.image_url,
+            end_at: savePrize.end_at,
+            status: savePrize.status,
             stock: this.prizeStorage.find(item => item.prize_id === savePrize.prize_id).stock
           }
           this.prizeList.push({...node})
-          // 刷新每个位置的库存
-          this.prizeList.map(item => {
-            if (item.prize_id === savePrize.prize_id) {
-              item.stock = node.stock
-            }
-            return item
-          })
+          if (savePrize.status === 1) {
+            // 刷新每个位置的库存
+            this.prizeList = this.prizeList.map(item => {
+              if (item.prize_id === savePrize.prize_id) {
+                item.stock = node.stock
+              }
+              return item
+            })
+          }
         } else {
           // 老位置
           let node = this.prizeList[idx]
           if (node.prize_id === savePrize.prize_id) {
             return
           }
-          this.deletePrizeStorage(node)
+          if (+node.status === 1) {
+            this.deletePrizeStorage(node)
+          }
           this.updatePrizeStorage({prize_id: savePrize.prize_id, number: defaultStock})
           let replaceNode = {
             prize_pools_id: savePrize.prize_pools_id,
@@ -160,11 +168,18 @@
             title: savePrize.title,
             place: place,
             prize_stock: defaultStock,
+            image_url: savePrize.image_url,
+            end_at: savePrize.end_at,
+            status: savePrize.status,
             stock: this.prizeStorage.find(item => item.prize_id === savePrize.prize_id).stock
           }
-          this.prizeList.splice(idx, 1, replaceNode)
           // 刷新每个位置的库存
-          this._renderPrizeList()
+          if (+this.prizeList[idx].status === 1) {
+            this.prizeList.splice(idx, 1, replaceNode)
+            this._renderPrizeList()
+          } else {
+            this.prizeList.splice(idx, 1, replaceNode)
+          }
         }
         // 排序
         this.prizeList.sort(function (a, b) {
@@ -181,14 +196,18 @@
         if (node.id !== 0) {
           this.delList.push({activity_prize_id: node.activity_prize_id})
         }
-        this.deletePrizeStorage(node)
         this.prizeList.splice(idx, 1)
-        // 刷新每个位置的库存
-        this._renderPrizeList()
+        // 删除产品在有效期内，调用下面方法
+        if (+node.status === 1) {
+          // 刷新每个位置的库存
+          this.deletePrizeStorage(node)
+          this._renderPrizeList()
+        }
       },
       _renderPrizeList() {
         this.prizeList.map(item => {
-          item.stock = this.prizeStorage.find(it => it.prize_id === item.prize_id).stock
+          let tempItem = this.prizeStorage.find(it => it.prize_id === item.prize_id)
+          tempItem && (item.stock = tempItem.stock)
           return item
         })
       },
@@ -288,6 +307,11 @@
             return true
           }
         }
+      },
+      _scrollUpdate() {
+        setTimeout(() => {
+          this.$refs.scroll.forceUpdate()
+        }, 40)
       }
     },
     computed: {
@@ -309,6 +333,14 @@
       saveBtnReg() {
         return this.prizeListReg && this.prizeListInputReg && this.percentageReg && this.joinTimesReg
       }
+    },
+    watch: {
+      prizeList(data, oldData) {
+        if (this.prizeLength !== data.length) {
+          this.prizeLength = data.length
+          this._scrollUpdate()
+        }
+      }
     }
   }
 </script>
@@ -323,7 +355,7 @@
     line-height: 1
     font-family: PingFangSC-Light;
     font-size: 12px;
-    color: #363547;
+    color: #27273E;
     &::-webkit-input-placeholder
       color: $color-CCCCCC
     &::-ms-input-placeholder
@@ -333,7 +365,7 @@
 
   .wheel
     fill-box()
-    z-index: 70
+    z-index: 20
     height: 100vh
     .scroll-wrapper
       position: fixed
@@ -383,7 +415,7 @@
   .prize-wrapper
     padding-top: 15px
     .prize-item-wrapper
-      padding-bottom: 10px
+      margin-bottom: 10px
       &:last-child
         padding-bottom: 20px
 
@@ -391,7 +423,7 @@
     padding: 35px 0 40px
     font-family: PingFangSC-Regular;
     font-size: 14px;
-    color: #363547;
+    color: #27273E;
     text-align: center
 
   .setting-wrapper
@@ -424,7 +456,7 @@
       .unit
         font-family: PingFangSC-Light;
         font-size: 12px;
-        color: #363547;
+        color: #27273E;
         padding-right: 15px
 
   .texts-wrapper
@@ -501,13 +533,13 @@
     align-items: center
     justify-content: center
     padding: 0 15px
-    z-index: 80
+    z-index: 40
     background: $color-F6F6F6
     .btn
       height: 44px
       width: 100%
       box-sizing: border-box
-      background: #363547
+      background: #27273E
       border-radius: 4px
       font-family: PingFangSC-Regular
       font-size: 16px

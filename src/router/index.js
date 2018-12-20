@@ -41,6 +41,8 @@ const ContentText = () => import('pages/content-text/content-text')
 const MapPicker = () => import('pages/map-picker/map-picker')
 const Wheel = () => import('pages/wheel/wheel')
 const WheelAddPrize = () => import('pages/wheel-add-prize/wheel-add-prize')
+const BrandTemplate = () => import('pages/brand-template/brand-template')
+const AccountDetail = () => import('pages/account-detail/account-detail')
 
 Vue.use(Router)
 
@@ -58,22 +60,6 @@ const route = new Router({
             title: '我的'
           },
           children: [
-            {
-              path: 'shop-info',
-              component: ShopInfo,
-              meta: {
-                title: '门店信息'
-              },
-              children: [
-                {
-                  path: 'map-picker',
-                  component: MapPicker,
-                  meta: {
-                    title: '门店地区'
-                  }
-                }
-              ]
-            },
             {
               path: 'employee-manage',
               component: EmployeeManage,
@@ -199,14 +185,14 @@ const route = new Router({
               path: 'exchange-manage',
               component: ExchangeManage,
               meta: {
-                title: '兑换券管理'
+                title: '奖品券管理'
               },
               children: [
                 {
                   path: 'editor-prize',
                   component: EditorPrize,
                   meta: {
-                    title: '新建兑换券'
+                    title: '新建奖品券'
                   }
                 }
               ]
@@ -216,14 +202,16 @@ const route = new Router({
               component: ExchangeCode,
               meta: {
                 title: '输码核销'
-              }
-            },
-            {
-              path: 'exchange-record',
-              component: ExchangeRecord,
-              meta: {
-                title: '核销记录'
-              }
+              },
+              children: [
+                {
+                  path: 'exchange-record',
+                  component: ExchangeRecord,
+                  meta: {
+                    title: '核销记录'
+                  }
+                }
+              ]
             },
             {
               path: 'property',
@@ -263,6 +251,43 @@ const route = new Router({
                   ]
                 }
               ]
+            },
+            {
+              path: 'shop-info',
+              component: ShopInfo,
+              meta: {
+                title: '门店信息'
+              },
+              children: [
+                {
+                  path: 'map-picker',
+                  component: MapPicker,
+                  meta: {
+                    title: '门店地区'
+                  }
+                }
+              ]
+            },
+            {
+              path: '/shop-qr-code',
+              component: ShopQrCode,
+              meta: {
+                title: '店铺二维码'
+              }
+            },
+            {
+              path: 'brand-template',
+              component: BrandTemplate,
+              meta: {
+                title: '品牌模板'
+              }
+            },
+            {
+              path: 'account-detail',
+              component: AccountDetail,
+              meta: {
+                title: '帐号信息'
+              }
             }
           ]
         },
@@ -307,13 +332,6 @@ const route = new Router({
       }
     },
     {
-      path: '/shop-qr-code',
-      component: ShopQrCode,
-      meta: {
-        title: '店铺二维码'
-      }
-    },
-    {
       path: '/login',
       component: Login,
       meta: {
@@ -350,7 +368,6 @@ const OAUTH_ROUTE = '/login' // 授权页面
 
 route.beforeEach(async (to, from, next) => {
   document.title = to.meta.title ? to.meta.title : DEFAULT_TITLE
-  console.log(to)
   if (to.path === '/') {
     const token = storage.get('token')
     if (token) {

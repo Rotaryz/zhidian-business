@@ -106,13 +106,13 @@
       </div>
       <div class="group-container no-padding">
         <div class="editor-img-item border-top-1px">
-          <div class="item-title need-no">活动封面 <span class="item-subtitle">建议尺寸600*480,大小10M以内，最多3张</span></div>
+          <div class="item-title need-no">活动封面 <span class="item-subtitle">建议尺寸比率为4:3,大小10M以内，最多3张</span></div>
           <div class="img-container">
             <div class="container-item">
               <div class="img-box">
                 <div class="img-bc un-up"></div>
                 <div class="img-bc up" v-if="!activityDetail.image_url"></div>
-                <input type="file" class="img-bc image-file" @change="_fileImage($event)" accept="image/*" v-if="!activityDetail.image_url">
+                <base-wx-input class="img-bc image-file" @change="_fileImage($event)" accept="image/*" v-if="!activityDetail.image_url"></base-wx-input>
               </div>
             </div>
             <div class="container-item" v-if="activityDetail.image_url">
@@ -127,7 +127,7 @@
       <div class="editor-title border-bottom-1px border-top-1px">
         <div class="title">活动时间</div>
       </div>
-      <div class="group-container">
+      <div class="group-container border-bottom-1px">
         <label>
           <div class="editor-item">
             <div class="item-left">开始时间</div>
@@ -145,30 +145,13 @@
           </div>
         </label>
       </div>
-      <div class="group-container border-top-1px" v-if="ruleId == 3">
+      <div class="group-container border-bottom-1px" v-if="ruleId == 3">
         <div class="editor-item"  @click="selectAny('prize')">
           <div class="item-left large">设置兑换券</div>
           <div class="item-right input-right">
             <div class="right-txt" :class="type !== 'editor' ? '' : 'gray'" v-if="activityDetail.coupon_title">{{activityDetail.coupon_title}}</div>
             <span class="right-txt-placeholder" v-if="!activityDetail.coupon_title">成功砍价可领取</span>
             <img src="./icon-press_right@2x.png" class="arrow-icon">
-          </div>
-        </div>
-      </div>
-      <div class="royalty-item deducte border-top-1px border-bottom-1px">
-        <div class="item-left">活动提成 <div class="right-txt-12">提成按售卖价格的百分比计算</div></div>
-        <div class="item-right">
-          <div class="right-num-box">
-            <input type="number" class="num-input" v-model="activityDetail.commission_rate" :class="type === 'editor' ? 'disabled' : ''" :disabled="type === 'editor'">
-          </div>
-          <div class="right-txt-14">%</div>
-        </div>
-      </div>
-      <div class="group-container no-padding border-bottom-1px">
-        <div class="royalty-item">
-          <div class="item-left need-no">统一上架</div>
-          <div class="item-right end-right">
-            <switch-box @switchChange="switchChange" :values="activityDetail.is_sync * 1"></switch-box>
           </div>
         </div>
       </div>
@@ -207,7 +190,6 @@
   }
   const MONEYREG = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/
   const COUNTREG = /^[1-9]\d*$/
-  const RATEREG = /^[0-9]\d*$/
   export default {
     data() {
       return {
@@ -239,8 +221,8 @@
             group_price: ''
           },
           stock: '',
-          is_sync: 0,
-          commission_rate: '',
+          is_sync: 1, // 已无用保留默认值为1
+          commission_rate: '0', // 已无用保留默认值为0
           start_at: '',
           end_at: '',
           image_id: '',
@@ -264,7 +246,6 @@
           case 'goods':
             this.activityDetail.goods_id = item.id
             this.activityDetail.goods_title = item.title
-            // this.activityDetail.goods_price = item.platform_price
             this.activityDetail.config.original_price = item.platform_price
             break
           case 'prize':
@@ -460,8 +441,7 @@
             {value: this.groupNumReg, txt: '请选择拼团人数'},
             {value: this.stockReg, txt: '请选择或输入合法的库存数量'},
             {value: this.use1TimeReg, txt: '请选择活动开始时间'},
-            {value: this.use2TimeReg, txt: '请选择活动结束时间'},
-            {value: this.rateReg, txt: '请输入正整数提成比例'}
+            {value: this.use2TimeReg, txt: '请选择活动结束时间'}
           ]
         } else if (+this.ruleId === 3) {
           arr = [
@@ -472,8 +452,7 @@
             {value: this.stockReg, txt: '请选择或输入合法的库存数量'},
             {value: this.use1TimeReg, txt: '请选择活动开始时间'},
             {value: this.use2TimeReg, txt: '请选择活动结束时间'},
-            {value: this.couponReg, txt: '请选择帮砍人兑换券'},
-            {value: this.rateReg, txt: '请输入正整数提成比例'}
+            {value: this.couponReg, txt: '请选择帮砍人兑换券'}
           ]
         }
         let res = this._testPropety(arr)
@@ -539,9 +518,6 @@
       },
       couponReg() {
         return this.activityDetail.coupon_id
-      },
-      rateReg() {
-        return RATEREG.test(this.activityDetail.commission_rate) && +this.activityDetail.commission_rate <= 100
       },
       showSelectType() {
         if (this.ruleId) {
@@ -619,7 +595,7 @@
         text-align: center
         font-size: $font-size-16
         color: $color-white
-        background: $color-363537
+        background: $color-27273E
         border-radius: 2px
     .last-box
       height: 82px
@@ -669,7 +645,7 @@
         line-height: 38px
         padding-top: 6px
         font-size: $font-size-14
-        color: $color-363537
+        color: $color-27273E
         font-family: $font-family-medium
       .item-txt
         font-family: $font-family-regular
@@ -693,7 +669,7 @@
         &:before
           content: '*'
           position: absolute
-          color: $color-EF705D
+          color: $color-D32F2F
           left: -7px
           top: 2px
           font-size: 14px
@@ -728,7 +704,7 @@
           font-family: $font-family-regular
           font-size: $font-size-14
           letter-spacing: 0.6px
-          color: $color-363537
+          color: $color-27273E
           width: 100%
           height: 55px
           flex: 1
@@ -752,7 +728,7 @@
           line-height: 20px
           border: 0 none
           font-size: $font-size-14
-          color: $color-363537
+          color: $color-27273E
         .no-click
           color: $color-CCCCCC
           &.disabled
@@ -772,7 +748,7 @@
             align-items: center
             .time-item
               font-family: $font-family-regular
-              color: $color-363537
+              color: $color-27273E
               font-size: $font-size-14
               margin-right: 5px
             .time-icon
@@ -780,7 +756,7 @@
               height: 12.5px
           .time-txt
             font-family: $font-family-regular
-            color: $color-363537
+            color: $color-27273E
             font-size: $font-size-14
             &.disabled
               color: $color-9B9B9B
@@ -815,7 +791,7 @@
         position: relative
         &:before
           content: '*'
-          color: $color-EF705D
+          color: $color-D32F2F
           font-size: 14px
           margin-right: 2px
           position: absolute
@@ -928,7 +904,7 @@
           line-height: 55px
           border: 0 none
           font-size: $font-size-14
-          color: $color-363537
+          color: $color-27273E
         .input-box::-webkit-input-placeholder
           color: $color-9B9B9B
         .input-box::-ms-input-placeholder
@@ -1005,7 +981,7 @@
       height: 55px
       line-height: 55px
       font-size: $font-size-14
-      color: $color-363537
+      color: $color-27273E
       font-family: $font-family-regular
     .textarea-item
       padding-right: 15px
@@ -1033,7 +1009,7 @@
           margin: 0
           outline: none
           font-family: $font-family-regular
-          color: $color-363537
+          color: $color-27273E
         .textarea-content::-webkit-input-placeholder
           color: $color-9B9B9B
         .textarea-content::-ms-input-placeholder
@@ -1063,7 +1039,7 @@
         &:before
           content: '*'
           position: absolute
-          color: $color-EF705D
+          color: $color-D32F2F
           left: -7px
           top: 2px
           font-size: 14px

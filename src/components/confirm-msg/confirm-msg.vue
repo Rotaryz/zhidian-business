@@ -78,7 +78,7 @@
         align-items: center
         font-family: $font-family-regular
         font-size: $font-size-16
-        color: $color-363537
+        color: $color-27273E
         text-align: center
         line-height: 24px
         padding: 0 20px
@@ -94,8 +94,8 @@
           line-height: 45px
           font-family: $font-family-regular
           font-size: $font-size-14
-          color: $color-363537
+          color: $color-27273E
           letter-spacing: 0.6px
           &.confirm
-            color: $color-EF705D
+            color: $color-D32F2F
 </style>
