@@ -98,6 +98,7 @@
       },
       // base64转file类型
       dataURLtoFile(base64, filename, fileType = 'image/png') {
+        fileType = fileType.replace(/jgp/i, 'jpeg')
         let bstr
         if (/base64/.test(base64)) {
           let arr = []
