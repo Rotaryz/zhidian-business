@@ -78,7 +78,7 @@
           }
           res.data.logo = res.data.logo ? res.data.logo : {}
           this.shopInfo = res.data
-          this.$refs.scroll.forceUpdate()
+          this.$refs.scroll && this.$refs.scroll.forceUpdate()
         })
       },
       _getBusinessDetail() {
@@ -95,6 +95,7 @@
         Mine.getUserInfo().then(res => {
           this.$loading.hide()
           if (this.$ERR_OK !== res.error) {
+            this.$toast.show(res.message)
             return
           }
           let info = res.data

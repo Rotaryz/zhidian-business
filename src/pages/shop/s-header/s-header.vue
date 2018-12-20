@@ -1,14 +1,14 @@
 <template>
   <div class="s-header">
     <router-link tag="div" class="msg" to="/shop/account-detail">
-      <div class="logo" v-if="shopInfo.logo && shopInfo.logo.url" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+      <div class="logo" v-if="shopInfo && shopInfo.logo && shopInfo.logo.url" :style="{backgroundImage: 'url(' + shopInfo.logo.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
       <div class="logo" v-else></div>
       <!--<img class="logo" src="./icon-shop_drz@2x.png" v-else/>-->
       <div class="msg-box">
-        <div class="title">{{shopInfo.name || '店铺名称'}}</div>
+        <div class="title">{{shopInfo && shopInfo.name || '店铺名称'}}</div>
         <div class="use-time">
-          <span class="time">使用期限:{{(userInfo.merchant && userInfo.merchant.expire_time) | formatTime}}</span>
-          <span class="big-box" @click.stop="showExpire" v-if="userInfo.merchant && userInfo.merchant.expired">
+          <span class="time">使用期限:{{(userInfo && userInfo.merchant && userInfo.merchant.expire_time) | formatTime}}</span>
+          <span class="big-box" @click.stop="showExpire" v-if="userInfo && userInfo.merchant && userInfo.merchant.expired">
             <span class="red-box">续费</span>
           </span>
         </div>
@@ -25,7 +25,9 @@
     props: {
       shopInfo: {
         type: Object,
-        default: {}
+        default: () => {
+          return {}
+        }
       }
     },
     data() {
