@@ -23,8 +23,11 @@ function _getAuthorization(options, callback) {
   const key = options.Key || ''
   // const pathname = key.indexOf('/') === 0 ? key : '/' + key
   const pathname = key
+  alert(pathname)
   const Authorization = storage.get('token')
+  alert(encodeURIComponent(pathname))
   const url = BASE_URL.upload + '/api/cos/temp/signature?method=' + method + '&image=' + encodeURIComponent(pathname)
+  alert(url)
   const xhr = new XMLHttpRequest()
   xhr.open('GET', url, true)
   xhr.setRequestHeader('Authorization', Authorization)
