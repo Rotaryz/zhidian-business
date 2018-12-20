@@ -15,8 +15,12 @@
     "lint": "eslint --fix --ext .js,.vue src test/unit test/e2e/specs && eslint --ext .js,.vue src test/unit test/e2e/specs",
     "build": "node build/build.js",
     "new": "hygen new",
-    "init": "node _config/index.js"
+    "init": "node _config/index.js",
+    "check:appconfig": "node _config/check.js"
   },
+  "pre-commit": [
+    "check:appconfig"
+  ],
   "dependencies": {
     "axios": "^0.18.0",
     "better-scroll": "^1.12.4",
@@ -80,6 +84,7 @@
     "postcss-import": "^11.0.0",
     "postcss-loader": "^2.0.8",
     "postcss-url": "^7.2.1",
+    "pre-commit": "^1.2.2",
     "rimraf": "^2.6.0",
     "selenium-server": "^3.0.1",
     "semver": "^5.3.0",
