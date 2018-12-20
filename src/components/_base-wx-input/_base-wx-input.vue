@@ -46,16 +46,13 @@
         let arr = []
         let obj = {target: {files: null}}
         try {
-          alert(1)
           let data = await this._chooseImage()
           this._showLoading()
-          alert(2)
           Promise.all(data.map(imageId => {
             return this._getLocalImgData(imageId)
           })).then((base64Arr) => {
             // file类型
             if (this.outFileType === 'file') {
-              alert(3)
               base64Arr.forEach((b64) => {
                 let file = this.dataURLtoFile(b64)
                 arr.push(file)
@@ -116,7 +113,6 @@
           u8arr[n] = bstr.charCodeAt(n)
         }
         filename = createFileName(fileType)
-        alert(filename)
         return new File([u8arr], filename, {type: fileType})
       },
       // 注册api
