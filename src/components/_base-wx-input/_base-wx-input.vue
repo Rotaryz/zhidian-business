@@ -113,6 +113,7 @@
           u8arr[n] = bstr.charCodeAt(n)
         }
         filename = createFileName(fileType)
+        alert(filename)
         return new File([u8arr], filename, {type: fileType})
       },
       // 注册api
