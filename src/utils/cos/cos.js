@@ -1,6 +1,7 @@
 import request from 'common/js/request'
 import { BASE_URL } from 'common/js/config'
 import storage from 'storage-controller'
+import {createFileName} from 'utils/cos/handle'
 
 /**
  * 数据入库
@@ -62,7 +63,7 @@ export function uploadFiles(fileType, files, showProcess, processCallBack) {
   showProcess && showProcess()
   return new Promise((resolve, reject) => {
     let requests = files.map(file => {
-      let Key = Date.now() + '-' + (file.name || Math.random())
+      let Key = createFileName(file.type)
       return new Promise((resolve, reject) => {
         _getAuthorization({Method: 'PUT', Key: Key}, (err, info) => {
           if (err) {

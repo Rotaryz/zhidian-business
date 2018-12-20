@@ -118,3 +118,8 @@ export function createFormData($Blob, type = 'image/jpeg') {
   formData.append('file', $Blob, 'file_' + Date.now() + imageExt)
   return formData
 }
+
+// 创建文件名
+export function createFileName(fileType) {
+  return Date.now() + '-' + (~~(Math.random() * 1000) + '').padStart(4, '0') + ((fileType && fileType.replace('image/', '.')) || '.png')
+}
