@@ -200,6 +200,10 @@
             }, 20)
           } else {
             this.$toast.show(res.message)
+            this['list' + this.tabIdx] = this['list' + this.tabIdx].map((item1) => {
+              item1.showEdit = false
+              return item1
+            })
           }
         })
       },
