@@ -10,7 +10,7 @@
         <div class="phone">{{mobile}}</div>
       </div>
     </div>
-    <div class="btn" @click="logOff">退出登录</div>
+    <div class="btn" @click="logOff"> 退出登录</div>
     <confirm ref="confirm" @confirm="exitApp"></confirm>
   </div>
 </template>
