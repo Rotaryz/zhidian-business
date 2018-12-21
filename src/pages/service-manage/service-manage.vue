@@ -152,9 +152,6 @@
         this._initAll()
         this._getList()
       },
-      showModal() {
-        this.$refs.modal.show({msg: '该服务已关联活动，下架会导致活动下架，确定吗？'})
-      },
       modalConfirm() {
         if (!this.temporaryItem.id) return
         switch (this.temporaryType) {
@@ -224,6 +221,12 @@
             setTimeout(() => {
               this.$refs[`scroll${this.tabIdx}`].forceUpdate()
             }, 20)
+          } else {
+            this.$toast.show(res.message)
+            this['list' + this.tabIdx] = this['list' + this.tabIdx].map((item1) => {
+              item1.showEdit = false
+              return item1
+            })
           }
         })
       },
