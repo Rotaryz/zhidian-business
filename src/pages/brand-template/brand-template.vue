@@ -75,6 +75,7 @@
             }
             this.$toast.show('导入成功')
             this._getTemplateList()
+            this.$emit('refresh')
           })
       },
       _makeTemplate(id = '') { // 一键生成模板/更新模板
