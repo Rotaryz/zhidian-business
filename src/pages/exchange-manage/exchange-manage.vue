@@ -211,7 +211,7 @@
         if (type === 'new') {
           this._initAll()
         }
-        let url = `${this.$route.path}/editor-prize?type=${type}&id=${id}`
+        let url = `/shop/exchange-manage/editor-prize?type=${type}&id=${id}`
         this.$router.push(url)
       },
       _initAll() {
