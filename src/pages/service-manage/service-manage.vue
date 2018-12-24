@@ -244,7 +244,7 @@
         if (type === 'new') {
           this._initAll()
         }
-        let url = `${this.$route.path}/editor-service?type=${type}&id=${id}`
+        let url = `/shop/service-manage/editor-service?type=${type}&id=${id}`
         this.$router.push(url)
       },
       _initAll() {
