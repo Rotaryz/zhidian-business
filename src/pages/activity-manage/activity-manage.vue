@@ -225,7 +225,7 @@
         if (type === 'new') {
           this._initAll()
         }
-        let url = `${this.$route.path}/editor-activity?type=${type}&id=${id}&ruleId=${ruleId}`
+        let url = `/shop/activity-manage/editor-activity?type=${type}&id=${id}&ruleId=${ruleId}`
         this.$router.push(url)
       },
       _initAll() {
