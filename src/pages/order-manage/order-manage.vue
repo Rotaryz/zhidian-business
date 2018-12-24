@@ -11,6 +11,11 @@
       <div class="right-block" v-if="!inputFocus"></div>
     </div>
     <div class="header-tab border-bottom-1px">
+      <div class="right-box" @click="choiceStaff">
+        <span class="right-name" :class="shopId ? 'active' : ''">服务订单</span>
+        <img src="./icon-screen@2x.png" class="right-icon" v-if="!shopId">
+        <img src="./icon-screen_pick@2x.png" class="right-icon" v-if="shopId">
+      </div>
       <div class="left-box">
         <div class="tab-box">
           <div class="tab-item" :class="tabIdx == index ? 'active' : ''" v-for="(item, index) in tabList" :key="index" @click="changeTab(index, item)">
@@ -21,11 +26,11 @@
           <div class="underline"></div>
         </div>
       </div>
-      <div class="right-box" @click="choiceStaff">
-        <span class="right-name" :class="shopId ? 'active' : ''">店员</span>
-        <img src="./icon-screen@2x.png" class="right-icon" v-if="!shopId">
-        <img src="./icon-screen_pick@2x.png" class="right-icon" v-if="shopId">
-      </div>
+      <!--<div class="right-box" @click="choiceStaff">-->
+        <!--<span class="right-name" :class="shopId ? 'active' : ''">店员</span>-->
+        <!--<img src="./icon-screen@2x.png" class="right-icon" v-if="!shopId">-->
+        <!--<img src="./icon-screen_pick@2x.png" class="right-icon" v-if="shopId">-->
+      <!--</div>-->
     </div>
     <div class="container">
       <div class="big-container" :style="'transform: translate(-' + tabIdx*25 + '%,0)'">
@@ -450,7 +455,7 @@
             background: $color-D32F2F
             border-radius: 3px
       .right-box
-        width: 65px
+        width: 88px
         line-height: 45px
         display: flex
         align-items: center
@@ -464,7 +469,7 @@
           height: 14px
           background: $color-706B82
           position: absolute
-          left: 0
+          right: 0
           top: 50%
           transform: translate(0, -50%)
         .right-icon

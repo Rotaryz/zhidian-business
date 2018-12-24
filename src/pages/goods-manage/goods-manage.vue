@@ -65,7 +65,7 @@
       </div>
     </div>
     <div class="footer-box">
-      <div class="footer-btn" @click="toDetail('new')">新建服务</div>
+      <div class="footer-btn" @click="toDetail('new')">新建商品</div>
     </div>
     <router-view-common @refresh="refresh"></router-view-common>
     <modal ref="modal" @confirm="modalConfirm"></modal>
@@ -183,9 +183,9 @@
         this.temporaryItem = item
         this.temporaryType = 'down'
         if (res) {
-          this.$refs.modal.show({msg: '该服务已关联活动，下架会导致活动下架，确定吗？'})
+          this.$refs.modal.show({msg: '该商品已关联活动，下架会导致活动下架，确定吗？'})
         } else {
-          this.$refs.modal.show({msg: '确定下架该服务吗？'})
+          this.$refs.modal.show({msg: '确定下架该商品吗？'})
         }
       },
       _serviceDown(item) {
@@ -227,7 +227,7 @@
       async itemDelete(item) {
         this.temporaryItem = item
         this.temporaryType = 'del'
-        this.$refs.modal.show({msg: '确定删除该服务吗？'})
+        this.$refs.modal.show({msg: '确定删除该商品吗？'})
       },
       _serviceDel(item) {
         ServiceApi.setServiceDel(item.id).then((res) => {
@@ -264,7 +264,7 @@
         if (type === 'new') {
           this._initAll()
         }
-        let url = `${this.$route.path}/editor-service?type=${type}&id=${id}`
+        let url = `${this.$route.path}/editor-goods?type=${type}&id=${id}`
         this.$router.push(url)
       },
       _initAll() {
