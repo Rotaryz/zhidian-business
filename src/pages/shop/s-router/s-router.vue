@@ -3,7 +3,7 @@
     <div class="manage">
       <h3 class="title">店铺管理</h3>
       <ul class="s-ul border-bottom-1px border-right-1px">
-        <li class="item-wrapper"  v-if="!(merchant&&merchant.type === 0 && item.icon === 'eight')"  v-for="(item, index) in manageArray" :key="index" @click="navHandle(item)">
+        <li class="item-wrapper"  v-if="!(merchant&&merchant.type === 0 && item.path === '/brand-template')"  v-for="(item, index) in manageArray" :key="index" @click="navHandle(item)">
           <div class="logo">
             <div class="icon" :class="item.icon"></div>
           </div>
