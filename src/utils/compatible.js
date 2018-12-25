@@ -21,6 +21,5 @@ function isWeiXinAndIos() {
   // 通过正则表达式匹配ua中是否含有MicroMessenger字符串且是IOS系统
   let isWeixin = /MicroMessenger/i.test(ua) // 是在微信浏览器
   let isIos = /\(i[^;]+;( U;)? CPU.+Mac OS X/i.test(ua) // 是IOS系统
-  console.log(ua)
   return isWeixin && isIos
 }
