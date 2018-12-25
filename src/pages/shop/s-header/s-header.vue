@@ -7,7 +7,9 @@
       <div class="msg-box">
         <div class="title">{{shopInfo && shopInfo.name || '店铺名称'}}</div>
         <div class="use-time">
-          <span class="time">使用期限:{{(userInfo && userInfo.merchant && userInfo.merchant.expire_time) | formatTime}}</span>
+          <router-link tag="div" @click.stop to="/shop/shop-qr-code">
+            <span class="code"><i class="icon"></i>我的小店</span>
+          </router-link>
           <span class="big-box" @click.stop="showExpire" v-if="userInfo && userInfo.merchant && userInfo.merchant.expired">
             <span class="red-box">续费</span>
           </span>
@@ -19,7 +21,6 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {formatDateTime} from 'common/js/utils'
   export default {
     name: 's-header',
     props: {
@@ -42,12 +43,6 @@
     computed: {
       userInfo() {
         return this.$storage.get('info')
-      }
-    },
-    filters: {
-      formatTime(val) {
-        if (!val) return ''
-        return formatDateTime(val * 1000, '-')
       }
     }
   }
@@ -90,11 +85,22 @@
         .use-time
           display: flex
           align-items: center
-          .time
+          .code
+            width: 96px
+            height: 20px
+            line-height: 20px
             font-size: $font-size-14
-            color: $color-white
-            font-family: $font-family-regular
-            opacity: 0.7
+            color: rgba(255,255,255,0.7)
+            display: flex
+            align-items: center
+            justify-content: center
+            border-radius: 20px
+            border-1px(#979797, 20px)
+            .icon
+              icon-image(code)
+              width: 12px
+              height: 12px
+              margin-right: 5px
           .big-box
             padding: 5px
             .red-box
