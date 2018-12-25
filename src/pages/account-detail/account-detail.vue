@@ -5,9 +5,13 @@
         <span class="label">姓名</span>
         <div class="name">{{nickname}}</div>
       </div>
-      <div class="item">
+      <div class="item border-bottom-1px">
         <span class="label">手机号</span>
         <div class="phone">{{mobile}}</div>
+      </div>
+      <div class="item">
+        <span class="label">使用期限</span>
+        <div class="date">{{(userInfo && userInfo.merchant && userInfo.merchant.expire_time) | formatTime}}</div>
       </div>
     </div>
     <div class="btn" @click="logOff"> 退出登录</div>
@@ -16,13 +20,15 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {formatDateTime} from 'common/js/utils'
   import Confirm from 'components/confirm-msg/confirm-msg'
   import { Mine } from 'api'
   export default {
     data() {
       return {
         nickname: '',
-        mobile: ''
+        mobile: '',
+        date: ''
       }
     },
     created() {
@@ -38,6 +44,7 @@
             }
             this.nickname = res.data.nickname
             this.mobile = res.data.mobile
+            this.date = res.data.date
           })
       },
       logOff() {
@@ -49,6 +56,15 @@
       }
     },
     computed: {
+      userInfo() {
+        return this.$storage.get('info')
+      }
+    },
+    filters: {
+      formatTime(val) {
+        if (!val) return ''
+        return formatDateTime(val * 1000, '-')
+      }
     },
     components: {
       Confirm
@@ -81,6 +97,8 @@
           white-space: nowrap
           overflow: hidden
           text-overflow: ellipsis
+        .date
+          color: $color-9B9B9B
     .btn
       margin: 30px 12px
       height: 44px

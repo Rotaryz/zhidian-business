@@ -114,6 +114,7 @@
       this.type = this.$route.query.type
       this.id = this.$route.query.id
       if (this.id) {
+        document.title = '编辑奖品券'
         this._getPrizeDetail(this.id)
       }
     },

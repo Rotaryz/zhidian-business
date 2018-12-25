@@ -167,6 +167,7 @@
       this.type = this.$route.query.type
       this.id = this.$route.query.id
       if (this.id) {
+        document.title = '编辑商品'
         this._getServiceDetail(this.id)
       }
     },

@@ -271,7 +271,7 @@ const route = new Router({
               ]
             },
             {
-              path: '/shop-qr-code',
+              path: 'shop-qr-code',
               component: ShopQrCode,
               meta: {
                 title: '店铺二维码'

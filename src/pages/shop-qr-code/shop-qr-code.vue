@@ -74,9 +74,13 @@
   @import '~common/stylus/mixin'
 
   .shop-qr-code
+    position: fixed
+    left: 0
+    top: 0
+    width: 100vw
     overflow: hidden
     height :100vh
-    z-index: 50
+    z-index: 20
     background: $color-27273E
     .pad
       padding: 15vw 35px

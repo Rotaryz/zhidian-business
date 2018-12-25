@@ -237,6 +237,7 @@
       this.id = this.$route.query.id
       this.ruleId = +this.$route.query.ruleId
       if (this.id) {
+        document.title = '编辑活动'
         this._getDetail(this.id)
       }
     },
