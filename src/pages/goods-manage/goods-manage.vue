@@ -21,14 +21,14 @@
                   :showNoMore="showNoMore0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in list0" :key="index">
-                <service-item :tabIdx="tabIdx"
+                <goods-item :tabIdx="tabIdx"
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemEditor="itemEditor"
                               @itemDown="itemDown"
                               @itemDelete="itemDelete">
-                </service-item>
+                </goods-item>
               </div>
               <div class="nothing-box" v-if="nothing0">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
@@ -46,14 +46,14 @@
                   :showNoMore="showNoMore1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in list1" :key="index">
-                <service-item :tabIdx="tabIdx"
+                <goods-item :tabIdx="tabIdx"
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemEditor="itemEditor"
                               @itemUp="itemUp"
                               @itemDelete="itemDelete">
-                </service-item>
+                </goods-item>
               </div>
               <div class="nothing-box" v-if="nothing1">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
@@ -73,7 +73,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import ServiceItem from 'components/service-item/service-item'
+  import GoodsItem from 'components/goods-item/goods-item'
   import Modal from 'components/confirm-msg/confirm-msg'
   import Scroll from 'components/scroll/scroll'
   import { ServiceApi } from 'api'
@@ -316,7 +316,7 @@
       }
     },
     components: {
-      ServiceItem,
+      GoodsItem,
       Scroll,
       Modal
     },

@@ -106,31 +106,12 @@
             </div>
           </div>
         </label>
-        <label>
-          <div class="editor-item">
-            <div class="item-left">预约信息</div>
-            <div class="item-right">
-              <input type="text" class="input-box" v-model="serviceDetail.note.need_subscribe" placeholder="请填写">
-            </div>
-          </div>
-        </label>
-      </div>
-      <div class="editor-title border-bottom-1px border-top-1px">
-        <div class="title">温馨提示</div>
-      </div>
-      <div class="group-container">
-        <div class="textarea-item">
-          <div class="textarea-box">
-            <textarea class="textarea-content" @touchmove.stop maxlength="20" placeholder="请输入" v-model="serviceDetail.note.remarks"></textarea>
-            <div class="count-box">{{serviceDetail.note.remarks.length}}/20</div>
-          </div>
-        </div>
       </div>
       <div class="padding-bottom"></div>
     </scroll>
     <title-box ref="titleBox" @submitMsg="submitTile"></title-box>
     <div class="bottom-box border-top-1px">
-      <div class="bottom-btn" @click="submitAll">保存</div>
+      <div class="bottom-btn" @click="submitAll">保存并上架</div>
     </div>
     <awesome-picker
       ref="picker"
@@ -176,10 +157,6 @@
           end_at: '', // 售卖结束
           commission_rate: '0', // 佣金 已无用保留默认值为0
           usable_stock: '', // 总库存
-          note: {
-            need_subscribe: '', // 预约信息
-            remarks: '' // 其他备注
-          },
           industry_name: '美业', // 品类
           is_online: '1', // 是否上线
           is_sync: 1 // 是否全员上架 已无用保留默认值为1
@@ -355,8 +332,7 @@
           {value: this.bannerReg, txt: '请添加至少一张商品图片'},
           {value: this.detailImgReg, txt: '请添加至少一张商品详情图片'},
           {value: this.use1TimeReg, txt: '请选择售卖开始时间'},
-          {value: this.use2TimeReg, txt: '请选择售卖结束时间'},
-          {value: this.subscribeMsg, txt: '请输入预约信息'}
+          {value: this.use2TimeReg, txt: '请选择售卖结束时间'}
         ]
         let res = this._testPropety(arr)
         if (res) {
@@ -407,9 +383,6 @@
       },
       use2TimeReg() {
         return this.serviceDetail.end_at
-      },
-      subscribeMsg() {
-        return this.serviceDetail.note.need_subscribe
       },
       stockReg() {
         return this.serviceDetail.usable_stock && COUNTREG.test(this.serviceDetail.usable_stock)

@@ -45,18 +45,6 @@
             </div>
           </div>
         </label>
-        <!--<div class="editor-item border-bottom-1px">-->
-          <!--<div class="item-left">品类</div>-->
-          <!--<div class="item-right">-->
-            <!--<span class="right-txt">{{serviceDetail.industry_name}}</span>-->
-          <!--</div>-->
-        <!--</div>-->
-        <!--<div class="editor-item">-->
-          <!--<div class="item-left">类型</div>-->
-          <!--<div class="item-right">-->
-            <!--<span class="right-txt">{{couponType[serviceDetail.promotion_type]}}</span>-->
-          <!--</div>-->
-        <!--</div>-->
       </div>
       <div class="group-container no-padding">
         <div class="service-img-item border-top-1px">
@@ -85,12 +73,6 @@
         </div>
       </div>
       <div class="group-container no-padding">
-        <!--<div class="editor-item border-bottom-1px">-->
-          <!--<div class="item-left">服务详情</div>-->
-          <!--<div class="item-right check-right" @click="checkService">-->
-            <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
-          <!--</div>-->
-        <!--</div>-->
         <div class="server-list border-bottom-1px" :class="item.hide ? 'hide-list': item.hasClass ? 'has-class show-list' : 'show-list'" v-for="(item, index) in serviceDetail.detail_config" :key="index">
           <label>
             <div class="editor-item border-bottom-1px">

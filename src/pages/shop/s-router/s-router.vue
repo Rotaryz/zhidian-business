@@ -57,16 +57,21 @@
     },
     {
       icon: 'six',
+      title: '商品',
+      path: '/goods-manage'
+    },
+    {
+      icon: 'seven',
       title: '门店信息',
       path: '/shop-info'
     },
     {
-      icon: 'seven',
+      icon: 'eight',
       title: '品牌故事',
       path: '/content'
     },
     {
-      icon: 'eight',
+      icon: 'nine',
       title: '品牌模板',
       path: '/brand-template'
     }
@@ -165,7 +170,7 @@
         layout(row)
         .item-wrapper
           position: relative
-          width: 25%
+          width: 33.333%
           layout()
           justify-content: center
           align-items: center
@@ -197,10 +202,12 @@
               &.five
                 icon-image(icon-service)
               &.six
-                icon-image(icon-info)
+                icon-image(icon-goods)
               &.seven
-                icon-image(icon-content)
+                icon-image(icon-info)
               &.eight
+                icon-image(icon-content)
+              &.nine
                 icon-image(icon-template)
               &.ac-one
                 icon-image(icon-activity)
