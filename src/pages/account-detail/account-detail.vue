@@ -27,7 +27,8 @@
     data() {
       return {
         nickname: '',
-        mobile: ''
+        mobile: '',
+        date: ''
       }
     },
     created() {
@@ -43,6 +44,7 @@
             }
             this.nickname = res.data.nickname
             this.mobile = res.data.mobile
+            this.date = res.data.date
           })
       },
       logOff() {

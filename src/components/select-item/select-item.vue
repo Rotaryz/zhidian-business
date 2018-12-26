@@ -1,8 +1,7 @@
 <template>
   <div class="service-item" @click="selectGoods(item)">
     <div class="item-content">
-      <div class="item-left" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}">
-      </div>
+      <img class="item-left" :src="item.image_url" />
       <div class="item-right">
         <div class="right-msg">
           <div class="right-title">{{item.title}}</div>
@@ -19,6 +18,7 @@
         </div>
       </div>
     </div>
+    <div class="tag" v-if="type !== 'prize'" :class="{'goods':item.type == 1}"></div>
   </div>
 </template>
 
@@ -48,6 +48,7 @@
     background: $color-white
     border-1px($color-col-line, 2px)
     position: relative
+    overflow: hidden
     .item-content
       position: absolute
       left: 0
@@ -65,6 +66,7 @@
         border-1px($color-E6E6E6)
         overflow: hidden
         position: relative
+        object-fit: cover
         .left-cover
           position: absolute
           width: 100%
@@ -130,4 +132,14 @@
               margin-top: 7px
               display: flex
               justify-content: space-between
+    .tag
+      width: 38px
+      height: 38px
+      position: absolute
+      left: -2px
+      top: -2px
+      z-index: 1
+      icon-image(pic-label_pt)
+    .goods
+      icon-image(pic-label_kj)
 </style>

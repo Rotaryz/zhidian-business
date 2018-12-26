@@ -1,5 +1,15 @@
 <template>
   <div class="exchange-record">
+    <div class="header-tab border-bottom-1px">
+      <div class="tab-box">
+        <div class="tab-item" :class="tabIdx == index ? 'active' : ''" v-for="(item, index) in tabList" :key="index" @click="changeTab(index, item)">
+          {{item.txt}}
+        </div>
+      </div>
+      <div class="underline-box" :style="'transform: translate(' + tabIdx*100 + '%,0)'">
+        <div class="underline"></div>
+      </div>
+    </div>
     <section class="header">
       <div class="left">
         <div class="name">券名</div>
@@ -44,6 +54,10 @@
   import { Exchange } from '../../api'
 
   const LIMIT = 10
+  const TABS = [
+    {txt: '服务', id: 0, type: 3},
+    {txt: '商品', id: 1, type: 1}
+  ]
   export default {
     name: 'ExchangeRecord',
     components: {
@@ -51,6 +65,8 @@
     },
     data() {
       return {
+        tabList: TABS,
+        tabIdx: 0,
         dataArray: [],
         pullUpLoad: true,
         pullUpLoadThreshold: 0,
@@ -58,16 +74,30 @@
         pullUpLoadNoMoreTxt: '没有更多了',
         page: 1,
         hasMore: true,
-        isEmpty: false
+        isEmpty: false,
+        type: 3
       }
     },
     created() {
       this._getLog()
     },
     methods: {
+      changeTab(idx) {
+        this.tabIdx = idx * 1
+        this.type = this.tabList[idx].type
+        this._initAll()
+        this._getLog()
+      },
+      _initAll() {
+        this.page = 1
+        this.hasMore = true
+        this.isEmpty = false
+        this.dataArray = []
+        this.pullUpLoad = true
+      },
       _getLog(data = {page: 1}) {
         if (!this.hasMore) return
-        Exchange.getVerificationLog({...data, limit: LIMIT}).then(res => {
+        Exchange.getVerificationLog({...data, limit: LIMIT, type: this.type}).then(res => {
           this.$loading.hide()
           if (res.error !== this.$ERR_OK) {
             this.$toast.show(res.message)
@@ -144,7 +174,46 @@
     fill-box()
     z-index: 40
     background: #fff
+    .header-tab
+      position: fixed
+      width: 100vw
+      height: 45px
+      top: 0
+      left: 0
+      z-index: 60
+      background: $color-white
+      .tab-box
+        width: 100%
+        height: 45px
+        display: flex
+        .tab-item
+          flex: 1
+          height: 45px
+          line-height: 44px
+          text-align: center
+          font-size: $font-size-16
+          color: $color-27273E
+          font-family: $font-family-regular
+          letter-spacing: 0.8px
+        .tab-item.active
+          font-family: $font-family-medium
+      .underline-box
+        height: 3px
+        position: absolute
+        bottom: 0
+        width: 50%
+        display: flex
+        justify-content: center
+        transform: translate(0, 0)
+        transition: all 0.3s
+        .underline
+          width: 30px
+          height: 3px
+          background: $color-D32F2F
+          border-radius: 3px
+
     .header
+      margin-top: 45px
       height: 50px
       padding: 0 15px
       layout(row, block, nowrap)
@@ -165,7 +234,7 @@
         width: $time-width
     .scroll-container
       position: absolute
-      top: 50px
+      top: 95px
       bottom: 0
       left: 0
       right: 0

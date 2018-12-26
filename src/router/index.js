@@ -43,6 +43,8 @@ const Wheel = () => import('pages/wheel/wheel')
 const WheelAddPrize = () => import('pages/wheel-add-prize/wheel-add-prize')
 const BrandTemplate = () => import('pages/brand-template/brand-template')
 const AccountDetail = () => import('pages/account-detail/account-detail')
+const GoodsManage = () => import('pages/goods-manage/goods-manage')
+const EditorGoods = () => import('pages/editor-goods/editor-goods')
 
 Vue.use(Router)
 
@@ -288,6 +290,22 @@ const route = new Router({
               meta: {
                 title: '帐号信息'
               }
+            },
+            {
+              path: 'goods-manage',
+              component: GoodsManage,
+              meta: {
+                title: '商品管理'
+              },
+              children: [
+                {
+                  path: 'editor-goods',
+                  component: EditorGoods,
+                  meta: {
+                    title: '新建商品'
+                  }
+                }
+              ]
             }
           ]
         },
