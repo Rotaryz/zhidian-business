@@ -1,18 +1,17 @@
 <template>
   <div class="order-item">
     <div class="top border-bottom-1px">
-      <div class="shop-name">店员：{{item.employee_name}}</div>
+      <div class="shop-name">订单编号：{{item.order_sn}}</div>
       <div class="status">{{item.status_str}}</div>
     </div>
-    <div class="down">
-      <div class="title">{{item.order_type}}：{{item.title}}</div>
+    <div class="down" @click="toDetail">
+      <div class="img" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+      <div class="img" v-else></div>
       <div class="down-msg">
-        <div class="left">
-          <div class="down-txt">下单号码：{{item.customer_mobile}}</div>
-          <div class="down-txt last">订单编号：{{item.order_sn}}</div>
-        </div>
-        <div class="right" @click="toDetail(item)">查看详情</div>
+        <div class="title">{{item.title}}</div>
+        <div class="price"><span class="mark">￥</span>{{item.total}}</div>
       </div>
+      <div class="right-icon"></div>
     </div>
   </div>
 </template>
@@ -25,8 +24,8 @@
       }
     },
     methods: {
-      toDetail(item) {
-        this.$emit('toDetail', item)
+      toDetail() {
+        this.$emit('toDetail', this.item)
       }
     }
   }
@@ -54,32 +53,41 @@
         color: $color-706B82
     .down
       padding: 15px 0
-      .title
-        font-size: $font-size-14
-        margin-bottom: 12px
-        word-break: break-all
-        display: -webkit-box
-        overflow: hidden
-        -webkit-line-clamp: 2
-        -webkit-box-orient: vertical
+      display: flex
+      align-items: center
+      justify-content: space-between
+      .img
+        width: 60px
+        height: @width
+        border-radius: 2px
+        background-color: #f5f5f5
       .down-msg
         display: flex
-        align-items: flex-end
+        flex: 1
+        overflow: hidden
+        flex-direction: column
         justify-content: space-between
-        .left
-          .down-txt
-            font-size: $font-size-14
-            color: $color-9B9B9B
-            &.last
-              margin-top: 9px
-        .right
-          width: 65px
-          height: 26px
-          box-sizing: border-box
-          border-1px($color-D32F2F, 2px)
-          text-align: center
-          line-height: 26px
-          font-size: $font-size-12
-          color: $color-D32F2F
+        margin-left: 10px
+        height: 55px
+        margin-right: 30px
+        .title
+          $color-4A4657
+          font-size: $font-size-14
+          font-family: $font-family-regular
+          overflow: hidden
+          text-overflow: ellipsis
+          white-space: nowrap
+        .price
+          font-size: $font-size-18
+          color: #000
+          font-family: $font-family-medium
+          .mark
+            font-size: $font-size-12
+            color: $color-27273E
+            font-family: $font-family-medium
+      .right-icon
+        width: 8px
+        height: 14px
+        icon-image(icon-pressed)
 
 </style>

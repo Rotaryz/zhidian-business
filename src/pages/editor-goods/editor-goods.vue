@@ -1,6 +1,6 @@
 <template>
   <div class="editor-service">
-    <scroll :data="serviceDetail.detail_config" :bcColor="'#ffffff'" ref="scroll">
+    <scroll :data="serviceDetail.goods_images" :bcColor="'#ffffff'" ref="scroll">
       <div class="editor-title border-bottom-1px border-top-1px">
         <div class="title">基本信息</div>
       </div>
@@ -9,7 +9,7 @@
           <div class="item-left">标题</div>
           <div class="item-right input-right" >
             <div class="right-txt" v-if="serviceDetail.title">{{serviceDetail.title}}</div>
-            <span class="right-txt-placeholder" v-if="!serviceDetail.title">请填写服务的标题</span>
+            <span class="right-txt-placeholder" v-if="!serviceDetail.title">请填写商品的标题</span>
             <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
           </div>
         </div>
@@ -17,7 +17,7 @@
           <div class="item-left need-no">副标题</div>
           <div class="item-right input-right" >
             <div class="right-txt" v-if="serviceDetail.subtitle">{{serviceDetail.subtitle}}</div>
-            <span class="right-txt-placeholder" v-if="!serviceDetail.subtitle">请填写服务的副标题</span>
+            <span class="right-txt-placeholder" v-if="!serviceDetail.subtitle">请填写商品的副标题</span>
             <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
           </div>
         </div>
@@ -48,7 +48,7 @@
       </div>
       <div class="group-container no-padding">
         <div class="service-img-item border-top-1px">
-          <div class="item-title">服务图片 <span class="item-subtitle">建议尺寸比率为4:3,大小10M以内，最多3张</span></div>
+          <div class="item-title">商品图片 <span class="item-subtitle">建议尺寸比率为4:3,大小10M以内，最多3张</span></div>
           <div class="img-container">
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in [1, 2, 3]" :key="index">
@@ -66,41 +66,7 @@
           </div>
         </div>
       </div>
-      <div class="editor-title border-bottom-1px border-top-1px">
-        <div class="title">
-          套餐
-          <span class="add-server" @click.stop="addItem"></span>
-        </div>
-      </div>
       <div class="group-container no-padding">
-        <div class="server-list border-bottom-1px" :class="item.hide ? 'hide-list': item.hasClass ? 'has-class show-list' : 'show-list'" v-for="(item, index) in serviceDetail.detail_config" :key="index">
-          <label>
-            <div class="editor-item border-bottom-1px">
-              <div class="item-left">名称</div>
-              <div class="item-right">
-                <input type="text" class="input-box" v-model="item.servie" placeholder="请填写服务名称">
-                <span v-if="index > 0" class="del-server" @click.stop="delItem(index)"></span>
-              </div>
-            </div>
-          </label>
-          <label>
-            <div class="editor-item border-bottom-1px">
-              <div class="item-left">数量</div>
-              <div class="item-right">
-                <input type="number" class="input-box" v-model="item.number" placeholder="请填写">
-              </div>
-            </div>
-          </label>
-          <label>
-            <div class="editor-item">
-              <div class="item-left">价格</div>
-              <div class="item-right">
-                <input type="number" class="input-box" v-model="item.price" placeholder="请填写">
-              </div>
-            </div>
-          </label>
-        </div>
-
         <div class="service-img-item">
           <div class="item-title">详情图片 <span class="item-subtitle">建议大小10M以内，最多5张</span></div>
           <div class="img-container">
@@ -140,33 +106,13 @@
             </div>
           </div>
         </label>
-        <label>
-          <div class="editor-item">
-            <div class="item-left">预约信息</div>
-            <div class="item-right">
-              <input type="text" class="input-box" v-model="serviceDetail.note.need_subscribe" placeholder="请填写">
-            </div>
-          </div>
-        </label>
-      </div>
-      <div class="editor-title border-bottom-1px border-top-1px">
-        <div class="title">温馨提示</div>
-      </div>
-      <div class="group-container">
-        <div class="textarea-item">
-          <div class="textarea-box">
-            <textarea class="textarea-content" @touchmove.stop maxlength="20" placeholder="请输入" v-model="serviceDetail.note.remarks"></textarea>
-            <div class="count-box">{{serviceDetail.note.remarks.length}}/20</div>
-          </div>
-        </div>
       </div>
       <div class="padding-bottom"></div>
     </scroll>
     <title-box ref="titleBox" @submitMsg="submitTile"></title-box>
     <div class="bottom-box border-top-1px">
-      <div class="bottom-btn" @click="submitAll">保存</div>
+      <div class="bottom-btn" @click="submitAll">保存并上架</div>
     </div>
-    <detail-modal ref="detailModal" @serviceSuccess="serviceSuccess"></detail-modal>
     <awesome-picker
       ref="picker"
       type="date"
@@ -181,7 +127,6 @@
 <script type="text/ecmascript-6">
   import TitleBox from 'components/title-box/title-box'
   import Scroll from 'components/scroll/scroll'
-  import DetailModal from 'components/service-detail-modal/service-detail-modal'
   import SwitchBox from 'components/switch-box/switch-box'
   import Cropper from 'components/cropper/cropper'
   import { ServiceApi } from 'api'
@@ -212,17 +157,6 @@
           end_at: '', // 售卖结束
           commission_rate: '0', // 佣金 已无用保留默认值为0
           usable_stock: '', // 总库存
-          note: {
-            need_subscribe: '', // 预约信息
-            remarks: '' // 其他备注
-          },
-          detail_config: [
-            {
-              servie: '',
-              number: '',
-              price: ''
-            }
-          ], // 服务详情
           industry_name: '美业', // 品类
           is_online: '1', // 是否上线
           is_sync: 1 // 是否全员上架 已无用保留默认值为1
@@ -233,7 +167,7 @@
       this.type = this.$route.query.type
       this.id = this.$route.query.id
       if (this.id) {
-        document.title = '编辑活动'
+        document.title = '编辑商品'
         this._getServiceDetail(this.id)
       }
     },
@@ -381,14 +315,6 @@
         this.timeType = type
         this.$refs.picker.show()
       },
-      checkService() {
-        this.$refs.detailModal.showCover(this.serviceDetail.detail_config)
-      },
-      serviceSuccess(res) {
-        this.serviceDetail.detail_config = res.map((item) => {
-          return Object.assign({}, item)
-        })
-      },
       switchChange(res) {
         this.serviceDetail.is_sync = res ? 1 : 0
       },
@@ -399,21 +325,15 @@
       },
       checkForm() {
         let arr = [
-          {value: this.titleReg, txt: '请输入服务标题'},
+          {value: this.titleReg, txt: '请输入商品标题'},
           {value: this.originalPriceNotReg, txt: '请输入合法的门市价格'},
           {value: this.platformPriceNotReg, txt: '请输入合法的售价'},
           {value: this.platformPriceRangeReg, txt: '平台价格不得高于门市价'},
           {value: this.stockReg, txt: '请输入合法的最大库存数量'},
-          {value: this.bannerReg, txt: '请添加至少一张服务图片'},
-          {value: this.serviceDetailReg, txt: '请至少添加一条服务套餐'},
-          {value: this.serviceDetailMsg, txt: '请完整填写服务套餐信息'},
-          {value: this.serviceCount, txt: '请输入合法的套餐数量'},
-          {value: this.servicePirceNum, txt: '请正确输入套餐价格'},
-          {value: this.servicePrice, txt: '套餐价格请保留两位小数'},
-          {value: this.detailImgReg, txt: '请添加至少一张服务详情图片'},
+          {value: this.bannerReg, txt: '请添加至少一张商品图片'},
+          {value: this.detailImgReg, txt: '请添加至少一张商品详情图片'},
           {value: this.use1TimeReg, txt: '请选择售卖开始时间'},
-          {value: this.use2TimeReg, txt: '请选择售卖结束时间'},
-          {value: this.subscribeMsg, txt: '请输入预约信息'}
+          {value: this.use2TimeReg, txt: '请选择售卖结束时间'}
         ]
         let res = this._testPropety(arr)
         if (res) {
@@ -438,42 +358,6 @@
             return true
           }
         }
-      },
-      addItem() {
-        this.serviceDetail.detail_config.push({
-          servie: '',
-          number: '',
-          price: '',
-          hide: true,
-          hasClass: true
-        })
-        setTimeout(() => {
-          this.serviceDetail.detail_config = this.serviceDetail.detail_config.map((item, index) => {
-            if (index === (this.serviceDetail.detail_config.length - 1)) {
-              item.hide = false
-            }
-            return item
-          })
-        }, 20)
-        setTimeout(() => {
-          this.serviceDetail.detail_config = this.serviceDetail.detail_config.map((item, index) => {
-            if (index === (this.serviceDetail.detail_config.length - 1)) {
-              item.hasClass = false
-            }
-            return item
-          })
-        }, 300)
-      },
-      delItem(idx) {
-        this.serviceDetail.detail_config = this.serviceDetail.detail_config.map((item, index) => {
-          if (index === idx) {
-            item.hide = true
-          }
-          return item
-        })
-        setTimeout(() => {
-          this.serviceDetail.detail_config.splice(idx, 1)
-        }, 300)
       }
     },
     computed: {
@@ -501,41 +385,8 @@
       use2TimeReg() {
         return this.serviceDetail.end_at
       },
-      subscribeMsg() {
-        return this.serviceDetail.note.need_subscribe
-      },
       stockReg() {
         return this.serviceDetail.usable_stock && COUNTREG.test(this.serviceDetail.usable_stock)
-      },
-      serviceDetailReg() {
-        let arr = this.serviceDetail.detail_config.filter((item) => {
-          return item.servie || item.number || item.price
-        })
-        return arr.length
-      },
-      serviceDetailMsg() {
-        let handle = this.serviceDetail.detail_config.every((item) => {
-          return item.servie && item.number && item.price
-        })
-        return handle
-      },
-      serviceCount() {
-        let count = this.serviceDetail.detail_config.every((item) => {
-          return item.number && COUNTREG.test(item.number)
-        })
-        return count
-      },
-      servicePirceNum() {
-        let num = this.serviceDetail.detail_config.every((item) => {
-          return item.price && MONEYREG.test(item.price)
-        })
-        return num
-      },
-      servicePrice() {
-        let price = this.serviceDetail.detail_config.every((item) => {
-          return !(/\d+\.\d{3}/.test(item.price))
-        })
-        return price
       }
     },
     watch: {
@@ -546,7 +397,6 @@
     components: {
       TitleBox,
       Scroll,
-      DetailModal,
       SwitchBox,
       Cropper
     }

@@ -8,7 +8,7 @@
               @pullingUp="onPullingUp"
               :showNoMore="showNoMore">
         <div class="list-container">
-          <div class="page-title">{{type === 'prize' ? '选择兑换券' : '选择商品'}}</div>
+          <div class="page-title" v-if="!nothing">{{type === 'prize' ? '选择兑换券' : '选择商品'}}</div>
           <div class="list-item" v-for="(item, index) in list" :key="index">
             <select-item :item="item" :type="type" @selectSome="selectDone"></select-item>
           </div>
@@ -19,7 +19,7 @@
         </div>
       </scroll>
     </div>
-    <div class="bottom-box border-top-1px">
+    <div class="bottom-box border-top-1px" v-if="!nothing">
       <div class="bottom-btn" @click="submitAll">确定</div>
     </div>
   </div>

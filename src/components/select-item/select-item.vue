@@ -19,6 +19,7 @@
         </div>
       </div>
     </div>
+    <div class="tag" :class="{'goods':item.type === 'goods'}"></div>
   </div>
 </template>
 
@@ -48,6 +49,7 @@
     background: $color-white
     border-1px($color-col-line, 2px)
     position: relative
+    overflow: hidden
     .item-content
       position: absolute
       left: 0
@@ -130,4 +132,13 @@
               margin-top: 7px
               display: flex
               justify-content: space-between
+    .tag
+      width: 38px
+      height: 38px
+      position: absolute
+      left: -2px
+      top: -2px
+      icon-image(pic-label_pt)
+    .goods
+      icon-image(pic-label_kj)
 </style>
