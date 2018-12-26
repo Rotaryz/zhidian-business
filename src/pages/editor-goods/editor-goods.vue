@@ -1,6 +1,6 @@
 <template>
-  <div class="editor-service">
-    <scroll :data="serviceDetail.goods_images" :bcColor="'#ffffff'" ref="scroll">
+  <div class="editor-goods">
+    <scroll :data="goodsDetail.goods_images" :bcColor="'#ffffff'" ref="scroll">
       <div class="editor-title border-bottom-1px border-top-1px">
         <div class="title">基本信息</div>
       </div>
@@ -8,16 +8,16 @@
         <div class="editor-item border-bottom-1px" @click="showTitleModal('title')">
           <div class="item-left">标题</div>
           <div class="item-right input-right" >
-            <div class="right-txt" v-if="serviceDetail.title">{{serviceDetail.title}}</div>
-            <span class="right-txt-placeholder" v-if="!serviceDetail.title">请填写商品的标题</span>
+            <div class="right-txt" v-if="goodsDetail.title">{{goodsDetail.title}}</div>
+            <span class="right-txt-placeholder" v-if="!goodsDetail.title">请填写商品的标题</span>
             <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
           </div>
         </div>
         <div class="editor-item border-bottom-1px" @click="showTitleModal('subtitle')">
           <div class="item-left need-no">副标题</div>
           <div class="item-right input-right" >
-            <div class="right-txt" v-if="serviceDetail.subtitle">{{serviceDetail.subtitle}}</div>
-            <span class="right-txt-placeholder" v-if="!serviceDetail.subtitle">请填写商品的副标题</span>
+            <div class="right-txt" v-if="goodsDetail.subtitle">{{goodsDetail.subtitle}}</div>
+            <span class="right-txt-placeholder" v-if="!goodsDetail.subtitle">请填写商品的副标题</span>
             <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
           </div>
         </div>
@@ -25,7 +25,7 @@
           <div class="editor-item border-bottom-1px">
             <div class="item-left">门市价</div>
             <div class="item-right">
-              <input type="number" class="input-box" v-model="serviceDetail.original_price" placeholder="请填写">
+              <input type="number" class="input-box" v-model="goodsDetail.original_price" placeholder="请填写">
             </div>
           </div>
         </label>
@@ -33,7 +33,7 @@
           <div class="editor-item border-bottom-1px">
             <div class="item-left">售价</div>
             <div class="item-right">
-              <input type="number" class="input-box" v-model="serviceDetail.platform_price" placeholder="请填写">
+              <input type="number" class="input-box" v-model="goodsDetail.platform_price" placeholder="请填写">
             </div>
           </div>
         </label>
@@ -41,24 +41,24 @@
           <div class="editor-item">
             <div class="item-left">库存</div>
             <div class="item-right">
-              <input type="number" class="input-box" v-model="serviceDetail.usable_stock" placeholder="请填写">
+              <input type="number" class="input-box" v-model="goodsDetail.usable_stock" placeholder="请填写">
             </div>
           </div>
         </label>
       </div>
       <div class="group-container no-padding">
-        <div class="service-img-item border-top-1px">
+        <div class="goods-img-item border-top-1px">
           <div class="item-title">商品图片 <span class="item-subtitle">建议尺寸比率为4:3,大小10M以内，最多3张</span></div>
           <div class="img-container">
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in [1, 2, 3]" :key="index">
                 <div class="img-bc un-up"></div>
-                <div class="img-bc up" v-if="serviceDetail.goods_banner_images.length == index"></div>
-                <base-wx-input class="img-bc image-file" @change="_fileImage($event)" accept="image/*" v-if="serviceDetail.goods_banner_images.length == index"></base-wx-input>
+                <div class="img-bc up" v-if="goodsDetail.goods_banner_images.length == index"></div>
+                <base-wx-input class="img-bc image-file" @change="_fileImage($event)" accept="image/*" v-if="goodsDetail.goods_banner_images.length == index"></base-wx-input>
               </div>
             </div>
             <div class="container-item">
-              <div class="img-box" v-for="(item, index) in serviceDetail.goods_banner_images" :key="index">
+              <div class="img-box" v-for="(item, index) in goodsDetail.goods_banner_images" :key="index">
                 <div class="img-show" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                 <div class="del-icon" v-if="item.image_url" @click.stop="delBanner(index)"></div>
               </div>
@@ -67,18 +67,18 @@
         </div>
       </div>
       <div class="group-container no-padding">
-        <div class="service-img-item">
+        <div class="goods-img-item">
           <div class="item-title">详情图片 <span class="item-subtitle">建议大小10M以内，最多5张</span></div>
           <div class="img-container">
             <div class="container-item">
               <div class="img-box" v-for="(item, index) in [1, 2, 3, 4, 5]" :key="index">
                 <div class="img-bc un-up"></div>
-                <div class="img-bc up" v-if="serviceDetail.goods_images.length == index"></div>
-                <base-wx-input class="img-bc image-file" @change="_fileDetail($event)" accept="image/*" v-if="serviceDetail.goods_images.length == index" :multiple="5"></base-wx-input>
+                <div class="img-bc up" v-if="goodsDetail.goods_images.length == index"></div>
+                <base-wx-input class="img-bc image-file" @change="_fileDetail($event)" accept="image/*" v-if="goodsDetail.goods_images.length == index" :multiple="5"></base-wx-input>
               </div>
             </div>
             <div class="container-item">
-              <div class="img-box" v-for="(item, index) in serviceDetail.goods_images" :key="index">
+              <div class="img-box" v-for="(item, index) in goodsDetail.goods_images" :key="index">
                 <div class="img-show" v-if="item.image_url" :style="{backgroundImage: 'url(' + item.image_url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
                 <div class="del-icon" v-if="item.image_url" @click.stop="delDetail(index)"></div>
               </div>
@@ -94,7 +94,7 @@
           <div class="editor-item border-bottom-1px">
             <div class="item-left">开始时间</div>
             <div class="item-right">
-              <input type="text" class="input-box" :class="{'no-click': (type === 'editor')}" @click="chioseTime('use1')" v-model="serviceDetail.start_at" readonly placeholder="请选择时间">
+              <input type="text" class="input-box" :class="{'no-click': (type === 'editor')}" @click="chioseTime('use1')" v-model="goodsDetail.start_at" readonly placeholder="请选择时间">
             </div>
           </div>
         </label>
@@ -102,7 +102,7 @@
           <div class="editor-item border-bottom-1px">
             <div class="item-left">结束时间</div>
             <div class="item-right">
-              <input type="text" class="input-box" @click="chioseTime('use2')" v-model="serviceDetail.end_at" readonly placeholder="请选择时间">
+              <input type="text" class="input-box" @click="chioseTime('use2')" v-model="goodsDetail.end_at" readonly placeholder="请选择时间">
             </div>
           </div>
         </label>
@@ -110,7 +110,7 @@
           <div class="editor-item">
             <div class="item-left">预约信息</div>
             <div class="item-right">
-              <input type="text" class="input-box" v-model="serviceDetail.note.need_subscribe" placeholder="请填写">
+              <input type="text" class="input-box" v-model="goodsDetail.note.need_subscribe" placeholder="请填写">
             </div>
           </div>
         </label>
@@ -121,8 +121,8 @@
       <div class="group-container">
         <div class="textarea-item">
           <div class="textarea-box">
-            <textarea class="textarea-content" @touchmove.stop maxlength="20" placeholder="请输入" v-model="serviceDetail.note.remarks"></textarea>
-            <div class="count-box">{{serviceDetail.note.remarks.length}}/20</div>
+            <textarea class="textarea-content" @touchmove.stop maxlength="20" placeholder="请输入" v-model="goodsDetail.note.remarks"></textarea>
+            <div class="count-box">{{goodsDetail.note.remarks.length}}/20</div>
           </div>
         </div>
       </div>
@@ -148,7 +148,7 @@
   import Scroll from 'components/scroll/scroll'
   import SwitchBox from 'components/switch-box/switch-box'
   import Cropper from 'components/cropper/cropper'
-  import { ServiceApi } from 'api'
+  import { Goods } from 'api'
 
   const COUPON_TYPE = {
     1: '套餐券'
@@ -163,8 +163,8 @@
         couponType: COUPON_TYPE,
         disabledCover: false, // 请求时禁止任何操作
         timeType: '',
-        serviceDetail: {
-          promotion_type: 1, // 1=套餐券;2=代金券;3=满减券;4=折扣券
+        goodsDetail: {
+          promotion_type: 0, // 1=套餐券;2=代金券;3=满减券;4=折扣券
           goods_banner_images: [], // banner图片
           image_id: '', // banner图片第一张
           title: '', // 商品标题
@@ -191,25 +191,25 @@
       this.id = this.$route.query.id
       if (this.id) {
         document.title = '编辑商品'
-        this._getServiceDetail(this.id)
+        this._getGoodsDetail(this.id)
       }
     },
     mounted() {
       this.$refs.scroll.refresh()
     },
     methods: {
-      _getServiceDetail(id) {
-        ServiceApi.getServiceDetail(id).then((res) => {
+      _getGoodsDetail(id) {
+        Goods.getGoodsDetail(id).then((res) => {
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
-            this.serviceDetail = Object.assign({}, this.serviceDetail, res.data)
+            this.goodsDetail = Object.assign({}, this.goodsDetail, res.data)
           } else {
             this.$toast.show(res.message)
           }
         })
       },
-      _newService() {
-        ServiceApi.newServiceMsg(this.serviceDetail).then((res) => {
+      _newGoods() {
+        Goods.newGoodsMsg(this.goodsDetail).then((res) => {
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
             this.$emit('refresh')
@@ -224,9 +224,9 @@
           }
         })
       },
-      _setService() {
-        this.serviceDetail.is_online = 1
-        ServiceApi.setServiceMsg(this.id, this.serviceDetail).then((res) => {
+      _setGoods() {
+        this.goodsDetail.is_online = 1
+        Goods.setGoodsMsg(this.id, this.goodsDetail).then((res) => {
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
             this.$emit('refresh')
@@ -242,7 +242,7 @@
         })
       },
       delBanner(index) {
-        this.serviceDetail.goods_banner_images.splice(index, 1)
+        this.goodsDetail.goods_banner_images.splice(index, 1)
       },
       _fileImage(e) {
         let arr = Array.from(e.target.files)
@@ -266,14 +266,14 @@
             }
             arr.push(obj)
           })
-          let newArr = this.serviceDetail.goods_images
+          let newArr = this.goodsDetail.goods_images
           newArr.push(...arr)
           newArr = newArr.splice(0, 5)
-          this.serviceDetail.goods_images = newArr
+          this.goodsDetail.goods_images = newArr
         })
       },
       delDetail(index) {
-        this.serviceDetail.goods_images.splice(index, 1)
+        this.goodsDetail.goods_images.splice(index, 1)
       },
       async cropperConfirm(e) {
         this.$loading.show()
@@ -287,7 +287,7 @@
           image_url: res.data.url,
           id: 0
         }
-        this.serviceDetail.goods_banner_images.push(obj)
+        this.goodsDetail.goods_banner_images.push(obj)
         this.$loading.hide()
         this.$refs.cropper.cancel()
       },
@@ -297,7 +297,7 @@
           case 'title':
             obj = {
               type,
-              text: this.serviceDetail.title,
+              text: this.goodsDetail.title,
               title: 'null',
               placeholder: '请输入标题'
             }
@@ -305,7 +305,7 @@
           case 'subtitle':
             obj = {
               type,
-              text: this.serviceDetail.subtitle,
+              text: this.goodsDetail.subtitle,
               title: 'null',
               placeholder: '请输入副标题'
             }
@@ -314,7 +314,7 @@
         this.$refs.titleBox.showTitleBox(obj)
       },
       submitTile(txt, type) {
-        this.serviceDetail[type] = txt
+        this.goodsDetail[type] = txt
       },
       pickerCancel() {
       },
@@ -326,10 +326,10 @@
         let res = arr.join('-')
         switch (this.timeType) {
           case 'use1':
-            this.serviceDetail.start_at = res
+            this.goodsDetail.start_at = res
             break
           case 'use2':
-            this.serviceDetail.end_at = res
+            this.goodsDetail.end_at = res
             break
         }
       },
@@ -339,7 +339,7 @@
         this.$refs.picker.show()
       },
       switchChange(res) {
-        this.serviceDetail.is_sync = res ? 1 : 0
+        this.goodsDetail.is_sync = res ? 1 : 0
       },
       submitAll() {
         if (this.disabledCover) return
@@ -356,16 +356,17 @@
           {value: this.bannerReg, txt: '请添加至少一张商品图片'},
           {value: this.detailImgReg, txt: '请添加至少一张商品详情图片'},
           {value: this.use1TimeReg, txt: '请选择售卖开始时间'},
-          {value: this.use2TimeReg, txt: '请选择售卖结束时间'}
+          {value: this.use2TimeReg, txt: '请选择售卖结束时间'},
+          {value: this.subscribeMsg, txt: '请输入预约信息'}
         ]
         let res = this._testPropety(arr)
         if (res) {
           switch (this.type) {
             case 'new':
-              this._newService()
+              this._newGoods()
               break
             case 'editor':
-              this._setService()
+              this._setGoods()
               break
           }
         }
@@ -385,39 +386,39 @@
     },
     computed: {
       bannerReg() {
-        return this.serviceDetail.goods_banner_images.length
+        return this.goodsDetail.goods_banner_images.length
       },
       titleReg() {
-        return this.serviceDetail.title
+        return this.goodsDetail.title
       },
       platformPriceNotReg() {
-        return this.serviceDetail.platform_price && MONEYREG.test(this.serviceDetail.platform_price)
+        return this.goodsDetail.platform_price && MONEYREG.test(this.goodsDetail.platform_price)
       },
       platformPriceRangeReg() {
-        return +this.serviceDetail.platform_price <= +this.serviceDetail.original_price
+        return +this.goodsDetail.platform_price <= +this.goodsDetail.original_price
       },
       originalPriceNotReg() {
-        return this.serviceDetail.original_price && MONEYREG.test(this.serviceDetail.original_price)
+        return this.goodsDetail.original_price && MONEYREG.test(this.goodsDetail.original_price)
       },
       detailImgReg() {
-        return this.serviceDetail.goods_images.length
+        return this.goodsDetail.goods_images.length
       },
       use1TimeReg() {
-        return this.serviceDetail.start_at
+        return this.goodsDetail.start_at
       },
       use2TimeReg() {
-        return this.serviceDetail.end_at
+        return this.goodsDetail.end_at
       },
       subscribeMsg() {
-        return this.serviceDetail.note.need_subscribe
+        return this.goodsDetail.note.need_subscribe
       },
       stockReg() {
-        return this.serviceDetail.usable_stock && COUNTREG.test(this.serviceDetail.usable_stock)
+        return this.goodsDetail.usable_stock && COUNTREG.test(this.goodsDetail.usable_stock)
       }
     },
     watch: {
-      'serviceDetail.goods_banner_images'(curVal) {
-        this.serviceDetail.image_id = (curVal[0] && curVal[0].image_id) || ''
+      'goodsDetail.goods_banner_images'(curVal) {
+        this.goodsDetail.image_id = (curVal[0] && curVal[0].image_id) || ''
       }
     },
     components: {
@@ -437,7 +438,7 @@
 
   label
     display: block
-  .editor-service
+  .editor-goods
     fill-box()
     z-index: 70
     background: $color-white
@@ -695,7 +696,7 @@
       .meddle-right.item-right
         display: flex
         align-items: center
-    .service-img-item
+    .goods-img-item
       padding-bottom: 20px
       padding-left: 15px
       .item-title

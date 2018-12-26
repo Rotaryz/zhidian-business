@@ -9,7 +9,7 @@
         <div class="right-down">
           <div class="down-left">
             <p class="down-txt"><span class="first-txt">库存：{{item.stock}}</span></p>
-            <p class="down-txt second"><i class="small">¥</i>{{item.platform_price}}<del class="origin-price">{{item.platform_price}}</del></p>
+            <p class="down-txt second"><i class="small">¥</i>{{item.platform_price}}<del class="origin-price">{{item.original_price}}</del></p>
           </div>
           <div class="down-right">
             <div class="down-right-icon" :class="showEdit ? 'active' : ''" @click.stop="showEditCover(item)"></div>
