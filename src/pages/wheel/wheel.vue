@@ -288,7 +288,8 @@
           {value: this.prizeListReg, txt: '请点击大转盘添加五个奖品'},
           {value: this.prizeListInputReg, txt: '请输入正确的奖品数量'},
           {value: this.percentageReg, txt: '请输入正确的中奖率'},
-          {value: this.joinTimesReg, txt: '请输入正确的中奖次数'}
+          {value: this.joinTimesReg, txt: '请输入正确的中奖次数'},
+          {value: this.saveBtnReg, txt: '请输入正确的奖品数量'}
         ]
         let res = this._testPropety(arr)
         if (res) {

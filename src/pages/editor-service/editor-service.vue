@@ -144,7 +144,7 @@
           <div class="editor-item">
             <div class="item-left">预约信息</div>
             <div class="item-right">
-              <input type="text" class="input-box" v-model="serviceDetail.note.need_subscribe" placeholder="请填写">
+              <input type="text" maxlength="140" class="input-box" v-model="serviceDetail.note.need_subscribe" placeholder="请填写">
             </div>
           </div>
         </label>
