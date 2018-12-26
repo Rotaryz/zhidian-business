@@ -17,6 +17,7 @@ import global from './global'
 import content from './content'
 import activeExtend from './active-extend'
 import template from './brand-template'
+import goods from './goods'
 
 export const ActiveExtend = activeExtend
 
@@ -58,3 +59,5 @@ export const OrderApi = order
 export const Global = global
 
 export const Template = template
+
+export const Goods = goods

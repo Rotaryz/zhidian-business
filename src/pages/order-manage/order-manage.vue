@@ -3,7 +3,7 @@
     <div class="search-box">
       <div class="left-box">
         <img src="./icon-search@2x.png" class="search-icon">
-        <input type="text" class="search-input" v-model="searchTxt" placeholder="手机号/订单号/店员名称" @focus="inputOnFocus" @blur="inputBlur">
+        <input type="text" class="search-input" v-model="searchTxt" placeholder="手机号/订单号" @focus="inputOnFocus" @blur="inputBlur">
         <img src="./Clear@2x.png" class="del-icon" v-if="searchTxt.length" @click="clearInput">
       </div>
       <div class="right-box" v-if="searchTxt.length && inputFocus" @click="searchList">搜索</div>
@@ -22,9 +22,9 @@
         </div>
       </div>
       <div class="right-box" @click="choiceStaff">
-        <span class="right-name" :class="shopId ? 'active' : ''">店员</span>
-        <img src="./icon-screen@2x.png" class="right-icon" v-if="!shopId">
-        <img src="./icon-screen_pick@2x.png" class="right-icon" v-if="shopId">
+        <span class="right-name" >{{listType === 'service' ? '服务订单' : '商品订单'}}</span>
+        <img src="./icon-screen@2x.png" class="right-icon">
+        <!--<img src="./icon-screen_pick@2x.png" class="right-icon" v-if="shopId">-->
       </div>
     </div>
     <div class="container">
@@ -38,7 +38,7 @@
                   :showNoMore="showNoMore0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in list0" :key="index">
-                <service-item :item="item" @toDetail="toDetail"></service-item>
+                <order-item :item="item" @toDetail="toDetail"></order-item>
               </div>
               <div class="nothing-box" v-if="nothing0">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
@@ -56,7 +56,7 @@
                   :showNoMore="showNoMore1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in list1" :key="index">
-                <service-item :item="item" @toDetail="toDetail"></service-item>
+                <order-item :item="item" @toDetail="toDetail"></order-item>
               </div>
               <div class="nothing-box" v-if="nothing1">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
@@ -74,7 +74,7 @@
                   :showNoMore="showNoMore2">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in list2" :key="index">
-                <service-item :item="item" @toDetail="toDetail"></service-item>
+                <order-item :item="item" @toDetail="toDetail"></order-item>
               </div>
               <div class="nothing-box" v-if="nothing2">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
@@ -92,7 +92,7 @@
                   :showNoMore="showNoMore3">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in list3" :key="index">
-                <service-item :item="item" @toDetail="toDetail"></service-item>
+                <order-item :item="item" @toDetail="toDetail"></order-item>
               </div>
               <div class="nothing-box" v-if="nothing3">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
@@ -103,12 +103,23 @@
         </div>
       </div>
     </div>
+    <div class="model">
+      <transition name="fade">
+        <div class="bg" v-if="showMenu"></div>
+      </transition>
+      <div class="box" :class="{'show': showMenu}">
+        <p class="item border-bottom-1px" @click="selectType('service')">服务订单</p>
+        <p class="item" @click="selectType('goods')">商品订单</p>
+        <p class="item cancel" @click="cancelMenu">取消</p>
+      </div>
+    </div>
+
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-  import ServiceItem from 'components/order-item/order-item'
+  import OrderItem from 'components/order-item/order-item'
   import Modal from 'components/confirm-msg/confirm-msg'
   import Scroll from 'components/scroll/scroll'
   import { OrderApi } from 'api'
@@ -159,7 +170,10 @@
         scrollToEasing: 'bounce',
         scrollToEasingOptions: ['bounce', 'swipe', 'swipeBounce'],
         temporaryItem: {}, // 缓存需要处理的item
-        temporaryType: ''
+        temporaryType: '',
+        showMenu: false,
+        listType: 'service',
+        noSelect: false
       }
     },
     created() {
@@ -180,15 +194,28 @@
         this._getList()
       },
       choiceStaff() {
-        let url = `${this.$route.path}/staff-screen?shopId=${this.shopId}`
-        this.$router.push(url)
+        this.showMenu = true
+      },
+      cancelMenu() {
+        this.showMenu = false
+      },
+      selectType(type) {
+        if (this.noSelect) return
+        this.noSelect = true
+        setTimeout(() => {
+          this.noSelect = false
+        }, 500)
+        this.listType = type
+        this._getList()
+        this.cancelMenu()
       },
       _getList(loading = true) {
         let data = {
           page: this[`page${this.tabIdx}`],
           trading_status: this.tabList[this.tabIdx].id,
           shop_id: this.shopId,
-          keyword: this.searchTxt
+          keyword: this.searchTxt,
+          order_kind: this.orderKind
         }
         OrderApi.getList(data, loading).then((res) => {
           this.$loading.hide()
@@ -244,7 +271,8 @@
           page: this[`page${this.tabIdx}`],
           trading_status: this.tabList[this.tabIdx].id,
           shop_id: this.shopId,
-          keyword: this.searchTxt
+          keyword: this.searchTxt,
+          order_kind: this.orderKind
         }
         OrderApi.getList(data).then((res) => {
           this.$loading.hide()
@@ -271,11 +299,14 @@
       }
     },
     components: {
-      ServiceItem,
+      OrderItem,
       Scroll,
       Modal
     },
     computed: {
+      orderKind() { // 1为实体商品，2为虚拟，3为服务
+        return this.listType === 'service' ? '3' : '1'
+      },
       pullUpLoadObj0: function () {
         return this.pullUpLoad0 ? {
           threshold: parseInt(this.pullUpLoadThreshold0),
@@ -360,7 +391,7 @@
       position: fixed
       left: 0
       top: 0
-      z-index: 60
+      z-index: 40
       width: 100vw
       display: flex
       height: 45px
@@ -405,7 +436,7 @@
         text-align: center
         line-height: 45px
         font-size: $font-size-14
-        coloe: $color-27273E
+        color: $color-27273E
         font-family: $font-family-regular
     .header-tab
       width: 100vw
@@ -413,7 +444,9 @@
       position: fixed
       left: 0
       top: 45px
-      z-index: 60
+      z-index: 40
+      padding-right: 10px
+      box-sizing: border-box
       background: $color-white
       display: flex
       .left-box
@@ -450,7 +483,7 @@
             background: $color-D32F2F
             border-radius: 3px
       .right-box
-        width: 65px
+        width: 88px
         line-height: 45px
         display: flex
         align-items: center
@@ -511,7 +544,7 @@
       position: fixed
       width: 100vw
       height: 64px
-      z-index: 60
+      z-index: 40
       bottom: 0
       left: 0
       background: $color-white
@@ -528,4 +561,34 @@
         color: $color-white
         font-size: $font-size-16
         letter-spacing: 0.8px
+    .bg
+      position: fixed
+      left: 0
+      right: 0
+      top: 0
+      bottom: 0
+      background: rgba(39,39,62,0.8)
+      z-index: 40
+    .box
+      position: fixed
+      bottom: -200px
+      left: 0
+      font-size: 14px
+      font-family: $font-family-regular
+      color: $color-27273E
+      width: 100%
+      height: 175px
+      line-height: 55px
+      text-align: center
+      background: $color-F6F6F6
+      transition: all 0.3s
+      z-index: 40
+      .item
+        background: $color-white
+      .item:first-child
+        border-bottom-1px($color-E6E6E6)
+      .cancel
+        margin-top: 10px
+    .show
+      bottom: 0
 </style>
