@@ -3,7 +3,7 @@
     <div class="search-box">
       <div class="left-box">
         <img src="./icon-search@2x.png" class="search-icon">
-        <input type="text" class="search-input" v-model="searchTxt" placeholder="手机号/订单号/店员名称" @focus="inputOnFocus" @blur="inputBlur">
+        <input type="text" class="search-input" v-model="searchTxt" placeholder="手机号/订单号" @focus="inputOnFocus" @blur="inputBlur">
         <img src="./Clear@2x.png" class="del-icon" v-if="searchTxt.length" @click="clearInput">
       </div>
       <div class="right-box" v-if="searchTxt.length && inputFocus" @click="searchList">搜索</div>
