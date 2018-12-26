@@ -158,5 +158,5 @@
   .shop
     fill-box()
   .padding
-    height: 20px
+    height: 60px
 </style>
