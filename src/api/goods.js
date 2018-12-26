@@ -5,7 +5,7 @@ export default {
    * 获取商品列表
    * @returns {*}
    */
-  getServiceList(data, loading = true) {
+  getGoodsList(data, loading = true) {
     let url = 'api/merchant/product'
     return request.get(url, data, loading)
   },
@@ -13,7 +13,7 @@ export default {
    * 获取商品详情
    * @returns {*}
    */
-  getServiceDetail(id, loading = true) {
+  getGoodsDetail(id, loading = true) {
     let url = `api/merchant/product/${id}`
     return request.get(url, {}, loading)
   },
@@ -21,7 +21,7 @@ export default {
    * 获取商品是否关联活动
    * @returns {*}
    */
-  getServiceConect(id, loading = true) {
+  getGoodsConect(id, loading = true) {
     let url = `api/merchant/product/before-destroy/${id}`
     return request.get(url, {}, loading)
   },
@@ -29,7 +29,7 @@ export default {
    * 下架商品
    * @returns {*}
    */
-  setServiceDown(id, loading = true) {
+  setGoodsDown(id, loading = true) {
     let url = `api/merchant/product-offline/${id}`
     return request.get(url, {}, loading)
   },
@@ -37,7 +37,7 @@ export default {
    * 删除商品
    * @returns {*}
    */
-  setServiceDel(id, loading = true) {
+  setGoodsDel(id, loading = true) {
     let url = `api/merchant/product/${id}`
     return request.delete(url, {}, loading)
   },
@@ -45,7 +45,7 @@ export default {
    * 编辑商品
    * @returns {*}
    */
-  setServiceMsg(id, data, loading = true) {
+  setGoodsMsg(id, data, loading = true) {
     let url = `api/merchant/product/${id}`
     return request.put(url, data, loading)
   },
@@ -53,7 +53,7 @@ export default {
    * 新建商品
    * @returns {*}
    */
-  newServiceMsg(data, loading = true) {
+  newGoodsMsg(data, loading = true) {
     let url = `api/merchant/product`
     return request.post(url, data, loading)
   }
