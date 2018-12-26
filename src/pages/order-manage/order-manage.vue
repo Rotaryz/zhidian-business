@@ -105,7 +105,7 @@
     </div>
     <div class="model">
       <transition name="fade">
-        <div class="bg" v-if="showMenu"></div>
+        <div class="bg" v-if="showMenu" @click="cancelMenu"></div>
       </transition>
       <div class="box" :class="{'show': showMenu}">
         <p class="item border-bottom-1px" @click="selectType('service')">服务订单</p>
@@ -567,7 +567,7 @@
       right: 0
       top: 0
       bottom: 0
-      background: rgba(39,39,62,0.8)
+      background: rgba(0,0,0,0.8)
       z-index: 40
     .box
       position: fixed
