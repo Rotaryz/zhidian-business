@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    <div class="tag" :class="{'goods':item.type == 1}"></div>
+    <div class="tag" v-if="type !== 'prize'" :class="{'goods':item.type == 1}"></div>
   </div>
 </template>
 
