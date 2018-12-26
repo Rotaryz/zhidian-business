@@ -206,6 +206,7 @@
           this.noSelect = false
         }, 500)
         this.listType = type
+        this._getList()
         this.cancelMenu()
       },
       _getList(loading = true) {
@@ -213,7 +214,8 @@
           page: this[`page${this.tabIdx}`],
           trading_status: this.tabList[this.tabIdx].id,
           shop_id: this.shopId,
-          keyword: this.searchTxt
+          keyword: this.searchTxt,
+          order_kind: this.orderKind
         }
         OrderApi.getList(data, loading).then((res) => {
           this.$loading.hide()
@@ -269,7 +271,8 @@
           page: this[`page${this.tabIdx}`],
           trading_status: this.tabList[this.tabIdx].id,
           shop_id: this.shopId,
-          keyword: this.searchTxt
+          keyword: this.searchTxt,
+          order_kind: this.orderKind
         }
         OrderApi.getList(data).then((res) => {
           this.$loading.hide()
@@ -301,6 +304,9 @@
       Modal
     },
     computed: {
+      orderKind() { // 1为实体商品，2为虚拟，3为服务
+        return this.listType === 'service' ? '3' : '1'
+      },
       pullUpLoadObj0: function () {
         return this.pullUpLoad0 ? {
           threshold: parseInt(this.pullUpLoadThreshold0),
