@@ -20,4 +20,5 @@ function envClear() {
 //   }
 // }
 // checkVersion()
+// test
 envClear()
