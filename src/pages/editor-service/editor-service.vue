@@ -406,7 +406,7 @@
           {value: this.stockReg, txt: '请输入合法的最大库存数量'},
           {value: this.bannerReg, txt: '请添加至少一张服务图片'},
           {value: this.serviceDetailReg, txt: '请至少添加一条服务套餐'},
-          {value: this.serviceDetailMsg, txt: '请完整填写服务套餐信息'},
+          {value: this.serviceDetailMsg, txt: '请正确填写服务套餐信息'},
           {value: this.serviceCount, txt: '请输入合法的套餐数量'},
           {value: this.servicePirceNum, txt: '请正确输入套餐价格'},
           {value: this.servicePrice, txt: '套餐价格请保留两位小数'},
