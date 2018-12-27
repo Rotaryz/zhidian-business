@@ -8,7 +8,7 @@
               @pullingUp="onPullingUp"
               :showNoMore="showNoMore">
         <div class="list-container">
-          <div class="page-title" v-if="!nothing">{{type === 'prize' ? '选择兑换券' : '选择商品'}}</div>
+          <div class="page-title" v-if="!nothing">{{type === 'prize' ? '选择奖品券' : '选择商品'}}</div>
           <div class="list-item" v-for="(item, index) in list" :key="index">
             <select-item :item="item" :type="type" @selectSome="selectDone"></select-item>
           </div>
@@ -54,7 +54,7 @@
       this.ruleId = this.$route.query.ruleId
       this.goodsId = this.$route.query.goodsId
       if (this.type === 'prize') {
-        document.title = '选择兑换券'
+        document.title = '选择奖品券'
         this._getPrizeList()
       } else {
         this._getGoodsList()

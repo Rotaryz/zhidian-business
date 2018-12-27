@@ -167,13 +167,13 @@
         width: 100%
         border-radius: 4px
         overflow: hidden
-        layout(row)
         .item-wrapper
           position: relative
           width: 33.333%
           layout()
           justify-content: center
           align-items: center
+          float: left
           font-size: 13px
           color: $color-27273E
           line-height: 14px
