@@ -206,6 +206,8 @@
           this.noSelect = false
         }, 500)
         this.listType = type
+        this._initAny()
+        this._initAll()
         this._getList()
         this.cancelMenu()
       },
@@ -250,10 +252,7 @@
       },
       _initAll() {
         for (let i = 0; i < 3; i++) {
-          this['list' + i] = this['list' + i].map((item1) => {
-            item1.showEdit = false
-            return item1
-          })
+          this['list' + i] = []
         }
       },
       _initAny() {
