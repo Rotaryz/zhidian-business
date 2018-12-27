@@ -557,6 +557,11 @@
         }
       }
     },
+    watch: {
+      ruleId() {
+        this.$refs.scroll.forceUpdate()
+      }
+    },
     components: {
       TitleBox,
       Scroll,
