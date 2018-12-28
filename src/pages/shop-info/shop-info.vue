@@ -222,9 +222,9 @@
           getAddress(location).then(res => {
             ctx.$loading.hide()
             let data = res.data.regeocode.addressComponent
-            ctx.shopInfo.province = data.province
-            ctx.shopInfo.city = data.city
-            ctx.shopInfo.area = data.district
+            ctx.shopInfo.province = data.province && data.province.toString()
+            ctx.shopInfo.city = data.city && data.city.toString()
+            ctx.shopInfo.area = data.district && data.district.toString()
             let newAddress = /我的位置/.test(address) ? address.split('我的位置')[0] : address.split(data.province + data.city + data.district)[1]
             ctx.shopInfo.address = newAddress
           })
