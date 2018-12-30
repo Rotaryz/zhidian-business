@@ -12,7 +12,7 @@
     </div>
     <div class="container">
       <div class="big-container" :style="'transform: translate(-' + tabIdx*50 + '%,0)'">
-        <div class="container-item">
+        <div class="container-item" :style="scrollItemStyle">
           <scroll ref="scroll0"
                   :data="list0"
                   bcColor="#f6f6f6"
@@ -37,7 +37,7 @@
             </div>
           </scroll>
         </div>
-        <div class="container-item">
+        <div class="container-item" :style="scrollItemStyle">
           <scroll ref="scroll1"
                   :data="list1"
                   bcColor="#f6f6f6"
@@ -64,9 +64,9 @@
         </div>
       </div>
     </div>
-    <!--<div class="footer-box">-->
-      <!--<div class="footer-btn" @click="toDetail('new')">新建商品</div>-->
-    <!--</div>-->
+    <div v-if="isBoss" class="footer-box" :style="buttonStyle">
+      <div class="footer-btn" @click="toDetail('new')">新建商品</div>
+    </div>
     <router-view-common @refresh="refresh"></router-view-common>
     <modal ref="modal" @confirm="modalConfirm"></modal>
   </div>
@@ -321,6 +321,18 @@
       Modal
     },
     computed: {
+      // 1分店，0总店
+      isBoss() {
+        let store = this.$storage.get('info').store || {}
+        let isBoss = '' + store.is_branch === '0'
+        return isBoss
+      },
+      scrollItemStyle() {
+        return this.isBoss ? 'padding: 45px 0 64px' : 'padding: 45px 0 0'
+      },
+      buttonStyle() {
+        return this.isBoss ? 'height: 64px' : 'height: 0'
+      },
       pullUpLoadObj0: function () {
         return this.pullUpLoad0 ? {
           threshold: parseInt(this.pullUpLoadThreshold0),
