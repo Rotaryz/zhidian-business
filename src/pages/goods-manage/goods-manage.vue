@@ -64,9 +64,9 @@
         </div>
       </div>
     </div>
-    <div class="footer-box">
-      <div class="footer-btn" @click="toDetail('new')">新建商品</div>
-    </div>
+    <!--<div class="footer-box">-->
+      <!--<div class="footer-btn" @click="toDetail('new')">新建商品</div>-->
+    <!--</div>-->
     <router-view-common @refresh="refresh"></router-view-common>
     <modal ref="modal" @confirm="modalConfirm"></modal>
   </div>
@@ -88,8 +88,8 @@
       return {
         tabList: TABS,
         tabIdx: 0,
-        list0: [],
-        list1: [],
+        list0: new Array(20).fill(1),
+        list1: [1],
         numObj: {},
         tabsNumArr: TABSNUM,
         pullUpLoad0: true,
@@ -368,6 +368,7 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+  $button-height=0px
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 
@@ -426,7 +427,7 @@
           width: 100vw
           height: 100vh
           box-sizing: border-box
-          padding: 45px 0 64px
+          padding: 45px 0 $button-height
           background: $color-F6F6F6
           .list-container
             padding: 0 15px
@@ -449,7 +450,7 @@
     .footer-box
       position: fixed
       width: 100vw
-      height: 64px
+      height: $button-height
       z-index: 60
       bottom: 0
       left: 0
