@@ -88,8 +88,8 @@
       return {
         tabList: TABS,
         tabIdx: 0,
-        list0: new Array(20).fill(1),
-        list1: [1],
+        list0: [],
+        list1: [],
         numObj: {},
         tabsNumArr: TABSNUM,
         pullUpLoad0: true,
