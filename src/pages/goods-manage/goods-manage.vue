@@ -1,5 +1,5 @@
 <template>
-  <div class="service-manage">
+  <div class="goods-manage">
     <div class="header-tab border-bottom-1px">
       <div class="tab-box">
         <div class="tab-item" :class="tabIdx == index ? 'active' : ''" v-for="(item, index) in tabList" :key="index" @click="changeTab(index, item)">
@@ -12,7 +12,7 @@
     </div>
     <div class="container">
       <div class="big-container" :style="'transform: translate(-' + tabIdx*50 + '%,0)'">
-        <div class="container-item">
+        <div class="container-item" :style="scrollItemStyle">
           <scroll ref="scroll0"
                   :data="list0"
                   bcColor="#f6f6f6"
@@ -21,14 +21,14 @@
                   :showNoMore="showNoMore0">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in list0" :key="index">
-                <service-item :tabIdx="tabIdx"
+                <goods-item :tabIdx="tabIdx"
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemEditor="itemEditor"
                               @itemDown="itemDown"
                               @itemDelete="itemDelete">
-                </service-item>
+                </goods-item>
               </div>
               <div class="nothing-box" v-if="nothing0">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
@@ -37,7 +37,7 @@
             </div>
           </scroll>
         </div>
-        <div class="container-item">
+        <div class="container-item" :style="scrollItemStyle">
           <scroll ref="scroll1"
                   :data="list1"
                   bcColor="#f6f6f6"
@@ -46,14 +46,14 @@
                   :showNoMore="showNoMore1">
             <div class="list-container">
               <div class="list-item" v-for="(item, index) in list1" :key="index">
-                <service-item :tabIdx="tabIdx"
+                <goods-item :tabIdx="tabIdx"
                               :item="item"
                               :showEdit="item.showEdit"
                               @showEdit="showEditor"
                               @itemEditor="itemEditor"
                               @itemUp="itemUp"
                               @itemDelete="itemDelete">
-                </service-item>
+                </goods-item>
               </div>
               <div class="nothing-box" v-if="nothing1">
                 <img src="./pic-empty_order@2x.png" class="nothing-img">
@@ -64,8 +64,8 @@
         </div>
       </div>
     </div>
-    <div class="footer-box">
-      <div class="footer-btn" @click="toDetail('new')">新建服务</div>
+    <div v-if="isBoss" class="footer-box" :style="buttonStyle">
+      <div class="footer-btn" @click="toDetail('new')">新建商品</div>
     </div>
     <router-view-common @refresh="refresh"></router-view-common>
     <modal ref="modal" @confirm="modalConfirm"></modal>
@@ -73,10 +73,10 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import ServiceItem from 'components/service-item/service-item'
+  import GoodsItem from 'components/goods-item/goods-item'
   import Modal from 'components/confirm-msg/confirm-msg'
   import Scroll from 'components/scroll/scroll'
-  import { ServiceApi } from 'api'
+  import { Goods } from 'api'
   import {ease} from 'common/js/ease'
   const TABS = [
     {txt: '已上架', id: 0},
@@ -119,7 +119,7 @@
           page: this[`page${this.tabIdx}`],
           status: this.tabIdx + 1
         }
-        ServiceApi.getServiceList(data, loading).then((res) => {
+        Goods.getGoodsList(data, loading).then((res) => {
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
             this._setTabNum(res)
@@ -156,10 +156,10 @@
         if (!this.temporaryItem.id) return
         switch (this.temporaryType) {
           case 'down':
-            this._serviceDown(this.temporaryItem)
+            this._goodsDown(this.temporaryItem)
             break
           case 'del':
-            this._serviceDel(this.temporaryItem)
+            this._goodsDel(this.temporaryItem)
             break
         }
       },
@@ -183,13 +183,13 @@
         this.temporaryItem = item
         this.temporaryType = 'down'
         if (res) {
-          this.$refs.modal.show({msg: '该服务已关联活动，下架会导致活动下架，确定吗？'})
+          this.$refs.modal.show({msg: '该商品已关联活动，下架会导致活动下架，确定吗？'})
         } else {
-          this.$refs.modal.show({msg: '确定下架该服务吗？'})
+          this.$refs.modal.show({msg: '确定下架该商品吗？'})
         }
       },
-      _serviceDown(item) {
-        ServiceApi.setServiceDown(item.id).then((res) => {
+      _goodsDown(item) {
+        Goods.setGoodsDown(item.id).then((res) => {
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
             this.$toast.show('操作成功')
@@ -207,7 +207,7 @@
         })
       },
       itemUp(item) {
-        ServiceApi.setServiceDown(item.id).then((res) => {
+        Goods.setGoodsDown(item.id).then((res) => {
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
             this.$toast.show('操作成功')
@@ -227,10 +227,10 @@
       async itemDelete(item) {
         this.temporaryItem = item
         this.temporaryType = 'del'
-        this.$refs.modal.show({msg: '确定删除该服务吗？'})
+        this.$refs.modal.show({msg: '确定删除该商品吗？'})
       },
-      _serviceDel(item) {
-        ServiceApi.setServiceDel(item.id).then((res) => {
+      _goodsDel(item) {
+        Goods.setGoodsDel(item.id).then((res) => {
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
             this.$toast.show('操作成功')
@@ -251,7 +251,7 @@
         })
       },
       async _checkActivity(item) {
-        let res = await ServiceApi.getServiceConect(item.id)
+        let res = await Goods.getGoodsConect(item.id)
         this.$loading.hide()
         if (res.error === this.$ERR_OK) {
           return res.data.length
@@ -264,7 +264,7 @@
         if (type === 'new') {
           this._initAll()
         }
-        let url = `/shop/service-manage/editor-service?type=${type}&id=${id}`
+        let url = `/shop/goods-manage/editor-goods?type=${type}&id=${id}`
         this.$router.push(url)
       },
       _initAll() {
@@ -290,7 +290,7 @@
           page: this[`page${this.tabIdx}`],
           status: this.tabIdx + 1
         }
-        ServiceApi.getServiceList(data).then((res) => {
+        Goods.getGoodsList(data).then((res) => {
           this.$loading.hide()
           if (res.error === this.$ERR_OK) {
             this._setTabNum(res)
@@ -316,11 +316,23 @@
       }
     },
     components: {
-      ServiceItem,
+      GoodsItem,
       Scroll,
       Modal
     },
     computed: {
+      // 1分店，0总店
+      isBoss() {
+        let store = this.$storage.get('info').store || {}
+        let isBoss = '' + store.is_branch === '0'
+        return isBoss
+      },
+      scrollItemStyle() {
+        return this.isBoss ? 'padding: 45px 0 64px' : 'padding: 45px 0 0'
+      },
+      buttonStyle() {
+        return this.isBoss ? 'height: 64px' : 'height: 0'
+      },
       pullUpLoadObj0: function () {
         return this.pullUpLoad0 ? {
           threshold: parseInt(this.pullUpLoadThreshold0),
@@ -368,10 +380,11 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+  $button-height=0px
   @import "~common/stylus/variable"
   @import "~common/stylus/mixin"
 
-  .service-manage
+  .goods-manage
     fill-box()
     z-index: 20
     background: $color-F6F6F6
@@ -426,7 +439,7 @@
           width: 100vw
           height: 100vh
           box-sizing: border-box
-          padding: 45px 0 64px
+          padding: 45px 0 $button-height
           background: $color-F6F6F6
           .list-container
             padding: 0 15px
@@ -449,7 +462,7 @@
     .footer-box
       position: fixed
       width: 100vw
-      height: 64px
+      height: $button-height
       z-index: 60
       bottom: 0
       left: 0
