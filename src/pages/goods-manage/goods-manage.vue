@@ -323,9 +323,10 @@
     computed: {
       // 1分店，0总店
       isBoss() {
-        let store = this.$storage.get('info').store || {}
-        let isBoss = '' + store.is_branch === '0'
-        return isBoss
+        // let store = this.$storage.get('info').store || {}
+        // let isBoss = '' + store.is_branch === '0'
+        // return isBoss
+        return true
       },
       scrollItemStyle() {
         return this.isBoss ? 'padding: 45px 0 64px' : 'padding: 45px 0 0'

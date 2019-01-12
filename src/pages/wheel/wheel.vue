@@ -415,10 +415,11 @@
 
   .prize-wrapper
     padding-top: 15px
+    padding-bottom: 20px
     .prize-item-wrapper
       margin-bottom: 10px
       &:last-child
-        padding-bottom: 20px
+        margin-bottom: 0
 
   .prize-empty
     padding: 35px 0 40px
