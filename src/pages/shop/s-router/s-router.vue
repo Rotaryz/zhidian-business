@@ -92,6 +92,11 @@
       icon: 'ac-three',
       title: '奖品券',
       path: '/exchange-manage'
+    },
+    {
+      icon: 'ac-three',
+      title: '优惠券',
+      path: '/discount-coupon'
     }
   ]
   export default {

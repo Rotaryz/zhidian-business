@@ -10,7 +10,11 @@
       <div class="right-box" v-if="!searchTxt.length && inputFocus">取消</div>
       <div class="right-block" v-if="!inputFocus"></div>
     </div>
-    <div class="header-tab border-bottom-1px">
+    <article class="header-tab border-bottom-1px">
+      <section class="right-box" @click="choiceStaff">
+        <span class="right-name" >{{listType === 'service' ? '服务订单' : '商品订单'}}</span>
+        <img src="./icon-screen@2x.png" class="right-icon">
+      </section>
       <div class="left-box">
         <div class="tab-box">
           <div class="tab-item" :class="tabIdx == index ? 'active' : ''" v-for="(item, index) in tabList" :key="index" @click="changeTab(index, item)">
@@ -21,12 +25,7 @@
           <div class="underline"></div>
         </div>
       </div>
-      <div class="right-box" @click="choiceStaff">
-        <span class="right-name" >{{listType === 'service' ? '服务订单' : '商品订单'}}</span>
-        <img src="./icon-screen@2x.png" class="right-icon">
-        <!--<img src="./icon-screen_pick@2x.png" class="right-icon" v-if="shopId">-->
-      </div>
-    </div>
+    </article>
     <div class="container">
       <div class="big-container" :style="'transform: translate(-' + tabIdx*25 + '%,0)'">
         <div class="container-item">
@@ -496,7 +495,7 @@
           height: 14px
           background: $color-706B82
           position: absolute
-          left: 0
+          right: 0
           top: 50%
           transform: translate(0, -50%)
         .right-icon
