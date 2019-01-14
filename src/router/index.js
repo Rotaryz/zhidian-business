@@ -47,7 +47,7 @@ const GoodsManage = () => import('pages/goods-manage/goods-manage')
 const EditorGoods = () => import('pages/editor-goods/editor-goods')
 const DiscountCoupon = () => import('pages/discount-coupon/discount-coupon')
 const DiscountCouponEditor = () => import('pages/discount-coupon-editor/discount-coupon-editor')
-const DiscountCouponSelect = () => import('pages/discount-coupon-select/discount-coupon-select')
+// const DiscountCouponSelect = () => import('pages/discount-coupon-select/discount-coupon-select')
 
 Vue.use(Router)
 
@@ -105,8 +105,8 @@ const route = new Router({
                   },
                   children: [
                     {
-                      path: 'discount-coupon-select',
-                      component: DiscountCouponSelect,
+                      path: 'choice-goods',
+                      component: ChoiceGoods,
                       meta: {
                         title: '选择商品|服务'
                       }

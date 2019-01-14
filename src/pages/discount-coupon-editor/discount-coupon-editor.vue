@@ -26,15 +26,15 @@
             <li v-if="isShowDiscount" class="item-wrapper border-bottom-1px">
               <div class="left">折扣</div>
               <div class="middle">
-                <p v-if="disableEditor" class="select-placeholder">{{discount}}</p>
-                <input v-else type="tel" placeholder="请设置1.0~9.9之间的折扣额度" maxlength="3" v-model="discount">
+                <p v-if="disableEditor" class="select-placeholder">{{discounts}}</p>
+                <input v-else type="tel" placeholder="请设置1.0~9.9之间的折扣额度" maxlength="3" v-model="discounts">
               </div>
             </li>
-            <li class="item-wrapper border-bottom-1px">
+            <li v-else class="item-wrapper border-bottom-1px">
               <div class="left key-icon">优惠金额</div>
               <div class="middle">
-                <p v-if="disableEditor" class="select-placeholder">{{money}}</p>
-                <input v-else type="tel" placeholder="请填写" maxlength="15" v-model="money">
+                <p v-if="disableEditor" class="select-placeholder">{{discounts}}</p>
+                <input v-else type="tel" placeholder="请填写" maxlength="15" v-model="discounts">
               </div>
             </li>
             <li class="item-wrapper">
@@ -52,7 +52,7 @@
           </header>
           <ul class="content">
             <li class="item-wrapper border-bottom-1px">
-              <div class="left key-icon">使用门槛</div>
+              <div class="left">使用门槛</div>
               <div class="middle middle-set">
                 <p class="p">订单金额满</p>
                 <p v-if="disableEditor" class="input-style select-placeholder">{{moneyLimit}}</p>
@@ -70,9 +70,9 @@
               <div class="middle" :class="{'select-placeholder': disableEditor}">{{USE_RANGE_ARR}}</div>
               <base-icon-arrow></base-icon-arrow>
             </li>
-            <li v-if="isShowSelect" class="item-wrapper" @click="showSheetHandle">
+            <li v-if="isShowSelect" class="item-wrapper" @click="selectHandle">
               <div class="left">选择商品</div>
-              <div class="middle" :class="{'select-placeholder': !selectItem  || disableEditor}">{{selectItem ||'请选择'}}</div>
+              <div class="middle" :class="{'select-placeholder': !selectItem.id  || disableEditor}">{{selectItem.title ||'请选择'}}</div>
               <base-icon-arrow></base-icon-arrow>
             </li>
           </ul>
@@ -111,7 +111,7 @@
       type="date"
       @confirm="pickerConfirmHandle">
     </awesome-picker>
-    <base-sheet ref="sheet" :sheetList="SHEET_LIST" @select="selectHandle"></base-sheet>
+    <!--<base-sheet ref="sheet" :sheetList="SHEET_LIST" @select="selectHandle"></base-sheet>-->
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
@@ -119,9 +119,9 @@
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
   import {
-    PAGE_CONFIG, SHEET_LIST, PICKER_DATA_OBJ, USE_TYPE_ARR, STOCK_LIMIT_ARR, USE_RANGE_ARR, formatPickerDate, PAGE_TYPE
+    PAGE_CONFIG, PICKER_DATA_OBJ, PICKER_RELATION_OBJ, USE_TYPE_ARR, STOCK_LIMIT_ARR, USE_RANGE_ARR, formatPickerDate, PAGE_TYPE
   } from './editor-config'
-
+  import * as API from 'api'
   const PAGE_NAME = 'DISCOUNT_COUPON_EDITOR'
 
   export default {
@@ -131,7 +131,7 @@
     },
     data() {
       return {
-        SHEET_LIST: SHEET_LIST,
+        // SHEET_LIST: SHEET_LIST,
         // pullUpLoad: true,
         // pullUpLoadThreshold: 0,
         // pullUpLoadMoreTxt: '加载更多',
@@ -144,14 +144,14 @@
         USE_RANGE_ARR: USE_RANGE_ARR[0][0],
         CURRENT_PICKER: '',
         name: '',
-        useType: '',
+        useType: PICKER_RELATION_OBJ.USE_TYPE_ARR.arr[0].key,
         money: '',
-        discount: '',
+        discounts: '',
         stock: '',
-        moneyLimit: '',
-        stockLimit: '',
-        useRange: '',
-        selectItem: '',
+        moneyLimit: 0,
+        stockLimit: PICKER_RELATION_OBJ.STOCK_LIMIT_ARR.arr[0].key,
+        useRange: PICKER_RELATION_OBJ.USE_RANGE_ARR.arr[0].key,
+        selectItem: {},
         startDate: '',
         endDate: ''
       }
@@ -166,30 +166,109 @@
       scrollWrapperStyle() {
         return `bottom:${this.PAGE_CONFIG.buttonGroupHeight}px`
       },
+      // 选择范围
       isShowSelect() {
         return this.USE_RANGE_ARR === USE_RANGE_ARR[0][1]
       },
+      // 选择折扣
       isShowDiscount() {
         return this.USE_TYPE_ARR === USE_TYPE_ARR[0][1]
       },
       disableEditor() {
         return this.PAGE_CONFIG === PAGE_CONFIG[PAGE_TYPE.EDITOR]
+      },
+      nameReg() {
+        return this.name
+      },
+      discountReg() {
+        if (this.isShowDiscount) {
+          return this.discounts > 1 && this.discounts < 9.9
+        } else {
+          return this.discounts >= 0
+        }
+      },
+      stockReg() {
+        return this.stock
+      },
+      moneyLimitReg() {
+        return this.moneyLimit >= 0
+      },
+      selectItemReg() {
+        if (this.isShowSelect) {
+          return this.selectItem.id
+        } else {
+          return true
+        }
+      },
+      startReg() {
+        let start = (new Date('' + this.startDate)) * 1 + 1000 * 60 * 60 * 24
+        return start > Date.now()
+      },
+      dateReg() {
+        let end = (new Date('' + this.endDate)) * 1
+        let start = (new Date('' + this.startDate)) * 1
+        return end > start
       }
     },
+    created() {
+      this._initPageData()
+    },
     methods: {
-      refresh() {
-        // todo
+      refresh(e) {
+        this._selectItem(e)
       },
-      showSheetHandle() {
-        if (this.disableEditor) return
-        this.$refs.sheet && this.$refs.sheet.show()
+      _selectItem(e) {
+        if (e && e.id) {
+          this.selectItem = e
+        }
       },
-      selectHandle(key) {
+      _initPageData() {
+        this._resolvePickerData()
+      },
+      _resolvePickerData() {
+        for (let [dataKey, dataValue] of Object.entries(PICKER_RELATION_OBJ)) {
+          let arr = dataValue.arr
+          let key = dataValue.key
+          let obj = arr.find((val) => val.key === this[key]) || {}
+          this[dataKey] = obj.title || arr[0].title
+        }
+      },
+      selectHandle() {
         if (this.disableEditor) return
-        this.$router.push(this.$route.path + '/discount-coupon-select?key=' + key)
+        this.$router.push(this.$route.path + '/choice-goods')
       },
       submitHandle() {
+        this._checkForm(() => {
+          API.Coupon.create(this.$data).then(() => {
+            this.$toast.show('发布成功！')
+            this.$router.back()
+          })
+        })
         // todo
+      },
+      _checkForm(cb) {
+        let arr = [
+          {value: this.nameReg, txt: '请输优惠券名称'},
+          {value: this.discountReg, txt: '请输入正确的优惠或折扣'},
+          {value: this.stockReg, txt: '请输入正确的发放数量'},
+          {value: this.moneyLimitReg, txt: '请输入正确的门槛金额'},
+          {value: this.selectItemReg, txt: '请选择商品或服务'},
+          {value: this.startReg, txt: '开始时间不能小于今天'},
+          {value: this.dateReg, txt: '结束日期不能小于开始日期'}
+        ]
+        let res = this._testPropety(arr)
+        res && cb && cb()
+      },
+      _testPropety(arr) {
+        for (let i = 0, j = arr.length; i < j; i++) {
+          if (!arr[i].value) {
+            this.$toast.show(arr[i].txt)
+            return false
+          }
+          if (i === j - 1 && arr[i].value) {
+            return true
+          }
+        }
       },
       showPickerHandle(pickerType) {
         if (this.disableEditor) return
@@ -206,7 +285,12 @@
         if (this.CURRENT_PICKER.includes('Date')) {
           this[this.CURRENT_PICKER] = formatPickerDate(e)
         } else {
+          let value = e[0].value
           this[this.CURRENT_PICKER] = e[0].value
+          // 设置对应的值
+          let current = PICKER_RELATION_OBJ[this.CURRENT_PICKER]
+          let obj = current.arr.find((val) => val.title === value)
+          this[current.key] = obj.key
         }
       }
     }
