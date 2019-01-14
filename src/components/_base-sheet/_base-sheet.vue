@@ -21,10 +21,7 @@
       sheetList: {
         type: Array,
         default: () => {
-          return [
-            {title: '服务订单', key: '1'},
-            {title: '商品订单', key: '2'}
-          ]
+          return []
         }
       }
     },
@@ -62,7 +59,7 @@
   @import '~common/stylus/mixin'
 
   .base-sheet
-    z-index: 40
+    z-index: 999
     .bg
       position: fixed
       left: 0
@@ -70,6 +67,7 @@
       top: 0
       bottom: 0
       background: rgba(0,0,0,0.8)
+      z-index :999
     .box
       position: fixed
       bottom: -200px
@@ -83,7 +81,7 @@
       text-align: center
       background: $color-F6F6F6
       transition: all 0.3s
-      z-index: 40
+      z-index: 999
       .item
         background: $color-white
       .item:first-child

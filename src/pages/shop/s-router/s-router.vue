@@ -94,7 +94,7 @@
       path: '/exchange-manage'
     },
     {
-      icon: 'ac-three',
+      icon: 'ac-four',
       title: '优惠券',
       path: '/discount-coupon'
     }
@@ -219,6 +219,8 @@
               &.ac-two
                 icon-image(icon-turntable)
               &.ac-three
+                icon-image(icon-grade)
+              &.ac-four
                 icon-image(icon-coupon)
 
 </style>

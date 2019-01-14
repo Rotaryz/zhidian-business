@@ -10,7 +10,7 @@
       >
         <div class="list-container">
           <div class="list-item" v-for="(item, index) in dataArray" :key="index">
-            <div style="height: 50px;border: 1px solid red">{{index}}</div>
+            <!--<div style="height: 50px;border: 1px solid red">{{index}}</div>-->
             <!--<goods-item :tabIdx="tabIdx"-->
             <!--:item="item"-->
             <!--:showEdit="item.showEdit"-->
@@ -19,6 +19,7 @@
             <!--@itemDown="itemDown"-->
             <!--@itemDelete="itemDelete">-->
             <!--</goods-item>-->
+            <select-item></select-item>
           </div>
           <div style="height: 50px"></div>
           <section class="nothing-box" v-if="nothing">
@@ -36,13 +37,15 @@
 
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
+  import SelectItem from './select-item/select-item'
 
   const PAGE_NAME = 'DISCOUNT_COUPON_SELECT'
 
   export default {
     name: PAGE_NAME,
     components: {
-      Scroll
+      Scroll,
+      SelectItem
     },
     data() {
       return {
