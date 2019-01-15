@@ -5,11 +5,14 @@
               bcColor="#f6f6f6"
               :data="dataArray"
               :showNoMore="false"
+              :listenScroll="true"
       >
         <section class="panel-wrapper">
           <header class="header">
             <p>基本信息</p>
-            <base-icon-help></base-icon-help>
+            <div @click="helpHandle">
+              <base-icon-help></base-icon-help>
+            </div>
           </header>
           <ul class="content">
             <li class="item-wrapper border-bottom-1px">
@@ -111,7 +114,7 @@
       type="date"
       @confirm="pickerConfirmHandle">
     </awesome-picker>
-    <!--<base-sheet ref="sheet" :sheetList="SHEET_LIST" @select="selectHandle"></base-sheet>-->
+    <coupon-rule ref="rule"></coupon-rule>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
@@ -123,13 +126,15 @@
   } from './editor-config'
   import * as API from 'api'
   import {RATE, MONEYREG} from 'common/js/utils'
+  import CouponRule from './coupon-rule/coupon-rule'
 
   const PAGE_NAME = 'DISCOUNT_COUPON_EDITOR'
 
   export default {
     name: PAGE_NAME,
     components: {
-      Scroll
+      Scroll,
+      CouponRule
     },
     data() {
       return {
@@ -228,6 +233,7 @@
     },
     watch: {
       USE_TYPE_ARR() {
+        if (this.disableEditor) return
         this.discounts = ''
       }
     },
@@ -235,6 +241,9 @@
       this._initPageData()
     },
     methods: {
+      helpHandle() {
+        this.$refs.rule && this.$refs.rule.showRule()
+      },
       refresh(e) {
         this._selectItem(e)
       },
@@ -261,8 +270,8 @@
       _resolvePickerData() {
         for (let [dataKey, dataValue] of Object.entries(PICKER_RELATION_OBJ)) {
           let arr = dataValue.arr
-          let key = dataValue.key
-          let obj = arr.find((val) => val.key === this[key]) || {}
+          let key = '' + dataValue.key
+          let obj = arr.find((val) => '' + val.key === '' + this[key]) || {}
           this[dataKey] = obj.title || arr[0].title
         }
       },

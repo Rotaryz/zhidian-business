@@ -7,7 +7,7 @@ export default {
     FN_ARR[fn] && (data = FN_ARR[fn](data))
     return defaultProcess('post', url, data, loading, toast)
   },
-  getList(data, loading, toast, fn) {
+  getList(data, loading, toast, fn = '_resolveListData') {
     const url = `/api/merchant/coupon`
     return defaultProcess('get', url, data, loading, toast, FN_ARR[fn])
   },
@@ -29,7 +29,8 @@ export default {
 }
 const FN_ARR = {
   _formatCreateData,
-  _resolveDetailData
+  _resolveDetailData,
+  _resolveListData
 }
 // 组装创建优惠券
 function _formatCreateData(data) {
@@ -47,6 +48,7 @@ function _formatCreateData(data) {
   }
 }
 
+// 解析详情
 function _resolveDetailData(res) {
   let resData = res.data
   let goodList = resData.goods_list.map((item) => {
@@ -68,6 +70,29 @@ function _resolveDetailData(res) {
     endDate: resData.end_at,
     selectItem: goodList[0] || {}
   }
+  res.data = data
+  return res
+}
+
+// 解析列表
+function _resolveListData(res) {
+  let data = res.data.map((item) => {
+    return {
+      id: item.id,
+      coupon_name: item.coupon_name,
+      coupon_type: item.coupon_type,
+      coupon_type_str: item.coupon_type_str,
+      denomination: item.denomination,
+      use_type: item.use_type,
+      use_type_str: item.use_type_str,
+      condition: item.condition,
+      condition_str: item.condition_str,
+      start_at: item.start_at.replace(/-/g, '.'),
+      end_at: item.end_at.replace(/-/g, '.'),
+      range_type: item.range_type,
+      range_type_str: item.range_type_str
+    }
+  })
   res.data = data
   return res
 }
