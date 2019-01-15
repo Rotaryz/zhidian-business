@@ -50,7 +50,7 @@
       .shop-name
         color: $color-27273E
       .status
-        color: $color-706B82
+        color: #D32F2F
     .down
       padding: 15px 0
       display: flex

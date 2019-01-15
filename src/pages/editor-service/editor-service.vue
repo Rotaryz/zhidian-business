@@ -1,7 +1,7 @@
 <template>
   <div class="editor-service">
     <scroll :data="serviceDetail.detail_config" :bcColor="'#ffffff'" ref="scroll">
-      <div class="editor-title border-bottom-1px border-top-1px">
+      <div class="editor-title">
         <div class="title">基本信息</div>
       </div>
       <div class="group-container">
@@ -66,7 +66,8 @@
           </div>
         </div>
       </div>
-      <div class="editor-title border-bottom-1px border-top-1px">
+      <h1 style="height: 10px; background: #F6F6F6"></h1>
+      <div class="editor-title border-top-1px">
         <div class="title">
           套餐
           <span class="add-server" @click.stop="addItem"></span>
@@ -120,7 +121,8 @@
           </div>
         </div>
       </div>
-      <div class="editor-title border-bottom-1px border-top-1px">
+      <h1 style="height: 10px; background: #F6F6F6"></h1>
+      <div class="editor-title border-top-1px">
         <div class="title">使用有效期</div>
       </div>
       <div class="group-container padding-right">
@@ -149,7 +151,8 @@
           </div>
         </label>
       </div>
-      <div class="editor-title border-bottom-1px border-top-1px">
+      <h1 style="height: 10px; background: #F6F6F6"></h1>
+      <div class="editor-title border-top-1px">
         <div class="title">温馨提示</div>
       </div>
       <div class="group-container">
@@ -588,12 +591,12 @@
         background: $color-27273E
         border-radius: 2px
     .editor-title
-      height: 40px
-      background: $color-F6F6F6
+      height: 48px
       font-size: 14px
-      line-height: 40px
+      line-height: @height
       padding: 0 15px
       color: $color-9B9B9B
+      background :$color-white
       &:before
         border-top-color: $color-E6E6E6
       &:after
@@ -602,6 +605,10 @@
         display: flex
         justify-content: space-between
         align-items: center
+        font-family :$font-family-medium
+        background :$color-white
+        font-size :16px
+        color: #000
         .add-server
           width: 20px
           height: 20px
