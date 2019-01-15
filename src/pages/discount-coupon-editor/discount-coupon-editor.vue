@@ -30,7 +30,7 @@
               <div class="left">折扣</div>
               <div class="middle">
                 <p v-if="disableEditor" class="select-placeholder">{{discounts}}</p>
-                <input v-else type="number" placeholder="请设置1.0~9.9之间的折扣额度" maxlength="3" v-model="discounts" @focus="blur">
+                <input v-else type="number" placeholder="请设置1.0~9.9之间的折扣额度" maxlength="3" v-model="discounts" @focus="blur()">
               </div>
             </li>
             <li v-else class="item-wrapper border-bottom-1px">
@@ -228,8 +228,11 @@
       },
       // 日期的 检查
       startReg() {
-        let start = (new Date('' + this.startDate)) * 1 + 1000 * 60 * 60 * 24
+        console.log(this.startDate)
+        let startDate = this.startDate + ''
+        let start = (new Date(startDate)).getTime() + 1000 * 60 * 60 * 24
         if (!this.disableEditor) {
+          console.log(start)
           return start >= Date.now()
         } else {
           return true
@@ -343,12 +346,12 @@
       // 检验数据有效性
       _checkForm(cb) {
         let arr = [
-          {value: this.nameReg, txt: '请输优惠券名称'},
-          {value: this.discountReg, txt: '请输入正确的优惠或折扣'},
-          {value: this.minStockReg, txt: '发放数量不能少于' + this.minStock},
-          {value: this.stockReg, txt: '请输入正确的发放数量'},
-          {value: this.moneyLimitReg, txt: '请输入正确的门槛金额'},
-          {value: this.selectItemReg, txt: '请选择商品或服务'},
+          // {value: this.nameReg, txt: '请输优惠券名称'},
+          // {value: this.discountReg, txt: '请输入正确的优惠或折扣'},
+          // {value: this.minStockReg, txt: '发放数量不能少于' + this.minStock},
+          // {value: this.stockReg, txt: '请输入正确的发放数量'},
+          // {value: this.moneyLimitReg, txt: '请输入正确的门槛金额'},
+          // {value: this.selectItemReg, txt: '请选择商品或服务'},
           {value: this.startReg, txt: '开始时间不能小于今天'},
           {value: this.dateReg, txt: '结束日期不能小于开始日期'}
         ]
