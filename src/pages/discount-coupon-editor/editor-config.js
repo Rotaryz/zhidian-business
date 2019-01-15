@@ -1,11 +1,13 @@
 export const PAGE_CONFIG = {
   '1': {
     buttonGroupHeight: 64,
-    hasDisableButton: false
+    hasDisableButton: false,
+    submitFn: 'create'
   },
   '2': {
     buttonGroupHeight: 120,
-    hasDisableButton: true
+    hasDisableButton: true,
+    submitFn: 'update'
   }
 }
 export const PAGE_TYPE = {

@@ -14,7 +14,7 @@
       <div class="big-container" :style="'transform: translate(-' + tabIndex*(100 / tabLength) + '%,0)'">
         <template v-for="(item, index) in tabList">
           <nav :key="index">
-           <c-body></c-body>
+           <c-body ref="cBody" :status="item.status"></c-body>
           </nav>
         </template>
       </div>
@@ -30,9 +30,9 @@
 
   const PAGE_NAME = 'DISCOUNT_COUPON'
   const TABS = [
-    {txt: '进行中', id: 0},
-    {txt: '未开始', id: 1},
-    {txt: '已失效', id: 2}
+    {txt: '进行中', status: 1},
+    {txt: '未开始', status: 0},
+    {txt: '已失效', status: 2}
   ]
 
   export default {
@@ -50,7 +50,11 @@
     },
     methods: {
       refresh() {
-        // todo
+        let arr = this.$refs.cBody || []
+        arr.forEach((item) => {
+          item && item._refresh()
+        })
+        this.tabIndex = 0
       },
       changeTab(idx) {
         this.tabIndex = idx

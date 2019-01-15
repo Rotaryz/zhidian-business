@@ -9,15 +9,7 @@
     >
       <div class="list-container">
         <div class="list-item" v-for="(item, index) in dataArray" :key="index">
-          <div style="height: 50px;">{{index}}</div>
-          <!--<goods-item :tabIdx="tabIdx"-->
-                      <!--:item="item"-->
-                      <!--:showEdit="item.showEdit"-->
-                      <!--@showEdit="showEditor"-->
-                      <!--@itemEditor="itemEditor"-->
-                      <!--@itemDown="itemDown"-->
-                      <!--@itemDelete="itemDelete">-->
-          <!--</goods-item>-->
+          <coupon-item :itemInfo="item" :status="status"></coupon-item>
         </div>
         <section class="nothing-box" v-if="nothing">
           <img class="nothing-img" src="./pic-empty_order@2x.png" alt="">
@@ -30,13 +22,22 @@
 
 <script type="text/ecmascript-6">
   import Scroll from 'components/scroll/scroll'
+  import CouponItem from '../coupon-item/coupon-item'
+  import * as API from 'api'
 
   const COMPONENT_NAME = 'COUPON_BODY'
 
   export default {
     name: COMPONENT_NAME,
     components: {
-      Scroll
+      Scroll,
+      CouponItem
+    },
+    props: {
+      status: {
+        type: Number,
+        default: 0
+      }
     },
     data() {
       return {
@@ -44,10 +45,11 @@
         pullUpLoadThreshold: 0,
         pullUpLoadMoreTxt: '加载更多',
         pullUpLoadNoMoreTxt: '没有更多了',
-        dataArray: new Array(20).fill(1),
+        dataArray: [],
         page: 1,
         limit: 10,
-        nothing: false
+        nothing: false,
+        noMore: false
       }
     },
     computed: {
@@ -58,12 +60,36 @@
         } : false
       }
     },
+    created() {
+      this._getList()
+    },
     methods: {
+      _refresh() {
+        this.page = 1
+        this.noMore = false
+        this._getList(false)
+      },
+      _getList(loading, toast) {
+        if (this.noMore) return
+        let data = {
+          page: this.page,
+          limit: this.limit,
+          status: this.status
+        }
+        API.Coupon.getList(data, loading, toast).then((res) => {
+          if (res.meta.current_page === 1) {
+            this.dataArray = res.data
+            this.nothing = !res.meta.total
+          } else {
+            let arr = this.dataArray.concat(res.data)
+            this.dataArray = arr
+          }
+          this.noMore = res.meta.current_page === res.meta.last_page
+        })
+      },
       onPullingUp() {
         // 更新数据
-        // if (!this.pullUpLoad) return this.$refs.scroll.forceUpdate()
-        // this._getWithdrawalLog({page: ++this.page})
-        console.log(123)
+        this._getList(false)
       },
       rebuildScroll() {
         this.$nextTick(() => {
@@ -89,7 +115,7 @@
     padding: $tab-header-height 0 $button-height
     background: $color-F6F6F6
     .list-container
-      padding: 0 15px
+      padding: 0 12px 20px
       .list-item
         padding-top: 10px
       .nothing-box

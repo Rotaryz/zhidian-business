@@ -99,7 +99,7 @@
     </div>
     <section class="btn-group-wrapper border-top-1px" :style="buttonGroupStyle">
       <div class="footer-btn" @click="submitHandle">保存并发布</div>
-      <div v-if="PAGE_CONFIG.hasDisableButton" class="disable-btn">使失效</div>
+      <div v-if="PAGE_CONFIG.hasDisableButton" class="disable-btn" @click="closeHandle">使失效</div>
     </section>
     <awesome-picker
       ref="picker"
@@ -122,6 +122,8 @@
     PAGE_CONFIG, PICKER_DATA_OBJ, PICKER_RELATION_OBJ, USE_TYPE_ARR, STOCK_LIMIT_ARR, USE_RANGE_ARR, formatPickerDate, PAGE_TYPE
   } from './editor-config'
   import * as API from 'api'
+  import {RATE, MONEYREG} from 'common/js/utils'
+
   const PAGE_NAME = 'DISCOUNT_COUPON_EDITOR'
 
   export default {
@@ -136,13 +138,14 @@
         // pullUpLoadThreshold: 0,
         // pullUpLoadMoreTxt: '加载更多',
         // pullUpLoadNoMoreTxt: '没有更多了',
-        dataArray: new Array(20).fill(1),
+        dataArray: [],
         PICKER_DATA: PICKER_DATA_OBJ.USE_TYPE_ARR,
         PICKER_TYPE: '',
         USE_TYPE_ARR: USE_TYPE_ARR[0][0],
         STOCK_LIMIT_ARR: STOCK_LIMIT_ARR[0][0],
         USE_RANGE_ARR: USE_RANGE_ARR[0][0],
         CURRENT_PICKER: '',
+        PAGE_CONFIG: PAGE_CONFIG[PAGE_TYPE.NEW],
         name: '',
         useType: PICKER_RELATION_OBJ.USE_TYPE_ARR.arr[0].key,
         money: '',
@@ -153,13 +156,15 @@
         useRange: PICKER_RELATION_OBJ.USE_RANGE_ARR.arr[0].key,
         selectItem: {},
         startDate: '',
-        endDate: ''
+        endDate: '',
+        minStock: 0,
+        nowTime: Date.now()
       }
     },
     computed: {
-      PAGE_CONFIG() {
-        return PAGE_CONFIG[PAGE_TYPE.NEW]
-      },
+      // PAGE_CONFIG() {
+      //   return PAGE_CONFIG[PAGE_TYPE.NEW]
+      // },
       buttonGroupStyle() {
         return `height:${this.PAGE_CONFIG.buttonGroupHeight}px`
       },
@@ -184,14 +189,21 @@
         if (this.isShowDiscount) {
           return this.discounts > 1 && this.discounts < 9.9
         } else {
-          return this.discounts >= 0
+          return MONEYREG.test(this.discounts)
+        }
+      },
+      minStockReg() {
+        if (this.disableEditor) {
+          return this.stock >= this.minStock
+        } else {
+          return true
         }
       },
       stockReg() {
-        return this.stock
+        return RATE.test(this.stock)
       },
       moneyLimitReg() {
-        return this.moneyLimit >= 0
+        return MONEYREG.test(this.moneyLimit)
       },
       selectItemReg() {
         if (this.isShowSelect) {
@@ -202,12 +214,21 @@
       },
       startReg() {
         let start = (new Date('' + this.startDate)) * 1 + 1000 * 60 * 60 * 24
-        return start > Date.now()
+        if (!this.disableEditor) {
+          return start > Date.now()
+        } else {
+          return true
+        }
       },
       dateReg() {
         let end = (new Date('' + this.endDate)) * 1
         let start = (new Date('' + this.startDate)) * 1
         return end > start
+      }
+    },
+    watch: {
+      USE_TYPE_ARR() {
+        this.discounts = ''
       }
     },
     created() {
@@ -223,7 +244,19 @@
         }
       },
       _initPageData() {
-        this._resolvePickerData()
+        let {couponId} = this.$route.query
+        if (couponId) {
+          this.PAGE_CONFIG = PAGE_CONFIG[PAGE_TYPE.EDITOR]
+          this._getDetail(couponId)
+        } else {
+          this._resolvePickerData()
+        }
+      },
+      _getDetail(couponId) {
+        API.Coupon.getDetail({couponId}).then((res) => {
+          Object.assign(this.$data, res.data)
+          this._resolvePickerData()
+        })
       },
       _resolvePickerData() {
         for (let [dataKey, dataValue] of Object.entries(PICKER_RELATION_OBJ)) {
@@ -238,18 +271,39 @@
         this.$router.push(this.$route.path + '/choice-goods')
       },
       submitHandle() {
+        if (Date.now() - this.nowTime < 150) {
+          return
+        }
+        this.nowTime = Date.now()
         this._checkForm(() => {
-          API.Coupon.create(this.$data).then(() => {
+          let data = {
+            ...this.$data,
+            couponId: this.$route.query.couponId
+          }
+          API.Coupon[this.PAGE_CONFIG.submitFn](data).then(() => {
+            this.$emit('refresh')
             this.$toast.show('发布成功！')
             this.$router.back()
           })
         })
-        // todo
+      },
+      closeHandle() {
+        if (Date.now() - this.nowTime < 150) {
+          return
+        }
+        this.nowTime = Date.now()
+        let {couponId} = this.$route.query
+        API.Coupon.close({couponId}).then((res) => {
+          this.$emit('refresh')
+          this.$toast.show('操作成功！')
+          this.$router.back()
+        })
       },
       _checkForm(cb) {
         let arr = [
           {value: this.nameReg, txt: '请输优惠券名称'},
           {value: this.discountReg, txt: '请输入正确的优惠或折扣'},
+          {value: this.minStockReg, txt: '发放数量不能少于' + this.minStock},
           {value: this.stockReg, txt: '请输入正确的发放数量'},
           {value: this.moneyLimitReg, txt: '请输入正确的门槛金额'},
           {value: this.selectItemReg, txt: '请选择商品或服务'},
