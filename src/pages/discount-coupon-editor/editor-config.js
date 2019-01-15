@@ -1,18 +1,22 @@
+// 页面类型
+export const PAGE_TYPE = {
+  NEW: '1',
+  EDITOR: '2'
+}
+// 页面类型的配置
 export const PAGE_CONFIG = {
-  '1': {
+  [PAGE_TYPE.NEW]: {
     buttonGroupHeight: 64,
     hasDisableButton: false,
-    submitFn: 'create'
+    submitFn: 'create',
+    pageTitle: '新建优惠券'
   },
-  '2': {
+  [PAGE_TYPE.EDITOR]: {
     buttonGroupHeight: 120,
     hasDisableButton: true,
-    submitFn: 'update'
+    submitFn: 'update',
+    pageTitle: '编辑优惠券'
   }
-}
-export const PAGE_TYPE = {
-  'NEW': '1',
-  'EDITOR': '2'
 }
 
 // 选择器的映射关系
@@ -32,6 +36,7 @@ const USE_RANGE_OBJ = [
   {title: '全部商品', key: '0'},
   {title: '指定商品/服务', key: '1'}
 ]
+// 页面各个选择器的映射关系
 export const PICKER_RELATION_OBJ = {
   USE_TYPE_ARR: {
     arr: USE_TYPE_OBJ,
@@ -46,7 +51,7 @@ export const PICKER_RELATION_OBJ = {
     key: 'useRange'
   }
 }
-export const SHEET_LIST = USE_TYPE_OBJ
+// 插件的数据格式
 export const USE_TYPE_ARR = [
   _formatArr(USE_TYPE_OBJ)
 ]
@@ -71,7 +76,7 @@ export function formatPickerDate(arr) {
   })
   return dateArr.join('-')
 }
-
+// 转换为插件的格式
 function _formatArr(arr) {
   return arr.map((item) => item.title)
 }

@@ -49,6 +49,7 @@
       }
     },
     methods: {
+      // 返回刷新页面数据
       refresh() {
         let arr = this.$refs.cBody || []
         arr.forEach((item) => {

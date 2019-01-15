@@ -59,7 +59,7 @@
               <div class="middle middle-set">
                 <p class="p">订单金额满</p>
                 <p v-if="disableEditor" class="input-style select-placeholder">{{moneyLimit}}</p>
-                <input v-else class="input-style" type="tel" placeholder="0" maxlength="7" v-model="moneyLimit">
+                <input v-else class="input-style" type="tel" placeholder="0" maxlength="7" v-model="moneyLimit" @focus="focusHandle" @blur="blurHandle">
                 <p class="p">元可用</p>
               </div>
             </li>
@@ -120,13 +120,19 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import Scroll from 'components/scroll/scroll'
   import {
-    PAGE_CONFIG, PICKER_DATA_OBJ, PICKER_RELATION_OBJ, USE_TYPE_ARR, STOCK_LIMIT_ARR, USE_RANGE_ARR, formatPickerDate, PAGE_TYPE
+    PAGE_CONFIG,
+    PICKER_DATA_OBJ,
+    PICKER_RELATION_OBJ,
+    USE_TYPE_ARR, STOCK_LIMIT_ARR,
+    USE_RANGE_ARR,
+    PAGE_TYPE,
+    formatPickerDate
   } from './editor-config'
   import * as API from 'api'
   import {RATE, MONEYREG} from 'common/js/utils'
   import CouponRule from './coupon-rule/coupon-rule'
+  import Scroll from 'components/scroll/scroll'
 
   const PAGE_NAME = 'DISCOUNT_COUPON_EDITOR'
 
@@ -138,11 +144,6 @@
     },
     data() {
       return {
-        // SHEET_LIST: SHEET_LIST,
-        // pullUpLoad: true,
-        // pullUpLoadThreshold: 0,
-        // pullUpLoadMoreTxt: '加载更多',
-        // pullUpLoadNoMoreTxt: '没有更多了',
         dataArray: [],
         PICKER_DATA: PICKER_DATA_OBJ.USE_TYPE_ARR,
         PICKER_TYPE: '',
@@ -167,29 +168,31 @@
       }
     },
     computed: {
-      // PAGE_CONFIG() {
-      //   return PAGE_CONFIG[PAGE_TYPE.NEW]
-      // },
+      // 按钮样式
       buttonGroupStyle() {
         return `height:${this.PAGE_CONFIG.buttonGroupHeight}px`
       },
+      // scroll样式
       scrollWrapperStyle() {
         return `bottom:${this.PAGE_CONFIG.buttonGroupHeight}px`
       },
-      // 选择范围
+      // 是否选择商品
       isShowSelect() {
         return this.USE_RANGE_ARR === USE_RANGE_ARR[0][1]
       },
-      // 选择折扣
+      // 是否为折扣优惠券类型
       isShowDiscount() {
         return this.USE_TYPE_ARR === USE_TYPE_ARR[0][1]
       },
+      // 是否为编辑模式
       disableEditor() {
         return this.PAGE_CONFIG === PAGE_CONFIG[PAGE_TYPE.EDITOR]
       },
+      // 优惠券名称 检查
       nameReg() {
         return this.name
       },
+      // 优惠券折扣或优惠金额 检查
       discountReg() {
         if (this.isShowDiscount) {
           return this.discounts > 1 && this.discounts < 9.9
@@ -197,6 +200,7 @@
           return MONEYREG.test(this.discounts)
         }
       },
+      // 最小库存的 检查
       minStockReg() {
         if (this.disableEditor) {
           return this.stock >= this.minStock
@@ -204,12 +208,15 @@
           return true
         }
       },
+      // 库存 检查
       stockReg() {
         return RATE.test(this.stock)
       },
+      // 门槛金额 检查
       moneyLimitReg() {
         return MONEYREG.test(this.moneyLimit)
       },
+      // 选中的商品/服务的 检查
       selectItemReg() {
         if (this.isShowSelect) {
           return this.selectItem.id
@@ -217,6 +224,7 @@
           return true
         }
       },
+      // 日期的 检查
       startReg() {
         let start = (new Date('' + this.startDate)) * 1 + 1000 * 60 * 60 * 24
         if (!this.disableEditor) {
@@ -232,6 +240,7 @@
       }
     },
     watch: {
+      // 切换优惠形式
       USE_TYPE_ARR() {
         if (this.disableEditor) return
         this.discounts = ''
@@ -241,8 +250,54 @@
       this._initPageData()
     },
     methods: {
+      // 优化门槛金额 聚焦/实效
+      focusHandle() {
+        let flag = +this.moneyLimit
+        if (!flag) {
+          this.moneyLimit = ''
+        }
+      },
+      blurHandle() {
+        let flag = +this.moneyLimit
+        if (!flag) {
+          this.moneyLimit = 0
+        }
+      },
+      // 帮助
       helpHandle() {
         this.$refs.rule && this.$refs.rule.showRule()
+      },
+      // 页面数据初始化
+      _initPageData() {
+        let {couponId} = this.$route.query
+        if (couponId) {
+          this.PAGE_CONFIG = PAGE_CONFIG[PAGE_TYPE.EDITOR]
+          document.title = this.PAGE_CONFIG.pageTitle
+          this._getDetail(couponId)
+        } else {
+          this._resolvePickerData()
+        }
+      },
+      // 获取详细信息
+      _getDetail(couponId) {
+        API.Coupon.getDetail({couponId}).then((res) => {
+          Object.assign(this.$data, res.data)
+          this._resolvePickerData()
+        })
+      },
+      // 将后台数据映射各个选择器的文案
+      _resolvePickerData() {
+        for (let [dataKey, dataValue] of Object.entries(PICKER_RELATION_OBJ)) {
+          let arr = dataValue.arr
+          let key = '' + dataValue.key
+          let obj = arr.find((val) => '' + val.key === '' + this[key]) || {}
+          this[dataKey] = obj.title || arr[0].title
+        }
+      },
+      // 选择商品
+      selectHandle() {
+        if (this.disableEditor) return
+        this.$router.push(this.$route.path + '/choice-goods')
       },
       refresh(e) {
         this._selectItem(e)
@@ -252,33 +307,7 @@
           this.selectItem = e
         }
       },
-      _initPageData() {
-        let {couponId} = this.$route.query
-        if (couponId) {
-          this.PAGE_CONFIG = PAGE_CONFIG[PAGE_TYPE.EDITOR]
-          this._getDetail(couponId)
-        } else {
-          this._resolvePickerData()
-        }
-      },
-      _getDetail(couponId) {
-        API.Coupon.getDetail({couponId}).then((res) => {
-          Object.assign(this.$data, res.data)
-          this._resolvePickerData()
-        })
-      },
-      _resolvePickerData() {
-        for (let [dataKey, dataValue] of Object.entries(PICKER_RELATION_OBJ)) {
-          let arr = dataValue.arr
-          let key = '' + dataValue.key
-          let obj = arr.find((val) => '' + val.key === '' + this[key]) || {}
-          this[dataKey] = obj.title || arr[0].title
-        }
-      },
-      selectHandle() {
-        if (this.disableEditor) return
-        this.$router.push(this.$route.path + '/choice-goods')
-      },
+      // 提交
       submitHandle() {
         if (Date.now() - this.nowTime < 150) {
           return
@@ -296,6 +325,7 @@
           })
         })
       },
+      // 实效
       closeHandle() {
         if (Date.now() - this.nowTime < 150) {
           return
@@ -308,6 +338,7 @@
           this.$router.back()
         })
       },
+      // 检验数据有效性
       _checkForm(cb) {
         let arr = [
           {value: this.nameReg, txt: '请输优惠券名称'},
@@ -333,6 +364,7 @@
           }
         }
       },
+      // 选择器
       showPickerHandle(pickerType) {
         if (this.disableEditor) return
         this.CURRENT_PICKER = pickerType

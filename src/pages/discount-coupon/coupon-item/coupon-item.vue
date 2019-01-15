@@ -80,7 +80,7 @@
           return
         }
         this.nowTime = Date.now()
-        if ('' + this.status === 2) return
+        if ('' + this.status === '2') return
         let url = `${this.$route.path}/discount-coupon-editor?couponId=${this.itemInfo.id}`
         this.$router.push(url)
       }
