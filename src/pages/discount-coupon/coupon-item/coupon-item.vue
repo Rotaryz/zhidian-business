@@ -4,7 +4,7 @@
       <article class="left">
         <section class="money">
           <div v-if="COUPON.isMoney" class="unit adapt-m" :class="COUPON.fontStyle">¥</div>
-          <div class="discounts" :class="COUPON.fontStyle">20</div>
+          <div class="discounts" :class="COUPON.fontStyle">{{itemInfo.denomination}}</div>
           <div v-if="!COUPON.isMoney" class="extends adapt-m" :class="COUPON.fontStyle">折</div>
         </section>
         <section class="explain" :class="COUPON.fontStyle">{{itemInfo.condition_str}}</section>
