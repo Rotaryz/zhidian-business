@@ -244,8 +244,8 @@
       dateReg() {
         let startDate = this.startDate.replace(/-/g, '/')
         let endDate = this.endDate.replace(/-/g, '/')
-        let end = (new Date(startDate)).getTime()
-        let start = (new Date(endDate)).getTime()
+        let start = (new Date(startDate)).getTime()
+        let end = (new Date(endDate)).getTime()
         return end > start
       }
     },
