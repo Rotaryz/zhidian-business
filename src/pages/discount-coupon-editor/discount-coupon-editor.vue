@@ -30,20 +30,20 @@
               <div class="left">折扣</div>
               <div class="middle">
                 <p v-if="disableEditor" class="select-placeholder">{{discounts}}</p>
-                <input v-else type="tel" placeholder="请设置1.0~9.9之间的折扣额度" maxlength="3" v-model="discounts">
+                <input v-else type="number" placeholder="请设置1.0~9.9之间的折扣额度" maxlength="3" v-model="discounts">
               </div>
             </li>
             <li v-else class="item-wrapper border-bottom-1px">
               <div class="left key-icon">优惠金额</div>
               <div class="middle">
                 <p v-if="disableEditor" class="select-placeholder">{{discounts}}</p>
-                <input v-else type="tel" placeholder="请填写" maxlength="15" v-model="discounts">
+                <input v-else type="number" placeholder="请填写" maxlength="15" v-model="discounts">
               </div>
             </li>
             <li class="item-wrapper">
               <div class="left key-icon">发放数量</div>
               <div class="middle">
-                <input type="tel" placeholder="请填写" maxlength="8" v-model="stock">
+                <input type="number" placeholder="请填写" maxlength="8" v-model="stock">
               </div>
             </li>
           </ul>
@@ -59,7 +59,7 @@
               <div class="middle middle-set">
                 <p class="p">订单金额满</p>
                 <p v-if="disableEditor" class="input-style select-placeholder">{{moneyLimit}}</p>
-                <input v-else class="input-style" type="tel" placeholder="0" maxlength="7" v-model="moneyLimit" @focus="focusHandle" @blur="blurHandle">
+                <input v-else class="input-style" type="number" placeholder="0" maxlength="7" v-model="moneyLimit" @focus="focusHandle" @blur="blurHandle">
                 <p class="p">元可用</p>
               </div>
             </li>
