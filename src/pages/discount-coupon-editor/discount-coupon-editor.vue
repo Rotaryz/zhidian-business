@@ -59,7 +59,9 @@
               <div class="middle middle-set">
                 <p class="p">订单金额满</p>
                 <p v-if="disableEditor" class="input-style select-placeholder">{{moneyLimit}}</p>
-                <input v-else class="input-style" type="number" placeholder="0" maxlength="7" v-model="moneyLimit" @focus="focusHandle" @blur="blurHandle">
+                <div v-else class="input-style">
+                  <input type="number" placeholder="0" maxlength="7" v-model="moneyLimit" @focus="focusHandle" @blur="blurHandle">
+                </div>
                 <p class="p">元可用</p>
               </div>
             </li>
