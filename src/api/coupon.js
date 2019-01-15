@@ -1,7 +1,6 @@
 import {defaultProcess} from 'common/js/request-utils'
 
 export default {
-  // 成员(员工)列表
   create(data, loading, toast, fn = '_formatCreateData') {
     const url = `/api/merchant/coupon`
     FN_ARR[fn] && (data = FN_ARR[fn](data))
