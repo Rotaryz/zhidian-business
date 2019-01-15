@@ -54,8 +54,8 @@
           <header class="header">
             <p>使用设置</p>
           </header>
-          <ul class="content">
-            <li class="item-wrapper border-bottom-1px">
+          <nav class="content">
+            <label class="item-wrapper border-bottom-1px">
               <div class="left">使用门槛</div>
               <div class="middle middle-set">
                 <p class="p">订单金额满</p>
@@ -65,41 +65,45 @@
                 </div>
                 <p class="p">元可用</p>
               </div>
-            </li>
-            <li class="item-wrapper border-bottom-1px" @click="showPickerHandle('STOCK_LIMIT_ARR')">
+            </label>
+            <label class="item-wrapper border-bottom-1px" @click="showPickerHandle('STOCK_LIMIT_ARR')">
               <div class="left key-icon">每人限领</div>
               <div class="middle" :class="{'select-placeholder': disableEditor}">{{STOCK_LIMIT_ARR}}</div>
               <base-icon-arrow></base-icon-arrow>
-            </li>
-            <li class="item-wrapper" :class="{'border-bottom-1px': isShowSelect}" @click="showPickerHandle('USE_RANGE_ARR')">
+              <input type="button" class="input-empty" onfocus="this.blur()">
+            </label>
+            <label class="item-wrapper" :class="{'border-bottom-1px': isShowSelect}" @click="showPickerHandle('USE_RANGE_ARR')">
               <div class="left key-icon">使用范围</div>
               <div class="middle" :class="{'select-placeholder': disableEditor}">{{USE_RANGE_ARR}}</div>
               <base-icon-arrow></base-icon-arrow>
-            </li>
-            <li v-if="isShowSelect" class="item-wrapper" @click="selectHandle">
+              <input type="button" class="input-empty" onfocus="this.blur()">
+            </label>
+            <label v-if="isShowSelect" class="item-wrapper" @click="selectHandle">
               <div class="left">选择商品</div>
               <div class="middle" :class="{'select-placeholder': !selectItem.id  || disableEditor}">{{selectItem.title ||'请选择'}}</div>
               <base-icon-arrow></base-icon-arrow>
-            </li>
-          </ul>
+            </label>
+          </nav>
         </section>
         <div style="height: 10px" class="border-bottom-1px border-top-1px"></div>
         <section class="panel-wrapper">
           <header class="header">
             <p>有效期</p>
           </header>
-          <ul class="content">
-            <li class="item-wrapper border-bottom-1px" @click="showPickerHandle('startDate')">
+          <nav class="content">
+            <label class="item-wrapper border-bottom-1px" @click="showPickerHandle('startDate')">
               <div class="left key-icon">开始时间</div>
               <div class="middle" :class="{'select-placeholder': !startDate || disableEditor}">{{startDate || '请选择时间'}}</div>
               <base-icon-arrow></base-icon-arrow>
-            </li>
-            <li class="item-wrapper" @click="showPickerHandle('endDate')">
+              <input type="button" class="input-empty" onfocus="this.blur()">
+            </label>
+            <label class="item-wrapper" @click="showPickerHandle('endDate')">
               <div class="left key-icon">结束时间</div>
               <div class="middle" :class="{'select-placeholder': !endDate || disableEditor}">{{endDate || '请选择时间'}}</div>
               <base-icon-arrow></base-icon-arrow>
-            </li>
-          </ul>
+              <input type="button" class="input-empty" onfocus="this.blur()">
+            </label>
+          </nav>
         </section>
       </scroll>
     </div>
