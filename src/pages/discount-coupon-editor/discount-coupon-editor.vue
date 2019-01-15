@@ -233,6 +233,7 @@
         let start = (new Date(startDate)).getTime() + 1000 * 60 * 60 * 24
         if (!this.disableEditor) {
           console.log(start)
+          alert(start)
           return start >= Date.now()
         } else {
           return true
