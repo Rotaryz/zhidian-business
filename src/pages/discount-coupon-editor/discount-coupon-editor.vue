@@ -234,6 +234,7 @@
         if (!this.disableEditor) {
           console.log(start)
           alert(start)
+          alert(Date.now())
           return start >= Date.now()
         } else {
           return true
