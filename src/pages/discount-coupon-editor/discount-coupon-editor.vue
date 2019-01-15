@@ -14,42 +14,40 @@
               <base-icon-help></base-icon-help>
             </div>
           </header>
-          <ul class="content">
-            <li class="item-wrapper border-bottom-1px">
+          <nav class="content">
+            <label class="item-wrapper border-bottom-1px">
               <div class="left key-icon">优惠券名称</div>
               <div class="middle">
                 <input type="text" placeholder="请填写" maxlength="30" v-model="name">
               </div>
-            </li>
-            <li class="item-wrapper border-bottom-1px" @click="showPickerHandle('USE_TYPE_ARR')">
+            </label>
+            <label class="item-wrapper border-bottom-1px" @click="showPickerHandle('USE_TYPE_ARR')">
               <div class="left key-icon">优惠形式</div>
-              <label class="middle" :class="{'select-placeholder': disableEditor}">
-                {{USE_TYPE_ARR}}
-                <input type="button" style="display: none">
-              </label>
+              <div class="middle" :class="{'select-placeholder': disableEditor}">{{USE_TYPE_ARR}}</div>
               <base-icon-arrow></base-icon-arrow>
-            </li>
-            <li v-if="isShowDiscount" class="item-wrapper border-bottom-1px">
+              <input type="button" class="input-empty" onfocus="this.blur()">
+            </label>
+            <label v-if="isShowDiscount" class="item-wrapper border-bottom-1px">
               <div class="left">折扣</div>
               <div class="middle">
                 <p v-if="disableEditor" class="select-placeholder">{{discounts}}</p>
                 <input v-else type="number" placeholder="请设置1.0~9.9之间的折扣额度" maxlength="3" v-model="discounts">
               </div>
-            </li>
-            <li v-else class="item-wrapper border-bottom-1px">
+            </label>
+            <label v-else class="item-wrapper border-bottom-1px">
               <div class="left key-icon">优惠金额</div>
               <div class="middle">
                 <p v-if="disableEditor" class="select-placeholder">{{discounts}}</p>
                 <input v-else type="number" placeholder="请填写" maxlength="15" v-model="discounts">
               </div>
-            </li>
-            <li class="item-wrapper">
+            </label>
+            <label class="item-wrapper">
               <div class="left key-icon">发放数量</div>
               <div class="middle">
                 <input type="number" placeholder="请填写" maxlength="8" v-model="stock">
               </div>
-            </li>
-          </ul>
+            </label>
+          </nav>
         </section>
         <div style="height: 10px" class="border-bottom-1px border-top-1px"></div>
         <section class="panel-wrapper">
@@ -434,10 +432,10 @@
         color: #000000;
         layout(row,block,nowrap)
         align-items :center
+        position :relative
         .left
           width :100px
         .middle
-          display :block
           flex:1
           overflow :hidden
           color: #27273E
