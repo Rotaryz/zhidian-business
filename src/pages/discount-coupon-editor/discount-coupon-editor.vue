@@ -202,7 +202,7 @@
       // 优惠券折扣或优惠金额 检查
       discountReg() {
         if (this.isShowDiscount) {
-          return this.discounts > 1 && this.discounts < 9.9
+          return this.discounts >= 1 && this.discounts <= 9.9
         } else {
           return MONEYREG.test(this.discounts)
         }
