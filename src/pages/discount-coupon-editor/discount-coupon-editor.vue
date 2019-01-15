@@ -229,6 +229,8 @@
       // 日期的 检查
       startReg() {
         let startDate = this.startDate.replace(/-/g, '/')
+        alert(startDate)
+        alert((new Date(startDate)).getTime())
         let start = (new Date(startDate)).getTime() + 1000 * 60 * 60 * 24
         if (!this.disableEditor) {
           console.log(start)
