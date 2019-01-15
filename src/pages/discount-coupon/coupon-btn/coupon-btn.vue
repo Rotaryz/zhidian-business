@@ -1,5 +1,5 @@
 <template>
-  <div class="coupon-btn">
+  <div class="coupon-btn border-top-1px">
     <router-link tag="div" to="/shop/discount-coupon/discount-coupon-editor" class="footer-btn">新建优惠券</router-link>
   </div>
 </template>
