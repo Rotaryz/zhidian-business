@@ -30,7 +30,7 @@
               <div class="left">折扣</div>
               <div class="middle">
                 <p v-if="disableEditor" class="select-placeholder">{{discounts}}</p>
-                <input v-else type="number" placeholder="请设置1.0~9.9之间的折扣额度" maxlength="3" v-model="discounts">
+                <input v-else type="number" placeholder="请设置1.0~9.9之间的折扣额度" maxlength="3" v-model="discounts" @focus="blur">
               </div>
             </li>
             <li v-else class="item-wrapper border-bottom-1px">
@@ -230,7 +230,7 @@
       startReg() {
         let start = (new Date('' + this.startDate)) * 1 + 1000 * 60 * 60 * 24
         if (!this.disableEditor) {
-          return start > Date.now()
+          return start >= Date.now()
         } else {
           return true
         }
