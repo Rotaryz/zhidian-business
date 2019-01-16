@@ -223,6 +223,14 @@
       moneyLimitReg() {
         return MONEYREG.test(this.moneyLimit)
       },
+      // 满减金额不能小于优惠金额
+      moneyLimitReg2() {
+        if (!this.isShowDiscount && this.moneyLimit) {
+          return MONEYREG.test(this.moneyLimit) && this.moneyLimit > this.discounts
+        } else {
+          return true
+        }
+      },
       // 选中的商品/服务的 检查
       selectItemReg() {
         if (this.isShowSelect) {
@@ -356,6 +364,7 @@
           {value: this.minStockReg, txt: '发放数量不能少于' + this.minStock},
           {value: this.stockReg, txt: '请输入正确的发放数量'},
           {value: this.moneyLimitReg, txt: '请输入正确的门槛金额'},
+          {value: this.moneyLimitReg2, txt: '门槛金额不能小于满减金额'},
           {value: this.selectItemReg, txt: '请选择商品或服务'},
           {value: this.startReg, txt: '开始日期不能小于今天'},
           {value: this.dateReg, txt: '结束日期不能小于开始日期'}
