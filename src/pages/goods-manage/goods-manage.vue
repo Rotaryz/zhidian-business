@@ -64,7 +64,7 @@
         </div>
       </div>
     </div>
-    <div v-if="isBoss" class="footer-box" :style="buttonStyle">
+    <div v-if="buttonHeight" class="footer-box" :style="buttonStyle">
       <div class="footer-btn" @click="toDetail('new')">新建商品</div>
     </div>
     <router-view-common @refresh="refresh"></router-view-common>
@@ -78,6 +78,8 @@
   import Scroll from 'components/scroll/scroll'
   import { Goods } from 'api'
   import {ease} from 'common/js/ease'
+  import {PAGE_CONFIG} from './goods-config'
+
   const TABS = [
     {txt: '已上架', id: 0},
     {txt: '已下架', id: 1}
@@ -321,18 +323,18 @@
       Modal
     },
     computed: {
-      // 1分店，0总店
-      isBoss() {
-        // let store = this.$storage.get('info').store || {}
-        // let isBoss = '' + store.is_branch === '0'
-        // return isBoss
-        return true
+      buttonHeight() {
+        // 1分店，0总店
+        let store = this.$storage.get('info').store || {}
+        let isBoss = '' + store.is_branch === '0'
+        let key = isBoss ? 'boss' : 'staff'
+        return PAGE_CONFIG.buttonHeight[key]
       },
       scrollItemStyle() {
-        return this.isBoss ? 'padding: 45px 0 64px' : 'padding: 45px 0 0'
+        return `padding: 45px 0 ${this.buttonHeight}px`
       },
       buttonStyle() {
-        return this.isBoss ? 'height: 64px' : 'height: 0'
+        return `height: ${this.buttonHeight}px`
       },
       pullUpLoadObj0: function () {
         return this.pullUpLoad0 ? {
