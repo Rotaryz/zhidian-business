@@ -210,7 +210,7 @@
       // 最小库存的 检查
       minStockReg() {
         if (this.disableEditor) {
-          return this.stock >= this.minStock
+          return this.stock - this.minStock >= 0
         } else {
           return true
         }
@@ -225,8 +225,8 @@
       },
       // 满减金额不能小于优惠金额
       moneyLimitReg2() {
-        if (!this.isShowDiscount && this.moneyLimit) {
-          return MONEYREG.test(this.moneyLimit) && this.moneyLimit > this.discounts
+        if (!this.isShowDiscount) {
+          return this.moneyLimit && this.discounts && +this.moneyLimit - +this.discounts > 0
         } else {
           return true
         }
@@ -244,7 +244,7 @@
         let startDate = this.startDate.replace(/-/g, '/')
         let start = (new Date(startDate)).getTime() + 1000 * 60 * 60 * 24
         if (!this.disableEditor) {
-          return start >= Date.now()
+          return start - Date.now() >= 0
         } else {
           return true
         }
@@ -254,7 +254,7 @@
         let endDate = this.endDate.replace(/-/g, '/')
         let start = (new Date(startDate)).getTime()
         let end = (new Date(endDate)).getTime()
-        return end > start
+        return end - start > 0
       }
     },
     watch: {
