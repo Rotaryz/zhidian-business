@@ -122,7 +122,7 @@
       @confirm="pickerConfirmHandle">
     </awesome-picker>
     <coupon-rule ref="rule"></coupon-rule>
-    <confirm-msg ref="confirm" @confirm="confirmHandle"></confirm-msg>
+    <confirm-msg v-if="disableEditor" ref="confirm" @confirm="confirmHandle"></confirm-msg>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
