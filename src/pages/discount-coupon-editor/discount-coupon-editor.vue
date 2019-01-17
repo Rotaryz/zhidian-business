@@ -122,6 +122,7 @@
       @confirm="pickerConfirmHandle">
     </awesome-picker>
     <coupon-rule ref="rule"></coupon-rule>
+    <confirm-msg ref="confirm" @confirm="confirmHandle"></confirm-msg>
     <router-view-common @refresh="refresh"></router-view-common>
   </div>
 </template>
@@ -140,6 +141,7 @@
   import {RATE, MONEYREG} from 'common/js/utils'
   import CouponRule from './coupon-rule/coupon-rule'
   import Scroll from 'components/scroll/scroll'
+  import ConfirmMsg from 'components/confirm-msg/confirm-msg'
 
   const PAGE_NAME = 'DISCOUNT_COUPON_EDITOR'
 
@@ -147,7 +149,8 @@
     name: PAGE_NAME,
     components: {
       Scroll,
-      CouponRule
+      CouponRule,
+      ConfirmMsg
     },
     data() {
       return {
@@ -345,12 +348,15 @@
       },
       // 实效
       closeHandle() {
+        this.$refs.confirm && this.$refs.confirm.show({msg: '优惠券失效后不可恢复'})
+      },
+      confirmHandle() {
         if (Date.now() - this.nowTime < 150) {
           return
         }
         this.nowTime = Date.now()
         let {couponId} = this.$route.query
-        API.Coupon.close({couponId}).then((res) => {
+        API.Coupon.close({couponId}).then(() => {
           this.$emit('refresh')
           this.$toast.show('操作成功！')
           this.$router.back()
