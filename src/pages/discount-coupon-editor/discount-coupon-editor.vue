@@ -207,7 +207,7 @@
         if (this.isShowDiscount) {
           return this.discounts >= 1 && this.discounts <= 9.9
         } else {
-          return MONEYREG.test(this.discounts)
+          return this.discounts > 0 && MONEYREG.test(this.discounts)
         }
       },
       // 最小库存的 检查
@@ -220,7 +220,7 @@
       },
       // 库存 检查
       stockReg() {
-        return RATE.test(this.stock)
+        return this.stock > 0 && RATE.test(this.stock)
       },
       // 门槛金额 检查
       moneyLimitReg() {
@@ -228,8 +228,10 @@
       },
       // 满减金额不能小于优惠金额
       moneyLimitReg2() {
-        if (!this.isShowDiscount) {
-          return this.moneyLimit && this.discounts && +this.moneyLimit - +this.discounts > 0
+        if (!this.isShowDiscount && +this.moneyLimit === 0) {
+          return true
+        } else if (!this.isShowDiscount) {
+          return this.moneyLimit - this.discounts > 0
         } else {
           return true
         }
