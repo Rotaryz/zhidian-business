@@ -8,7 +8,7 @@
     >
       <s-header :shopInfo="shopInfo" @showExpire="showExpire"></s-header>
       <s-data :info="businessData" :values="values"></s-data>
-      <s-router></s-router>
+      <s-router :type="type"></s-router>
       <div class="padding"></div>
     </scroll>
     <router-view-common @refresh="refresh"></router-view-common>
@@ -49,7 +49,8 @@
           }
         ],
         values: {},
-        shopInfo: {}
+        shopInfo: {},
+        type: 0
       }
     },
     created() {
@@ -99,6 +100,7 @@
             return
           }
           let info = res.data
+          this.type = res.data.merchant && res.data.merchant.type
           // info.store.is_branch = 1
           if (info.merchant && info.merchant.expired && !this.$storage.get('hasShowExpire')) {
             this.$emit('showExpire')
