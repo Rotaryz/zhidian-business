@@ -254,6 +254,7 @@
           }
           res.data.video = res.data.video ? res.data.video : {}
           res.data.logo = res.data.logo ? res.data.logo : {}
+          res.data.cover = res.data.cover || {}
           Object.assign(this.shopInfo, res.data)
           if (this.shopInfo.opening_hours.start) {
             this.start = this.shopInfo.opening_hours.start
