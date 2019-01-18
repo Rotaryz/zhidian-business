@@ -3,7 +3,7 @@
     <div class="manage">
       <h3 class="title">店铺管理</h3>
       <ul class="s-ul border-bottom-1px border-right-1px">
-        <li class="item-wrapper"  v-if="!(type === 0 && item.path === '/brand-template')"  v-for="(item, index) in manageArray" :key="index" @click="navHandle(item)">
+        <li class="item-wrapper"  v-if="!(isBranch && item.path === '/brand-template')"  v-for="(item, index) in manageArray" :key="index" @click="navHandle(item)">
           <div class="logo">
             <div class="icon" :class="item.icon"></div>
           </div>
@@ -100,17 +100,18 @@
     }
   ]
   export default {
-    props: {
-      type: {
-        type: Number,
-        default: 0
-      }
-    },
     data() {
       return {
         manageArray,
         activityArray,
         noClick: false
+      }
+    },
+    computed: {
+      isBranch() {
+        // 0 单店 1 多店
+        let merchant = this.$storage.get('info').merchant || {}
+        return +merchant.type === 0
       }
     },
     methods: {
