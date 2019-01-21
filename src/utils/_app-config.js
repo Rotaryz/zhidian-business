@@ -1,4 +1,4 @@
-const version = '/v1'
+const version = ``
 export default {
   app: 'ME时代',
   appKey: 'me',
