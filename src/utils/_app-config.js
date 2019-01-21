@@ -1,12 +1,8 @@
 const version = ``
-const versionIm = ``
 export default {
-  app: '赞播平台',
-  appKey: 'platform',
+  app: 'ME时代',
+  appKey: 'me',
   env: 'release',
-  api: 'https://zhidian-api.jkweixin.net' + version,
-  upload: 'https://zhidian-api.jkweixin.net' + version,
-  mall: 'https://exchange-mall-api.jkweixin.net' + version,
-  oauthURI: 'https://zhidian-api.jkweixin.net',
-  imRecord: 'https://data-analysis-api.jkweixin.net' + versionIm
+  api: 'https://zhidian-me-era-api.jkweixin.net' + version,
+  upload: 'https://zhidian-me-era-api.jkweixin.net' + version
 }
