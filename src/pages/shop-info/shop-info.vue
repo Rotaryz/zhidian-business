@@ -76,6 +76,19 @@
               </figure>
             </article>
             <article class="media-item border-bottom-1px">
+              <div class="title">门店封面</div>
+              <figure class="content">
+                <label class="add">
+                  <div class="img-show" v-if="shopInfo.cover.url" :style="{backgroundImage: 'url(' + shopInfo.cover.url + ')',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}"></div>
+                  <div class="del-icon" v-if="shopInfo.cover.url" @click.stop="delDetail('cover')"></div>
+                  <base-wx-input v-if="!shopInfo.logo.cover"  style="display: none" @change="_fileChange($event, 'cover')"
+                                 accept="image/*"></base-wx-input>
+                </label>
+                <div class="explain one">点击图片预览实际展示效果</div>
+                <div class="explain">添加1张图片（尺寸750*320，大小2M以下）</div>
+              </figure>
+            </article>
+            <article class="media-item border-bottom-1px">
               <div class="title">门店视频</div>
               <figure class="content">
                 <label class="add">
@@ -135,6 +148,7 @@
     </awesome-picker>
     <cropper ref="cropper-shop_images" @confirm="cropperConfirm"></cropper>
     <cropper ref="cropper-shop_logo" @confirm="cropperConfirm($event ,'logo')" :aspect="1"></cropper>
+    <cropper ref="cropper-shop_cover" @confirm="cropperConfirm($event ,'cover')" :aspect="720/320"></cropper>
     <router-view-common @refresh="refresh"></router-view-common>
   </form>
 </template>
@@ -174,6 +188,7 @@
           address: '', // 门店地址
           opening_hours: {}, // 营业时间
           logo: {}, // 门店logo
+          cover: {}, // 门店封面
           video: {}, // 门店视频
           images: [], // 门店图片
           employee: {
@@ -239,6 +254,7 @@
           }
           res.data.video = res.data.video ? res.data.video : {}
           res.data.logo = res.data.logo ? res.data.logo : {}
+          res.data.cover = res.data.cover || {}
           Object.assign(this.shopInfo, res.data)
           if (this.shopInfo.opening_hours.start) {
             this.start = this.shopInfo.opening_hours.start
@@ -266,6 +282,7 @@
         if (arr.length < 1) return
         flag === 'images' && this.$refs['cropper-shop_images'].show(arr[0])
         flag === 'logo' && this.$refs['cropper-shop_logo'].show(arr[0])
+        flag === 'cover' && this.$refs['cropper-shop_cover'].show(arr[0])
         if (flag === 'video') {
           this.$loading.show('视频上传中...')
           this.$vod.uploadFiles(arr[0], curr => {
@@ -291,6 +308,10 @@
           this.shopInfo.video = ''
           return
         }
+        if (index === 'cover') {
+          this.shopInfo.cover = ''
+          return
+        }
         this.shopInfo.images.splice(index, 1)
       },
       async cropperConfirm(e, type) {
@@ -309,6 +330,10 @@
           case 'logo' :
             this.shopInfo.logo = obj
             this.$refs['cropper-shop_logo'].cancel()
+            break
+          case 'cover':
+            this.shopInfo.cover = obj
+            this.$refs['cropper-shop_cover'].cancel()
             break
           default:
             this.shopInfo.images.push(obj)
@@ -408,6 +433,7 @@
           {value: this.addressDetailReg, txt: '请输入您的门店的详细地址'},
           {value: this.openHoursReg, txt: '请选择您的营业时间'},
           {value: this.shopLogoReg, txt: '请添加门店logo'},
+          {value: this.shopCoverReg, txt: '请添加门店封面'},
           // {value: this.shopVideoReg, txt: '请添加门店视频'},
           {value: this.locationReg, txt: '请选择地理位置'},
           {value: this.shopImagesReg, txt: '请添加至少一张门店图片'}
@@ -449,10 +475,13 @@
         return this.shopInfo.images.length > 0
       },
       shopVideoReg() {
-        return this.shopInfo.video.url
+        return this.shopInfo.video && this.shopInfo.video.url
       },
       shopLogoReg() {
-        return this.shopInfo.logo.url
+        return this.shopInfo.logo && this.shopInfo.logo.url
+      },
+      shopCoverReg() {
+        return this.shopInfo.cover && this.shopInfo.cover.url
       },
       shopImagesLen() {
         return Math.min(this.shopInfo.images.length + 1, 10)

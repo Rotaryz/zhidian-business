@@ -45,6 +45,9 @@ const BrandTemplate = () => import('pages/brand-template/brand-template')
 const AccountDetail = () => import('pages/account-detail/account-detail')
 const GoodsManage = () => import('pages/goods-manage/goods-manage')
 const EditorGoods = () => import('pages/editor-goods/editor-goods')
+const DiscountCoupon = () => import('pages/discount-coupon/discount-coupon')
+const DiscountCouponEditor = () => import('pages/discount-coupon-editor/discount-coupon-editor')
+// const DiscountCouponSelect = () => import('pages/discount-coupon-select/discount-coupon-select')
 
 Vue.use(Router)
 
@@ -87,6 +90,31 @@ const route = new Router({
             title: '商户助手'
           },
           children: [
+            {
+              path: 'discount-coupon',
+              component: DiscountCoupon,
+              meta: {
+                title: '优惠券'
+              },
+              children: [
+                {
+                  path: 'discount-coupon-editor',
+                  component: DiscountCouponEditor,
+                  meta: {
+                    title: '新建优惠券'
+                  },
+                  children: [
+                    {
+                      path: 'choice-goods',
+                      component: ChoiceGoods,
+                      meta: {
+                        title: '选择商品|服务'
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
             {
               path: 'wheel',
               component: Wheel,

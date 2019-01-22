@@ -18,7 +18,7 @@
         </div>
         <div class="explain">可提现金额 ¥{{bankInfo.remaining}}</div>
       </section>
-      <div class="declare">微信按提现金额0.7%收取手续费，最低1元。</div>
+      <div class="declare">微信按提现金额{{bankInfo.rate}}收取手续费，最低{{bankInfo.minimum_withdrawal}}元。</div>
       <div class="btn" :class="getMoneyReg?'active':''" @click="_checkForm">提现</div>
       <router-view-common @refresh="refresh"></router-view-common>
   </div>
@@ -35,7 +35,9 @@
           bank: '',
           name: '',
           withdrawal_card: '',
-          remaining: '0.00'
+          remaining: '0.00',
+          rate: '0.7%',
+          minimum_withdrawal: 50
         },
         getMoney: ''
       }
@@ -100,10 +102,8 @@
         return this.bankInfo.bank
       },
       getMoneyReg() {
-        return (typeof +this.getMoney === 'number') && +this.getMoney > 0 && +this.getMoney <= this.bankInfo.remaining
+        return (typeof +this.getMoney === 'number') && +this.getMoney > 0 && +this.getMoney <= this.bankInfo.remaining && +this.getMoney >= this.bankInfo.minimum_withdrawal
       }
-    },
-    watch: {
     }
   }
 </script>

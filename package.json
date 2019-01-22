@@ -16,7 +16,8 @@
     "build": "node build/build.js",
     "new": "hygen new",
     "init": "node _config/index.js",
-    "check:appconfig": "node _config/check.js"
+    "check:appconfig": "node _config/check.js",
+    "look": "node _config/look.js"
   },
   "pre-commit": [
     "check:appconfig"

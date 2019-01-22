@@ -18,6 +18,9 @@ import content from './content'
 import activeExtend from './active-extend'
 import template from './brand-template'
 import goods from './goods'
+import coupon from './coupon'
+
+export const Coupon = coupon
 
 export const ActiveExtend = activeExtend
 

@@ -2,6 +2,10 @@ import CITY_JSON from 'common/js/city'
 import axios from 'axios'
 
 const REGPHONE = /^(13[0-9]|14[579]|15[0-3,5-9]|16[0-9]|17[0135678]|18[0-9]|19[0-9])\d{8}$/
+// 正整数正则
+export const RATE = /^[0-9]\d*$/
+// 金额二位数正则
+export const MONEYREG = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$|^(0|0.0|0.00)$/
 
 // 获取设备信息
 export function getPlatform() {

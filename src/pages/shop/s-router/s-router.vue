@@ -3,7 +3,7 @@
     <div class="manage">
       <h3 class="title">店铺管理</h3>
       <ul class="s-ul border-bottom-1px border-right-1px">
-        <li class="item-wrapper"  v-if="!(merchant&&merchant.type === 0 && item.path === '/brand-template')"  v-for="(item, index) in manageArray" :key="index" @click="navHandle(item)">
+        <li class="item-wrapper"  v-if="!(isBranch && item.path === '/brand-template')"  v-for="(item, index) in manageArray" :key="index" @click="navHandle(item)">
           <div class="logo">
             <div class="icon" :class="item.icon"></div>
           </div>
@@ -92,6 +92,11 @@
       icon: 'ac-three',
       title: '奖品券',
       path: '/exchange-manage'
+    },
+    {
+      icon: 'ac-four',
+      title: '优惠券',
+      path: '/discount-coupon'
     }
   ]
   export default {
@@ -100,6 +105,13 @@
         manageArray,
         activityArray,
         noClick: false
+      }
+    },
+    computed: {
+      isBranch() {
+        // 0 单店 1 多店
+        let merchant = this.$storage.get('info').merchant || {}
+        return +merchant.type === 0
       }
     },
     methods: {
@@ -135,11 +147,6 @@
             callback && callback()
           }
         })
-      }
-    },
-    computed: {
-      merchant() {
-        return (this.$storage.get('info') && this.$storage.get('info').merchant)
       }
     }
   }
@@ -214,6 +221,8 @@
               &.ac-two
                 icon-image(icon-turntable)
               &.ac-three
+                icon-image(icon-grade)
+              &.ac-four
                 icon-image(icon-coupon)
 
 </style>
