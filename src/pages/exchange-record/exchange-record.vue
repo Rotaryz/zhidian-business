@@ -248,6 +248,7 @@
           justify-content: space-between
           font-family: PingFangSC-Regular
           font-size: 14px
+          line-height: 1.2
           color: #27273E
           &:nth-child(2n)
             background: #F6F6F6
@@ -267,7 +268,7 @@
             align-items: flex-end
             .time
               font-size: 14px
-              margin: 13px 0 3px
+              margin: 14px 0 3px
             .now
               font-size: 12px
 </style>

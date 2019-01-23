@@ -73,6 +73,7 @@
         .title
           $color-4A4657
           font-size: $font-size-14
+          line-height: 1.2
           font-family: $font-family-regular
           overflow: hidden
           text-overflow: ellipsis
