@@ -86,14 +86,17 @@
         <label>
           <div class="editor-item border-top-1px" v-if="ruleId == 3">
             <div class="item-left">库存</div>
-            <div class="item-right check-right">
-              <span class="right-txt" :class="activityDetail.goods_id ? activityDetail.stock ? '' : 'gray' : 'gray'">{{activityDetail.goods_id ? activityDetail.stock ? activityDetail.stock : '请选择' : '请先选择商品'}}</span>
-              <img src="./icon-press_right@2x.png" class="arrow-icon">
-              <select v-model='activityDetail.stock' class="right-selected" :disabled="!activityDetail.goods_id">
-                <option v-for="(option, index) in showBraginStock" :value="option">
-                  {{ option }}
-                </option>
-              </select>
+            <!--<div class="item-right check-right">-->
+              <!--<span class="right-txt" :class="activityDetail.goods_id ? activityDetail.stock ? '' : 'gray' : 'gray'">{{activityDetail.goods_id ? activityDetail.stock ? activityDetail.stock : '请选择' : '请先选择商品'}}</span>-->
+              <!--<img src="./icon-press_right@2x.png" class="arrow-icon">-->
+              <!--<select v-model='activityDetail.stock' class="right-selected" :disabled="!activityDetail.goods_id">-->
+                <!--<option v-for="(option, index) in showBraginStock" :value="option">-->
+                  <!--{{ option }}-->
+                <!--</option>-->
+              <!--</select>-->
+            <!--</div>-->
+            <div class="item-right">
+              <input type="number" class="input-box" v-model="activityDetail.stock" :placeholder="activityDetail.goods_id ? '请填写' : '请先选择商品'" :disabled="!activityDetail.goods_id">
             </div>
           </div>
         </label>
