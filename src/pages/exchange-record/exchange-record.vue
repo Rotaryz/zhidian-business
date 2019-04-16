@@ -112,15 +112,15 @@
           }
           if (res.meta) {
             this.hasMore = res.meta.current_page !== res.meta.last_page
-            this.pullUpLoad = !this.hasMore
+            // this.pullUpLoad = !this.hasMore
           } else {
-            this.pullUpLoad = false
+            // this.pullUpLoad = false
           }
         })
       },
       onPullingUp() {
         // 更新数据
-        if (!this.pullUpLoad) return this.$refs.scroll.forceUpdate()
+        // if (!this.pullUpLoad) return this.$refs.scroll.forceUpdate()
         this._getLog({page: ++this.page})
       },
       rebuildScroll() {
